@@ -24,12 +24,12 @@ header{
 }
 header a{
   margin-left: 10px;
-  border-bottom: 2px solid #ffe100;
+  border-bottom: 2px solid #33CEFF;
   padding: 4px;
   cursor: pointer;
 }
 header a:hover{
-  background: #ffe100;
+  background: #33CEFF;
   color: black;
 }
 
