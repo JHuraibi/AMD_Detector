@@ -1,33 +1,185 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/styles.css">
-    <title>Home</title>
-</head>
-<body>
-    <header>
-        <nav>
-          <a class="sign-out">sign out</a>
-        </nav>
-      </header>
-
-   <div class=modal>This is just a place holder</div> 
-
-
-
-    <script src="/__/firebase/7.21.0/firebase-app.js"></script>
-
-    <script src="/__/firebase/7.7.0/firebase-auth.js"></script>
-    <script src="/__/firebase/7.7.0/firebase-firestore.js"></script>
-    <script src="/__/firebase/7.7.0/firebase-functions.js"></script>
-
-    <!-- Initialize Firebase -->
-    <script src="/__/firebase/init.js"></script>
-      
-    
-
-    <script src="home.js"></script>
-</body>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+		<meta name="generator" content="Jekyll v4.1.1">
+		<title>Home · Vision Monitor</title>
+		
+		<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/album/">
+		
+		<!-- Bootstrap core CSS -->
+		<link href="./css/bootstrap/bootstrap.min.css" rel="stylesheet">
+		
+		<style>
+			.bd-placeholder-img {
+				font-size: 1.125rem;
+				text-anchor: middle;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+			}
+			
+			@media (min-width: 768px) {
+				.bd-placeholder-img-lg {
+					font-size: 3.5rem;
+				}
+			}
+		</style>
+		<!-- Custom styles for this template -->
+		<link href="./css/home.css" rel="stylesheet">
+	</head>
+	<body>
+		<header>
+			<div class="collapse bg-dark" id="navbarHeader">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-8 col-md-7 py-4">
+							<h4 class="text-white">About</h4>
+							<p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some
+								informative tidbits. Then, link them off to some social networking sites or contact information.</p>
+						</div>
+						<div class="col-sm-4 offset-md-1 py-4">
+							<h4 class="text-white">Contact</h4>
+							<ul class="list-unstyled">
+								<li><a href="#" class="text-white">Follow on Twitter</a></li>
+								<li><a href="#" class="text-white">Like on Facebook</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="navbar navbar-dark bg-dark shadow-sm">
+				<div class="container d-flex justify-content-between">
+					<a href="#" class="navbar-brand d-flex align-items-center">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+								 aria-hidden="true" class="mr-2" viewBox="0 0 100 100" focusable="false">
+							<path d="M 10,30 A 20,20 0,0,1 50,30 A 20,20 0,0,1 90,30 Q 90,60 50,90 Q 10,60 10,30 z"/>
+							<circle cx="12" cy="13" r="4"/>
+						</svg>
+						<!--        <strong>Your Results</strong>-->
+					</a>
+					
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false"
+									aria-label="Toggle navigation">
+						<a class="sign-out"><span style="color: #007bff">Sign Out</span></a>
+					</button>
+				</div>
+			</div>
+		</header>
+		
+		<main role="main">
+			
+			<section class="jumbotron text-center">
+				<div class="container">
+					<h1>Age-Related Macular Degeneration</h1>
+					<p class="lead text-muted">Test, Track, and Detect AMD-related Symptoms</p>
+					<p>
+						<a href="#" class="btn btn-primary my-2">Take your First Test</a>
+						<a href="#" class="btn btn-secondary my-2">See Your Past Results</a>
+					</p>
+				</div>
+			</section>
+			
+			<div class="album py-5 bg-light">
+				<div class="container">
+					
+					<div class="row">
+						<div class="col-md-4">
+							<div class="card mb-4 shadow-sm">
+								<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
+										 role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title>
+									<rect width="100%" height="100%" fill="#55595c"/>
+									<text x="50%" y="50%" fill="#eceeef" dy=".3em">Game Screenshot</text>
+								</svg>
+								<div class="card-body">
+									<p class="card-text"><span style="font-weight: bold">Growing Circles</span></p>
+									<p class="card-text">Keep your eye on the center black dot for the whole test. Click you mouse any time a new red circles pops
+										up on the screen.</p>
+									<div class="d-flex justify-content-between align-items-center">
+										<div class="btn-group">
+											<button type="button" class="btn btn-sm btn-outline-secondary">Start Test</button>
+										</div>
+										<small class="text-muted">Est Duration: <1 mins</small>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="card mb-4 shadow-sm">
+								<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
+										 role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title>
+									<rect width="100%" height="100%" fill="#55595c"/>
+									<text x="50%" y="50%" fill="#eceeef" dy=".3em">Game Screenshot</text>
+								</svg>
+								<div class="card-body">
+									<p class="card-text"><span style="font-weight: bold">Sketch Test</span></p>
+									<p class="card-text">Use your mouse to draw the lines that you see.
+										<br>
+										<br>
+										<br>
+									</p>
+									<div class="d-flex justify-content-between align-items-center">
+										<div class="btn-group">
+											<button type="button" class="btn btn-sm btn-outline-secondary">Start Test</button>
+										</div>
+										<small class="text-muted">Est Duration: 1 mins</small>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="card mb-4 shadow-sm">
+								<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
+										 role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title>
+									<rect width="100%" height="100%" fill="#55595c"/>
+									<text x="50%" y="50%" fill="#eceeef" dy=".3em">Game Screenshot</text>
+								</svg>
+								<div class="card-body">
+									<p class="card-text"><span style="font-weight: bold">Extending Lines</span></p>
+									<p class="card-text">Keep your eye on the center black dot for the whole test. Click your mouse any time you see
+										a line curve.</p>
+									<div class="d-flex justify-content-between align-items-center">
+										<div class="btn-group">
+											<button type="button" class="btn btn-sm btn-outline-secondary">Start Test</button>
+										</div>
+										<small class="text-muted">Est Duration: 2 mins</small>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+		</main>
+		
+		<footer class="text-muted">
+			<div class="container">
+				<p class="float-right">
+					<a href="#">Back to top</a>
+				</p>
+			</div>
+		</footer>
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+						crossorigin="anonymous"></script>
+		<script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
+		<script src="./assets/dist/js/bootstrap.bundle.min.js"></script>
+		
+		<!-- Firebase Items-->
+		<script src="/__/firebase/7.21.0/firebase-app.js"></script>
+		
+		<script src="/__/firebase/7.7.0/firebase-auth.js"></script>
+		<script src="/__/firebase/7.7.0/firebase-firestore.js"></script>
+		<script src="/__/firebase/7.7.0/firebase-functions.js"></script>
+		
+		<!-- Initialize Firebase -->
+		<script src="/__/firebase/init.js"></script>
+		
+		
+		<script src="./home.js"></script>
+	</body>
 </html>

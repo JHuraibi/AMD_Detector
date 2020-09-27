@@ -1,5 +1,5 @@
 const signOut = document.querySelector('.sign-out');
- 
+
  // sign out
  signOut.addEventListener('click', () => {
     firebase.auth().signOut()
@@ -14,6 +14,6 @@ const signOut = document.querySelector('.sign-out');
       authWrapper.classList.add('open');
       authModals[0].classList.add('active');
     } else {
-      
+
     }
   });
