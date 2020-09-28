@@ -4,26 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Growing Circles</title>
+    <title>Instructions</title>
+    <link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <style>
-        canvas {
-            border: 1px solid black;
-        }
-
-        button {
-            border: 1px solid black;
-            text-align: center;
-            display: inline-block;
-            font-size: 25px;
-        }
-
-        .column {
-            float: left;
-            width: 50%;
+        .instruct {
+            width: 400px;
+            padding: 30px;
+            margin: 100px auto;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
     </style>
-    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -47,25 +41,18 @@
             </div>
         </div>
     </header>
-
     <br>
-    <div class="column" id="leftEyeResults">
-        <b>Left Eye Results</b>
-    </div>
-    <div class="column" id="rightEyeResults">
-        <b>Right Eye Results</b>
-    </div>
-    <div style="text-align: center;">
-        <canvas></canvas>
-        <canvas id="canvas2"></canvas>
-    </div>
-    <div style="text-align: center;">
-        <button id="start" class="btn btn-sm btn-outline-secondary">
-            Start Test
-        </button>
-        <button id="button" class="btn btn-sm btn-outline-secondary">
-            Seen
-        </button>
+    <div class="instruct">
+<p>
+    This test will detect AMD by analyzing if you have any blind spots in your vision. Start by covering your left eye
+    and click the "Start Test" button. Keep your eye on the black dot in the center of the grid. Everytime you notice a 
+    small red circle appear on the screen, click the "seen" button.
+</p>
+
+        <div class="btn-group">
+            <button type="button" onClick="location.href='growingCircle.html'"
+                class="btn btn-sm btn-outline-secondary">Start Test</button>
+        </div>
     </div>
 
     <script src="/__/firebase/7.21.0/firebase-app.js"></script>
@@ -78,7 +65,7 @@
     <script src="/__/firebase/init.js"></script>
 
     <script src="growingCircle.js"></script>
-    <script src="../home.js"></script>
+    <script src="../../home.js"></script>
 </body>
 
 </html>
