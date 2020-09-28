@@ -12,7 +12,7 @@ const signOut = document.querySelector('.sign-out');
 signOut.addEventListener('click', () => {
   firebase.auth().signOut()
     .then(() => console.log('signed out'));
-  window.location = '../index.html';
+  window.location = '../../index.html';
 });
 
 var seen = false;
