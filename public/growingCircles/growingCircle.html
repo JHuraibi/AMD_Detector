@@ -8,12 +8,6 @@
     <style>
         canvas {
             border: 1px solid black;
-            text-align: center;
-            padding-left: 0;
-            padding-right: 0;
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
         }
 
         button {
@@ -21,6 +15,12 @@
             text-align: center;
             display: inline-block;
             font-size: 25px;
+        }
+
+        .column {
+            float: left;
+            width: 50%;
+            text-align: center;
         }
     </style>
     <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
@@ -49,7 +49,16 @@
     </header>
 
     <br>
-    <canvas></canvas>
+    <div class="column" id="leftEyeResults">
+        <b>Left Eye Results</b>
+    </div>
+    <div class="column" id="rightEyeResults">
+        <b>Right Eye Results</b>
+    </div>
+    <div style="text-align: center;">
+        <canvas></canvas>
+        <canvas id="canvas2"></canvas>
+    </div>
     <div style="text-align: center;">
         <button id="start" class="btn btn-sm btn-outline-secondary">
             Start Test
