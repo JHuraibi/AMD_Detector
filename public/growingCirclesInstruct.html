@@ -4,26 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Growing Circles</title>
+    <title>Instructions</title>
+    <link href="./css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <style>
-        canvas {
-            border: 1px solid black;
+        .instruct {
+            width: 300px;
+            padding: 30px;
+            margin: 100px auto;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
-            padding-left: 0;
-            padding-right: 0;
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
-        }
-
-        button {
-            border: 1px solid black;
-            text-align: center;
-            display: inline-block;
-            font-size: 25px;
         }
     </style>
-    <link href="./css/bootstrap/bootstrap.min.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -47,16 +41,18 @@
             </div>
         </div>
     </header>
-
     <br>
-    <canvas></canvas>
-    <div style="text-align: center;">
-        <button id="start" class="btn btn-sm btn-outline-secondary">
-            Restart Test
-        </button>
-        <button id="button" class="btn btn-sm btn-outline-secondary">
-            Seen
-        </button>
+    <div class="instruct">
+<p>
+    This test will detect AMD by analyzing if you have any blind spots in your vision. Start by covering your left eye
+    and click the "Start Test" button. Keep your eye on the black dot in the center of the grid. Everytime you notice a 
+    small red circle appear on the screen, click the "seen" button.
+</p>
+
+        <div class="btn-group">
+            <button type="button" onClick="location.href='growingCircle.html'"
+                class="btn btn-sm btn-outline-secondary">Start Test</button>
+        </div>
     </div>
 
     <script src="/__/firebase/7.21.0/firebase-app.js"></script>

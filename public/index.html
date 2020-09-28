@@ -1,56 +1,59 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Vision Monitor</title>
-    <link rel="stylesheet" href="css/styles.css">
-  </head>
-  <body>
 
-    <div class= "auth open">
-      <div class= "modal active">
-        <h2>Login</h2>
-        <form class="login">
-          <input type="text" name="email" placeholder="Email">
-          <input type="password" name="password" placeholder="Password">
-          <button>Login</button>
-          <p class="error"></p>
-        </form>
-        <div>No account? <a class="switch">Register instead</a></div>
-      </div>
-      <div class="modal">
-        <h2>Register</h2>
-        <form class="register">
-          <input type="text" id="firstname" name="firstname" placeholder="First Name">
-          <input type="text" id="lastname" name="lastname" placeholder="Last Name">
-          <input type="text" name="email" placeholder="Email">
-          <input type="password" name="password" placeholder="Password">
-          <input type="date" id="birthdate" name="birthdate" placeholder="Birthdate">
-          <button>Register</button>
-          <p class="error"></p>
-        </form>
-        <div>Got an account? <a class="switch">Login instead</a></div>
-      </div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vision Monitor</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <div class="auth open">
+    <div class="modal active">
+      <h2>Login</h2>
+      <form class="login">
+        <input type="text" name="email" placeholder="Email">
+        <input type="password" name="password" placeholder="Password">
+        <button>Login</button>
+        <p class="error"></p>
+      </form>
+      <div>No account? <a class="switch">Register instead</a></div>
     </div>
+    <div class="modal">
+      <h2>Register</h2>
+      <form class="register">
+        <input type="text" id="firstname" name="firstname" placeholder="First Name">
+        <input type="text" id="lastname" name="lastname" placeholder="Last Name">
+        <input type="text" name="email" placeholder="Email">
+        <input type="password" name="password" placeholder="Password">
+        <input type="date" id="birthdate" name="birthdate" placeholder="Birthdate">
+        <button>Register</button>
+        <p class="error"></p>
+      </form>
+      <div>Got an account? <a class="switch">Login instead</a></div>
+    </div>
+  </div>
 
-    
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
 
-    <script src="/__/firebase/7.21.0/firebase-app.js"></script>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
 
-    <script src="/__/firebase/7.7.0/firebase-auth.js"></script>
-    <script src="/__/firebase/7.7.0/firebase-firestore.js"></script>
-    <script src="/__/firebase/7.7.0/firebase-functions.js"></script>
+  <script src="/__/firebase/7.21.0/firebase-app.js"></script>
 
-    <!-- Initialize Firebase -->
-    <script src="/__/firebase/init.js"></script>
+  <script src="/__/firebase/7.7.0/firebase-auth.js"></script>
+  <script src="/__/firebase/7.7.0/firebase-firestore.js"></script>
+  <script src="/__/firebase/7.7.0/firebase-functions.js"></script>
 
-    <script>
-      const auth = firebase.auth();
-      const db = firebase.firestore();
-    </script>
+  <!-- Initialize Firebase -->
+  <script src="/__/firebase/init.js"></script>
 
-    <script src="auth.js"></script>
-  </body>
+  <script>
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+  </script>
+
+  <script src="auth.js"></script>
+</body>
+
 </html>
