@@ -28,6 +28,11 @@ results[0] = [];
 results[1] = [];
 results[2] = [];
 var index = 0;
+c.fillStyle = "black";
+c.beginPath();
+c.arc(250, 250, 4, 0, Math.PI * 2, false);
+c.fill();
+c.stroke();
 
 function test() {
 
@@ -96,7 +101,10 @@ function startTest() {                               //start test and create an 
     test();
 }
 
-function showResults(r) {                        //Clear the canvas and create a new one with the data collected
+//Clear the canvas and create a new one with the data collected. Need to also save the data to the database here
+
+function showResults(r) {
+
     //clear canvas
     c.clearRect(0, 0, 500, 500)
 
