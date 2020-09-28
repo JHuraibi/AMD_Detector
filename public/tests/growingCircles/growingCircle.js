@@ -61,7 +61,7 @@ c.stroke();
 
 function test() {
 
-    if (j < 20) {
+    if (j < 10) {
         // New red dot location
         x = Math.random() * 500;
         y = Math.random() * 500;
@@ -157,7 +157,7 @@ c2.stroke();
 
 function test2() {
 
-    if (j2 < 20) {
+    if (j2 < 10) {
         // New red dot location
         x2 = Math.random() * 500;
         y2 = Math.random() * 500;
