@@ -6,6 +6,15 @@ var c = canvas.getContext('2d');
 var c2 = canvas2.getContext('2d');
 document.getElementById("button").addEventListener("click", myFunction);
 document.getElementById("start").addEventListener("click", startTest);
+const signOut = document.querySelector('.sign-out');
+
+// sign out
+signOut.addEventListener('click', () => {
+  firebase.auth().signOut()
+    .then(() => console.log('signed out'));
+  window.location = '../index.html';
+});
+
 var seen = false;
 
 var size = 500;
