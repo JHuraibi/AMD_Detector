@@ -7,7 +7,6 @@ exports.newUserSignUp = functions.auth.user().onCreate(user => {
 
     admin.firestore().collection('users').doc(user.uid).set({
         email: user.email,
-        firstname: user.firstname,
         testResults: [],
     
     })
