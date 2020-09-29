@@ -11,7 +11,7 @@
 		<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
 		
 		<!-- Bootstrap core CSS -->
-<!--		<link href="../public/css/bootstrap/bootstrap.min.css" rel="stylesheet">-->
+		<!--		<link href="../public/css/bootstrap/bootstrap.min.css" rel="stylesheet">-->
 		<link href="./css/bootstrap/bootstrap.min.css" rel="stylesheet">
 		
 		<style>
@@ -59,7 +59,7 @@
 					<div class="sidebar-sticky pt-3">
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a class="nav-link active" href="index.html">
+								<a class="nav-link active" href="home.html">
 									<span data-feather="home"></span>
 									Home <span class="sr-only">(current)</span>
 								</a>
@@ -102,142 +102,25 @@
 						</div>
 					</div>
 					
-					<div>
-						<img src="./images/dash_prototype.png" alt="Dashboard Example">
-					</div>
+					<!-- Interactive Canvas -->
+					<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 					
-					<!--	DISABLED FOR PROTOTYPE DEMONSTRATION USING STATIC IMAGE-->
-					<!--					<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>-->
-					<!--					-->
-					<!--					<h2>Scores</h2>-->
-					<!--					<div class="table-responsive">-->
-					<!--						<table class="table table-striped table-sm">-->
-					<!--							<thead>-->
-					<!--							<tr>-->
-					<!--								<th>#</th>-->
-					<!--								<th>Header</th>-->
-					<!--								<th>Header</th>-->
-					<!--								<th>Header</th>-->
-					<!--								<th>Header</th>-->
-					<!--							</tr>-->
-					<!--							</thead>-->
-					<!--							<tbody>-->
-					<!--							<tr>-->
-					<!--								<td>1,001</td>-->
-					<!--								<td>Lorem</td>-->
-					<!--								<td>ipsum</td>-->
-					<!--								<td>dolor</td>-->
-					<!--								<td>sit</td>-->
-					<!--							</tr>-->
-					<!--							<tr>-->
-					<!--								<td>1,002</td>-->
-					<!--								<td>amet</td>-->
-					<!--								<td>consectetur</td>-->
-					<!--								<td>adipiscing</td>-->
-					<!--								<td>elit</td>-->
-					<!--							</tr>-->
-					<!--							<tr>-->
-					<!--								<td>1,003</td>-->
-					<!--								<td>Integer</td>-->
-					<!--								<td>nec</td>-->
-					<!--								<td>odio</td>-->
-					<!--								<td>Praesent</td>-->
-					<!--							</tr>-->
-					<!--							<tr>-->
-					<!--								<td>1,003</td>-->
-					<!--								<td>libero</td>-->
-					<!--								<td>Sed</td>-->
-					<!--								<td>cursus</td>-->
-					<!--								<td>ante</td>-->
-					<!--							</tr>-->
-					<!--							<tr>-->
-					<!--								<td>1,004</td>-->
-					<!--								<td>dapibus</td>-->
-					<!--								<td>diam</td>-->
-					<!--								<td>Sed</td>-->
-					<!--								<td>nisi</td>-->
-					<!--							</tr>-->
-					<!--							<tr>-->
-					<!--								<td>1,005</td>-->
-					<!--								<td>Nulla</td>-->
-					<!--								<td>quis</td>-->
-					<!--								<td>sem</td>-->
-					<!--								<td>at</td>-->
-					<!--							</tr>-->
-					<!--							<tr>-->
-					<!--								<td>1,006</td>-->
-					<!--								<td>nibh</td>-->
-					<!--								<td>elementum</td>-->
-					<!--								<td>imperdiet</td>-->
-					<!--								<td>Duis</td>-->
-					<!--							</tr>-->
-					<!--							<tr>-->
-					<!--								<td>1,007</td>-->
-					<!--								<td>sagittis</td>-->
-					<!--								<td>ipsum</td>-->
-					<!--								<td>Praesent</td>-->
-					<!--								<td>mauris</td>-->
-					<!--							</tr>-->
-					<!--							<tr>-->
-					<!--								<td>1,008</td>-->
-					<!--								<td>Fusce</td>-->
-					<!--								<td>nec</td>-->
-					<!--								<td>tellus</td>-->
-					<!--								<td>sed</td>-->
-					<!--							</tr>-->
-					<!--							<tr>-->
-					<!--								<td>1,009</td>-->
-					<!--								<td>augue</td>-->
-					<!--								<td>semper</td>-->
-					<!--								<td>porta</td>-->
-					<!--								<td>Mauris</td>-->
-					<!--							</tr>-->
-					<!--							<tr>-->
-					<!--								<td>1,010</td>-->
-					<!--								<td>massa</td>-->
-					<!--								<td>Vestibulum</td>-->
-					<!--								<td>lacinia</td>-->
-					<!--								<td>arcu</td>-->
-					<!--							</tr>-->
-					<!--							<tr>-->
-					<!--								<td>1,011</td>-->
-					<!--								<td>eget</td>-->
-					<!--								<td>nulla</td>-->
-					<!--								<td>Class</td>-->
-					<!--								<td>aptent</td>-->
-					<!--							</tr>-->
-					<!--							<tr>-->
-					<!--								<td>1,012</td>-->
-					<!--								<td>taciti</td>-->
-					<!--								<td>sociosqu</td>-->
-					<!--								<td>ad</td>-->
-					<!--								<td>litora</td>-->
-					<!--							</tr>-->
-					<!--							<tr>-->
-					<!--								<td>1,013</td>-->
-					<!--								<td>torquent</td>-->
-					<!--								<td>per</td>-->
-					<!--								<td>conubia</td>-->
-					<!--								<td>nostra</td>-->
-					<!--							</tr>-->
-					<!--							<tr>-->
-					<!--								<td>1,014</td>-->
-					<!--								<td>per</td>-->
-					<!--								<td>inceptos</td>-->
-					<!--								<td>himenaeos</td>-->
-					<!--								<td>Curabitur</td>-->
-					<!--							</tr>-->
-					<!--							<tr>-->
-					<!--								<td>1,015</td>-->
-					<!--								<td>sodales</td>-->
-					<!--								<td>ligula</td>-->
-					<!--								<td>in</td>-->
-					<!--								<td>libero</td>-->
-					<!--							</tr>-->
-					<!--							</tbody>-->
-					<!--						</table>-->
-					<!--					</div>-->
-					<!--	END DISABLED -->
+					<h2>Scores</h2>
+					<div class="table-responsive">
+						<table class="table table-striped table-sm" id="user_data_table">
+							<thead>
+							<tr>
+								<th>Test</th>
+								<th>Date Taken</th>
+								<th>Score</th>
+								<th>Link to Test</th>
+							</tr>
+							</thead>
+							<tbody>
+							<!-- Table is Populated by file: "FirebaseDAO.js" -->
+							</tbody>
+						</table>
+					</div>
 				</main>
 			</div>
 		</div>
@@ -248,5 +131,24 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 		<script src="./js/dashboard.js"></script>
+		<!----| Firebase Initialization Items |----------------------------------------------->
+		<!-- The core Firebase JS SDK is always required and must be listed first -->
+		<script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
+		<!-- Firebase Libraries We're Using -->
+		<script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-firestore.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-analytics.js"></script>
+		
+		<!-- Initialize Firebase -->
+		<script src="/__/firebase/init.js"></script>
+		
+		<script src="./js/FirebaseDAO.js"></script>
+		
+		<script>
+		// !! Note: Formatting is currently hard-coded for each tag target (will be dynamic in the near future)
+		// var db = firebase.initializeApp(firebaseConfig);
+		var obj = new FirebaseDAO(firebase.firestore());
+		obj.populateTestTable("user_data_table");
+		</script>
+	
 	</body>
 </html>
