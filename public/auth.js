@@ -21,6 +21,7 @@ authSwitchLinks.forEach(link => {
   // sign up the user & add firestore data
   firebase.auth().createUserWithEmailAndPassword(email, password).then(cred => {
     return db.collection('users').doc(cred.user.uid).set({
+      email: registerForm['email'].value,
       firstname: registerForm['firstname'].value,
       lastname: registerForm['lastname'].value,
       birthday: registerForm['birthdate'].value,

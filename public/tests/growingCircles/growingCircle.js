@@ -2,11 +2,17 @@ var canvas = document.querySelector('canvas');
 var canvas2 = document.getElementById("canvas2");
 var LER = document.getElementById('leftEyeResults');
 var RER = document.getElementById('rightEyeResults');
+var nexteye = document.getElementById('nextEye');
+var retakebtn = document.getElementById('retakebtn');
+var savebtn = document.getElementById('savebtn');
 var c = canvas.getContext('2d');
 var c2 = canvas2.getContext('2d');
 document.getElementById("button").addEventListener("click", myFunction);
 document.getElementById("start").addEventListener("click", startTest);
+document.getElementById("nexttestbtn").addEventListener("click", startTest2);
 const signOut = document.querySelector('.sign-out');
+var startbtn= document.getElementById('start');
+var seenbtn= document.getElementById('button');
 
 // sign out
 signOut.addEventListener('click', () => {
@@ -36,11 +42,13 @@ c2.scale(scale, scale);
 
 //hide canvas 2 for now
 canvas2.style.display = "none";
-
-
+nexteye.style.display ="none";
+//hide results text
 LER.style.display ="none";
 RER.style.display="none";
-
+//hide end buttons
+retakebtn.style.display="none";
+savebtn.style.display="none";
 
 //Test variables 
 var x;
@@ -61,11 +69,11 @@ c.stroke();
 
 function test() {
 
-    if (j < 10) {
+    if (j < 5) {
         // New red dot location
         x = Math.random() * 500;
         y = Math.random() * 500;
-        z = 4
+        z = 3
         c.clearRect(0, 0, 500, 500)
 
         // Black Dot
@@ -124,6 +132,7 @@ function startTest() {                               //start test and create an 
         index = 0;
         j = 0;
         seen = false;
+        startbtn.innerText="Restart";
         test();
     } else {
         startTest2();
@@ -131,9 +140,13 @@ function startTest() {                               //start test and create an 
 }
 
 function nextTest() {
+    //Clear the page and tell the user to start the next test
     canvas.style.display = "none";
-    canvas2.style.display = "inline-block";
-    startTest2();
+    //start the next test
+    nexteye.style.display ="block";
+    //Hide start test and seen button
+    startbtn.style.display = "none";
+    seenbtn.style.display = "none";
 
 }
 
@@ -157,11 +170,11 @@ c2.stroke();
 
 function test2() {
 
-    if (j2 < 10) {
+    if (j2 < 5) {
         // New red dot location
         x2 = Math.random() * 500;
         y2 = Math.random() * 500;
-        z2 = 4
+        z2 = 3
         c2.clearRect(0, 0, 500, 500)
 
         // Black Dot
@@ -211,7 +224,11 @@ function myFunction() {
 }
 
 function startTest2() {                               //start test and create an array for this test
-
+    nexteye.style.display ="none";
+    canvas2.style.display = "inline-block";
+    startbtn.style.display = "inline-block";
+    seenbtn.style.display = "inline-block";
+    startbtn.innerText="Restart";
     results2 = [];
     results2[0] = [];
     results2[1] = [];
@@ -226,11 +243,18 @@ function startTest2() {                               //start test and create an
 
 function showResults(r, r2) {
 
+    //displaying and hiding elements 
     console.log("displaying results from both tests");
     canvas2.style.display = "inline-block";
     canvas.style.display = "inline-block";
     LER.style.display ="block";
     RER.style.display="block";
+    startbtn.style.display = "none";
+    seenbtn.style.display = "none";
+
+    //save results or retake test buttons
+    retakebtn.style.display = "inline-block";
+    savebtn.style.display = "inline-block";
 
     //clear canvas
     c.clearRect(0, 0, 500, 500)

@@ -22,6 +22,16 @@
             width: 50%;
             text-align: center;
         }
+
+        .instruct {
+            width: 400px;
+            padding: 30px;
+            margin: 100px auto;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
     </style>
     <link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -55,10 +65,20 @@
     <div class="column" id="rightEyeResults">
         <b>Right Eye Results</b>
     </div>
+
     <div style="text-align: center;">
         <canvas></canvas>
         <canvas id="canvas2"></canvas>
     </div>
+
+    <div class="instruct" id="nextEye">
+        <p>
+            Great! Now cover your left eye, and with your right eye focus on the black dot in the center. 
+            Click the "seen" button whenever you notice a red dot appear. 
+        </p>
+        <button id="nexttestbtn" class="btn btn-sm btn-outline-secondary">Start next eye</button>
+    </div>
+
     <div style="text-align: center;">
         <button id="start" class="btn btn-sm btn-outline-secondary">
             Start Test
@@ -66,8 +86,15 @@
         <button id="button" class="btn btn-sm btn-outline-secondary">
             Seen
         </button>
+        <button id="retakebtn" class="btn btn-sm btn-outline-secondary" onclick="location.href='growingCircle.html'">
+            Retake Test
+        </button>
+        <button id="savebtn" class="btn btn-sm btn-outline-secondary">
+            Save Results
+        </button>
     </div>
 
+    <br>
     <script src="/__/firebase/7.21.0/firebase-app.js"></script>
 
     <script src="/__/firebase/7.7.0/firebase-auth.js"></script>
