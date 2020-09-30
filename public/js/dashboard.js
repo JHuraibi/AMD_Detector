@@ -19,17 +19,22 @@
         'May',
         'June',
         'July',
-        'August (Current)'
+        'August',
+        'September',
+        'October (Current)'
       ],
       datasets: [{
         data: [
-          15339,
-          21345,
-          18483,
-          24003,
-          23489,
-          24092,
-          12034
+          202,
+          189,
+          163,
+          175,
+          144,
+          60,
+          45,
+          42,
+          37,
+          20
         ],
         lineTension: 0,
         backgroundColor: 'transparent',
