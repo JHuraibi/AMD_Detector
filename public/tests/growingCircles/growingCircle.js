@@ -69,11 +69,11 @@ c.stroke();
 
 function test() {
 
-    if (j < 10) {
+    if (j < 5) {
         // New red dot location
         x = Math.random() * 500;
         y = Math.random() * 500;
-        z = 4
+        z = 3
         c.clearRect(0, 0, 500, 500)
 
         // Black Dot
@@ -132,6 +132,7 @@ function startTest() {                               //start test and create an 
         index = 0;
         j = 0;
         seen = false;
+        startbtn.innerText="Restart";
         test();
     } else {
         startTest2();
@@ -169,11 +170,11 @@ c2.stroke();
 
 function test2() {
 
-    if (j2 < 10) {
+    if (j2 < 5) {
         // New red dot location
         x2 = Math.random() * 500;
         y2 = Math.random() * 500;
-        z2 = 4
+        z2 = 3
         c2.clearRect(0, 0, 500, 500)
 
         // Black Dot
@@ -227,6 +228,7 @@ function startTest2() {                               //start test and create an
     canvas2.style.display = "inline-block";
     startbtn.style.display = "inline-block";
     seenbtn.style.display = "inline-block";
+    startbtn.innerText="Restart";
     results2 = [];
     results2[0] = [];
     results2[1] = [];
