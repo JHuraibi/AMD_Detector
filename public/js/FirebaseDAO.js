@@ -1,3 +1,5 @@
+// CHECK: Extract into two different classes (FirebaseSender and FirebaseRetriever)?
+
 class FirebaseDAO {
 	constructor(dbRef) {
 		this.db = dbRef;
@@ -21,6 +23,7 @@ class FirebaseDAO {
 	}
 
 	addRowToTestTable(data, targetTableID) {
+		// TODO: Sort tables
 		// Extract the data by using the Firestore document's field names
 		var testName = data.testName;
 		var time = data.date;
