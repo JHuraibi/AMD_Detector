@@ -15,19 +15,19 @@ class FirebaseDAO {
 					console.log("Test Name: " + doc.data().testName);
 					console.log("Time: " + doc.data().date);
 					console.log("Score: " + doc.data().score);
-					console.log("URL to Test: " + doc.data().url);
+					console.log("URL of Test: " + doc.data().url);
 				});
 			});
 	}
 
 	addRowToTestTable(data, targetTableID) {
-		// Data received from the database
+		// Extract the data by using the Firestore document's field names
 		var testName = data.testName;
 		var time = data.date;
 		var score = data.score;
-		var urlToTest = data.url;
+		var urlOfTest = data.url;
 
-		// Where to print the table
+		// ID of which table to put the data into (HTML ID)
 		var tableBody = document.getElementById(targetTableID);
 
 		// Table Row
@@ -39,7 +39,7 @@ class FirebaseDAO {
 		var columnScore = document.createElement("td");
 		var columnURL = document.createElement("td");
 
-		// Child of URL Column so we can add hyperlink
+		// Will be a child of columnURL so we can add hyperlink
 		var linkForURL = document.createElement("a");
 
 		// Text to be put in the Columns
@@ -50,15 +50,15 @@ class FirebaseDAO {
 
 		// Set href attribute for link to test
 		linkForURL.appendChild(textURL);
-		linkForURL.setAttribute("href", urlToTest);
+		linkForURL.setAttribute("href", urlOfTest);
 
-		// Put the Text in the Columns
+		// Put the Text into their respective Columns
 		columnTestName.appendChild(textTestName);
 		columnTime.appendChild(textTime);
 		columnScore.appendChild(textScore);
 		columnURL.appendChild(linkForURL);
 
-		// Add the Columns to the Row
+		// Add each the Columns to the Row
 		row.appendChild(columnTestName);
 		row.appendChild(columnTime);
 		row.appendChild(columnScore);
