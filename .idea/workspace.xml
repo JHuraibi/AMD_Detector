@@ -27,7 +27,7 @@
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.HTML" />
+    <property name="settings.editor.selected.configurable" value="preferences.toDoOptions" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -153,10 +153,10 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2539" height="492" key="GridCell.Tab.3.right/0.0.2560.1400/-1080.0.1080.1880@0.0.2560.1400" timestamp="1601244720259" />
-    <state x="781" y="345" width="1346" height="710" key="SettingsEditor" timestamp="1601751992797">
+    <state x="781" y="345" width="1346" height="710" key="SettingsEditor" timestamp="1601753883067">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="781" y="345" width="1346" height="710" key="SettingsEditor/0.0.2560.1400/-1080.0.1080.1880@0.0.2560.1400" timestamp="1601751992797" />
+    <state x="781" y="345" width="1346" height="710" key="SettingsEditor/0.0.2560.1400/-1080.0.1080.1880@0.0.2560.1400" timestamp="1601753883067" />
     <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1601242252414">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>

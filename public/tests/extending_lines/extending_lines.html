@@ -50,6 +50,7 @@
 				<script src="bar.js"></script>
 				<script src="clicked_bar.js"></script>
 				<script>
+					// CRITICAL: Method below may give user a "Prevent more popups," blocking the confirm windows. We can't have this.
 					getUploadConfirmation();
 
 					function getUploadConfirmation() {
@@ -67,6 +68,9 @@
 								getUploadConfirmation();
 							}
 						}
+						
+						// Use "location.replace" not ".href = {}" so that user can't press Back
+						window.location.replace('../../home.html');
 					}
 				</script>
 			</main>
@@ -80,6 +84,7 @@
 		
 		<script>
 			// TODO: Make firebaseDAO global
+			//"Page location is " + window.location.href; <- Dynamically get the URL of test page.
 			let firebaseDAO = new FirebaseDAO(firebase.firestore());
 			firebaseDAO.populateTestTable("user_data_table");
 		</script>
