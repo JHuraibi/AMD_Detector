@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f83ada36-4700-435b-9038-19db646f66c3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/FirebaseDAO.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/FirebaseDAO.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/tests/growingCircles/growingCircle.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/tests/growingCircles/growingCircle.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/tests/extending_lines/extending_lines.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/tests/extending_lines/extending_lines.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,9 +165,9 @@
       <screen x="-1080" y="0" width="1080" height="1880" />
     </state>
     <state x="-1080" y="0" width="1096" height="1387" key="dock-window-1/0.0.2560.1400/-1080.0.1080.1880@0.0.2560.1400" timestamp="1601233497908" />
-    <state x="987" y="433" width="585" height="534" key="find.popup" timestamp="1601752060819">
+    <state x="987" y="433" width="585" height="534" key="find.popup" timestamp="1601752355715">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="987" y="433" width="585" height="534" key="find.popup/0.0.2560.1400/-1080.0.1080.1880@0.0.2560.1400" timestamp="1601752060819" />
+    <state x="987" y="433" width="585" height="534" key="find.popup/0.0.2560.1400/-1080.0.1080.1880@0.0.2560.1400" timestamp="1601752355715" />
   </component>
 </project>

@@ -14,20 +14,20 @@
 		<link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
 		
 		<style>
-			.bd-placeholder-img {
-				font-size: 1.125rem;
-				text-anchor: middle;
-				-webkit-user-select: none;
-				-moz-user-select: none;
-				-ms-user-select: none;
-				user-select: none;
-			}
-			
-			@media (min-width: 768px) {
-				.bd-placeholder-img-lg {
-					font-size: 3.5rem;
-				}
-			}
+					.bd-placeholder-img {
+						font-size: 1.125rem;
+						text-anchor: middle;
+						-webkit-user-select: none;
+						-moz-user-select: none;
+						-ms-user-select: none;
+						user-select: none;
+					}
+					
+					@media (min-width: 768px) {
+						.bd-placeholder-img-lg {
+							font-size: 3.5rem;
+						}
+					}
 		</style>
 		<!-- Custom styles for this template -->
 		<link href="../../css/cover.css" rel="stylesheet">
@@ -49,6 +49,26 @@
 				<script src="extending_lines.js"></script>
 				<script src="bar.js"></script>
 				<script src="clicked_bar.js"></script>
+				<script>
+					getUploadConfirmation();
+
+					function getUploadConfirmation() {
+						var confirmation = window.confirm("Click Ok to Upload Your Score to Your Account");
+						if (confirmation) {
+							//sendToFirebase()
+							alert("Uploading Your Score");
+						}
+						else {
+							confirmation = window.confirm("Are You Sure You Do Not Want To Save Your Test Score?");
+							if (confirmation) {
+								alert("Your Score Was Not Saved");
+							}
+							else {
+								getUploadConfirmation();
+							}
+						}
+					}
+				</script>
 			</main>
 			
 			<footer class="mastfoot mt-auto">
@@ -56,5 +76,12 @@
 				</div>
 			</footer>
 		</div>
+		
+		
+		<script>
+			// TODO: Make firebaseDAO global
+			let firebaseDAO = new FirebaseDAO(firebase.firestore());
+			firebaseDAO.populateTestTable("user_data_table");
+		</script>
 	</body>
 </html>
