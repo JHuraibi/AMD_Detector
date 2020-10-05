@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<body>
+	
+	
+	</body>
+</html>
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+		<meta name="generator" content="Jekyll v4.1.1">
+		<title>Extending Lines · Test</title>
+		
+		<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/cover/">
+		
+		<!-- Bootstrap core CSS -->
+		<link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+		
+		<style>
+			.bd-placeholder-img {
+				font-size: 1.125rem;
+				text-anchor: middle;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+			}
+			
+			@media (min-width: 768px) {
+				.bd-placeholder-img-lg {
+					font-size: 3.5rem;
+				}
+			}
+		</style>
+		<!-- Custom styles for this template -->
+		<link href="../../css/cover.css" rel="stylesheet">
+	</head>
+	<body class="text-center">
+		<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+			<header class="masthead mb-auto">
+				<div class="inner">
+					<h3 class="masthead-brand">Vision Monitor</h3>
+					<nav class="nav nav-masthead justify-content-center">
+						<a class="nav-link active" href="../../home.html">Home</a>
+						<a class="nav-link" href="#">My Dashboard</a>
+					</nav>
+				</div>
+			</header>
+			
+<!--			<main role="main" class="inner cover">-->
+			<main role="main" style="background: white">
+				<canvas id="myCanvas" width="500" height="500"></canvas>
+				<br>
+				<button onclick="Seen();">Seen</button>
+				
+				<script>
+					var c = document.getElementById("myCanvas");
+		
+					var ctx = c.getContext("2d");
+					ctx.beginPath();
+					ctx.arc(250, 250, 10, 0, 2 * Math.PI);
+					ctx.fillStyle = "black";
+					ctx.fill();
+
+					function Seen() {
+						ctx.beginPath();
+						var x = Math.floor(Math.random() * 500);
+						var y = Math.floor(Math.random() * 500);
+						ctx.arc(x, y, 10, 0, 2 * Math.PI);
+						ctx.fillStyle = "red";
+						ctx.fill();
+						setTimeout(function () {
+							ctx.beginPath();
+							ctx.arc(x, y, 10, 0, 2 * Math.PI);
+							ctx.fillStyle = "white";
+							ctx.fill();
+						}, 2000);
+					}
+				</script>
+			</main>
+			
+			<footer class="mastfoot mt-auto">
+				<div class="inner">
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>
