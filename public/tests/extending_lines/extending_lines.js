@@ -1,21 +1,17 @@
-var timer;
-var clickCounter = 0;
-var clickedBars = [];
-var stopGame = false;
-var showResults = false;
-var bars = []
-var numBars = 4;
-var currentBar;
+let timer;
+let clickCounter = 0;
+let clickedBars = [];
+let stopGame = false;
+let showResults = false;
+let bars = []
+let numBars = 4;
+let currentBar;
 
-var queue = []
-var queCount = 0;
+let queue = []
+let queCount = 0;
 
-var windowPercent = 0.8;
-
-var showDebugMsg = false;
-var tempMsgCounter = 0;
-
-var flashy = 0;
+let showDebugMsg = false;
+let tempMsgCounter = 0;
 
 function setup() {
 	createCanvas(800, 800);
@@ -29,17 +25,20 @@ function setup() {
 	currentBar = bars[i];
 }
 
-// draw() x60 per second
+// draw() loops x60 each second
 function draw() {
 	if (!showResults) {
-		showAllBars();
-		oneSecondUpdate();
-		timer++;
+		// Test running
+		showAllBars();									// Draw all the bars on the canvas
+		moveNextBar();									// Move bars at fixed time interval (see fxn for timer usage)
+		timer++;										// Increment the timer
 	}
 	else {
+		// Test done running
 		showClickAreas();
 	}
 
+	// Items to always be shown (game running or not)
 	showCenterCircle();
 	debugMsg();
 }
@@ -83,7 +82,9 @@ function showAllBars() {
 	}
 }
 
-function oneSecondUpdate() {
+function moveNextBar() {
+	// Every 60 increments of timer is 1 second
+	// So below is moving the next bar every half second
 	if (timer % 30 === 0) {
 		var whichBar = feedQueue();
 		bars[whichBar].move();
@@ -92,20 +93,20 @@ function oneSecondUpdate() {
 }
 
 function feedQueue() {
-	var nextBar;
+	var nextBarIndex;
 
 	if (queCount >= 4) {
 		for (var i = 0; i < numBars; i++) {
 			queCount[i] = i;
 		}
 
-		shuffle(queCount, true);
+		shuffle(queCount, true);	// TODO: arr = shuffle(arr)
 		queCount = 0;
 	}
 
-	nextBar = queue[queCount];
+	nextBarIndex = queue[queCount];
 	queCount++;
-	return nextBar;
+	return nextBarIndex;
 }
 
 function debugMsg() {
