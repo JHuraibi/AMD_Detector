@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f83ada36-4700-435b-9038-19db646f66c3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/tests/full_bars/bar.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/tests/full_bars/full_bars.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/tests/full_bars/full_bars.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/tests/extending_lines/bar.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/tests/extending_lines/clicked_bar.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/tests/extending_lines/extending_lines.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/tests/extending_lines/extending_lines.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/tests/extending_lines/p5.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/tests/full_bars/p5.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/tests/extending_lines/p5.pre-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/tests/full_bars/p5.pre-min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/tests/full_bars/full_bars.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/tests/full_bars/full_bars.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,10 +161,10 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog/0.0.2560.1400/-1080.0.1080.1880@0.0.2560.1400" timestamp="1602215388457" />
-    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1601242252414">
+    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1602219114039">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.2560.1400/-1080.0.1080.1880@0.0.2560.1400" timestamp="1601242252414" />
+    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.2560.1400/-1080.0.1080.1880@0.0.2560.1400" timestamp="1602219114039" />
     <state x="-1080" y="0" width="1096" height="1387" key="dock-window-1" timestamp="1601233497908">
       <screen x="-1080" y="0" width="1080" height="1880" />
     </state>
