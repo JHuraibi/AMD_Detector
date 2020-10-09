@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Instructions</title>
+		<link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+		<style>
+					.instruct {
+						width: 400px;
+						padding: 30px;
+						margin: 100px auto;
+						border-radius: 10px;
+						background: white;
+						box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+						text-align: center;
+					}
+		</style>
+		<script src="CustomInstructionsInjector.js"></script>
+	</head>
+	
+	<body>
+		<header>
+			<div class="navbar navbar-dark bg-dark shadow-sm">
+				<div class="container d-flex justify-content-between">
+					<a href="#" class="navbar-brand d-flex align-items-center">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+							 stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2"
+							 viewBox="0 0 100 100" focusable="false">
+							<path d="M 10,30 A 20,20 0,0,1 50,30 A 20,20 0,0,1 90,30 Q 90,60 50,90 Q 10,60 10,30 z"/>
+							<circle cx="12" cy="13" r="4"/>
+						</svg>
+						<!--        <strong>Your Results</strong>-->
+					</a>
+					
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
+							aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+						<a class="sign-out"><span style="color: #007bff">Sign Out</span></a>
+					</button>
+				</div>
+			</div>
+		</header>
+		<br>
+		<div class="instruct">
+			<p>
+				This test will detect AMD by analyzing if you have any blind spots in your vision. Start by covering your
+				right eye
+				and click the "Start Test" button. Keep your eye on the black dot in the center of the grid. Everytime you
+				notice a
+				small red circle appear on the screen, click the "seen" button.
+				
+				Below is JavaScript.
+				<script>
+					var customInstructions = retrieveInstructions('full_bars');
+					document.write(customInstructions);
+				</script>
+			</p>
+			
+			<div class="btn-group">
+				<button type="button" onClick="location.href='growingCircle.html'"
+						class="btn btn-sm btn-outline-secondary">Start Test
+				</button>
+			</div>
+		</div>
+		
+		<script src="/__/firebase/7.21.0/firebase-app.js"></script>
+		
+		<script src="/__/firebase/7.7.0/firebase-auth.js"></script>
+		<script src="/__/firebase/7.7.0/firebase-firestore.js"></script>
+		<script src="/__/firebase/7.7.0/firebase-functions.js"></script>
+		
+		<!-- Initialize Firebase -->
+		<script src="/__/firebase/init.js"></script>
+		
+		<script src="growingCircle.js"></script>
+		<script src="../../home.js"></script>
+	</body>
+
+</html>
