@@ -2,18 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f83ada36-4700-435b-9038-19db646f66c3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/css/dashboard.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/dashboard.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/Thumbnail-RedDotOutline.PNG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/dash_prototype.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/js/dashboard.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firebase-debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/firebase-debug.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/functions/p5/p5.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/functions/p5/p5.pre-min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/bootstrap/bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/bootstrap/bootstrap.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/thumbnail_extLines.PNG" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/thumbnail_extLines.PNG" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/tests/full_bars/full_bars.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/tests/full_bars/full_bars.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/tests/full_bars/full_bars.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/tests/full_bars/full_bars.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +23,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="HTML" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/public/images" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/public/tests/full_bars" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -41,16 +32,16 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Jay\OneDrive - Wayne State University\School\Senior Project\.Programs\AMD_Detector\public" />
-      <recent name="C:\Users\Jay\OneDrive - Wayne State University\School\Senior Project\.Programs\AMD_Detector\public\tests\testsjs" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Jay\OneDrive - Wayne State University\School\Senior Project\.Programs\AMD_Detector\public\tests\full_bars" />
       <recent name="C:\Users\Jay\OneDrive - Wayne State University\School\Senior Project\.Programs\AMD_Detector\public\images" />
       <recent name="C:\Users\Jay\OneDrive - Wayne State University\School\Senior Project\.Programs\AMD_Detector\public\css" />
       <recent name="C:\Users\Jay\OneDrive - Wayne State University\School\Senior Project\.Programs\AMD_Detector\public\js" />
       <recent name="C:\Users\Jay\OneDrive - Wayne State University\School\Senior Project\.Programs\AMD_Detector\public" />
-      <recent name="C:\Users\Jay\OneDrive - Wayne State University\School\Senior Project\.Programs\AMD_Detector\public\tests\extending_lines" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Jay\OneDrive - Wayne State University\School\Senior Project\.Programs\AMD_Detector\public" />
+      <recent name="C:\Users\Jay\OneDrive - Wayne State University\School\Senior Project\.Programs\AMD_Detector\public\tests\testsjs" />
     </key>
   </component>
   <component name="RunManager" selected="JavaScript Debug.extending_lines.html">
@@ -84,6 +75,7 @@
       <workItem from="1601241300403" duration="496000" />
       <workItem from="1601241819430" duration="2305000" />
       <workItem from="1601259969272" duration="4503000" />
+      <workItem from="1602359282229" duration="2655000" />
     </task>
     <servers />
   </component>
@@ -167,10 +159,14 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="781" y="345" key="SettingsEditor/0.0.2560.1400/-1080.0.1080.1880@0.0.2560.1400" timestamp="1601242791826" />
-    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1601242252414">
+    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1602215388457">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.2560.1400/-1080.0.1080.1880@0.0.2560.1400" timestamp="1601242252414" />
+    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog/0.0.2560.1400/-1080.0.1080.1880@0.0.2560.1400" timestamp="1602215388457" />
+    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1602219114039">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.2560.1400/-1080.0.1080.1880@0.0.2560.1400" timestamp="1602219114039" />
     <state x="-1080" y="0" width="1096" height="1387" key="dock-window-1" timestamp="1601233497908">
       <screen x="-1080" y="0" width="1080" height="1880" />
     </state>
