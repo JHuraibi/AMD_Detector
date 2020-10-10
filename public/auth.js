@@ -25,6 +25,7 @@ authSwitchLinks.forEach(link => {
       firstname: registerForm['firstname'].value,
       lastname: registerForm['lastname'].value,
       birthday: registerForm['birthdate'].value,
+      testSpeeds: 1
     });
   }).then(() => {
         var user = firebase.auth().currentUser;
