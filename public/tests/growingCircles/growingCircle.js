@@ -11,14 +11,17 @@ document.getElementById("button").addEventListener("click", myFunction);
 document.getElementById("start").addEventListener("click", startTest);
 document.getElementById("nexttestbtn").addEventListener("click", startTest2);
 const signOut = document.querySelector('.sign-out');
-var startbtn= document.getElementById('start');
-var seenbtn= document.getElementById('button');
+var startbtn = document.getElementById('start');
+var seenbtn = document.getElementById('button');
+var growingspeed = 1000;
+
+
 
 // sign out
 signOut.addEventListener('click', () => {
-  firebase.auth().signOut()
-    .then(() => console.log('signed out'));
-  window.location = '../../index.html';
+    firebase.auth().signOut()
+        .then(() => console.log('signed out'));
+    window.location = '../../index.html';
 });
 
 var seen = false;
@@ -42,13 +45,13 @@ c2.scale(scale, scale);
 
 //hide canvas 2 for now
 canvas2.style.display = "none";
-nexteye.style.display ="none";
+nexteye.style.display = "none";
 //hide results text
-LER.style.display ="none";
-RER.style.display="none";
+LER.style.display = "none";
+RER.style.display = "none";
 //hide end buttons
-retakebtn.style.display="none";
-savebtn.style.display="none";
+retakebtn.style.display = "none";
+savebtn.style.display = "none";
 
 //Test variables 
 var x;
@@ -74,16 +77,7 @@ function test() {
         x = Math.random() * 500;
         y = Math.random() * 500;
         z = 3
-        c.clearRect(0, 0, 500, 500)
-
-        // Black Dot
-        c.fillStyle = "black";
-        c.beginPath();
-        c.arc(250, 250, 4, 0, Math.PI * 2, false);
-        c.fill();
-        c.stroke();
         grow();
-
 
         // Grow dot
         function grow() {
@@ -94,6 +88,7 @@ function test() {
             c.stroke();
             if (seen == false) {                          //user hasnt seen the red dot yet, keep growing
                 z++;
+                //1000 = 1 second. Default is 1. this changes when the user prefernce changes. 
                 setTimeout(grow, 1000);
             } else if (seen == true && z > 5) {                //user seen red dot and it has grown in size- add it to array
                 console.log("create array of the coorinates and size of dot")
@@ -103,12 +98,28 @@ function test() {
                 index++;
                 j++;
                 seen = false;
-                test();
+                c.clearRect(0, 0, 500, 500)
+                c.fillStyle = "black";
+                c.beginPath();
+                c.arc(250, 250, 4, 0, Math.PI * 2, false);
+                c.fill();
+                c.stroke();
+                if (j < 5) {
+                    setTimeout(test, growingspeed);
+                }else test();
             }
             else {                                       //user seen the dot right away
                 j++;
                 seen = false;
-                test();
+                c.clearRect(0, 0, 500, 500)
+                c.fillStyle = "black";
+                c.beginPath();
+                c.arc(250, 250, 4, 0, Math.PI * 2, false);
+                c.fill();
+                c.stroke();
+                if (j < 5) {
+                    setTimeout(test, growingspeed);
+                }else test();
             }
         }
     } else {
@@ -124,6 +135,21 @@ function myFunction() {
 
 function startTest() {                               //start test and create an array for this test
 
+    //set the speed of the test to equal the user preference. 
+    var db = firebase.firestore();
+    var id = firebase.auth().currentUser.uid;
+
+    db.collection("users").doc(id)
+        .get()
+        .then(doc => {
+
+            let newgrowingspeed = (doc.data().testSpeeds) * 1000;
+            growingspeed = newgrowingspeed;
+            console.log(newgrowingspeed);
+
+        });
+
+
     if (canvas2.style.display == "none") {
         results = [];
         results[0] = [];
@@ -132,7 +158,7 @@ function startTest() {                               //start test and create an 
         index = 0;
         j = 0;
         seen = false;
-        startbtn.innerText="Restart";
+        startbtn.innerText = "Restart";
         test();
     } else {
         startTest2();
@@ -143,7 +169,7 @@ function nextTest() {
     //Clear the page and tell the user to start the next test
     canvas.style.display = "none";
     //start the next test
-    nexteye.style.display ="block";
+    nexteye.style.display = "block";
     //Hide start test and seen button
     startbtn.style.display = "none";
     seenbtn.style.display = "none";
@@ -175,14 +201,6 @@ function test2() {
         x2 = Math.random() * 500;
         y2 = Math.random() * 500;
         z2 = 3
-        c2.clearRect(0, 0, 500, 500)
-
-        // Black Dot
-        c2.fillStyle = "black";
-        c2.beginPath();
-        c2.arc(250, 250, 4, 0, Math.PI * 2, false);
-        c2.fill();
-        c2.stroke();
         grow2();
 
 
@@ -204,12 +222,31 @@ function test2() {
                 index2++;
                 j2++;
                 seen = false;
-                test2();
+                c2.clearRect(0, 0, 500, 500)
+
+                // Black Dot
+                c2.fillStyle = "black";
+                c2.beginPath();
+                c2.arc(250, 250, 4, 0, Math.PI * 2, false);
+                c2.fill();
+                c2.stroke();
+                if (j2 < 5) {
+                    setTimeout(test2, growingspeed);
+                }else test2();
             }
             else {                                       //user seen the dot right away
                 j2++;
                 seen = false;
-                test2();
+                c2.clearRect(0, 0, 500, 500)
+                // Black Dot
+                c2.fillStyle = "black";
+                c2.beginPath();
+                c2.arc(250, 250, 4, 0, Math.PI * 2, false);
+                c2.fill();
+                c2.stroke();
+                if (j2 < 5) {
+                    setTimeout(test2, growingspeed);
+                }else test2();
             }
         }
     } else {
@@ -224,11 +261,11 @@ function myFunction() {
 }
 
 function startTest2() {                               //start test and create an array for this test
-    nexteye.style.display ="none";
+    nexteye.style.display = "none";
     canvas2.style.display = "inline-block";
     startbtn.style.display = "inline-block";
     seenbtn.style.display = "inline-block";
-    startbtn.innerText="Restart";
+    startbtn.innerText = "Restart";
     results2 = [];
     results2[0] = [];
     results2[1] = [];
@@ -247,8 +284,8 @@ function showResults(r, r2) {
     console.log("displaying results from both tests");
     canvas2.style.display = "inline-block";
     canvas.style.display = "inline-block";
-    LER.style.display ="block";
-    RER.style.display="block";
+    LER.style.display = "block";
+    RER.style.display = "block";
     startbtn.style.display = "none";
     seenbtn.style.display = "none";
 
@@ -305,5 +342,3 @@ function showResults(r, r2) {
     }
 
 }
-
-
