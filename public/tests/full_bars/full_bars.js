@@ -11,6 +11,8 @@ let xBarsDone = false;
 let currentPos = 0;				// X or Y value to draw the next bar at
 let sec = 2;					// Seconds between showing each bar
 
+let barFillAlpha = 0;				// Will control the alpha
+
 // let barW = ...;				// TODO: Implement this variable once a grid size is agreed on
 
 /**
@@ -50,8 +52,10 @@ function draw() {
 
 		if (timer % (60 * sec) === 0) {
 			loadNextBarPos();
+			barFillAlpha = 0;
 		}
 
+		// fadeIn();
 		drawBar();
 		timer++;
 	}
@@ -110,11 +114,28 @@ function initializeQueue() {
 	posQueue = shuffle(posQueue);
 }
 
+/**
+ * Updates the Alpha (opacity) of the bar fill color. This will create
+ * an animation illusion that makes it look like a single bar is fading in.
+ */
+function fadeIn() {
+	barFillAlpha += 10;
+
+	if (barFillAlpha > 255) {
+		barFillAlpha = 255;
+	}
+
+	fill(0, barFillAlpha);
+}
+
+
 function drawBar() {
 	fill(0);
 
 	let barW = (width / 20) / 4;
 	noStroke();
+
+	fadeIn();
 
 	if (!xBarsDone) {
 		rect(currentPos, 0, barW, height);
