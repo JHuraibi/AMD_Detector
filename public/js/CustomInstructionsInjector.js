@@ -1,8 +1,32 @@
+function retrieveTestTitle(target_test) {
+	switch (target_test) {
+		default:
+			return "";
+
+		// case "amsler_grid":
+		// 	return "Amsler Grid";
+
+		case "growing_circles":
+			return "Growing Circles";
+
+		case "parallel_lines":
+			return "Parallel Lines";
+
+		case "full_bars":
+			return "Full Bars";
+	}
+}
+
 function retrieveInstructions(target_test) {
 
 	switch (target_test) {
 		default:
 			return "[DEBUG] - RETURNED FROM FUNCTION";
+
+		// // AMSLER GRID
+		// case "amsler_grid":
+		// 	return "Amsler Grid Instructions";
+
 		// GROWING CIRCLES
 		case "growing_circles":
 			return "This test will detect AMD by analyzing if you have any blind spots in your vision. Start by covering\n" +
