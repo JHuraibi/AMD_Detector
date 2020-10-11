@@ -11,7 +11,7 @@ let xBarsDone = false;
 let currentPos = 0;				// X or Y value to draw the next bar at
 let sec = 2;					// Seconds between showing each bar
 
-let barFillAlpha = 0;				// Will control the alpha
+let barFillAlpha = 0;			// Will control the alpha
 
 // let barW = ...;				// TODO: Implement this variable once a grid size is agreed on
 
@@ -21,7 +21,7 @@ let barFillAlpha = 0;				// Will control the alpha
  */
 function setup() {
 	createCanvas(800, 800);
-	background(150);
+	background(200);
 	initializeQueue();
 }
 
@@ -44,7 +44,7 @@ function setup() {
  */
 function draw() {
 	// TODO: Would a router-style switch statement be easier to read?
-	background(150);
+	background(200);
 
 	drawStaticGrid();
 
