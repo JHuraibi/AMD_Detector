@@ -1,4 +1,4 @@
-const signOut = document.querySelectorAll('.sign-out');
+const signOut = document.querySelector('.sign-out');
 
 // sign out
 signOut.addEventListener('click', () => {

@@ -25,6 +25,7 @@ authSwitchLinks.forEach(link => {
       firstname: registerForm['firstname'].value,
       lastname: registerForm['lastname'].value,
       birthday: registerForm['birthdate'].value,
+      gender: registerForm['gender'].value,
       testSpeeds: 1
     });
   }).then(() => {
