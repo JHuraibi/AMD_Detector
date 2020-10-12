@@ -13,6 +13,14 @@ ul{
   padding: 0;
 }
 
+label {
+  /* Other styling... */
+  text-align: right;
+  clear: both;
+  float:left;
+  padding: 10px;
+}
+
 /* header styles */
 header{
   width: 100%;
@@ -38,7 +46,6 @@ header a:hover{
   max-width: 800px;
   margin: 40px auto 0;
 }
-
 
 /* modal styles */
 .modal{

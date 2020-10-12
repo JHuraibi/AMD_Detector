@@ -27,8 +27,20 @@
         <input type="text" id="firstname" name="firstname" placeholder="First Name">
         <input type="text" id="lastname" name="lastname" placeholder="Last Name">
         <input type="text" name="email" placeholder="Email">
-        <input type="password" name="password" placeholder="Password">
+        <input name="password" id="password" type="password" onkeyup='check();' placeholder="Password">
+        <input type="password" name="confirm_password" id="confirm_password" onkeyup='check();'
+          placeholder="Confirm password">
+        <span id='message'></span>
         <input type="date" id="birthdate" name="birthdate" placeholder="Birthdate">
+        <div style="display: inline-block;">
+          <label for="male">Male</label>
+          <input type="radio" id="male" name="gender" value="male">
+        </div>
+        <div style="display: inline-block;">
+          <label for="female">Female</label>
+          <input type="radio" id="female" name="gender" value="female">
+        </div>
+        <br>
         <button>Register</button>
         <p class="error"></p>
       </form>
@@ -54,6 +66,20 @@
   </script>
 
   <script src="auth.js"></script>
+
+  <script>
+    var check = function () {
+      if (document.getElementById('password').value ==
+        document.getElementById('confirm_password').value) {
+        document.getElementById('message').style.color = 'green';
+        document.getElementById('message').innerHTML = 'matching';
+      } else {
+        document.getElementById('message').style.color = 'red';
+        document.getElementById('message').innerHTML = 'not matching';
+      }
+    }
+
+  </script>
 </body>
 
 </html>
