@@ -38,7 +38,7 @@ function setup() {
  *        [This is for debugging. Results probably won't immediately be shown to user after test]
  *        Show results by drawing the bars that were clicked.
  *
- *    Always done:
+ * Always:
  *        Draw the center black dot.
  *        Draw the border around the canvas.
  */
