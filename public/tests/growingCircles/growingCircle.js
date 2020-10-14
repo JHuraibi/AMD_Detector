@@ -10,19 +10,19 @@ var c2 = canvas2.getContext('2d');
 document.getElementById("button").addEventListener("click", myFunction);
 document.getElementById("start").addEventListener("click", startTest);
 document.getElementById("nexttestbtn").addEventListener("click", startTest2);
-const signOut = document.querySelector('.sign-out');
+//const signOut = document.querySelector('.sign-out');
 var startbtn = document.getElementById('start');
 var seenbtn = document.getElementById('button');
 var growingspeed = 1000;
 
 
 
-// sign out
+/* // sign out
 signOut.addEventListener('click', () => {
     firebase.auth().signOut()
         .then(() => console.log('signed out'));
     window.location = '../../index.html';
-});
+}); */
 
 var seen = false;
 
@@ -31,6 +31,7 @@ canvas.style.width = size + "px";
 canvas.style.height = size + "px";
 canvas2.style.width = size + "px";
 canvas2.style.height = size + "px";
+
 
 // Set actual size in memory (scaled to account for extra pixel density).
 var scale = window.devicePixelRatio; // <--- Change to 1 on retina screens to see blurry canvas.
@@ -106,7 +107,7 @@ function test() {
                 c.stroke();
                 if (j < 5) {
                     setTimeout(test, growingspeed);
-                }else test();
+                } else test();
             }
             else {                                       //user seen the dot right away
                 j++;
@@ -119,7 +120,7 @@ function test() {
                 c.stroke();
                 if (j < 5) {
                     setTimeout(test, growingspeed);
-                }else test();
+                } else test();
             }
         }
     } else {
@@ -232,7 +233,7 @@ function test2() {
                 c2.stroke();
                 if (j2 < 5) {
                     setTimeout(test2, growingspeed);
-                }else test2();
+                } else test2();
             }
             else {                                       //user seen the dot right away
                 j2++;
@@ -246,7 +247,7 @@ function test2() {
                 c2.stroke();
                 if (j2 < 5) {
                     setTimeout(test2, growingspeed);
-                }else test2();
+                } else test2();
             }
         }
     } else {

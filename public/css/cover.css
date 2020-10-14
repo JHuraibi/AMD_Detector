@@ -19,14 +19,23 @@ a:hover {
   border: .05rem solid #fff;
 }
 
+.test-buttons{
+  color: #fff;
+  border-color: #fff;
+}
 
+.test-buttons:hover{
+  color: #000;
+  background-color: #fff;
+  border-color: #fff;
+}
 /*
  * Base structure
  */
 
 html,
 body {
-  height: 100%;
+  /*height: 100%; */
   background-color: #333;
 }
 

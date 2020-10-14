@@ -7,7 +7,7 @@ let clickCount = 0;
 sec = 2;
 var id;
 var db = firebase.firestore();
-getUid();
+
 async function getUid() {
     //let user = await firebase.auth().currentUser;
     await firebase.auth().onAuthStateChanged(user => {
@@ -27,8 +27,6 @@ async function getUid() {
     });
 }
 
-console.log(sec);
-
 let gameFinished = false;
 let xBarsDone = false;
 
@@ -45,6 +43,8 @@ let alphaIncrease = 15;			// How much to increase the opacity
  * Sets up the canvas, sets background color, and initializes the positions queue.
  */
 function setup() {
+    console.log("Test start");
+    getUid();
     createCanvas(800, 800);
     fillPositionQueue();
 }
