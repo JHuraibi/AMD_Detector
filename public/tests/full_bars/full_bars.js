@@ -4,12 +4,36 @@ let timer = 0;
 let xClickLocations = [];
 let yClickLocations = [];
 let clickCount = 0;
+sec = 2;
+var id;
+var db = firebase.firestore();
+getUid();
+async function getUid() {
+    //let user = await firebase.auth().currentUser;
+    await firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            id = user.uid;
+            console.log(id);
+            db.collection("users").doc(user.uid)
+                .get()
+                .then(doc => {
+
+                    let newgrowingspeed = (doc.data().testSpeeds);
+                    sec = newgrowingspeed;
+                    console.log(sec);
+
+                });
+        }
+    });
+}
+
+console.log(sec);
 
 let gameFinished = false;
 let xBarsDone = false;
 
 let currentPos = 0;				// X or Y value to draw the next bar at
-let sec = 2;					// Seconds between showing each bar
+//let sec = 2;					// Seconds between showing each bar
 
 let barFillAlpha = 0;			// Will control the alpha
 let alphaIncrease = 15;			// How much to increase the opacity
@@ -78,9 +102,9 @@ function draw() {
  *        This means horizontal bars are being shown, so add location to yClickLocations[].
  */
 function mousePressed() {
-	if (gameFinished){
-		return;
-	}
+    if (gameFinished) {
+        return;
+    }
 
     if (!xBarsDone) {
         if (xClickLocations[clickCount] !== currentPos) {
