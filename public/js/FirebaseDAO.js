@@ -1,4 +1,18 @@
-// CHECK: Extract into two different classes (FirebaseSender and FirebaseRetriever)?
+// May not need to pass in a db reference
+function sendToFirebase(dbRef, jsonData){
+	// var portableJSON = JSON.stringify(resultsJSON);
+	if (dbRef == null){
+		console.log("DATABASE REFERENCE - NULL");
+		return;
+	}
+
+	dbRef.collection("TestJSON").add(jsonData);
+}
+
+
+// TODO: Extract into two different classes (FirebaseSender and FirebaseRetriever)?
+// --| OR |--
+// TODO: Remove class and leave functions?
 
 class FirebaseDAO {
 	constructor(dbRef) {

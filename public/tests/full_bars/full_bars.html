@@ -7,12 +7,12 @@
 		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 		<meta name="generator" content="Jekyll v4.1.1">
 		<title>Full Bars · Test</title>
-
+		
 		<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/cover/">
-
+		
 		<!-- Bootstrap core CSS -->
 		<link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
-
+		
 		<style>
 					.bd-placeholder-img {
 						font-size: 1.125rem;
@@ -22,7 +22,7 @@
 						-ms-user-select: none;
 						user-select: none;
 					}
-
+					
 					@media (min-width: 768px) {
 						.bd-placeholder-img-lg {
 							font-size: 3.5rem;
@@ -45,22 +45,52 @@
 			</header>
 			<main role="main" class="inner cover">
 				<script src="./p5.js"></script>
-				<script src="bar.js"></script>
 				<script src="full_bars.js"></script>
 			</main>
-
+			
+			<!-- These buttons should only become visible once the user has finished the test -->
+			<div class="btn-group" id="exitTestBtns">
+				<script>
+					document.getElementById('exitTestBtns').style.display = "none";
+				</script>
+				<button type="button" onClick="sendToFirestore()"
+						class="btn btn-sm btn-outline-secondary">Upload Results
+				</button>
+				<button type="button" onClick="location.href='home.html'"
+						class="btn btn-sm btn-outline-secondary">Exit without Upload
+				</button>
+			</div>
+			
 			<footer class="mastfoot mt-auto">
 				<div class="inner">
 				</div>
 			</footer>
 		</div>
 		
+		<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+		<script src="/__/firebase/7.23.0/firebase-app.js"></script>
+		
+		<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+		<script src="/__/firebase/7.23.0/firebase-analytics.js"></script>
+		
+		<!-- Add Firebase products that you want to use -->
+		<script src="/__/firebase/7.23.0/firebase-auth.js"></script>
+		<script src="/__/firebase/7.23.0/firebase-firestore.js"></script>
+		
+		<!-- Initialize Firebase -->
+		<script src="/__/firebase/init.js"></script>
 		
 		<script>
-			// TODO: Make firebaseDAO global
-			//"Page location is " + window.location.href; <- Dynamically get the URL of test page.
-			let firebaseDAO = new FirebaseDAO(firebase.firestore());
-			firebaseDAO.populateTestTable("user_data_table");
+			var db = firebase.firestore();
+		</script>
+		
+		<script>
+			// CURRENT: This function works. Sends a JSON object to the database.
+			function sendToFirestore() {
+				var dataToWrite = getResultsJSON();
+
+				db.collection("TestCollection").add(dataToWrite);
+			}
 		</script>
 	</body>
 </html>
