@@ -1,20 +1,21 @@
-let numBars = 2; // FOR TESTING
+let numBars = 2; // VALUE 2 FOR TESTING
 
-// let numBars = 6;
-let posQueue = [];
-let timer = 0;
+let posQueue = [];				// Holds the randomly-shuffled locations to draw the bars
+let currentPos = 0;				// X or Y value to draw the next bar at
+
 let xClickLocations = [];
 let yClickLocations = [];
-let clickCount = 0;
-
-let gameFinished = false;
-let xBarsDone = false;
-
-let currentPos = 0;				// X or Y value to draw the next bar at
-let sec = 2;					// Seconds between showing each bar
+let validClickCount = 0;
 
 let barFillAlpha = 0;			// Will control the alpha
-let alphaIncrease = 15;			// How much to increase the opacity
+let opacityIncrease = 15;		// How much to increase the opacity
+
+let timer = 0;
+let sec = 2;					// Seconds between showing each bar
+
+let testFinished = false;
+let xBarsDone = false;
+
 
 /**
  * Runs only once.
@@ -23,7 +24,6 @@ let alphaIncrease = 15;			// How much to increase the opacity
 function setup() {
 	createCanvas(800, 800);
 	fillPositionQueue();
-	print("STARTING GAME");
 }
 
 /**
@@ -44,12 +44,12 @@ function setup() {
  *        Draw the border around the canvas.
  */
 function draw() {
-	// TODO: Would a router-style switch statement be easier to read?
+	// TODO: Move the items within "else" below to their own function
 	background(220);
 
 	// drawStaticGrid();	// Grid
 
-	if (!gameFinished) {
+	if (!testFinished) {
 
 		if (timer % (60 * sec) === 0) {
 			loadNextBarPos();
@@ -71,30 +71,35 @@ function draw() {
 
 /**
  * Records the location of the currently-shown bar whenever a click is registered.
- * Will handle multiple clicks for the same bar by using clickCount as index to
- *    check that the most current array index is not the same as the current bar.
+ * Will handle multiple clicks for the same bar by using validClickCounter as index to
+ *    check that the most current array (xClickLocations or yClickLocations) index is
+ *    not the same as the current bar. If the bar IS new, save its coordinate
+ *    value and increment validClickCounter.
+ *
+ * If testFinished (i.e. the test is over)
+ * 		Take no action if the user clicks.
  *
  * If xBarsDone is FALSE:
- *        This means vertical bars are being shown, so add location to xClickLocations[].
+ *		This means vertical bars are still being shown, so add locations when clicked to xClickLocations.
  *
  * If xBarsDone is TRUE:
- *        This means horizontal bars are being shown, so add location to yClickLocations[].
+ *		This means horizontal bars are being shown, so add locations when clicked to yClickLocations.
  */
 function mousePressed() {
-	if (gameFinished) {
+	if (testFinished) {
 		return;
 	}
 
 	if (!xBarsDone) {
-		if (xClickLocations[clickCount] !== currentPos) {
-			xClickLocations[clickCount] = currentPos;
-			clickCount++;
+		if (xClickLocations[validClickCount] !== currentPos) {
+			xClickLocations[validClickCount] = currentPos;
+			validClickCount++;
 		}
 	}
 	else {
-		if (yClickLocations[clickCount] !== currentPos) {
-			yClickLocations[clickCount] = currentPos;
-			clickCount++;
+		if (yClickLocations[validClickCount] !== currentPos) {
+			yClickLocations[validClickCount] = currentPos;
+			validClickCount++;
 		}
 	}
 }
@@ -124,7 +129,7 @@ function fillPositionQueue() {
  * an animation illusion that makes it look like a single bar is fading in.
  */
 function fadeIn() {
-	barFillAlpha += alphaIncrease;
+	barFillAlpha += opacityIncrease;
 
 	if (barFillAlpha > 255) {
 		barFillAlpha = 255;
@@ -173,14 +178,14 @@ function loadNextBarPos() {
 		if (!posQueue.length) {
 			console.log("Vertical Bars (x) DONE");
 			fillPositionQueue();
-			clickCount = 0;
+			validClickCount = 0;
 			xBarsDone = true;
 		}
 	}
 	else if (xBarsDone) {
 		if (!posQueue.length) {
 			console.log("Horizontal Bars (Y) DONE");
-			gameFinished = true;
+			testFinished = true;
 			return;
 		}
 	}
@@ -291,8 +296,8 @@ function showExitButton() {
 function getFullBarsResults() {
 	// TODO: Add user's ID
 	return {
-		"UID": "[NONE]",
 		"TestName": "full_bars",
+		"TimeStampMS": Date.now(),
 		"XLocations": xClickLocations,
 		"YLocations": yClickLocations
 	}
