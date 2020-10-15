@@ -16,8 +16,6 @@ let sec = 2;					// Seconds between showing each bar
 let barFillAlpha = 0;			// Will control the alpha
 let alphaIncrease = 15;			// How much to increase the opacity
 
-// let barW = ...;				// TODO: Implement this variable once a grid size is agreed on
-
 /**
  * Runs only once.
  * Sets up the canvas, sets background color, and initializes the positions queue.
@@ -49,7 +47,7 @@ function draw() {
 	// TODO: Would a router-style switch statement be easier to read?
 	background(220);
 
-	drawStaticGrid();
+	// drawStaticGrid();	// Grid
 
 	if (!gameFinished) {
 
@@ -255,19 +253,45 @@ function drawClickedBars() {
 	}
 }
 
+/**
+ * Once the test is finished, this function will un-hide the buttons that
+ * 	allow the user to choose to upload their results to their database or exit.
+ *
+ * A "fade-in" method is used to gradually increase the opacity of the buttons
+ * 	instead of simply turning them on. The opacity is going from 0% to 100% at increments
+ * 	of 1% that occurs every n-milliseconds as defined by fadeInSpeed.
+ */
 function showExitButton() {
-	var exitBtn = document.getElementById('exitTestBtns');
+	let exitBtns = document.getElementById('exitTestBtns');
+	let fadeInSpeed = 1;
 
-	if (exitBtn == null) {
-		console.log("BUTTON NOT FOUND");
-	}
+	exitBtns.style.display = "inherit";
+	exitBtns.style.opacity = 0.0;
 
-	exitBtn.style.display = "inherit";
+	let fadeIn = setInterval(function () {
+		if (exitBtns.style.opacity < 1.0) {
+
+			// Needs the plus sign before "exitBtns"
+			exitBtns.style.opacity = +exitBtns.style.opacity + 0.01;
+			print(exitBtns.style.opacity);
+		}
+		else {
+			// Clear the current timer and exit
+			clearInterval(fadeIn);
+		}
+	}, fadeInSpeed);
 }
 
-function getResultsJSON() {
+/**
+ * Formats the appropriate data into a JSON.
+ * (As of Oct 14 20:49 the UID is NOT being set from this file.)
+ *
+ * @returns JSON: {{UID: string, TestName: string, XLocations: [], YLocations: []}}
+ */
+function getFullBarsResults() {
 	// TODO: Add user's ID
 	return {
+		"UID": "[NONE]",
 		"TestName": "full_bars",
 		"XLocations": xClickLocations,
 		"YLocations": yClickLocations

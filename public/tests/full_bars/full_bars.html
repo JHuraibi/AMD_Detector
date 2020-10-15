@@ -13,7 +13,13 @@
 		<!-- Bootstrap core CSS -->
 		<link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
 		
+		<!--		Move the style for "main" below into "cover.css" once the size agreed upon by whole team-->
 		<style>
+					main {
+						padding-top: 4em;
+						padding-bottom: 4em;
+					}
+					
 					.bd-placeholder-img {
 						font-size: 1.125rem;
 						text-anchor: middle;
@@ -28,12 +34,13 @@
 							font-size: 3.5rem;
 						}
 					}
+		
 		</style>
 		<!-- Custom styles for this template -->
 		<link href="../../css/cover.css" rel="stylesheet">
 	</head>
 	<body class="text-center">
-		<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+		<div class="d-flex w-auto h-auto p-3 mx-auto flex-column">
 			<header class="masthead mb-auto">
 				<div class="inner">
 					<h3 class="masthead-brand">Vision Monitor</h3>
@@ -43,22 +50,24 @@
 					</nav>
 				</div>
 			</header>
-			<main role="main" class="inner cover">
+			
+			<main role="main">
 				<script src="./p5.js"></script>
 				<script src="full_bars.js"></script>
 			</main>
 			
-			<!-- These buttons should only become visible once the user has finished the test -->
-			<div class="btn-group" id="exitTestBtns">
-				<script>
-					document.getElementById('exitTestBtns').style.display = "none";
-				</script>
-				<button type="button" onClick="sendToFirestore()"
-						class="btn btn-sm btn-outline-secondary">Upload Results
-				</button>
-				<button type="button" onClick="location.href='home.html'"
-						class="btn btn-sm btn-outline-secondary">Exit without Upload
-				</button>
+			<div>
+				<!-- These buttons will only become visible once the user has finished the test -->
+				<div class="btn-group" id="exitTestBtns" style="display: none">
+					<button type="button" onClick="sendToFirestore()"
+							class="btn btn-sm btn-outline-secondary">
+						Upload Results
+					</button>
+					<button type="button" onClick="location.href='../../home.html'"
+							class="btn btn-sm btn-outline-secondary">
+						Exit without Upload
+					</button>
+				</div>
 			</div>
 			
 			<footer class="mastfoot mt-auto">
@@ -85,11 +94,10 @@
 		</script>
 		
 		<script>
-			// CURRENT: This function works. Sends a JSON object to the database.
 			function sendToFirestore() {
-				var dataToWrite = getResultsJSON();
+				var dataToWrite = getFullBarsResults();
 
-				db.collection("TestCollection").add(dataToWrite);
+				db.collection("TestResults").add(dataToWrite);
 			}
 		</script>
 	</body>
