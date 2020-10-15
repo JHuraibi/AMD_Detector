@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+	
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,7 @@
 		</style>
 		<link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
 	</head>
-
+	
 	<body>
 		<header>
 			<div class="navbar navbar-dark bg-dark shadow-sm">
@@ -32,7 +32,7 @@
 						</svg>
 						<!--        <strong>Your Results</strong>-->
 					</a>
-
+					
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
 							aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
 						<a class="sign-out"><span style="color: #007bff">Sign Out</span></a>
@@ -54,52 +54,60 @@
 					var customInstructions = retrieveInstructions(whichTest);
 					var destinationTestPage = retrieveURLLink(whichTest);
 				</script>
-
+				
 				<h2>
 					<script>
 						document.write(testTitle);
 					</script>
 				</h2>
-
+				
 				<p>
 					<script>
 						document.write(customInstructions);
 					</script>
 				</p>
-
+				
 				<div class="btn-group">
 					<button type="button" onClick="location.href=destinationTestPage"
 							class="btn btn-sm btn-outline-secondary">Start Test
 					</button>
 				</div>
 			</div>
-
-			<div class="instruct">
+			
+			<div class="instruct" id="speedSlider">
 				<p>
 					Set the test speed below to change the rate at which your tests will run.
 				</p>
-
+				
 				<input type="range" id="speed" max="5" min="1" style="width:80%" oninput="num.value = this.value">
 				<output id="num"></output>
 				<div class="btn-group">
 					<button type="button" onclick="setspeed()" class="btn btn-sm btn-outline-secondary">Set Speed</button>
 				</div>
 			</div>
+			
+			<script>
+				// Hides the speed slider if the user is taking the Amsler Grid test
+				if (whichTest == "amsler_grid") {
+					let speedSlider = document.getElementById('speedSlider');
+					speedSlider.style.display = "none";
+				}
+			</script>
 		</div>
 		<script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-app.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-firestore.js"></script>
-
-
+		
+		
 		<script src="/__/firebase/7.7.0/firebase-auth.js"></script>
-
+		
 		<script src="/__/firebase/7.7.0/firebase-functions.js"></script>
-
+		
 		<!-- Initialize Firebase -->
 		<script src="/__/firebase/init.js"></script>
 		<script src="growingCircles/growingCircle.js"></script>
 		<script src="../home.js"></script>
 		<script src="speed.js"></script>
-
+		
 		<script>
 			// !! Note: Formatting is currently hard-coded for each tag target (will be dynamic in the near future)
 			// var db = firebase.initializeApp(firebaseConfig);
@@ -108,7 +116,7 @@
 				obj.changeSpeed();
 			}
 		</script>
-
+	
 	</body>
 
 </html>
