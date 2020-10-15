@@ -80,8 +80,12 @@
 					<h1>Age-Related Macular Degeneration</h1>
 					<p class="lead text-muted">Detect, Test, and Track AMD-related Symptoms</p>
 					<p>
-						<a href="tests/instructions_page.html" class="btn btn-primary my-2">Take Your First Test</a>
-						<a href="dashboard.html" class="btn btn-secondary my-2">See Your Past Results</a>
+						<button class="btn btn-primary my-2" onClick="location.href='./tests/instructions_page.html?amsler_grid'">
+							Take Your First Test
+						</button>
+						<button class="btn btn-secondary my-2" onClick="location.href='dashboard.html'">
+							See Your Past Results
+						</button>
 					</p>
 				</div>
 			</section>
@@ -90,6 +94,25 @@
 				<div class="container">
 					
 					<div class="row">
+						<div class="col-md-4">
+							<div class="card mb-4 shadow-sm">
+								<img class="bd-placeholder-img card-img-top" src="images/thumbnail_amsler_grid.png">
+								<div class="card-body">
+									<p class="card-text"><span style="font-weight: bold">Amsler Grid</span></p>
+									<p class="card-text"><br>The standard Amsler Grid test.</p>
+									<div class="d-flex justify-content-between align-items-center">
+										<div class="btn-group">
+											
+											<button type="button" class="btn btn-sm btn-outline-secondary"
+													onClick="location.href='./tests/instructions_page.html?amsler_grid'">
+												Start Test
+											</button>
+										</div>
+										<small class="text-muted">Est Duration: 2 mins</small>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="col-md-4">
 							<div class="card mb-4 shadow-sm">
 								<img class="bd-placeholder-img card-img-top" src="images/thumbnail_growing_circles.PNG">
@@ -128,6 +151,8 @@
 								</div>
 							</div>
 						</div>
+					</div>
+					<div class="row">
 						<div class="col-md-4">
 							<div class="card mb-4 shadow-sm">
 								<img class="bd-placeholder-img card-img-top" src="images/thumbnail_extending_lines.PNG">
