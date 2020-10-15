@@ -16,14 +16,17 @@ let sec = 2;					// Seconds between showing each bar
 let testFinished = false;
 let xBarsDone = false;
 
+let timestamp;					// Will record the time the test was started (in milliseconds since Epoch)
+
 
 /**
  * Runs only once.
- * Sets up the canvas, sets background color, and initializes the positions queue.
+ * Sets up the canvas, sets background color, initializes the positions queue, and records current time.
  */
 function setup() {
 	createCanvas(800, 800);
 	fillPositionQueue();
+	timestamp = Date.now();
 }
 
 /**
@@ -288,16 +291,13 @@ function showExitButton() {
 }
 
 /**
- * Formats the appropriate data into a JSON.
- * (As of Oct 14 20:49 the UID is NOT being set from this file.)
- *
- * @returns JSON: {{UID: string, TestName: string, XLocations: [], YLocations: []}}
+ * Formats the relevant data into a JSON.
+ * @returns {{TestName: string, XLocations: [], TimeStampMS: Number, YLocations: []}}
  */
 function getFullBarsResults() {
-	// TODO: Add user's ID
 	return {
 		"TestName": "full_bars",
-		"TimeStampMS": Date.now(),
+		"TimeStampMS": timestamp,
 		"XLocations": xClickLocations,
 		"YLocations": yClickLocations
 	}
