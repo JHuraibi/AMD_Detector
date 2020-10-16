@@ -3,8 +3,8 @@ function retrieveTestTitle(target_test) {
 		default:
 			return "";
 
-		// case "amsler_grid":
-		// 	return "Amsler Grid";
+		case "amsler_grid":
+			return "Amsler Grid";
 
 		case "growing_circles":
 			return "Growing Circles";
@@ -18,14 +18,13 @@ function retrieveTestTitle(target_test) {
 }
 
 function retrieveInstructions(target_test) {
-
 	switch (target_test) {
 		default:
-			return "[DEBUG] - RETURNED FROM FUNCTION";
+			return "[DEBUG] - NO INSTRUCTIONS RETURNED FROM FUNCTION";
 
-		// // AMSLER GRID
-		// case "amsler_grid":
-		// 	return "Amsler Grid Instructions";
+		// AMSLER GRID
+		case "amsler_grid":
+			return "You are about to take the Amsler Grid test. [Ali add the instructions for your test here]";
 
 		// GROWING CIRCLES
 		case "growing_circles":
@@ -57,6 +56,8 @@ function retrieveURLLink(target_test) {
 	switch (target_test) {
 		default:
 			return "#";
+		case "amsler_grid":
+			return "./AmslerGrid/Amsler.html";
 		case "growing_circles":
 			return "./growingCircles/growingCircle.html";
 		case "parallel_lines":
