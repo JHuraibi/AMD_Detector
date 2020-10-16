@@ -17,7 +17,7 @@
 		<style>
 					main {
 						padding-top: 4em;
-						padding-bottom: 4em;
+						padding-bottom: 1em;
 					}
 					
 					.bd-placeholder-img {
@@ -59,7 +59,7 @@
 			<div>
 				<!-- These buttons will only become visible once the user has finished the test -->
 				<div class="btn-group" id="exitTestBtns" style="display: none">
-					<button type="button" onClick="sendToFirestore()"
+					<button type="button" onClick="sendToFirestore();showStatusIndicator();"
 							class="btn btn-sm btn-outline-secondary">
 						Upload Results
 					</button>
@@ -67,6 +67,9 @@
 							class="btn btn-sm btn-outline-secondary">
 						Exit without Upload
 					</button>
+					<p id="uploadStatus" style="display: none">
+						<br>Uploading Your Results...
+					</p>
 				</div>
 			</div>
 			
@@ -88,16 +91,74 @@
 		
 		<!-- Initialize Firebase -->
 		<script src="/__/firebase/init.js"></script>
+		<script src="../../auth.js"></script>
+
 		
 		<script>
-			var db = firebase.firestore();
+			let dbRef = firebase.firestore();
+			let userRef = null;
+
+			firebase.auth().onAuthStateChanged(user => {
+				console.log("[FullBars.html] - USER LOCATED");
+				console.log(user);
+				userRef = user;
+			});
 		</script>
 		
 		<script>
+			// !! TODO: Docstrings and comments
+			// If Time: Use event listeners instead of onclick (Unobtrusive Javascript)
+			let maxWaitTime = 2000;
+			let waitTime = 200;
+
 			function sendToFirestore() {
+				attemptUserLookup();
+
 				var dataToWrite = getFullBarsResults();
 
-				db.collection("TestResults").add(dataToWrite);
+				if (userRef) {
+					dbRef.collection("TestResults")
+						.doc(userRef.uid)
+						.collection("FullBars")
+						.add(dataToWrite)
+						.then(() => {
+							uploadSuccess();
+							setTimeout(() => {
+								// Use replace() to disallow back button to come back to this page
+								window.location.replace("../../home.html");
+							}, 1000);
+						});
+				}
+			}
+
+			function attemptUserLookup() {
+				if (!userRef && maxWaitTime > 0) {
+					timer += waitTime;
+
+					// console.log("[Time: " + timer + "] No User. Reattempting Lookup.");
+					setTimeout(attemptUserLookup, waitTime);
+				}
+				else if (maxWaitTime < 0) {
+					userLookupFailed();
+				}
+			}
+
+			function uploadSuccess() {
+				let uploadStatusIndicator = document.getElementById('uploadStatus');
+				uploadStatusIndicator.textContent = "Results Saved!";
+			}
+
+			function userLookupFailed() {
+				// TODO: Better error message and format
+				let uploadStatusIndicator = document.getElementById('uploadStatus');
+				uploadStatusIndicator.textContent = "Upload failed. Please Try Again Later.";
+			}
+		</script>
+		
+		<script>
+			function showStatusIndicator() {
+				let uploadStatusIndicator = document.getElementById('uploadStatus');
+				uploadStatusIndicator.style.display = "inherit";
 			}
 		</script>
 	</body>
