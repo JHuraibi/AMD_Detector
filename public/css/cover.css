@@ -20,14 +20,14 @@ a:hover {
 }
 
 .test-buttons{
-	color: #fff;
-	border-color: #fff;
+  color: #fff;
+  border-color: #fff;
 }
 
 .test-buttons:hover{
-	color: #000;
-	background-color: #fff;
-	border-color: #fff;
+  color: #000;
+  background-color: #fff;
+  border-color: #fff;
 }
 /*
  * Base structure

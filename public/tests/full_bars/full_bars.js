@@ -120,7 +120,8 @@ function fillPositionQueue() {
 	// TODO: Don't draw bars at edges of canvas?
 	var interval = (width / numBars);
 
-	for (let i = 0; i < numBars; i++) {
+	for (let i = 0; i
+	< numBars; i++) {
 		posQueue[i] = interval * i;
 	}
 
@@ -143,15 +144,15 @@ function fadeIn() {
 
 /**
  * Draws a basic rectangle at currentPos. Whether drawn vertically or
- * 	horizontally is controlled by xBarsDone.
- * 	When xBarsDone is FALSE:
- * 		- currentPos is the position on the x-axis where to draw the next bar
- * 		- Draw a rectangle that starts at x=currentPos and y=0,
- * 			with width=barW, and length=height of the canvas
- * 	When xBarsDone is TRUE:
- * 		- currentPos is the position on the y-axis where to draw the next bar
- * 		- Draw a rectangle that starts at x=0 and y=currentPos,
- * 			with width=width of the canvas, and length=barW
+ *    horizontally is controlled by xBarsDone.
+ *    When xBarsDone is FALSE:
+ *        - currentPos is the position on the x-axis where to draw the next bar
+ *        - Draw a rectangle that starts at x=currentPos and y=0,
+ *            with width=barW, and length=height of the canvas
+ *    When xBarsDone is TRUE:
+ *        - currentPos is the position on the y-axis where to draw the next bar
+ *        - Draw a rectangle that starts at x=0 and y=currentPos,
+ *            with width=width of the canvas, and length=barW
  */
 function drawBar() {
 	fill(0);
@@ -263,11 +264,11 @@ function drawClickedBars() {
 
 /**
  * Once the test is finished, this function will un-hide the buttons that
- * 	allow the user to choose to upload their results to their database or exit.
+ *    allow the user to choose to upload their results to their database or exit.
  *
  * A "fade-in" method is used to gradually increase the opacity of the buttons
- * 	instead of simply turning them on. The opacity is going from 0% to 100% at increments
- * 	of 1% that occurs every n-milliseconds as defined by fadeInSpeed.
+ *    instead of simply turning them on. The opacity is going from 0% to 100% at increments
+ *    of 1% that occurs every n-milliseconds as defined by fadeInSpeed.
  */
 function showExitButton() {
 	let exitBtns = document.getElementById('exitTestBtns');
