@@ -281,7 +281,6 @@ function showExitButton() {
 
 			// Needs the plus sign before "exitBtns"
 			exitBtns.style.opacity = +exitBtns.style.opacity + 0.01;
-			print(exitBtns.style.opacity);
 		}
 		else {
 			// Clear the current timer and exit
