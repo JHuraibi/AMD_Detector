@@ -1,69 +1,61 @@
-// May not need to pass in a db reference
-function sendToFirebase(dbRef, jsonData){
-	// var portableJSON = JSON.stringify(resultsJSON);
-	if (dbRef == null){
-		console.log("DATABASE REFERENCE - NULL");
-		return;
-	}
-
-	dbRef.collection("TestJSON").add(jsonData);
-}
-
-
-// TODO: Extract into two different classes (FirebaseSender and FirebaseRetriever)?
-// --| OR |--
-// TODO: Remove class and leave functions?
-
 class FirebaseDAO {
 	constructor(dbRef) {
-		this.db = dbRef;
+		this.dbRef = dbRef;
+		this.userRef = null;
 	}
 
-	populateTestTable(targetTableID) {
-		this.db.collection("TestJ")
+	updateUserReference(userRef) {
+		this.userRef = userRef;
+	}
+
+	// CHECK: How can I make this more modular for different tables?
+	populateFullBarsTable(targetTableID) {
+		if (!userRef) {
+			console.log("[FirebaseDAO] - User is null");
+			return;
+		}
+
+		this.dbRef
+			.collection("TestResults")
+			.doc(userRef.uid)
+			.collection("FullBars")
+			.orderBy("TimeStampMS", "desc")
+			.limit(3)
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					let extractedData = doc.data();
-					this.addRowToTestTable(extractedData, targetTableID);
+					let timeStamp = doc.data().TimeStampMS;
+					this.addRowToTableFullBars(timeStamp, targetTableID);
 
-					console.log("ID: " + doc.id);
-					console.log("Test Name: " + doc.data().testName);
-					console.log("Time: " + doc.data().date);
-					console.log("Score: " + doc.data().score);
-					console.log("URL of Test: " + doc.data().url);
+					console.log("TimeStamp: " + timeStamp);
 				});
 			});
 	}
 
-	addRowToTestTable(data, targetTableID) {
-		// TODO: Sort tables
-		// Extract the data by using the Firestore document's field names
-		var testName = data.testName;
-		var time = data.date;
-		var score = data.score;
-		var urlOfTest = data.url;
+	// TODO: Refactor variable names below to be more readable
+	addRowToTableFullBars(timeStamp, targetTableID) {
+		let testName = "Full Bars";
+		let time = this.formatDate(timeStamp);
+		let urlOfTest = "../tests/instructions_page.html?full_bars";
 
-		// ID of which table to put the data into (HTML ID)
-		var tableBody = document.getElementById(targetTableID);
+		// ID of which table to put the data into (HTML Attribute ID)
+		let tableBody = document.getElementById(targetTableID);
 
 		// Table Row
-		var row = document.createElement("tr");
+		let row = document.createElement("tr");
 
 		// Table Columns
-		var columnTestName = document.createElement("td");
-		var columnTime = document.createElement("td");
-		var columnScore = document.createElement("td");
-		var columnURL = document.createElement("td");
+		let columnTestName = document.createElement("td");
+		let columnTime = document.createElement("td");
+		let columnURL = document.createElement("td");
 
 		// Will be a child of columnURL so we can add hyperlink
-		var linkForURL = document.createElement("a");
+		let linkForURL = document.createElement("a");
 
 		// Text to be put in the Columns
-		var textTestName = document.createTextNode(testName);
-		var textTime = document.createTextNode(time);
-		var textScore = document.createTextNode(score);
-		var textURL = document.createTextNode("Retake Test");
+		let textTestName = document.createTextNode(testName);
+		let textTime = document.createTextNode(time);
+		let textURL = document.createTextNode("Retake Test");
 
 		// Set href attribute for link to test
 		linkForURL.appendChild(textURL);
@@ -72,17 +64,40 @@ class FirebaseDAO {
 		// Put the Text into their respective Columns
 		columnTestName.appendChild(textTestName);
 		columnTime.appendChild(textTime);
-		columnScore.appendChild(textScore);
 		columnURL.appendChild(linkForURL);
 
 		// Add each the Columns to the Row
 		row.appendChild(columnTestName);
 		row.appendChild(columnTime);
-		row.appendChild(columnScore);
 		row.appendChild(columnURL);
 
 		// Add the Row to the Table
 		tableBody.appendChild(row);
+	}
+
+	// CURRENT: WORKING. Fix minutesString precision formatting
+	formatDate(ms) {
+		console.log("FORMAT DATE");
+		let date = new Date(ms);
+
+		let dateString = date.toDateString();
+		let hoursString = date.getUTCHours();
+		let minutesString = date.getUTCMinutes();
+		let timeModifier = "";
+
+		if (hoursString > 12) {
+			hoursString %= hoursString;
+			timeModifier = "PM";
+		}
+		else {
+			timeModifier = "AM";
+		}
+
+		if (hoursString == 0) {
+			hoursString = "12";
+		}
+
+		return dateString + " at " + hoursString + ":" + minutesString + timeModifier;
 	}
 
 }// class [ FirebaseDAO ]
