@@ -133,9 +133,8 @@
 
 			function attemptUserLookup() {
 				if (!userRef && maxWaitTime > 0) {
-					timer += waitTime;
-
-					// console.log("[Time: " + timer + "] No User. Reattempting Lookup.");
+					maxWaitTime -= waitTime;
+					console.log("No User. Reattempting Lookup.");
 					setTimeout(attemptUserLookup, waitTime);
 				}
 				else if (maxWaitTime < 0) {
