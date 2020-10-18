@@ -44,7 +44,6 @@
 			}
 			
 			.grid > div {
-				/*background: #000000;*/
 				padding: 1rem;
 				display: grid;
 			}
@@ -56,13 +55,6 @@
 				background: red;
 				grid-area: 1 / 1 / 2 / 2;
 			}
-			
-			/*.grid > div::after {*/
-			/*	content: "";*/
-			/*	display: block;*/
-			/*	background: red;*/
-			/*	grid-area: 2 / 1 / 2 / 2;*/
-			/*}*/
 			
 			.grid > div > canvas {
 				width: 100%;
@@ -78,8 +70,26 @@
 				background: #e7f6ff;
 				grid-area: 1 / 1 / 2 / 2;
 			}
-		
 		</style>
+		
+		<script>
+			let miniCanvasDivSize = 0;
+			
+			window.addEventListener('resize', function () {
+				let templateDiv = document.getElementById("sizeRef");
+				
+				if (templateDiv) {
+					templateDiv.style.display = "inherit";
+					miniCanvasDivSize = templateDiv.offsetWidth;
+					
+					templateDiv.style.display = "none";
+					
+					// Uncomment below if needed for debugging
+					// console.log("WINDOW RESIZE DETECTED. NEW CANVAS CONTAINER SIZE: " + resultsDivSize);
+				}
+			});
+		
+		</script>
 		
 		<!-- Custom styles for this template -->
 		<link href="./css/dashboard.css" rel="stylesheet">
@@ -148,26 +158,18 @@
 						<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 					</div>
 					
-					<!-- Canvas(es) to Show Full Bars Results -->
-					<div style="border: dotted red;">
+					<!-- Grid of Canvases to Redraw Full Bars Results (but smaller) -->
+					<div style="border: dotted red; margin-top: 2rem">
 						<h2>&nbsp;Test Results (Full Bars Test)</h2>
-						<div class="grid">
-							<div id="sizeRef">
-								<canvas id="fullBars1"></canvas>
-								<p id="fullBars1-data"></p>
-							</div>
-							<div>
-								<canvas id="fullBars2"></canvas>
-								<p id="fullBars2-data"></p>
-							</div>
-							<div>
-								<canvas id="fullBars3"></canvas>
-								<p id="fullBars3-data"></p>
+						<div class="grid" id="resultsContainer">
+							<!-- This div is turned on/off on window resize just to get its pixel size -->
+							<div id="sizeRef" style="display: none">
+								<!-- Empty. Actual div's are generated from FirebaseDAO.js -->
 							</div>
 						</div>
 					</div>
 					
-					<h2>Scores</h2>
+					<h2  style="margin-top: 2rem">History</h2>
 					<div class="table-responsive">
 						<table class="table table-striped table-sm" id="full_bars_results">
 							<thead>
@@ -224,6 +226,7 @@
 				userRef = user;
 			});
 		</script>
+		
 		<script>
 			// !! TODO: Docstrings and comments
 			// If Time: Use event listeners instead of onclick (Unobtrusive Javascript)
@@ -247,18 +250,9 @@
 				else if (userRef) {
 					tableHelper.updateUserReference(userRef);
 					tableHelper.populateFullBarsTable("full_bars_results");
+					tableHelper.drawFullBars('resultsContainer', miniCanvasDivSize);
 				}
 			})();
-		</script>
-		<script>
-			let parentRef = document.getElementById("sizeRef");
-			let parentSize = parentRef.offsetHeight;
-			console.log("H: " + parentSize);
-			
-			// Pass ID of respective canvas and the container height
-			drawFullBars('fullBars1', +parentSize);
-			drawFullBars('fullBars2', +parentSize);
-			drawFullBars('fullBars3', +parentSize);
 		</script>
 	</body>
 
