@@ -1,3 +1,8 @@
+// !! NOTE: The Software Design Specification API section needs to be updated if
+//				any edits are made to the JSON format or other Firebase read/write.
+
+
+// CHECK: This function being used by team? Delete if no.
 // May not need to pass in a db reference
 function sendToFirebase(dbRef, jsonData){
 	// var portableJSON = JSON.stringify(resultsJSON);
@@ -9,10 +14,6 @@ function sendToFirebase(dbRef, jsonData){
 	dbRef.collection("TestJSON").add(jsonData);
 }
 
-
-// TODO: Extract into two different classes (FirebaseSender and FirebaseRetriever)?
-// --| OR |--
-// TODO: Remove class and leave functions?
 
 class FirebaseDAO {
 	constructor(dbRef) {
