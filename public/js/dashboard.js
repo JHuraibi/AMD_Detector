@@ -42,22 +42,5 @@
 			}
 		}
 	})
-}())
+}());
 
-// fillRect(x, y, width, height)
-function drawFullBars(chartID, parentSize) {
-	let canvas = document.getElementById(chartID);
-	let context = canvas.getContext('2d');
-
-	let barW = 2;
-
-	let xLocations = [25, 100];
-	let yLocations = [50, 150];
-
-	for (let i = 0; i < xLocations.length; i++) {
-		let xPos = xLocations[i];
-		context.fillRect(xPos, 0, barW, parentSize);
-		// console.log("X: " + xPos);
-
-	}
-}
