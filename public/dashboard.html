@@ -16,26 +16,71 @@
 		<link href="./css/bootstrap/bootstrap.min.css" rel="stylesheet">
 		
 		<style>
-					.bd-placeholder-img {
-						font-size: 1.125rem;
-						text-anchor: middle;
-						-webkit-user-select: none;
-						-moz-user-select: none;
-						-ms-user-select: none;
-						user-select: none;
-					}
-					
-					@media (min-width: 768px) {
-						.bd-placeholder-img-lg {
-							font-size: 3.5rem;
-						}
-					}
-					
-					/* For the static image of a prototype dashboard */
-					img {
-						max-width: 90%;
-					}
+			.bd-placeholder-img {
+				font-size: 1.125rem;
+				text-anchor: middle;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+			}
+			
+			@media (min-width: 768px) {
+				.bd-placeholder-img-lg {
+					font-size: 3.5rem;
+				}
+			}
+			
+			.my-container {
+				border: 1px solid #008000;
+			}
+			
+			.grid {
+				gap: 1rem;
+				grid-template-columns:  repeat(auto-fill, minmax(200px, 1fr));
+				display: grid;
+				margin-bottom: 2rem;
+				/*border: dotted red;*/
+			}
+			
+			.grid > div {
+				/*background: #000000;*/
+				padding: 1rem;
+				display: grid;
+			}
+			
+			.grid > div::before {
+				content: "";
+				padding-top: 100%;
+				display: block;
+				background: red;
+				grid-area: 1 / 1 / 2 / 2;
+			}
+			
+			/*.grid > div::after {*/
+			/*	content: "";*/
+			/*	display: block;*/
+			/*	background: red;*/
+			/*	grid-area: 2 / 1 / 2 / 2;*/
+			/*}*/
+			
+			.grid > div > canvas {
+				width: 100%;
+				height: 100%;
+				border: 4px solid black;
+				background: #e7f6ff;
+				grid-area: 1 / 1 / 2 / 2;
+			}
+			
+			.grid > div > img {
+				width: 100%;
+				border: 4px solid black;
+				background: #e7f6ff;
+				grid-area: 1 / 1 / 2 / 2;
+			}
+		
 		</style>
+		
 		<!-- Custom styles for this template -->
 		<link href="./css/dashboard.css" rel="stylesheet">
 	</head>
@@ -99,7 +144,28 @@
 					</div>
 					
 					<!-- Interactive Canvas -->
-					<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+					<div>
+						<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+					</div>
+					
+					<!-- Canvas(es) to Show Full Bars Results -->
+					<div style="border: dotted red;">
+						<h2>&nbsp;Test Results (Full Bars Test)</h2>
+						<div class="grid">
+							<div id="sizeRef">
+								<canvas id="fullBars1"></canvas>
+								<p id="fullBars1-data"></p>
+							</div>
+							<div>
+								<canvas id="fullBars2"></canvas>
+								<p id="fullBars2-data"></p>
+							</div>
+							<div>
+								<canvas id="fullBars3"></canvas>
+								<p id="fullBars3-data"></p>
+							</div>
+						</div>
+					</div>
 					
 					<h2>Scores</h2>
 					<div class="table-responsive">
@@ -144,14 +210,14 @@
 		<script src="/__/firebase/init.js"></script>
 		<script src="../../auth.js"></script>
 		
-		<script src="home.js"></script>
+		<!--		<script src="home.js"></script>-->
 		<script src="./js/dashboard.js"></script>
 		<script src="./js/FirebaseDAO.js"></script>
 		
 		<script>
 			let dbRef = firebase.firestore();
 			let userRef = null;
-
+			
 			firebase.auth().onAuthStateChanged(user => {
 				console.log("[dashboard.html] - USER LOCATED");
 				console.log(user);
@@ -164,7 +230,7 @@
 			var tableHelper = new FirebaseDAO(dbRef);
 			let maxWaitTime = 2000;
 			let waitTime = 200;
-
+			
 			// NOTE TO TEAM:
 			// From testing, the user lookup below is taking about 400-600ms to
 			// 	recognize a user while using local Firebase hosting.
@@ -184,7 +250,16 @@
 				}
 			})();
 		</script>
-	
+		<script>
+			let parentRef = document.getElementById("sizeRef");
+			let parentSize = parentRef.offsetHeight;
+			console.log("H: " + parentSize);
+			
+			// Pass ID of respective canvas and the container height
+			drawFullBars('fullBars1', +parentSize);
+			drawFullBars('fullBars2', +parentSize);
+			drawFullBars('fullBars3', +parentSize);
+		</script>
 	</body>
 
 </html>
