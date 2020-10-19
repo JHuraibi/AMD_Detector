@@ -115,7 +115,7 @@ class FirebaseDAO {
 		// Text to be put in the Columns
 		let textTestName = document.createTextNode(testName);
 		let textTime = document.createTextNode(time);
-		let textURL = document.createTextNode("Retake Test");
+		let textURL = document.createTextNode("Take this Test");
 		
 		// Set href attribute for link to test
 		linkForURL.appendChild(textURL);
