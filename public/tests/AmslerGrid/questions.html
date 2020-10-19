@@ -6,7 +6,7 @@
 		<meta name="description" content="">
 		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 		<meta name="generator" content="Jekyll v4.1.1">
-		<title>Extending Lines · Test</title>
+		<title>Amsler Grid · Test</title>
 		
 		<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/cover/">
 		
@@ -45,26 +45,43 @@
 			</header>
 			
 			<main role="main" class="inner cover">
-                <header style="text-align: center; font-size: 40px;">Amsler Grid Test Questions</header>
-                <div id="q1">
-                <label for="questions">Question 1</label>
-                <p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
-                <button>Yes</button><button>No</button>
-                </div>
+				<header style="text-align: center; font-size: 40px;">Amsler Grid Test Questions</header>
+				<div id="q1">
+					<label for="questions">Question 1</label>
+					<p>Please select section(s) that gave your vision a problem</p>
+					<input type="radio"> Section 1
+					<input type="radio"> Section 2
+					<input type="radio"> Section 3
+					<input type="radio"> Section 4
+					</div>
                 <div id="q2">
-                    <label for="questions">Question 2</label>
-                    <p>Do all the boxes in the grid look square and the same size?</p>
-                    <button>Yes</button><button>No</button>
+                <label for="questions">Question 2</label>
+				<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
+				<input type="radio"> Yes
+				<input type="radio"> No
                 </div>
                 <div id="q3">
-                    <label for="questions">Question 3</label>
-                    <p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
-                    <button>Yes</button><button>No</button>
+                    <label for="questions">Question 3 </label>
+                    <p>Do all the boxes in the grid look square and the same size?</p>
+					<input type="radio"> Yes
+					<input type="radio"> No
                 </div>
                 <div id="q4">
                     <label for="questions">Question 4</label>
+					<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
+					<input type="radio"> Yes
+					<input type="radio"> No
+                </div>
+                <div id="q5">
+                    <label for="questions">Question 5</label>
                     <p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
-                    <button>Yes</button><button>No</button>
+					<input type="radio"> Yes
+					<input type="radio"> No
+                </div>
+                <div style="text-align: right; " class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+					<button id="nxt" type="button" onClick="location.href='../../home.html'"
+							class="btn btn-sm btn-outline-secondary">Done
+					</button>
                 </div>
 			</main>
 			
@@ -75,55 +92,3 @@
 		</div>
 	</body>
 </html>
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amsler Grid Test</title>
-    <style type="text/css">
-    
-
-    </style>
-</head>
-<body>
-    <p id="timer" style="text-align: right;"></p>
-    <div style="text-align: center;">
-    <img src="amsler.jpg" alt="amslerGrid" width="700" height="700">
-    </div>    
-    <script src="Amsler.js"></script>
-    
-</body>
-</html> -->
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amsler Test Questions</title>
-</head>
-<body>
-    <header style="text-align: center; font: bold;">Amsler Grid Test</header>
-    <div id="q1">
-    <label for="questions">Question 1</label>
-    <p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
-    <button>Yes</button><button>No</button>
-    </div>
-    <div id="q2">
-        <label for="questions">Question 2</label>
-        <p>Do all the boxes in the grid look square and the same size?</p>
-        <button>Yes</button><button>No</button>
-    </div>
-    <div id="q3">
-        <label for="questions">Question 3</label>
-        <p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
-        <button>Yes</button><button>No</button>
-    </div>
-    <div id="q4">
-        <label for="questions">Question 4</label>
-        <p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
-        <button>Yes</button><button>No</button>
-    </div>
-</body>
-</html> -->
