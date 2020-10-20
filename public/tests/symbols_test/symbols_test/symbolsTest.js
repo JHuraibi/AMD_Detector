@@ -73,7 +73,8 @@ var resultX = [];
 var resultY = [];
 var resultX2 = [];
 var resultY2 = [];
-var resultsSymbols = [];
+var resultsSymbolsOne = [];
+var resultsSymbolsTwo = [];
 
 canvas2.style.display = "none";
 // index to capture result
@@ -84,7 +85,7 @@ var t2 = 0;
 function aKey() {
 	if (testOneInProgress) {
 		if (symbols[r] != "+") {
-			resultsSymbols[t] = symbols[r];
+			resultsSymbolsOne[t] = symbols[r];
 			resultX[t] = x;
 			resultY[t] = y;
 			t++;
@@ -93,9 +94,9 @@ function aKey() {
 	}
 	else {
 		if (symbols[r2] != "+") {
-			resultsSymbols[t2] = symbols[r2];
-			resultX2[t2] = x2;
-			resultY2[t2] = y2;
+			resultsSymbolsTwo[t2] = symbols[r2];
+			resultX2[t2] = x;
+			resultY2[t2] = y;
 			t2++;
 			
 		}
@@ -108,7 +109,7 @@ function aKey() {
 function sKey() {
 	if (testOneInProgress) {
 		if (symbols[r] != "-") {
-			resultsSymbols[t] = symbols[r];
+			resultsSymbolsOne[t] = symbols[r];
 			resultX[t] = x;
 			resultY[t] = y;
 			t++;
@@ -117,9 +118,9 @@ function sKey() {
 	}
 	else {
 		if (symbols[r2] != "-") {
-			resultsSymbols[t2] = symbols[r2];
-			resultX2[t2] = x2;
-			resultY2[t2] = y2;
+			resultsSymbolsTwo[t2] = symbols[r2];
+			resultX2[t2] = x;
+			resultY2[t2] = y;
 			t2++;
 			
 		}
@@ -132,7 +133,7 @@ function sKey() {
 function xKey() {
 	if (testOneInProgress) {
 		if (symbols[r] != "x") {
-			resultsSymbols[t] = symbols[r];
+			resultsSymbolsOne[t] = symbols[r];
 			resultX[t] = x;
 			resultY[t] = y;
 			t++;
@@ -141,9 +142,9 @@ function xKey() {
 	}
 	else {
 		if (symbols[r2] != "x") {
-			resultsSymbols[t2] = symbols[r2];
-			resultX2[t2] = x2;
-			resultY2[t2] = y2;
+			resultsSymbolsTwo[t2] = symbols[r2];
+			resultX2[t2] = x;
+			resultY2[t2] = y;
 			t2++;
 			
 		}
@@ -156,7 +157,7 @@ function xKey() {
 function dKey() {
 	if (testOneInProgress) {
 		if (symbols[r] != "÷") {
-			resultsSymbols[t] = symbols[r];
+			resultsSymbolsOne[t] = symbols[r];
 			resultX[t] = x;
 			resultY[t] = y;
 			t++;
@@ -165,11 +166,11 @@ function dKey() {
 	}
 	else {
 		if (symbols[r2] != "÷") {
-			resultsSymbols[t2] = symbols[r2];
-			resultX2[t2] = x2;
-			resultY2[t2] = y2;
+			resultsSymbolsTwo[t2] = symbols[r2];
+			resultX2[t2] = x;
+			resultY2[t2] = y;
 			t2++;
-			
+			console.log("")
 		}
 		
 	}
@@ -187,7 +188,6 @@ function clearCanvas() {
 	c2.clearRect(0, 0, 500, 500);
 	c2.fillStyle = "White";
 	c2.fillRect(0, 0, 500, 500);
-	
 }
 
 //Function have black dot in the center
@@ -242,8 +242,8 @@ function test1() {
 		blackDot();
 		randomSymbol();
 		i++;
-		// setTimeout(test1, 3000);
-		setTimeout(test1, 1000);	// Faster just for testing
+		setTimeout(test1, 3000);
+		// setTimeout(test1, 1000);	// !! FOR TESTING
 	}
 	else {
 		console.log("Going to next test");
@@ -277,8 +277,8 @@ function test2() {
 		blackDot();
 		randomSymbol();
 		a++;
-		// setTimeout(test2, 3000);
-		setTimeout(test2, 1000);	// Faster just for testing
+		setTimeout(test2, 3000);
+		// setTimeout(test2, 1000);	// !! FOR TESTING
 	}
 	else results();
 	
@@ -290,22 +290,30 @@ var j2;
 // function to show the erros after test is conducted
 function results() {
 	
+	// console.log("Result Symbols: " + resultsSymbols);
+	
 	// TODO: The two canvases are being stacked on top of each other
 	canvas.style.display = "block";
 	clearCanvas();
 	blackDot();
-	for (j = 0; j < resultY.length; j++) {
+
+	for (j = 0; j < resultsSymbolsOne.length; j++) {
 		c.fillStyle = "blue";
 		c.font = "35 px Arial";
-		c.fillText(resultsSymbols[j], resultX[j], resultY[j]);
-		
+		c.fillText(resultsSymbolsOne[j], resultX[j], resultY[j]);
+		// console.log("Result: " + resultsSymbolsOne[j]);
+		// console.log("X: " + resultX[j]);
+		// console.log("Y: " + resultY[j]);
 	}
-	for (j2 = 0; j2 < resultY2.length; j2++) {
+	
+	for (j2 = 0; j2 < resultsSymbolsTwo.length; j2++) {
 		console.log("In loop of c2 results ");
 		c2.fillStyle = "blue";
 		c2.font = "35 px Arial";
-		c2.fillText(resultsSymbols[j2], resultX2[j2], resultY2[j2]);
-		
+		c2.fillText(resultsSymbolsTwo[j2], resultX2[j2], resultY2[j2]);
+		// console.log("Result 2: " + resultsSymbolsTwo[j2]);
+		// console.log("X2: " + resultX[j2]);
+		// console.log("Y2: " + resultY[j2]);
 	}
 	
 	
