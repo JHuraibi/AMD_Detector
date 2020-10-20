@@ -236,7 +236,8 @@ function test1() {
 		blackDot();
 		randomSymbol();
 		i++;
-		setTimeout(test1, 3000);
+		// setTimeout(test1, 3000);
+		setTimeout(test1, 1000);	// Faster just for testing
 	}
 	else {
 		console.log("Going to next test");
@@ -246,10 +247,15 @@ function test1() {
 }
 
 function nexttest() {
+	// TODO: canvas2 is shifting to left between switching (might be display attr)
 	canvas.style.display = "none";
 	canvas2.style.display = "block";
-	test2();
 	
+	var startTest1 = document.getElementById("start_test1");
+	var startTest2 = document.getElementById("start_test2");
+	
+	startTest1.style.display = "none";
+	startTest2.style.display = "inherit";
 }
 
 var a = 0;
@@ -263,7 +269,8 @@ function test2() {
 		blackDot();
 		randomSymbol();
 		a++;
-		setTimeout(test2, 3000);
+		// setTimeout(test2, 3000);
+		setTimeout(test2, 1000);	// Faster just for testing
 	}
 	else results();
 	
