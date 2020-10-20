@@ -7,6 +7,7 @@
 // // JS code
 // //
 
+var testOneInProgress = true;
 
 var canvas = document.getElementById('canvas1');
 var canvas2 = document.getElementById("canvas2");
@@ -76,7 +77,7 @@ var t2 = 0;
 
 // if the key pressed is not a capture the result for the next 4 functions
 function aKey() {
-	if (canvas.style.display != "none") {
+	if (testOneInProgress) {
 		if (symbols[r] != "+") {
 			resultsSymbols[t] = symbols[r];
 			resultX[t] = x;
@@ -100,7 +101,7 @@ function aKey() {
 }
 
 function sKey() {
-	if (canvas.style.display != "none") {
+	if (testOneInProgress) {
 		if (symbols[r] != "-") {
 			resultsSymbols[t] = symbols[r];
 			resultX[t] = x;
@@ -124,7 +125,7 @@ function sKey() {
 }
 
 function xKey() {
-	if (canvas.style.display != "none") {
+	if (testOneInProgress) {
 		if (symbols[r] != "x") {
 			resultsSymbols[t] = symbols[r];
 			resultX[t] = x;
@@ -148,7 +149,7 @@ function xKey() {
 }
 
 function dKey() {
-	if (canvas.style.display != "none") {
+	if (testOneInProgress) {
 		if (symbols[r] != "÷") {
 			resultsSymbols[t] = symbols[r];
 			resultX[t] = x;
@@ -207,7 +208,7 @@ function randomSymbol() {
 	x = Math.floor(Math.random() * 500);
 	y = Math.floor(Math.random() * 500);
 	
-	if (canvas.style.display != "none") {
+	if (testOneInProgress) {
 		c.beginPath();
 		c.fillStyle = "red";
 		c.font = "40px Arial";
@@ -256,6 +257,8 @@ function nexttest() {
 	
 	startTest1.style.display = "none";
 	startTest2.style.display = "inherit";
+	
+	testOneInProgress = false;
 }
 
 var a = 0;
