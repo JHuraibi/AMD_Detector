@@ -8,7 +8,7 @@
 // //
 
 
-var canvas = document.querySelector('canvas');
+var canvas = document.getElementById('canvas1');
 var canvas2 = document.getElementById("canvas2");
 var c = canvas.getContext('2d');
 var c2 = canvas2.getContext('2d');
