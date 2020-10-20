@@ -17,6 +17,7 @@ let testFinished = false;
 let xBarsDone = false;
 
 let timestamp;					// Will record the time the test was started (in milliseconds since Epoch)
+let canvasSize = 0;				// Will record the size of the canvas the test was taken at
 
 
 /**
@@ -27,6 +28,9 @@ function setup() {
 	createCanvas(800, 800);
 	fillPositionQueue();
 	timestamp = Date.now();
+	
+	// !! TODO: This variable needs to be updated when dynamic canvas size is implemented
+	canvasSize = 800;
 }
 
 /**
@@ -298,6 +302,7 @@ function getFullBarsResults() {
 	return {
 		"TestName": "full_bars",
 		"TimeStampMS": timestamp,
+		"TestCanvasSize": canvasSize,
 		"XLocations": xClickLocations,
 		"YLocations": yClickLocations
 	}

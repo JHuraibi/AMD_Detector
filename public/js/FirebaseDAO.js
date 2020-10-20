@@ -39,22 +39,30 @@ class FirebaseDAO {
 		let xLocations = doc.data().XLocations;
 		let yLocations = doc.data().YLocations;
 		let timeStamp = doc.data().TimeStampMS;
+		let testCanvasSize = doc.data().TestCanvasSize;
 		
 		let barW = 10;
+		let ratio = sizeRef / testCanvasSize;
 		let ctx = newCanvas.getContext('2d');
 		
 		ctx.globalAlpha = 0.5;
 		
+		console.log("Original: " + testCanvasSize);
+		console.log("Ref: " + sizeRef);
+		console.log("Ratio: " + ratio);
+		
 		for (let i = 0; i < xLocations.length; i++) {
 			let xPos = xLocations[i];
 			ctx.fillStyle = "#460046";
-			ctx.fillRect(xPos, 0, barW + 10, 100);
+			ctx.fillRect((xPos * ratio), 0, barW + 10, sizeRef);
+			console.log("X Drawn At: " + (xPos * ratio));
 		}
 		
 		for (let i = 0; i < yLocations.length; i++) {
 			let yPos = xLocations[i];
 			ctx.fillStyle = "#460046";
-			ctx.fillRect(0, yPos, 100 + 20, barW);
+			ctx.fillRect(0, (yPos * ratio), sizeRef, barW);
+			console.log("Y Drawn At: " + (yPos * ratio));
 		}
 		
 		let dateTakenMsg = "Date Taken: " + this.formatDate(timeStamp);
@@ -66,6 +74,7 @@ class FirebaseDAO {
 		newDivContainer.appendChild(caption);
 		
 		parent.appendChild(newDivContainer);
+		
 	}
 	
 	// CHECK: How can I make this more modular for different tables?
@@ -87,7 +96,7 @@ class FirebaseDAO {
 					let timeStamp = doc.data().TimeStampMS;
 					this.addRowToTableFullBars(timeStamp, targetTableID);
 					
-					console.log("TimeStamp: " + timeStamp);
+					// console.log("TimeStamp: " + timeStamp);
 				});
 			});
 	}
@@ -136,7 +145,7 @@ class FirebaseDAO {
 	}
 	
 	formatDate(ms) {
-		console.log("FORMAT DATE");
+		// console.log("FORMAT DATE");
 		let date = new Date(ms);
 		
 		let dateString = date.toDateString();
