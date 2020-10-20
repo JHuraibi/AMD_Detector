@@ -204,10 +204,10 @@ var r2;
 function randomSymbol() {
 	r = Math.floor(Math.random() * 4);
 	r2 = Math.floor(Math.random() * 4);
+	x = Math.floor(Math.random() * 500);
+	y = Math.floor(Math.random() * 500);
 	
 	if (canvas.style.display != "none") {
-		x = Math.floor(Math.random() * 500);
-		y = Math.floor(Math.random() * 500);
 		c.beginPath();
 		c.fillStyle = "red";
 		c.font = "40px Arial";
@@ -262,9 +262,9 @@ var a = 0;
 
 function test2() {
 	
-	console.log("Test2");
+	// console.log("Test2");
 	if (a < 5) {
-		console.log("In test 2 loop");
+		// console.log("In test 2 loop");
 		clearCanvas();
 		blackDot();
 		randomSymbol();
