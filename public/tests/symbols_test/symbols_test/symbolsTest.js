@@ -35,25 +35,30 @@ window.addEventListener('keydown', function (e) {
 	
 	// key variable
 	var key = e.key;
-//if key pressed is s
+	key = key.toLowerCase();
+	
 	if (key === 's') {
+		//if key pressed is s
 		console.log("KeyPress: S");
 		sKey();
 	}
-// if a key is pressed
-	if (key === 'a') {
+	else if (key === 'a') {
+		// if a key is pressed
 		console.log("KeyPress: A");
 		aKey();
 	}
-//if d key is pressed
-	if (key === 'd') {
+	else if (key === 'd') {
+		//if d key is pressed
 		console.log("KeyPress: D");
 		dKey();
 	}
-// if x key is pressed
-	if (key === 'x') {
+	else if (key === 'x') {
+		// if x key is pressed
 		console.log("KeyPress: X");
 		xKey();
+	}
+	else {
+		console.log("KeyPress: Other");
 	}
 	
 });
