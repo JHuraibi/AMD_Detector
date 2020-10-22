@@ -255,7 +255,7 @@ function test1() {
 function nexttest() {
 	// TODO: canvas2 is shifting to left between switching (might be display attr)
 	canvas.style.display = "none";
-	canvas2.style.display = "block";
+	canvas2.style.display = "inline-block";
 	
 	var startTest1 = document.getElementById("start_test1");
 	var startTest2 = document.getElementById("start_test2");
@@ -294,7 +294,7 @@ function results() {
 	// console.log("Result Symbols: " + resultsSymbols);
 	
 	// TODO: The two canvases are being stacked on top of each other
-	canvas.style.display = "block";
+	canvas.style.display = "inline-block";
 	clearCanvas();
 	blackDot();
 
