@@ -343,13 +343,13 @@ function showExitButton() {
 
 function getSymbolsResults() {
 	return {
-		"TestName": "full_bars",
+		"TestName": "symbols",
 		"TimeStampMS": timestamp,
 		"LeftXLocations": leftResultX,
 		"LeftYLocations": leftResultY,
 		"LeftResultsSymbols": leftResultsSymbols,
 		"RightXLocations": rightResultX,
 		"RightYLocations": rightResultY,
-		"RightResultsSymbols": rightResultsSymbols,
+		"RightResultsSymbols": rightResultsSymbols
 	}
 }
