@@ -7,6 +7,7 @@
 // // JS code
 // //
 
+let timestamp = Date.now();
 var testOneInProgress = true;
 
 var canvas = document.getElementById('canvas1');
@@ -69,12 +70,12 @@ c.fillRect(0, 0, 500, 500);
 // Variable
 var x, y, y2, x2;
 var symbols = ["+", "-", "x", "÷"];
-var resultX = [];
-var resultY = [];
-var resultX2 = [];
-var resultY2 = [];
-var resultsSymbolsOne = [];
-var resultsSymbolsTwo = [];
+var leftResultX = [];
+var leftResultY = [];
+var rightResultX = [];
+var rightResultY = [];
+var leftResultsSymbols = [];
+var rightResultsSymbols = [];
 
 canvas2.style.display = "none";
 // index to capture result
@@ -85,18 +86,18 @@ var t2 = 0;
 function aKey() {
 	if (testOneInProgress) {
 		if (symbols[r] != "+") {
-			resultsSymbolsOne[t] = symbols[r];
-			resultX[t] = x;
-			resultY[t] = y;
+			leftResultsSymbols[t] = symbols[r];
+			leftResultX[t] = x;
+			leftResultY[t] = y;
 			t++;
 			
 		}
 	}
 	else {
 		if (symbols[r2] != "+") {
-			resultsSymbolsTwo[t2] = symbols[r2];
-			resultX2[t2] = x;
-			resultY2[t2] = y;
+			rightResultsSymbols[t2] = symbols[r2];
+			rightResultX[t2] = x;
+			rightResultY[t2] = y;
 			t2++;
 			
 		}
@@ -109,18 +110,18 @@ function aKey() {
 function sKey() {
 	if (testOneInProgress) {
 		if (symbols[r] != "-") {
-			resultsSymbolsOne[t] = symbols[r];
-			resultX[t] = x;
-			resultY[t] = y;
+			leftResultsSymbols[t] = symbols[r];
+			leftResultX[t] = x;
+			leftResultY[t] = y;
 			t++;
 			
 		}
 	}
 	else {
 		if (symbols[r2] != "-") {
-			resultsSymbolsTwo[t2] = symbols[r2];
-			resultX2[t2] = x;
-			resultY2[t2] = y;
+			rightResultsSymbols[t2] = symbols[r2];
+			rightResultX[t2] = x;
+			rightResultY[t2] = y;
 			t2++;
 			
 		}
@@ -133,18 +134,18 @@ function sKey() {
 function xKey() {
 	if (testOneInProgress) {
 		if (symbols[r] != "x") {
-			resultsSymbolsOne[t] = symbols[r];
-			resultX[t] = x;
-			resultY[t] = y;
+			leftResultsSymbols[t] = symbols[r];
+			leftResultX[t] = x;
+			leftResultY[t] = y;
 			t++;
 			
 		}
 	}
 	else {
 		if (symbols[r2] != "x") {
-			resultsSymbolsTwo[t2] = symbols[r2];
-			resultX2[t2] = x;
-			resultY2[t2] = y;
+			rightResultsSymbols[t2] = symbols[r2];
+			rightResultX[t2] = x;
+			rightResultY[t2] = y;
 			t2++;
 			
 		}
@@ -157,18 +158,18 @@ function xKey() {
 function dKey() {
 	if (testOneInProgress) {
 		if (symbols[r] != "÷") {
-			resultsSymbolsOne[t] = symbols[r];
-			resultX[t] = x;
-			resultY[t] = y;
+			leftResultsSymbols[t] = symbols[r];
+			leftResultX[t] = x;
+			leftResultY[t] = y;
 			t++;
 			
 		}
 	}
 	else {
 		if (symbols[r2] != "÷") {
-			resultsSymbolsTwo[t2] = symbols[r2];
-			resultX2[t2] = x;
-			resultY2[t2] = y;
+			rightResultsSymbols[t2] = symbols[r2];
+			rightResultX[t2] = x;
+			rightResultY[t2] = y;
 			t2++;
 			console.log("")
 		}
@@ -280,7 +281,10 @@ function test2() {
 		setTimeout(test2, 3000);
 		// setTimeout(test2, 1000);	// !! FOR TESTING
 	}
-	else results();
+	else {
+		results();
+		showExitButton();
+	}
 	
 }
 
@@ -296,25 +300,56 @@ function results() {
 	canvas.style.display = "block";
 	clearCanvas();
 	blackDot();
-
-	for (j = 0; j < resultsSymbolsOne.length; j++) {
+	
+	for (j = 0; j < leftResultsSymbols.length; j++) {
 		c.fillStyle = "blue";
 		c.font = "35 px Arial";
-		c.fillText(resultsSymbolsOne[j], resultX[j], resultY[j]);
+		c.fillText(leftResultsSymbols[j], leftResultX[j], leftResultY[j]);
 		// console.log("Result: " + resultsSymbolsOne[j]);
 		// console.log("X: " + resultX[j]);
 		// console.log("Y: " + resultY[j]);
 	}
 	
-	for (j2 = 0; j2 < resultsSymbolsTwo.length; j2++) {
+	for (j2 = 0; j2 < rightResultsSymbols.length; j2++) {
 		console.log("In loop of c2 results ");
 		c2.fillStyle = "blue";
 		c2.font = "35 px Arial";
-		c2.fillText(resultsSymbolsTwo[j2], resultX2[j2], resultY2[j2]);
-		// console.log("Result 2: " + resultsSymbolsTwo[j2]);
+		c2.fillText(rightResultsSymbols[j2], rightResultX[j2], rightResultY[j2]);
+		// console.log("Result 2: " + rightResultsSymbols[j2]);
 		// console.log("X2: " + resultX[j2]);
 		// console.log("Y2: " + resultY[j2]);
 	}
+}
+
+function showExitButton() {
+	let exitBtns = document.getElementById('exitTestBtns');
+	let fadeInSpeed = 1;
 	
+	exitBtns.style.display = "inherit";
+	exitBtns.style.opacity = 0.0;
 	
+	let fadeIn = setInterval(function () {
+		if (exitBtns.style.opacity < 1.0) {
+			
+			// Needs the plus sign before "exitBtns"
+			exitBtns.style.opacity = +exitBtns.style.opacity + 0.01;
+		}
+		else {
+			// Clear the current timer and exit
+			clearInterval(fadeIn);
+		}
+	}, fadeInSpeed);
+}
+
+function getSymbolsResults() {
+	return {
+		"TestName": "full_bars",
+		"TimeStampMS": timestamp,
+		"LeftXLocations": leftResultX,
+		"LeftYLocations": leftResultY,
+		"LeftResultsSymbols": leftResultsSymbols,
+		"RightXLocations": rightResultX,
+		"RightYLocations": rightResultY,
+		"RightResultsSymbols": rightResultsSymbols,
+	}
 }
