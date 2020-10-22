@@ -287,7 +287,9 @@ function test2() {
 var j;
 var j2;
 
-// Results for tests shows 2 canvas'
+// Results for tests shows 1 canvas'
+// blue represents right eye
+// orange represents left eye
 // function to show the erros after test is conducted
 function results() {
 	
