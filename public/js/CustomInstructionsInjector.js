@@ -8,10 +8,14 @@ function retrieveTestTitle(target_test) {
 
 		case "growing_circles":
 			return "Growing Circles";
-
+		
+		// Parallel Lines test
 		case "parallel_lines":
 			return "Parallel Lines";
-
+		
+		// case "symbols":
+		// 	return "Symbols";
+			
 		case "full_bars":
 			return "Full Bars";
 	}
@@ -41,6 +45,14 @@ function retrieveInstructions(target_test) {
 			return "Shut one eye. " +
 				"Focus on black dot in the center. If objects appear distorted click the \"Distorted\" button." +
 				"When you are ready to being click the \"Start Test\" button below.";
+		
+		// // SYMBOLS
+		// case "symbols":
+		// 	return "You will need to start by cupping one eye with your hand." +
+		// 	"Move 14 inches away from your screen and" +
+		// 	"focus on the black dot in the center" +
+		// 	"You will see random objects appearing on the screen" +
+		// 	"if you see \"+\" press \"A\", \"-\" press \"S\", \"x\" press \"X\", and \"÷\" press \"D\"";
 
 		// FULL BARS
 		case "full_bars":
@@ -62,6 +74,8 @@ function retrieveURLLink(target_test) {
 			return "./growingCircles/growingCircle.html";
 		case "parallel_lines":
 			return "./parallel_line/parallelline.html";
+		// case "symbols":
+		// 	return "./symbols_test/symbols_test/symbolsTest.html";
 		case "full_bars":
 			return "./full_bars/full_bars.html";
 	}
