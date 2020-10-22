@@ -129,7 +129,7 @@
 			function sendToFirestore() {
 				attemptUserLookup();
 				
-				var dataToWrite = getFullBarsResults();
+				var dataToWrite = getSymbolsResults();
 				
 				if (userRef) {
 					dbRef.collection("TestResults")
