@@ -287,6 +287,7 @@ function test2() {
 var j;
 var j2;
 
+// Results for tests shows 2 canvas'
 // function to show the erros after test is conducted
 function results() {
 	
