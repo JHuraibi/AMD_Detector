@@ -7,6 +7,7 @@
 // // JS code
 // //
 
+let timestamp = Date.now();
 var testOneInProgress = true;
 
 var canvas = document.getElementById('canvas1');
@@ -75,6 +76,7 @@ var resultX2 = [];
 var resultY2 = [];
 var resultsSymbolsOne = [];
 var resultsSymbolsTwo = [];
+
 
 canvas2.style.display = "none";
 // index to capture result
@@ -281,7 +283,6 @@ function test2() {
 		// setTimeout(test2, 1000);	// !! FOR TESTING
 	}
 	else results();
-	
 }
 
 var j;
@@ -300,18 +301,16 @@ function results() {
 	canvas2.style.display = "none";
 	clearCanvas();
 	blackDot();
-
+	
 	for (j = 0; j < resultsSymbolsOne.length; j++) {
 		c.fillStyle = "blue";
 		c.font = "35 px Arial";
 		c.fillText(resultsSymbolsOne[j], resultX[j], resultY[j]);
-
-		
 		// console.log("Result: " + resultsSymbolsOne[j]);
 		// console.log("X: " + resultX[j]);
 		// console.log("Y: " + resultY[j]);
 	}
-	// Im a comment 
+	// Im a comment
 	for (j2 = 0; j2 < resultsSymbolsTwo.length; j2++) {
 		console.log("In loop of c2 results ");
 		c.fillStyle = "orange";
@@ -321,6 +320,38 @@ function results() {
 		// console.log("X2: " + resultX[j2]);
 		// console.log("Y2: " + resultY[j2]);
 	}
+}
+
+function showExitButton() {
+	let exitBtns = document.getElementById('exitTestBtns');
+	let fadeInSpeed = 1;
 	
+	exitBtns.style.display = "inherit";
+	exitBtns.style.opacity = 0.0;
 	
+	let fadeIn = setInterval(function () {
+		if (exitBtns.style.opacity < 1.0) {
+			
+			// Needs the plus sign before "exitBtns"
+			exitBtns.style.opacity = +exitBtns.style.opacity + 0.01;
+		}
+		else {
+			// Clear the current timer and exit
+			clearInterval(fadeIn);
+		}
+	}, fadeInSpeed);
+}
+
+// Update value names
+function getSymbolsResults() {
+	return {
+		"TestName": "symbols",
+		"TimeStampMS": timestamp,
+		"LeftXLocations": leftResultX,
+		"LeftYLocations": leftResultY,
+		"LeftResultsSymbols": leftResultsSymbols,
+		"RightXLocations": rightResultX,
+		"RightYLocations": rightResultY,
+		"RightResultsSymbols": rightResultsSymbols
+	}
 }
