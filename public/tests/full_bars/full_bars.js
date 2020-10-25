@@ -21,6 +21,31 @@ let canvasSize = 0;				// Will record the size of the canvas the test was taken 
 
 
 /**
+ * Sets up the speed to match the user preference 
+ */
+var id;
+var db = firebase.firestore();
+getUid();
+async function getUid() {
+	//let user = await firebase.auth().currentUser;
+	await firebase.auth().onAuthStateChanged(user => {
+		if (user) {
+			id = user.uid;
+			console.log(id);
+			db.collection("users").doc(user.uid)
+				.get()
+				.then(doc => {
+
+					let newgrowingspeed = (doc.data().testSpeeds);
+					sec = newgrowingspeed;
+					console.log(sec);
+
+				});
+		}
+	});
+}
+
+/**
  * Runs only once.
  * Sets up the canvas, sets background color, initializes the positions queue, and records current time.
  */
@@ -28,7 +53,7 @@ function setup() {
 	createCanvas(800, 800);
 	fillPositionQueue();
 	timestamp = Date.now();
-	
+
 	// !! TODO: This variable needs to be updated when dynamic canvas size is implemented
 	canvasSize = 800;
 }
@@ -125,7 +150,7 @@ function fillPositionQueue() {
 	var interval = (width / numBars);
 
 	for (let i = 0; i
-	< numBars; i++) {
+		< numBars; i++) {
 		posQueue[i] = interval * i;
 	}
 
@@ -306,4 +331,33 @@ function getFullBarsResults() {
 		"XLocations": xClickLocations,
 		"YLocations": yClickLocations
 	}
+}
+
+function sendToFirestore() {
+
+	var dataToWrite = getFullBarsResults();
+	var db = firebase.firestore();
+	var id = firebase.auth().currentUser.uid;
+	db.collection("TestResults")
+		.doc(id)
+		.collection("FullBars")
+		.add(dataToWrite)
+		.then(() => {
+			uploadSuccess();
+			setTimeout(() => {
+				// Use replace() to disallow back button to come back to this page
+				window.location.replace("../../home.html");
+			}, 1000);
+		});
+
+}
+
+function uploadSuccess() {
+	let uploadStatusIndicator = document.getElementById('uploadStatus');
+	uploadStatusIndicator.textContent = "Results Saved!";
+}
+
+function showStatusIndicator() {
+	let uploadStatusIndicator = document.getElementById('uploadStatus');
+	uploadStatusIndicator.style.display = "inherit";
 }
