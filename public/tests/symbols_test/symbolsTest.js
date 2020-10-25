@@ -29,6 +29,27 @@ canvas2.height = size * scale;
 
 c.scale(scale, scale);
 c2.scale(scale, scale);
+var speed=3000;
+var id;
+var db = firebase.firestore();
+getUid();
+async function getUid() {
+    //let user = await firebase.auth().currentUser;
+    await firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            id = user.uid;
+            console.log(id);
+            db.collection("users").doc(user.uid)
+                .get()
+                .then(doc => {
+
+                    let newgrowingspeed = (doc.data().testSpeeds);
+                    speed = newgrowingspeed*1000;
+
+                });
+        }
+    });
+}
 
 window.addEventListener('keydown', function (e) {
 	// WebStorm saying keyCode is deprecated. It might not work in all browsers (-Jay)
@@ -244,7 +265,7 @@ function test1() {
 		blackDot();
 		randomSymbol();
 		i++;
-		setTimeout(test1, 3000);
+		setTimeout(test1, speed);
 		// setTimeout(test1, 1000);	// !! FOR TESTING
 	}
 	else {
@@ -279,7 +300,7 @@ function test2() {
 		blackDot();
 		randomSymbol();
 		a++;
-		setTimeout(test2, 3000);
+		setTimeout(test2, speed);
 		// setTimeout(test2, 1000);	// !! FOR TESTING
 	}
 	else results();
