@@ -18,6 +18,12 @@
             font-size: 25px;
         }
 
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
         .column {
             float: left;
             width: 50%;
@@ -34,6 +40,7 @@
             text-align: center;
             color: #282828;
         }
+
         a,
         a:focus,
         a:hover {
@@ -63,13 +70,14 @@
             </div>
         </header>
         <br>
-        <div class="column" id="leftEyeResults" style="width: 50%;">
-            <b>Left Eye Results</b>
+        <div class="row">
+            <div class="column" id="leftEyeResults">
+                <b>Left Eye Results</b>
+            </div>
+            <div class="column" id="rightEyeResults">
+                <b>Right Eye Results</b>
+            </div>
         </div>
-        <div class="column" id="rightEyeResults" style="width: 50%;">
-            <b>Right Eye Results</b>
-        </div>
-
         <div style="text-align: center;">
             <canvas></canvas>
             <canvas id="canvas2"></canvas>
@@ -80,7 +88,8 @@
                 Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
                 Click the "seen" button whenever you notice a red dot appear.
             </p>
-            <button id="nexttestbtn" class="btn btn-sm btn-outline-secondary" style="color: #282828; border-color: #282828;">Start next eye</button>
+            <button id="nexttestbtn" class="btn btn-sm btn-outline-secondary"
+                style="color: #282828; border-color: #282828;">Start next eye</button>
         </div>
 
         <div style="text-align: center;">
@@ -110,7 +119,7 @@
     <script src="/__/firebase/init.js"></script>
 
     <script src="growingCircle.js"></script>
-    
+
     <script src="../speed.js"></script>
 </body>
 

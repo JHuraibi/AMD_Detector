@@ -9,7 +9,7 @@ var c2 = canvas2.getContext('2d');
 document.getElementById("button").addEventListener("click", myFunction);
 document.getElementById("start").addEventListener("click", startTest);
 document.getElementById("nexttestbtn").addEventListener("click", startTest2);
-document.getElementById("savebtn").addEventListener("click",sendToFirestore);
+document.getElementById("savebtn").addEventListener("click", sendToFirestore);
 //const signOut = document.querySelector('.sign-out');
 var startbtn = document.getElementById('start');
 var seenbtn = document.getElementById('button');
@@ -279,12 +279,30 @@ function startTest2() {                               //start test and create an
 
 function showResults(r, r2) {
 
+    size = 500;
+    canvas.style.width = size + "px";
+    canvas.style.height = size + "px";
+    canvas2.style.width = size + "px";
+    canvas2.style.height = size + "px";
+
+
+    // Set actual size in memory (scaled to account for extra pixel density).
+    var scale = window.devicePixelRatio; // <--- Change to 1 on retina screens to see blurry canvas.
+    canvas.width = size * scale;
+    canvas.height = size * scale;
+    canvas2.width = size * scale;
+    canvas2.height = size * scale;
+
+    // Normalize coordinate system to use css pixels.
+    c.scale(scale, scale);
+    c2.scale(scale, scale);
+
     //displaying and hiding elements 
     console.log("displaying results from both tests");
     canvas2.style.display = "inline-block";
     canvas.style.display = "inline-block";
-    LER.style.display = "block";
-    RER.style.display = "block";
+    LER.style.display = "inline-block";
+    RER.style.display = "inline-block";
     startbtn.style.display = "none";
     seenbtn.style.display = "none";
 
@@ -293,21 +311,21 @@ function showResults(r, r2) {
     savebtn.style.display = "inline-block";
 
     //clear canvas
-    c.clearRect(0, 0, 700, 700)
+    c.clearRect(0, 0, 500, 500)
 
     // Black Dot
     c.fillStyle = "black";
     c.beginPath();
-    c.arc(350, 350, 4, 0, Math.PI * 2, false);
+    c.arc(250, 250, 4, 0, Math.PI * 2, false);
     c.fill();
     c.stroke();
 
-    c2.clearRect(0, 0, 700, 700)
+    c2.clearRect(0, 0, 500, 500)
 
     // Black Dot
     c2.fillStyle = "black";
     c2.beginPath();
-    c2.arc(350, 350, 4, 0, Math.PI * 2, false);
+    c2.arc(250, 250, 4, 0, Math.PI * 2, false);
     c2.fill();
     c2.stroke();
 
@@ -315,9 +333,9 @@ function showResults(r, r2) {
     var limit = r[0].length;
     if (limit > 0) {
         for (var i = 0; i < limit; i++) {
-            x = r[0][i];
-            y = r[1][i];
-            z = r[2][i];
+            x = (500*r[0][i])/700;
+            y = (500*r[1][i])/700;
+            z = (500*r[2][i])/700;
             c.fillStyle = "red";
             c.beginPath();
             c.arc(x, y, z, 0, Math.PI * 2, false);
@@ -329,9 +347,9 @@ function showResults(r, r2) {
     var limit2 = r2[0].length;
     if (limit2 > 0) {
         for (var i = 0; i < limit; i++) {
-            x2 = r2[0][i];
-            y2 = r2[1][i];
-            z2 = r2[2][i];
+            x2 = (500*r2[0][i])/700;
+            y2 = (500*r2[1][i])/700;
+            z2 = (500*r2[2][i])/700;
             c2.fillStyle = "red";
             c2.beginPath();
             c2.arc(x2, y2, z2, 0, Math.PI * 2, false);

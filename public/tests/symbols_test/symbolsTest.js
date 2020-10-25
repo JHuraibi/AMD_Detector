@@ -29,36 +29,36 @@ canvas2.height = size * scale;
 
 c.scale(scale, scale);
 c2.scale(scale, scale);
-var speed=3000;
+var speed = 3000;
 var id;
 var db = firebase.firestore();
 getUid();
 async function getUid() {
-    //let user = await firebase.auth().currentUser;
-    await firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-            id = user.uid;
-            console.log(id);
-            db.collection("users").doc(user.uid)
-                .get()
-                .then(doc => {
+	//let user = await firebase.auth().currentUser;
+	await firebase.auth().onAuthStateChanged(user => {
+		if (user) {
+			id = user.uid;
+			console.log(id);
+			db.collection("users").doc(user.uid)
+				.get()
+				.then(doc => {
 
-                    let newgrowingspeed = (doc.data().testSpeeds);
-                    speed = newgrowingspeed*1000;
+					let newgrowingspeed = (doc.data().testSpeeds);
+					speed = newgrowingspeed * 1000;
 
-                });
-        }
-    });
+				});
+		}
+	});
 }
 
 window.addEventListener('keydown', function (e) {
 	// WebStorm saying keyCode is deprecated. It might not work in all browsers (-Jay)
 	// var key = e.keyCode;
-	
+
 	// key variable
 	var key = e.key;
 	key = key.toLowerCase();
-	
+
 	if (key === 's') {
 		//if key pressed is s
 		console.log("KeyPress: S");
@@ -82,7 +82,7 @@ window.addEventListener('keydown', function (e) {
 	else {
 		console.log("KeyPress: Other");
 	}
-	
+
 });
 
 c.fillStyle = "White";
@@ -98,7 +98,6 @@ var resultY2 = [];
 var resultsSymbolsOne = [];
 var resultsSymbolsTwo = [];
 
-
 canvas2.style.display = "none";
 // index to capture result
 var t = 0;
@@ -112,7 +111,6 @@ function aKey() {
 			resultX[t] = x;
 			resultY[t] = y;
 			t++;
-			
 		}
 	}
 	else {
@@ -121,12 +119,8 @@ function aKey() {
 			resultX2[t2] = x;
 			resultY2[t2] = y;
 			t2++;
-			
 		}
-		
 	}
-	
-	
 }
 
 function sKey() {
@@ -136,7 +130,7 @@ function sKey() {
 			resultX[t] = x;
 			resultY[t] = y;
 			t++;
-			
+
 		}
 	}
 	else {
@@ -145,12 +139,12 @@ function sKey() {
 			resultX2[t2] = x;
 			resultY2[t2] = y;
 			t2++;
-			
+
 		}
-		
+
 	}
-	
-	
+
+
 }
 
 function xKey() {
@@ -160,7 +154,7 @@ function xKey() {
 			resultX[t] = x;
 			resultY[t] = y;
 			t++;
-			
+
 		}
 	}
 	else {
@@ -169,12 +163,12 @@ function xKey() {
 			resultX2[t2] = x;
 			resultY2[t2] = y;
 			t2++;
-			
+
 		}
-		
+
 	}
-	
-	
+
+
 }
 
 function dKey() {
@@ -184,7 +178,7 @@ function dKey() {
 			resultX[t] = x;
 			resultY[t] = y;
 			t++;
-			
+
 		}
 	}
 	else {
@@ -195,9 +189,9 @@ function dKey() {
 			t2++;
 			console.log("")
 		}
-		
+
 	}
-	
+
 }
 
 
@@ -206,7 +200,7 @@ function clearCanvas() {
 	c.clearRect(0, 0, 500, 500);
 	c.fillStyle = "White";
 	c.fillRect(0, 0, 500, 500);
-	
+
 	// Canvas 2
 	c2.clearRect(0, 0, 500, 500);
 	c2.fillStyle = "White";
@@ -219,7 +213,7 @@ function blackDot() {
 	c.beginPath();
 	c.arc(250, 250, 4, 0, Math.PI * 2);
 	c.fill();
-// Canvas 2
+	// Canvas 2
 	c2.fillStyle = "black";
 	c2.beginPath();
 	c2.arc(250, 250, 4, 0, Math.PI * 2);
@@ -235,7 +229,7 @@ function randomSymbol() {
 	r2 = Math.floor(Math.random() * 4);
 	x = Math.floor(Math.random() * 500);
 	y = Math.floor(Math.random() * 500);
-	
+
 	if (testOneInProgress) {
 		c.beginPath();
 		c.fillStyle = "red";
@@ -250,14 +244,14 @@ function randomSymbol() {
 		c2.font = "40px Arial";
 		c2.fillText(symbols[r2], x, y);
 	}
-	
+
 }
 
 // Vaariable representing iterations
 var i = 0;
 
 function test1() {
-	
+
 	console.log("test 1");
 	blackDot();
 	if (i < 5) {
@@ -272,27 +266,27 @@ function test1() {
 		console.log("Going to next test");
 		nexttest();
 	}
-	
+
 }
 
 function nexttest() {
 	// TODO: canvas2 is shifting to left between switching (might be display attr)
 	canvas.style.display = "none";
 	canvas2.style.display = "inline-block";
-	
+
 	var startTest1 = document.getElementById("start_test1");
 	var startTest2 = document.getElementById("start_test2");
-	
+
 	startTest1.style.display = "none";
 	startTest2.style.display = "inherit";
-	
+
 	testOneInProgress = false;
 }
 
 var a = 0;
 
 function test2() {
-	
+
 	// console.log("Test2");
 	if (a < 5) {
 		// console.log("In test 2 loop");
@@ -314,15 +308,15 @@ var j2;
 // orange represents left eye
 // function to show the erros after test is conducted
 function results() {
-	
+
 	// console.log("Result Symbols: " + resultsSymbols);
-	
+
 	// TODO: The two canvases are being stacked on top of each other
 	canvas.style.display = "inline-block";
 	canvas2.style.display = "none";
 	clearCanvas();
 	blackDot();
-	
+
 	for (j = 0; j < resultsSymbolsOne.length; j++) {
 		c.fillStyle = "blue";
 		c.font = "35 px Arial";
@@ -346,13 +340,13 @@ function results() {
 function showExitButton() {
 	let exitBtns = document.getElementById('exitTestBtns');
 	let fadeInSpeed = 1;
-	
+
 	exitBtns.style.display = "inherit";
 	exitBtns.style.opacity = 0.0;
-	
+
 	let fadeIn = setInterval(function () {
 		if (exitBtns.style.opacity < 1.0) {
-			
+
 			// Needs the plus sign before "exitBtns"
 			exitBtns.style.opacity = +exitBtns.style.opacity + 0.01;
 		}
