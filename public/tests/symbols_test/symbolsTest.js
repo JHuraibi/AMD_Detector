@@ -342,6 +342,7 @@ function results() {
 		// console.log("X2: " + resultX[j2]);
 		// console.log("Y2: " + resultY[j2]);
 	}
+	showExitButton();
 }
 
 function showExitButton() {
