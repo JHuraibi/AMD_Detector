@@ -1,4 +1,4 @@
-class FirebaseDAO {
+class SymbolsDAO {
 	constructor(dbRef) {
 		this.dbRef = dbRef;
 		this.userRef = null;
@@ -8,16 +8,16 @@ class FirebaseDAO {
 		this.userRef = userRef;
 	}
 	
-	drawFullBars(containerID, sizeRef) {
+	drawSymbols(containerID, sizeRef) {
 		if (!userRef) {
-			console.log("[FirebaseDAO: drawFullBars] - User is null");
+			console.log("[FullBarsDAO: drawFullBars] - User is null");
 			return;
 		}
 		
 		this.dbRef
 			.collection("TestResults")
 			.doc(userRef.uid)
-			.collection("FullBars")
+			.collection("Symbols")
 			.orderBy("TimeStampMS", "desc")
 			.limit(3)
 			.get()
@@ -28,41 +28,60 @@ class FirebaseDAO {
 			});
 	}
 	
+	// !! TODO: Error handling (especially getting values from Firebase)
 	// !! TODO: Refactor to make reading easier
 	populateCanvas(containerID, sizeRef, doc) {
 		let parent = document.getElementById(containerID);
 		
 		let newDivContainer = document.createElement("div");
-		let newCanvas = document.createElement("canvas");
-		let caption = document.createElement("p");
 		
-		let xLocations = doc.data().XLocations;
-		let yLocations = doc.data().YLocations;
+		let leftCanvas = document.createElement("canvas");
+		let rightCanvas = document.createElement("canvas");
+		
+		let caption = document.createElement("p");
+		let ctxLeft = leftCanvas.getContext('2d');
+		let ctxRight = rightCanvas.getContext('2d');
+		
+		// TODO: Error handling for discrepancy between Symbols[] and Locations[] lengths
+		let leftResultSymbols = doc.data().LeftResultsSymbols;
+		let leftXLocations = doc.data().LeftXLocations;
+		let leftYLocations = doc.data().LeftYLocations;
+		let rightResultSymbols = doc.data().RightResultsSymbols;
+		let rightXLocations = doc.data().RightXLocations;
+		let rightYLocations = doc.data().RightXLocations;
 		let timeStamp = doc.data().TimeStampMS;
 		let testCanvasSize = doc.data().TestCanvasSize;
 		
-		let barW = 10;
 		let ratio = sizeRef / testCanvasSize;
-		let ctx = newCanvas.getContext('2d');
 		
-		ctx.globalAlpha = 0.5;
-		
-		console.log("Original: " + testCanvasSize);
-		console.log("Ref: " + sizeRef);
-		console.log("Ratio: " + ratio);
-		
-		for (let i = 0; i < xLocations.length; i++) {
-			let xPos = xLocations[i];
-			ctx.fillStyle = "#460046";
-			ctx.fillRect((xPos * ratio), 0, barW + 10, sizeRef);
-			console.log("X Drawn At: " + (xPos * ratio));
+		// NOTE: The font size (see below) of 35 is hardcoded in symbols_test.js
+		if (leftResultSymbols) {
+			
+			ctxLeft.fillStyle = "blue";
+			ctxLeft.font = (ratio * 35) + "px Arial";
+			
+			for (let i = 0; i < leftXLocations.length; i++) {
+				let symbol = leftResultSymbols[i];
+				let xPos = leftXLocations[i] * ratio;
+				let yPos = leftYLocations[i] * ratio;
+				
+				ctxLeft.fillText(symbol, xPos, yPos);
+			}
 		}
 		
-		for (let i = 0; i < yLocations.length; i++) {
-			let yPos = xLocations[i];
-			ctx.fillStyle = "#460046";
-			ctx.fillRect(0, (yPos * ratio), sizeRef, barW);
-			console.log("Y Drawn At: " + (yPos * ratio));
+		// !! TODO: Right canvas has nothing on it when printing to the webpage
+		if (rightResultSymbols) {
+			
+			ctxRight.fillStyle = "orange";
+			ctxRight.font = (ratio * 35) + "px Arial";
+			
+			for (let i = 0; i < leftYLocations.length; i++) {
+				let symbol = rightResultSymbols[i];
+				let xPos = rightXLocations[i] * ratio;
+				let yPos = rightYLocations[i] * ratio;
+				
+				ctxRight.fillText(symbol, xPos, yPos);
+			}
 		}
 		
 		let dateTakenMsg = "Date Taken: " + this.formatDate(timeStamp);
@@ -70,42 +89,43 @@ class FirebaseDAO {
 		
 		caption.appendChild(captionTextNode);
 		
-		newDivContainer.appendChild(newCanvas);
-		newDivContainer.appendChild(caption);
+		// grid-area: Row#, Column#, Row Span, Column Span
+		leftCanvas.style.gridArea = "1 / 1 / 2 / 2";
+		rightCanvas.style.gridArea = "1 / 2 / 2 / 2";
+		
+		newDivContainer.appendChild(leftCanvas);
+		newDivContainer.appendChild(rightCanvas);
 		
 		parent.appendChild(newDivContainer);
-		
 	}
 	
 	// CHECK: How can I make this more modular for different tables?
-	populateFullBarsTable(targetTableID) {
+	populateSymbolsTable(targetTableID) {
 		if (!userRef) {
-			console.log("[FirebaseDAO: populateFullBarsTable] - User is null");
+			console.log("[SymbolsDAO: populateFullBarsTable] - User is null");
 			return;
 		}
 		
 		this.dbRef
 			.collection("TestResults")
 			.doc(userRef.uid)
-			.collection("FullBars")
+			.collection("Symbols")
 			.orderBy("TimeStampMS", "desc")
 			.limit(3)
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
 					let timeStamp = doc.data().TimeStampMS;
-					this.addRowToTableFullBars(timeStamp, targetTableID);
-					
-					// console.log("TimeStamp: " + timeStamp);
+					this.addRowToTable(timeStamp, targetTableID);
 				});
 			});
 	}
 	
 	// TODO: Refactor variable names below to be more readable
-	addRowToTableFullBars(timeStamp, targetTableID) {
-		let testName = "Full Bars";
+	addRowToTable(timeStamp, targetTableID) {
+		let testName = "Symbols";
 		let time = this.formatDate(timeStamp);
-		let urlOfTest = "../tests/instructions_page.html?full_bars";
+		let urlOfTest = "../tests/instructions_page.html?symbols";
 		
 		// ID of which table to put the data into (HTML Attribute ID)
 		let tableBody = document.getElementById(targetTableID);
@@ -144,28 +164,22 @@ class FirebaseDAO {
 		tableBody.appendChild(row);
 	}
 	
-	formatDate(ms) {
-		// console.log("FORMAT DATE");
-		let date = new Date(ms);
+	formatDate(milliseconds) {
+		let date = new Date(milliseconds);
 		
 		let dateString = date.toDateString();
 		let hoursString = date.getUTCHours();
 		let minutesString = date.getUTCMinutes();
-		let timeModifier = "";
+		let postfix = hoursString > 11 ? "PM" : "AM";
 		
-		if (hoursString > 12) {
-			hoursString %= hoursString;
-			timeModifier = "PM";
-		}
-		else {
-			timeModifier = "AM";
+		if (hoursString === 0){
+			hoursString = 12;
 		}
 		
-		if (hoursString == 0) {
-			hoursString = "12";
-		}
+		minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
+		hoursString = hoursString % 12;
 		
-		return dateString + " at " + hoursString + ":" + minutesString + timeModifier;
+		return dateString + " at " + hoursString + ":" + minutesString + postfix;
 	}
 	
-}// class [ FirebaseDAO ]
+}// class [ SymbolsDAO ]

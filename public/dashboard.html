@@ -153,31 +153,42 @@
 					</div>
 				</div>
 
-				<!-- Interactive Canvas -->
-				<div>
-					<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
-				</div>
+				<!-- Interactive Canvas (Time Series Graph) -->
+				<!-- <div> -->
+				<!-- 	<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
+				<!-- </div> -->
 
-				<!-- TODO: The first box is sometimes rendering as a rectangle -->
-				<!-- Grid of Canvases to Redraw Full Bars Results (but smaller) -->
+				<!-- Grid of Canvases to Redraw Test Results (but smaller) -->
+				
+				<!-- GROWING CIRCLES -->
 				<div style="border: dotted red; margin-top: 2rem">
-					<h2>&nbsp;Test Results (Full Bars Test)</h2>
-					<div class="grid" id="resultsContainer">
-						<!-- This div is turned on/off on window resize just to get its pixel size -->
-						<div id="sizeRef" style="display: none">
-							<!-- Empty. Actual div's are generated from FirebaseDAO.js -->
-						</div>
-					</div>
-				</div>
-				<div style="border: dotted red; margin-top: 2rem">
-					<h2>&nbsp;Test Results (Growing Circles)</h2>
+					<h4>&nbsp;Growing Circles Test Results</h4>
 					<div class="grid" id="resultsContainerGrowingCircles">
-						<!-- This div is turned on/off on window resize just to get its pixel size -->
+						
+						<!-- This div is turned on/off on window resize just to get its size -->
 						<div id="sizeRef" style="display: none">
 							<!-- Empty. Actual div's are generated from growingCirclesDAO.js.js -->
 						</div>
+						
 					</div>
 				</div>
+				
+				<!-- SYMBOLS -->
+				<div style="border: dotted red; margin-top: 2rem">
+					<h4>&nbsp;Symbols Test Results</h4>
+					<div class="grid" id="resultsContainerSymbols">
+						<!-- Empty. Actual div's are generated from FullBarsDAO.js -->
+					</div>
+				</div>
+				
+				<!-- FULL BARS -->
+				<div style="border: dotted red; margin-top: 2rem">
+					<h4>&nbsp;Full Bars Test Results</h4>
+					<div class="grid" id="resultsContainerFullBars">
+						<!-- Empty. Actual div's are generated from FirebaseDAO.js -->
+					</div>
+				</div>
+				
 				<h2 style="margin-top: 2rem">History</h2>
 				<div class="table-responsive">
 					<table class="table table-striped table-sm" id="full_bars_results">
@@ -240,8 +251,10 @@
 	<script>
 		// !! TODO: Docstrings and comments
 		// If Time: Use event listeners instead of onclick (Unobtrusive Javascript)
-		var tableHelper = new FirebaseDAO(dbRef);
 		var tableHelperGrowingCircles = new growingCirclesDAO(dbRef);
+		var symbolsDAO = new SymbolsDAO(dbRef);
+		var fullBarsDAO = new FullBarsDAO(dbRef);
+		
 		let maxWaitTime = 2000;
 		let waitTime = 200;
 
@@ -259,25 +272,19 @@
 				console.log("User Lookup Timed Out");
 			}
 			else if (userRef) {
-				tableHelper.updateUserReference(userRef);
-				tableHelper.populateFullBarsTable("full_bars_results");
-				temp_drawFullBars();
-
 				tableHelperGrowingCircles.updateUserReference(userRef);
 				tableHelperGrowingCircles.populateGrowingCirclesTable("full_bars_results");
 				temp_drawGrowingCircles();
+				
+				symbolsDAO.updateUserReference(userRef);
+				symbolsDAO.populateGrowingCirclesTable("full_bars_results");
+				temp_drawSymbols();
+
+				fullBarsDAO.updateUserReference(userRef);
+				fullBarsDAO.populateFullBarsTable("full_bars_results");
+				temp_drawFullBars();
 			}
 		})();
-
-		function temp_drawFullBars() {
-			if (miniCanvasDivSize === 0) {
-				console.log("Manual Update of Size.");
-				manualSizeUpdate();
-				setTimeout(temp_drawFullBars, 200);
-			}
-
-			tableHelper.drawFullBars('resultsContainer', miniCanvasDivSize);
-		}
 
 		function temp_drawGrowingCircles() {
 			if (miniCanvasDivSize === 0) {
@@ -287,6 +294,26 @@
 			}
 
 			tableHelperGrowingCircles.drawGrowingCircles('resultsContainerGrowingCircles', miniCanvasDivSize);
+		}
+		
+		function temp_drawSymbols() {
+			if (miniCanvasDivSize === 0) {
+				console.log("Manual Update of Size Was Required.");
+				manualSizeUpdate();
+				setTimeout(temp_drawSymbols, 200);
+			}
+			
+			symbolsDAO.drawSymbols('resultsContainerSymbols', miniCanvasDivSize);
+		}
+
+		function temp_drawFullBars() {
+			if (miniCanvasDivSize === 0) {
+				console.log("Manual Update of Size.");
+				manualSizeUpdate();
+				setTimeout(temp_drawFullBars, 200);
+			}
+			
+			fullBarsDAO.drawFullBars('resultsContainer', miniCanvasDivSize);
 		}
 
 		function manualSizeUpdate() {
