@@ -15,25 +15,25 @@
 		
 		<!--		Move the style for "main" below into "cover.css" once the size agreed upon by whole team-->
 		<style>
-					main {
-						padding-top: 4em;
-						padding-bottom: 1em;
-					}
-					
-					.bd-placeholder-img {
-						font-size: 1.125rem;
-						text-anchor: middle;
-						-webkit-user-select: none;
-						-moz-user-select: none;
-						-ms-user-select: none;
-						user-select: none;
-					}
-					
-					@media (min-width: 768px) {
-						.bd-placeholder-img-lg {
-							font-size: 3.5rem;
-						}
-					}
+			main {
+				padding-top: 4em;
+				padding-bottom: 1em;
+			}
+			
+			.bd-placeholder-img {
+				font-size: 1.125rem;
+				text-anchor: middle;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+			}
+			
+			@media (min-width: 768px) {
+				.bd-placeholder-img-lg {
+					font-size: 3.5rem;
+				}
+			}
 		
 		</style>
 		<!-- Custom styles for this template -->
@@ -97,7 +97,7 @@
 		<script>
 			let dbRef = firebase.firestore();
 			let userRef = null;
-
+			
 			firebase.auth().onAuthStateChanged(user => {
 				console.log("[FullBars.html] - USER LOCATED");
 				console.log(user);
@@ -111,12 +111,12 @@
 			// If Time: Use event listeners instead of onclick (Unobtrusive Javascript)
 			let maxWaitTime = 2000;
 			let waitTime = 200;
-
+			
 			function sendToFirestore() {
 				attemptUserLookup();
-
+				
 				var dataToWrite = getFullBarsResults();
-
+				
 				if (userRef) {
 					dbRef.collection("TestResults")
 						.doc(userRef.uid)
@@ -131,7 +131,7 @@
 						});
 				}
 			}
-
+			
 			function attemptUserLookup() {
 				if (!userRef && maxWaitTime > 0) {
 					maxWaitTime -= waitTime;
@@ -142,12 +142,12 @@
 					userLookupFailed();
 				}
 			}
-
+			
 			function uploadSuccess() {
 				let uploadStatusIndicator = document.getElementById('uploadStatus');
 				uploadStatusIndicator.textContent = "Results Saved!";
 			}
-
+			
 			function userLookupFailed() {
 				// TODO: Better error message and format
 				let uploadStatusIndicator = document.getElementById('uploadStatus');
