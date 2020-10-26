@@ -15,7 +15,7 @@ var canvas2 = document.getElementById("canvas2");
 var c = canvas.getContext('2d');
 var c2 = canvas2.getContext('2d');
 
-var size = 500;
+var size = 750;
 canvas.style.width = size + "px";
 canvas.style.height = size + "px";
 canvas2.style.width = size + "px";
@@ -86,7 +86,7 @@ window.addEventListener('keydown', function (e) {
 });
 
 c.fillStyle = "White";
-c.fillRect(0, 0, 500, 500);
+c.fillRect(0, 0, 750, 750);
 
 // Variable
 var x, y, y2, x2;
@@ -199,26 +199,26 @@ function dKey() {
 
 //function to clear canvas
 function clearCanvas() {
-	c.clearRect(0, 0, 500, 500);
+	c.clearRect(0, 0, 750, 750);
 	c.fillStyle = "White";
-	c.fillRect(0, 0, 500, 500);
+	c.fillRect(0, 0, 750, 750);
 
 	// Canvas 2
-	c2.clearRect(0, 0, 500, 500);
+	c2.clearRect(0, 0, 750, 750);
 	c2.fillStyle = "White";
-	c2.fillRect(0, 0, 500, 500);
+	c2.fillRect(0, 0, 750, 750);
 }
 
 //Function have black dot in the center
 function blackDot() {
 	c.fillStyle = "black";
 	c.beginPath();
-	c.arc(250, 250, 4, 0, Math.PI * 2);
+	c.arc(375, 375, 4, 0, Math.PI * 2);
 	c.fill();
 	// Canvas 2
 	c2.fillStyle = "black";
 	c2.beginPath();
-	c2.arc(250, 250, 4, 0, Math.PI * 2);
+	c2.arc(375, 375, 4, 0, Math.PI * 2);
 	c2.fill();
 }
 
@@ -229,8 +229,8 @@ var r2;
 function randomSymbol() {
 	r = Math.floor(Math.random() * 4);
 	r2 = Math.floor(Math.random() * 4);
-	x = Math.floor(Math.random() * 500);
-	y = Math.floor(Math.random() * 500);
+	x = Math.floor(Math.random() * 750);
+	y = Math.floor(Math.random() * 750);
 
 	if (testOneInProgress) {
 		c.beginPath();
