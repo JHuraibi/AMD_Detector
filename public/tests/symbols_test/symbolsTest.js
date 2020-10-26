@@ -10,6 +10,9 @@
 let timestamp = Date.now();
 var testOneInProgress = true;
 
+
+var strt1 = document.getElementById('start_test1');
+var strt2 = document.getElementById('start_test2');
 var canvas = document.getElementById('canvas1');
 var canvas2 = document.getElementById("canvas2");
 var c = canvas.getContext('2d');
@@ -254,6 +257,7 @@ var i = 0;
 
 function test1() {
 
+	strt1.style.display = "none";
 	console.log("test 1");
 	blackDot();
 	if (i < 5) {
@@ -280,7 +284,7 @@ function nexttest() {
 	var startTest2 = document.getElementById("start_test2");
 
 	startTest1.style.display = "none";
-	startTest2.style.display = "inherit";
+	startTest2.style.display = "inline-block";
 
 	testOneInProgress = false;
 }
@@ -289,6 +293,7 @@ var a = 0;
 
 function test2() {
 
+	strt2.style.display = "none";
 	// console.log("Test2");
 	if (a < 5) {
 		// console.log("In test 2 loop");
