@@ -177,7 +177,7 @@
 				<div style="border: dotted red; margin-top: 2rem">
 					<h4>&nbsp;Symbols Test Results</h4>
 					<div class="grid" id="resultsContainerSymbols">
-						<!-- Empty. Actual div's are generated from FullBarsDAO.js -->
+						<!-- Empty. Actual div's are generated from SymbolsDAO.js -->
 					</div>
 				</div>
 				
@@ -185,7 +185,7 @@
 				<div style="border: dotted red; margin-top: 2rem">
 					<h4>&nbsp;Full Bars Test Results</h4>
 					<div class="grid" id="resultsContainerFullBars">
-						<!-- Empty. Actual div's are generated from FirebaseDAO.js -->
+						<!-- Empty. Actual div's are generated from FullBarsDAO.js -->
 					</div>
 				</div>
 				
@@ -234,8 +234,9 @@
 
 	<!--		<script src="home.js"></script>-->
 	<script src="./js/dashboard.js"></script>
-	<script src="./js/FirebaseDAO.js"></script>
 	<script src="./js/growingCirclesDAO.js"></script>
+	<script src="js/SymbolsDAO.js"></script>
+	<script src="js/FullBarsDAO.js"></script>
 
 	<script>
 		let dbRef = firebase.firestore();
@@ -277,7 +278,7 @@
 				temp_drawGrowingCircles();
 				
 				symbolsDAO.updateUserReference(userRef);
-				symbolsDAO.populateGrowingCirclesTable("full_bars_results");
+				symbolsDAO.populateSymbolsTable("full_bars_results");
 				temp_drawSymbols();
 
 				fullBarsDAO.updateUserReference(userRef);
@@ -313,7 +314,7 @@
 				setTimeout(temp_drawFullBars, 200);
 			}
 			
-			fullBarsDAO.drawFullBars('resultsContainer', miniCanvasDivSize);
+			fullBarsDAO.drawFullBars('resultsContainerFullBars', miniCanvasDivSize);
 		}
 
 		function manualSizeUpdate() {
