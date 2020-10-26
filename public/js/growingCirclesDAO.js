@@ -45,6 +45,7 @@ class growingCirclesDAO {
 
         let ratio = sizeRef / testCanvasSize;
         let ctx = newCanvas.getContext('2d');
+        console.log(newCanvas.width + "This is the new canvas width");
         ctx.globalAlpha = 0.5;
         console.log("Original: " + testCanvasSize);
         console.log("Ref: " + sizeRef);

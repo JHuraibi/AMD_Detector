@@ -261,7 +261,7 @@ function test1() {
 		blackDot();
 		randomSymbol();
 		i++;
-		setTimeout(test1, 3000);
+		setTimeout(test1, speed);
 		// setTimeout(test1, 1000);	// !! FOR TESTING
 	}
 	else {
@@ -296,7 +296,7 @@ function test2() {
 		blackDot();
 		randomSymbol();
 		a++;
-		setTimeout(test2, 3000);
+		setTimeout(test2, speed);
 		// setTimeout(test2, 1000);	// !! FOR TESTING
 	}
 	else results();
