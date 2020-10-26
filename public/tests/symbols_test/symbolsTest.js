@@ -98,7 +98,9 @@ var resultY2 = [];
 var resultsSymbolsOne = [];
 var resultsSymbolsTwo = [];
 
+// Not displaying second canvas
 canvas2.style.display = "none";
+
 // index to capture result
 var t = 0;
 var t2 = 0;
