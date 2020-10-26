@@ -25,7 +25,7 @@ function retrieveInstructions(target_test) {
 		
 		// AMSLER GRID
 		case "amsler_grid":
-			return "You are about to take the Amsler Grid test. [Ali add the instructions for your test here]";
+			return "You are about to take the Amsler Grid test. You will need to start by cupping the eye that isn't being tested. Face must be 14 inches away from the screen. Focus on the black dot in the center. Press next after timer is done.";
 		
 		// GROWING CIRCLES
 		case "growing_circles":
