@@ -261,7 +261,7 @@ function test1() {
 		blackDot();
 		randomSymbol();
 		i++;
-		setTimeout(test1, speed);
+		setTimeout(test1, 3000);
 		// setTimeout(test1, 1000);	// !! FOR TESTING
 	}
 	else {
@@ -296,7 +296,7 @@ function test2() {
 		blackDot();
 		randomSymbol();
 		a++;
-		setTimeout(test2, speed);
+		setTimeout(test2, 3000);
 		// setTimeout(test2, 1000);	// !! FOR TESTING
 	}
 	else results();
@@ -315,7 +315,7 @@ function results() {
 
 	// TODO: The two canvases are being stacked on top of each other
 	canvas.style.display = "inline-block";
-	canvas2.style.display = "none";
+	canvas2.style.display = "inline-block";
 	clearCanvas();
 	blackDot();
 
@@ -330,9 +330,9 @@ function results() {
 	// Im a comment
 	for (j2 = 0; j2 < resultsSymbolsTwo.length; j2++) {
 		console.log("In loop of c2 results ");
-		c.fillStyle = "orange";
-		c.font = "35 px Arial";
-		c.fillText(resultsSymbolsTwo[j2], resultX2[j2], resultY2[j2]);
+		c2.fillStyle = "orange";
+		c2.font = "35 px Arial";
+		c2.fillText(resultsSymbolsTwo[j2], resultX2[j2], resultY2[j2]);
 		// console.log("Result 2: " + resultsSymbolsTwo[j2]);
 		// console.log("X2: " + resultX[j2]);
 		// console.log("Y2: " + resultY[j2]);
