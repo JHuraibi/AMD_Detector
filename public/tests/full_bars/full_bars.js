@@ -5,13 +5,15 @@
 let timestamp;					// Will record the time the test was started (in milliseconds since Epoch)
 let canvasSize = 0;				// Will record the size of the canvas the test was taken at
 let backgroundColor = 220;		// Greyscale color for canvas background (0:Black, 255:White)
-let barFillAlpha = 0;			// Will control the alpha
-let opacityIncrease = 15;		// How much to increase the opacity
+let barFillAlpha = 0;			// Will control the bars' alpha
+let opacityIncrease = 15;		// How much to incrementally increase bar opacity
+let clickFillAlpha = 255;		// Will control the click indicator's alpha
+let opacityDecrease = 5;		// How much to incrementally decrease click indicator opacity
 
 let timer = 1;					// Frame counter (start at 1 to avoid "if (timer % (60 * sec) === 0)" being true)
 let sec = 2;					// Seconds between showing each bar
 let indicatorTimer = 0;			// Will track the current timer value when a click is registered
-let indicatorDuration = 33;		// How many frames to show the indicator (60 frames is 1 second)
+let indicatorDuration = 45;		// How many frames to show the indicator (60 frames is 1 second)
 
 let posQueue = [];				// Holds the randomly-shuffled locations to draw the bars
 let currentPos = 0;				// X or Y coordinate value to draw the next bar at
@@ -26,7 +28,6 @@ let numBars = 6;				// !! numBars HAS TO BE A MULTIPLE OF 2
 let barsCounter = 0;			// Used to determine when half bars are drawn (thus switch bar axis)
 
 let clickUsedThisRound = false;
-let showClickIndicator = false;
 
 let leftEyeTestInProgress = true;
 let transition = false;
@@ -97,10 +98,12 @@ function draw() {
 	
 	
 	drawCenterDot();
+	drawClickIndicator();
 	drawStaticBorder();
 }
 
 function startFirstEye() {
+	
 	loop();
 }
 
@@ -153,7 +156,7 @@ function mousePressed() {
 	clickUsedThisRound = true;
 	
 	indicatorTimer = timer;
-	showClickIndicator = true;
+	clickFillAlpha = 255;
 }
 
 /**
@@ -181,7 +184,7 @@ function fillPositionQueue() {
  * 		create an animation that makes it look like a single bar is fading in.
  * 		Maximum alpha/opacity value is 255.
  */
-function fadeIn() {
+function fadeInBar() {
 	barFillAlpha += opacityIncrease;
 	
 	if (barFillAlpha > 255) {
@@ -205,13 +208,12 @@ function fadeIn() {
  *            with width=width of the canvas, and length=barW
  */
 function drawBar() {
-	console.log("Axis: " + currentAxis);
 	let barW = (width / 80);
 	
 	fill(0);
 	noStroke();
 	
-	fadeIn();
+	fadeInBar();
 	
 	if (currentAxis === 'x') {
 		rect(currentPos, 0, barW, height);
@@ -234,10 +236,6 @@ function updateAll() {
 	clickUsedThisRound = false;
 	barFillAlpha = 0;
 	barsCounter++;
-	
-	if (timer - indicatorTimer > indicatorDuration) {
-		showClickIndicator = false;
-	}
 }
 
 /**
@@ -282,7 +280,6 @@ function setNextBarAxis() {
 
 function transitionToNextEye() {
 	leftEyeTestInProgress = false;
-	showClickIndicator = false;
 	indicatorTimer = 0;
 	barsCounter = 0;
 	noLoop();
@@ -319,20 +316,48 @@ function drawStaticGrid() {
 }
 
 /**
- * Draws a black dot with grey outline (matches canvas color) at the center of canvas.
+ * Incrementally decreases the Alpha (opacity) of the click indicator fill color. This will
+ * 		create an animation that makes it look like the indicator is fading out.
+ * 		Minimum alpha/opacity value is 0.
+ */
+function fadeOutIndicator() {
+	if (timer - indicatorTimer > indicatorDuration) {
+		clickFillAlpha -= opacityIncrease;
+	}
+	
+	if (clickFillAlpha < 0) {
+		clickFillAlpha = 0;
+	}
+	
+	// Hex: "#2846be"
+	fill(40, 70, 190, clickFillAlpha);
+}
+
+/**
+ * Draws a black dot with grey outline (that matches canvas color) at the center of canvas.
  */
 function drawCenterDot() {
-	if (showClickIndicator) {
-		fill('#a60019');
-	}
-	else {
-		fill(0);
-	}
+	fill(0);
 	
 	strokeWeight(2);
 	stroke(backgroundColor);
 	ellipse(width / 2, height / 2, 20);
 }
+
+/**
+ *
+ */
+function drawClickIndicator() {
+	fill('#a60019');
+	fadeOutIndicator();
+	
+	strokeWeight(2);
+	stroke(backgroundColor);
+	ellipse(width / 2, height / 2, 20);
+	
+	fill(0, 255);
+}
+
 
 /**
  * Draws an outline around the canvas.
