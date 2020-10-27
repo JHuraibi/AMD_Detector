@@ -1,19 +1,18 @@
+// TODO: Update docstrings
 // TODO: Add pause or confirmation before switching eyes
 // TODO: When drawing the results at the end, the first Left Y is black
-
 
 let timestamp;					// Will record the time the test was started (in milliseconds since Epoch)
 let canvasSize = 0;				// Will record the size of the canvas the test was taken at
 let backgroundColor = 220;		// Greyscale color for canvas background (0:Black, 255:White)
 let barFillAlpha = 0;			// Will control the bars' alpha
 let opacityIncrease = 15;		// How much to incrementally increase bar opacity
-let clickFillAlpha = 255;		// Will control the click indicator's alpha
-let opacityDecrease = 5;		// How much to incrementally decrease click indicator opacity
+let clickFillAlpha = 0;			// Will control the click indicator's alpha
 
-let timer = 1;					// Frame counter (start at 1 to avoid "if (timer % (60 * sec) === 0)" being true)
+let timer = 0;					// Frame counter
 let sec = 2;					// Seconds between showing each bar
-let indicatorTimer = 0;			// Will track the current timer value when a click is registered
-let indicatorDuration = 45;		// How many frames to show the indicator (60 frames is 1 second)
+let indicatorStartTime = 0;		// Will track the current timer value when a click is registered
+let indicatorDuration = 65;		// How many frames to show the indicator (60 frames is 1 second)
 
 let posQueue = [];				// Holds the randomly-shuffled locations to draw the bars
 let currentPos = 0;				// X or Y coordinate value to draw the next bar at
@@ -32,7 +31,13 @@ let clickUsedThisRound = false;
 let leftEyeTestInProgress = true;
 let transition = false;
 let testFinished = false;
+let waitingToStart = true;
 
+
+function startTest() {
+	waitingToStart = false;
+	loop();
+}
 
 /**
  * Runs once upon page loading.
@@ -45,16 +50,6 @@ function setup() {
 	timestamp = Date.now();
 	// !! TODO: This variable needs to be updated when dynamic canvas size is implemented
 	canvasSize = 800;
-	
-	// NOTE: The button's label text may need to be different based on
-	//		how we implement the user's option to select which eye to test
-	// transitionButton = createButton('Start Left Eye');
-	// transitionButton.position(width / 2, height / 2);
-	// transitionButton.mousePressed(function () {
-	// 	transition = false;
-	// });
-	//
-	// transitionButton.style.display = "none";
 	
 	noLoop();
 }
@@ -102,10 +97,6 @@ function draw() {
 	drawStaticBorder();
 }
 
-function startFirstEye() {
-	
-	loop();
-}
 
 /**
  * Records the location of the currently-shown bar whenever a click is registered.
@@ -124,11 +115,7 @@ function startFirstEye() {
  *		The user is doing the test for their RIGHT eye.
  */
 function mousePressed() {
-	if (testFinished) {
-		return;
-	}
-	
-	if (clickUsedThisRound) {
+	if (waitingToStart || clickUsedThisRound || testFinished) {
 		return;
 	}
 	
@@ -155,7 +142,7 @@ function mousePressed() {
 	
 	clickUsedThisRound = true;
 	
-	indicatorTimer = timer;
+	indicatorStartTime = timer;
 	clickFillAlpha = 255;
 }
 
@@ -208,6 +195,10 @@ function fadeInBar() {
  *            with width=width of the canvas, and length=barW
  */
 function drawBar() {
+	if (waitingToStart || testFinished) {
+		return;
+	}
+	
 	let barW = (width / 80);
 	
 	fill(0);
@@ -280,18 +271,14 @@ function setNextBarAxis() {
 
 function transitionToNextEye() {
 	leftEyeTestInProgress = false;
-	indicatorTimer = 0;
+	waitingToStart = true;
+	
+	indicatorStartTime = 0;
 	barsCounter = 0;
+	// timer = 0;
 	noLoop();
 	
 	document.getElementById("rightEye").style.display = "inherit";
-}
-
-/**
- * Wait for user to click the button to start the next eye test.
- */
-function startNextTest() {
-	loop();
 }
 
 /**
@@ -317,20 +304,36 @@ function drawStaticGrid() {
 
 /**
  * Incrementally decreases the Alpha (opacity) of the click indicator fill color. This will
- * 		create an animation that makes it look like the indicator is fading out.
- * 		Minimum alpha/opacity value is 0.
+ * 	create an animation that makes it look like the indicator is fading out.
+ * 	Minimum alpha/opacity value is 0.
+ * Fading out will start once timer has n-frames have passed. Where indicatorDuration is
+ *  the number of frames and 60 frames is 1 second.
  */
 function fadeOutIndicator() {
-	if (timer - indicatorTimer > indicatorDuration) {
+	if (timer - indicatorStartTime > indicatorDuration) {
 		clickFillAlpha -= opacityIncrease;
 	}
 	
 	if (clickFillAlpha < 0) {
 		clickFillAlpha = 0;
 	}
+}
+
+/**
+ * Draws a blue center dot when a click is registered.
+ * Alpha/opacity is controlled by fadeOutIndicator.
+ */
+function drawClickIndicator() {
+	fadeOutIndicator();
 	
 	// Hex: "#2846be"
 	fill(40, 70, 190, clickFillAlpha);
+	
+	strokeWeight(2);
+	stroke(backgroundColor);
+	ellipse(width / 2, height / 2, 20);
+	
+	fill(0, 255);
 }
 
 /**
@@ -342,20 +345,6 @@ function drawCenterDot() {
 	strokeWeight(2);
 	stroke(backgroundColor);
 	ellipse(width / 2, height / 2, 20);
-}
-
-/**
- *
- */
-function drawClickIndicator() {
-	fill('#a60019');
-	fadeOutIndicator();
-	
-	strokeWeight(2);
-	stroke(backgroundColor);
-	ellipse(width / 2, height / 2, 20);
-	
-	fill(0, 255);
 }
 
 
