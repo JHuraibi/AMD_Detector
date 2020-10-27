@@ -147,29 +147,23 @@ class growingCirclesDAO {
         // Add the Row to the Table
         tableBody.appendChild(row);
     }
-
-    formatDate(ms) {
-        // console.log("FORMAT DATE");
-        let date = new Date(ms);
-
-        let dateString = date.toDateString();
-        let hoursString = date.getUTCHours();
-        let minutesString = date.getUTCMinutes();
-        let timeModifier = "";
-
-        if (hoursString > 12) {
-            hoursString %= hoursString;
-            timeModifier = "PM";
-        }
-        else {
-            timeModifier = "AM";
-        }
-
-        if (hoursString == 0) {
-            hoursString = "12";
-        }
-
-        return dateString + " at " + hoursString + ":" + minutesString + timeModifier;
-    }
+	
+	formatDate(milliseconds) {
+		let date = new Date(milliseconds);
+		
+		let dateString = date.toDateString();
+		let hoursString = date.getUTCHours();
+		let minutesString = date.getUTCMinutes();
+		let postfix = hoursString > 11 ? "PM" : "AM";
+		
+		if (hoursString === 0){
+			hoursString = 12;
+		}
+		
+		minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
+		hoursString = hoursString % 12;
+		
+		return dateString + " at " + hoursString + ":" + minutesString + postfix;
+	}
 
 }// class [ FirebaseDAO ]
