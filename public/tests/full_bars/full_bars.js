@@ -10,6 +10,8 @@ let opacityIncrease = 15;		// How much to increase the opacity
 
 let timer = 1;					// Frame counter (start at 1 to avoid "if (timer % (60 * sec) === 0)" being true)
 let sec = 2;					// Seconds between showing each bar
+let indicatorTimer = 0;			// Will track the current timer value when a click is registered
+let indicatorDuration = 33;		// How many frames to show the indicator (60 frames is 1 second)
 
 let posQueue = [];				// Holds the randomly-shuffled locations to draw the bars
 let currentPos = 0;				// X or Y coordinate value to draw the next bar at
@@ -24,6 +26,7 @@ let numBars = 6;				// !! numBars HAS TO BE A MULTIPLE OF 2
 let barsCounter = 0;			// Used to determine when half bars are drawn (thus switch bar axis)
 
 let clickUsedThisRound = false;
+let showClickIndicator = false;
 
 let leftEyeTestInProgress = true;
 let transition = false;
@@ -92,6 +95,7 @@ function draw() {
 	drawBar();
 	timer++;
 	
+	
 	drawCenterDot();
 	drawStaticBorder();
 }
@@ -147,6 +151,9 @@ function mousePressed() {
 	}
 	
 	clickUsedThisRound = true;
+	
+	indicatorTimer = timer;
+	showClickIndicator = true;
 }
 
 /**
@@ -184,6 +191,7 @@ function fadeIn() {
 	fill(0, barFillAlpha);
 }
 
+
 /**
  * Draws a basic rectangle at currentPos. Whether drawn vertically or
  *    horizontally is controlled by currentAxis.
@@ -212,7 +220,8 @@ function drawBar() {
 		rect(0, currentPos, width, barW);
 	}
 	else {
-		console.log("drawBar called when currentAxis not 'X' or 'Y'");
+		// Uncomment below if needed for debugging
+		// console.log("drawBar called when currentAxis not 'X' or 'Y'");
 	}
 }
 
@@ -225,6 +234,10 @@ function updateAll() {
 	clickUsedThisRound = false;
 	barFillAlpha = 0;
 	barsCounter++;
+	
+	if (timer - indicatorTimer > indicatorDuration) {
+		showClickIndicator = false;
+	}
 }
 
 /**
@@ -267,8 +280,10 @@ function setNextBarAxis() {
 	}
 }
 
-function transitionToNextEye(){
+function transitionToNextEye() {
 	leftEyeTestInProgress = false;
+	showClickIndicator = false;
+	indicatorTimer = 0;
 	barsCounter = 0;
 	noLoop();
 	
@@ -307,7 +322,13 @@ function drawStaticGrid() {
  * Draws a black dot with grey outline (matches canvas color) at the center of canvas.
  */
 function drawCenterDot() {
-	fill(0);
+	if (showClickIndicator) {
+		fill('#a60019');
+	}
+	else {
+		fill(0);
+	}
+	
 	strokeWeight(2);
 	stroke(backgroundColor);
 	ellipse(width / 2, height / 2, 20);
