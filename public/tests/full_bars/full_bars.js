@@ -8,7 +8,7 @@ let backgroundColor = 220;		// Greyscale color for canvas background (0:Black, 2
 let barFillAlpha = 0;			// Will control the alpha
 let opacityIncrease = 15;		// How much to increase the opacity
 
-let timer = 0;					// Frame counter
+let timer = 1;					// Frame counter (start at 1 to avoid "if (timer % (60 * sec) === 0)" being true)
 let sec = 2;					// Seconds between showing each bar
 
 let posQueue = [];				// Holds the randomly-shuffled locations to draw the bars
@@ -27,7 +27,6 @@ let clickUsedThisRound = false;
 
 let leftEyeTestInProgress = true;
 let transition = false;
-let transitionButton;
 let testFinished = false;
 
 
@@ -198,6 +197,7 @@ function fadeIn() {
  *            with width=width of the canvas, and length=barW
  */
 function drawBar() {
+	console.log("Axis: " + currentAxis);
 	let barW = (width / 80);
 	
 	fill(0);
@@ -208,8 +208,11 @@ function drawBar() {
 	if (currentAxis === 'x') {
 		rect(currentPos, 0, barW, height);
 	}
-	else {
+	else if (currentAxis === 'y') {
 		rect(0, currentPos, width, barW);
+	}
+	else {
+		console.log("drawBar called when currentAxis not 'X' or 'Y'");
 	}
 }
 
@@ -254,8 +257,6 @@ function loadNextBarPos() {
  * Second half of bars will be drawn horizontally (Y-Axis).
  */
 function setNextBarAxis() {
-	console.log("Bars Counter: " + barsCounter);
-	
 	let midPoint = numBars / 2;
 	
 	if (barsCounter > midPoint) {
