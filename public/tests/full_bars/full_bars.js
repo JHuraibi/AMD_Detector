@@ -199,7 +199,7 @@ function drawBar() {
 		return;
 	}
 	
-	let barW = (width / 80);
+	let barW = (width / 50);
 	
 	fill(0);
 	noStroke();
