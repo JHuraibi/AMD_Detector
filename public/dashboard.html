@@ -30,9 +30,14 @@
 				font-size: 3.5rem;
 			}
 		}
-
-		.my-container {
-			border: 1px solid #008000;
+		
+		.results-container {
+			margin-top: 2rem;
+			border-radius: 1rem;
+			background: #ffe4ff;
+			/*Light Orange: ffecc7*/
+			/*Lavender ffe4ff*/
+			/*Light Green: f7ffe4*/
 		}
 
 		.grid {
@@ -161,7 +166,7 @@
 				<!-- Grid of Canvases to Redraw Test Results (but smaller) -->
 				
 				<!-- GROWING CIRCLES -->
-				<div style="border: dotted red; margin-top: 2rem">
+				<div class="results-container">
 					<h4>&nbsp;Growing Circles Test Results</h4>
 					<div class="grid" id="resultsContainerGrowingCircles">
 						
@@ -174,7 +179,7 @@
 				</div>
 				
 				<!-- SYMBOLS -->
-				<div style="border: dotted red; margin-top: 2rem">
+				<div class="results-container">
 					<h4>&nbsp;Symbols Test Results</h4>
 					<div class="grid" id="resultsContainerSymbols">
 						<!-- Empty. Actual div's are generated from SymbolsDAO.js -->
@@ -182,7 +187,7 @@
 				</div>
 				
 				<!-- FULL BARS -->
-				<div style="border: dotted red; margin-top: 2rem">
+				<div class="results-container">
 					<h4>&nbsp;Full Bars Test Results</h4>
 					<div class="grid" id="resultsContainerFullBars">
 						<!-- Empty. Actual div's are generated from FullBarsDAO.js -->
