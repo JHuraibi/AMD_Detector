@@ -1,280 +1,304 @@
 <!doctype html>
 <html lang="en">
-	
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="description" content="">
-		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-		<meta name="generator" content="Jekyll v4.1.1">
-		<title>AMD Detector · Dashboard</title>
-		
-		<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
-		
-		<!-- Bootstrap core CSS -->
-		<!--		<link href="../public/css/bootstrap/bootstrap.min.css" rel="stylesheet">-->
-		<link href="./css/bootstrap/bootstrap.min.css" rel="stylesheet">
-		
-		<style>
-			.bd-placeholder-img {
-				font-size: 1.125rem;
-				text-anchor: middle;
-				-webkit-user-select: none;
-				-moz-user-select: none;
-				-ms-user-select: none;
-				user-select: none;
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+	<meta name="generator" content="Jekyll v4.1.1">
+	<title>AMD Detector · Dashboard</title>
+
+	<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
+
+	<!-- Bootstrap core CSS -->
+	<!--		<link href="../public/css/bootstrap/bootstrap.min.css" rel="stylesheet">-->
+	<link href="./css/bootstrap/bootstrap.min.css" rel="stylesheet">
+
+	<style>
+		.bd-placeholder-img {
+			font-size: 1.125rem;
+			text-anchor: middle;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		@media (min-width: 768px) {
+			.bd-placeholder-img-lg {
+				font-size: 3.5rem;
 			}
-			
-			@media (min-width: 768px) {
-				.bd-placeholder-img-lg {
-					font-size: 3.5rem;
-				}
+		}
+
+		.my-container {
+			border: 1px solid #008000;
+		}
+
+		.grid {
+			gap: 1rem;
+			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+			display: grid;
+			margin-bottom: 2rem;
+			/*border: dotted red;*/
+		}
+
+		.grid>div {
+			padding: 1rem;
+			display: grid;
+		}
+
+		.grid>div::before {
+			content: "";
+			padding-top: 100%;
+			display: block;
+			background: red;
+			grid-area: 1 / 1 / 2 / 2;
+		}
+
+		.grid>div>canvas {
+			width: 100%;
+			height: 100%;
+			border: 4px solid black;
+			background: #e7f6ff;
+			grid-area: 1 / 1 / 2 / 2;
+		}
+
+		.grid>div>img {
+			width: 100%;
+			border: 4px solid black;
+			background: #e7f6ff;
+			grid-area: 1 / 1 / 2 / 2;
+		}
+	</style>
+
+	<script>
+		let miniCanvasDivSize = 0;
+
+		window.addEventListener('resize', function () {
+			let templateDiv = document.getElementById("sizeRef");
+
+			if (templateDiv) {
+				templateDiv.style.display = "inherit";
+				miniCanvasDivSize = templateDiv.offsetWidth;
+
+				templateDiv.style.display = "none";
+
+				// Uncomment below if needed for debugging
+				console.log("WINDOW RESIZE DETECTED. NEW CANVAS CONTAINER SIZE: " + miniCanvasDivSize);
 			}
-			
-			.my-container {
-				border: 1px solid #008000;
-			}
-			
-			.grid {
-				gap: 1rem;
-				grid-template-columns:  repeat(auto-fill, minmax(200px, 1fr));
-				display: grid;
-				margin-bottom: 2rem;
-				/*border: dotted red;*/
-			}
-			
-			.grid > div {
-				padding: 1rem;
-				display: grid;
-			}
-			
-			.grid > div::before {
-				content: "";
-				padding-top: 100%;
-				display: block;
-				background: red;
-				grid-area: 1 / 1 / 2 / 2;
-			}
-			
-			.grid > div > canvas {
-				width: 100%;
-				height: 100%;
-				border: 4px solid black;
-				background: #e7f6ff;
-				grid-area: 1 / 1 / 2 / 2;
-			}
-			
-			.grid > div > img {
-				width: 100%;
-				border: 4px solid black;
-				background: #e7f6ff;
-				grid-area: 1 / 1 / 2 / 2;
-			}
-		</style>
-		
-		<script>
-			let miniCanvasDivSize = 0;
-			
-			window.addEventListener('resize', function () {
-				let templateDiv = document.getElementById("sizeRef");
-				
-				if (templateDiv) {
-					templateDiv.style.display = "inherit";
-					miniCanvasDivSize = templateDiv.offsetWidth;
-					
-					templateDiv.style.display = "none";
-					
-					// Uncomment below if needed for debugging
-					console.log("WINDOW RESIZE DETECTED. NEW CANVAS CONTAINER SIZE: " + miniCanvasDivSize);
-				}
-			});
-		
-		</script>
-		
-		<!-- Custom styles for this template -->
-		<link href="./css/dashboard.css" rel="stylesheet">
-	</head>
-	
-	<body>
-		<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-			<a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="home.html">Vision Monitor</a>
-			<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
-					data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-			<ul class="navbar-nav px-3">
-				<li class="nav-item text-nowrap">
-					<a class="sign-out"><span style="color: #007bff">Sign Out</span></a>
-				</li>
-			</ul>
-		</nav>
-		<div class="container-fluid">
-			<div class="row">
-				<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-					<div class="sidebar-sticky pt-3">
-						<ul class="nav flex-column">
-							<li class="nav-item">
-								<a class="nav-link active" href="home.html">
-									<span data-feather="home"></span>
-									Home <span class="sr-only">(current)</span>
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="home.html">
-									<span data-feather="file"></span>
-									Tests
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="mailto:mail@example.org">
-									<span data-feather="users"></span>
-									Contact Physician
-								</a>
-							</li>
-						</ul>
-					
+		});
+
+	</script>
+
+	<!-- Custom styles for this template -->
+	<link href="./css/dashboard.css" rel="stylesheet">
+</head>
+
+<body>
+	<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+		<a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="home.html">Vision Monitor</a>
+		<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
+			data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+		<ul class="navbar-nav px-3">
+			<li class="nav-item text-nowrap">
+				<a class="sign-out"><span style="color: #007bff">Sign Out</span></a>
+			</li>
+		</ul>
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+				<div class="sidebar-sticky pt-3">
+					<ul class="nav flex-column">
+						<li class="nav-item">
+							<a class="nav-link active" href="home.html">
+								<span data-feather="home"></span>
+								Home <span class="sr-only">(current)</span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="home.html">
+								<span data-feather="file"></span>
+								Tests
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="mailto:mail@example.org">
+								<span data-feather="users"></span>
+								Contact Physician
+							</a>
+						</li>
+					</ul>
+
+				</div>
+			</nav>
+
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+				<div
+					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+					<h1 class="h2">My Progress</h1>
+					<div class="btn-toolbar mb-2 mb-md-0">
+						<div class="btn-group mr-2">
+							<button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+							<button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+						</div>
+						<button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+							<span data-feather="calendar"></span>
+							This week
+						</button>
 					</div>
-				</nav>
-				
-				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-					<div
-							class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-						<h1 class="h2">My Progress</h1>
-						<div class="btn-toolbar mb-2 mb-md-0">
-							<div class="btn-group mr-2">
-								<button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-								<button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-							</div>
-							<button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-								<span data-feather="calendar"></span>
-								This week
-							</button>
+				</div>
+
+				<!-- Interactive Canvas -->
+				<div>
+					<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+				</div>
+
+				<!-- TODO: The first box is sometimes rendering as a rectangle -->
+				<!-- Grid of Canvases to Redraw Full Bars Results (but smaller) -->
+				<div style="border: dotted red; margin-top: 2rem">
+					<h2>&nbsp;Test Results (Full Bars Test)</h2>
+					<div class="grid" id="resultsContainer">
+						<!-- This div is turned on/off on window resize just to get its pixel size -->
+						<div id="sizeRef" style="display: none">
+							<!-- Empty. Actual div's are generated from FirebaseDAO.js -->
 						</div>
 					</div>
-					
-					<!-- Interactive Canvas -->
-					<div>
-						<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
-					</div>
-					
-					<!-- TODO: The first box is sometimes rendering as a rectangle -->
-					<!-- Grid of Canvases to Redraw Full Bars Results (but smaller) -->
-					<div style="border: dotted red; margin-top: 2rem">
-						<h2>&nbsp;Test Results (Full Bars Test)</h2>
-						<div class="grid" id="resultsContainer">
-							<!-- This div is turned on/off on window resize just to get its pixel size -->
-							<div id="sizeRef" style="display: none">
-								<!-- Empty. Actual div's are generated from FirebaseDAO.js -->
-							</div>
+				</div>
+				<div style="border: dotted red; margin-top: 2rem">
+					<h2>&nbsp;Test Results (Growing Circles)</h2>
+					<div class="grid" id="resultsContainerGrowingCircles">
+						<!-- This div is turned on/off on window resize just to get its pixel size -->
+						<div id="sizeRef" style="display: none">
+							<!-- Empty. Actual div's are generated from growingCirclesDAO.js.js -->
 						</div>
 					</div>
-					
-					<h2 style="margin-top: 2rem">History</h2>
-					<div class="table-responsive">
-						<table class="table table-striped table-sm" id="full_bars_results">
-							<thead>
+				</div>
+				<h2 style="margin-top: 2rem">History</h2>
+				<div class="table-responsive">
+					<table class="table table-striped table-sm" id="full_bars_results">
+						<thead>
 							<tr>
 								<th>Test</th>
 								<th>Date Taken</th>
 								<th>Link to Test</th>
 							</tr>
-							</thead>
-							<tbody>
+						</thead>
+						<tbody>
 							<!-- Table is Populated by file: "FirebaseDAO.js" -->
-							</tbody>
-						</table>
-					</div>
-				</main>
-			</div>
+						</tbody>
+					</table>
+				</div>
+			</main>
 		</div>
-		
-		<!-- START Bootstrap EXAMPLE DATA -->
-		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-				integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-				crossorigin="anonymous"></script>
-		<script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
-		<script src="../functions/bootstrap/bootstrap.bundle.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-		<!-- END -->
-		
-		<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-		<script src="/__/firebase/7.23.0/firebase-app.js"></script>
-		
-		<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
-		<script src="/__/firebase/7.23.0/firebase-analytics.js"></script>
-		
-		<!-- Add Firebase products that you want to use -->
-		<script src="/__/firebase/7.23.0/firebase-auth.js"></script>
-		<script src="/__/firebase/7.23.0/firebase-firestore.js"></script>
-		
-		<!-- Initialize Firebase -->
-		<script src="/__/firebase/init.js"></script>
-		<script src="../../auth.js"></script>
-		
-		<!--		<script src="home.js"></script>-->
-		<script src="./js/dashboard.js"></script>
-		<script src="./js/FirebaseDAO.js"></script>
-		
-		<script>
-			let dbRef = firebase.firestore();
-			let userRef = null;
-			
-			firebase.auth().onAuthStateChanged(user => {
-				console.log("[dashboard.html] - USER LOCATED");
-				console.log(user);
-				userRef = user;
-			});
-		</script>
-		
-		<script>
-			// !! TODO: Docstrings and comments
-			// If Time: Use event listeners instead of onclick (Unobtrusive Javascript)
-			var tableHelper = new FirebaseDAO(dbRef);
-			let maxWaitTime = 2000;
-			let waitTime = 200;
-			
-			// NOTE TO TEAM:
-			// From testing, the user lookup below is taking about 400-600ms to
-			// 	recognize a user while using local Firebase hosting.
-			(function attemptUserLookup() {
-				console.log("attemptLookup");
-				if (!userRef && maxWaitTime > 0) {
-					maxWaitTime -= waitTime;
-					console.log("No User. Reattempting Lookup.");
-					setTimeout(attemptUserLookup, waitTime);
-				}
-				else if (maxWaitTime < 0) {
-					console.log("User Lookup Timed Out");
-				}
-				else if (userRef) {
-					tableHelper.updateUserReference(userRef);
-					tableHelper.populateFullBarsTable("full_bars_results");
-					temp_drawFullBars();
-				}
-			})();
-			
-			function temp_drawFullBars() {
-				if (miniCanvasDivSize === 0) {
-					console.log("Manual Update of Size.");
-					manualSizeUpdate();
-					setTimeout(temp_drawFullBars, 200);
-				}
-				
-				tableHelper.drawFullBars('resultsContainer', miniCanvasDivSize);
+	</div>
+
+	<!-- START Bootstrap EXAMPLE DATA -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+		crossorigin="anonymous"></script>
+	<script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
+	<script src="../functions/bootstrap/bootstrap.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+	<!-- END -->
+
+	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+	<script src="/__/firebase/7.23.0/firebase-app.js"></script>
+
+	<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+	<script src="/__/firebase/7.23.0/firebase-analytics.js"></script>
+
+	<!-- Add Firebase products that you want to use -->
+	<script src="/__/firebase/7.23.0/firebase-auth.js"></script>
+	<script src="/__/firebase/7.23.0/firebase-firestore.js"></script>
+
+	<!-- Initialize Firebase -->
+	<script src="/__/firebase/init.js"></script>
+	<script src="../../auth.js"></script>
+
+	<!--		<script src="home.js"></script>-->
+	<script src="./js/dashboard.js"></script>
+	<script src="./js/FirebaseDAO.js"></script>
+	<script src="./js/growingCirclesDAO.js"></script>
+
+	<script>
+		let dbRef = firebase.firestore();
+		let userRef = null;
+
+		firebase.auth().onAuthStateChanged(user => {
+			console.log("[dashboard.html] - USER LOCATED");
+			console.log(user);
+			userRef = user;
+		});
+	</script>
+
+	<script>
+		// !! TODO: Docstrings and comments
+		// If Time: Use event listeners instead of onclick (Unobtrusive Javascript)
+		var tableHelper = new FirebaseDAO(dbRef);
+		var tableHelperGrowingCircles = new growingCirclesDAO(dbRef);
+		let maxWaitTime = 2000;
+		let waitTime = 200;
+
+		// NOTE TO TEAM:
+		// From testing, the user lookup below is taking about 400-600ms to
+		// 	recognize a user while using local Firebase hosting.
+		(function attemptUserLookup() {
+			console.log("attemptLookup");
+			if (!userRef && maxWaitTime > 0) {
+				maxWaitTime -= waitTime;
+				console.log("No User. Reattempting Lookup.");
+				setTimeout(attemptUserLookup, waitTime);
 			}
-			
-			function manualSizeUpdate() {
-				let templateDiv = document.getElementById("sizeRef");
-				
-				if (templateDiv) {
-					templateDiv.style.display = "inherit";
-					miniCanvasDivSize = templateDiv.offsetWidth;
-					templateDiv.style.display = "none";
-				}
+			else if (maxWaitTime < 0) {
+				console.log("User Lookup Timed Out");
 			}
-		</script>
-	</body>
+			else if (userRef) {
+				tableHelper.updateUserReference(userRef);
+				tableHelper.populateFullBarsTable("full_bars_results");
+				temp_drawFullBars();
+
+				tableHelperGrowingCircles.updateUserReference(userRef);
+				tableHelperGrowingCircles.populateGrowingCirclesTable("full_bars_results");
+				temp_drawGrowingCircles();
+			}
+		})();
+
+		function temp_drawFullBars() {
+			if (miniCanvasDivSize === 0) {
+				console.log("Manual Update of Size.");
+				manualSizeUpdate();
+				setTimeout(temp_drawFullBars, 200);
+			}
+
+			tableHelper.drawFullBars('resultsContainer', miniCanvasDivSize);
+		}
+
+		function temp_drawGrowingCircles() {
+			if (miniCanvasDivSize === 0) {
+				console.log("Manual Update of Size.");
+				manualSizeUpdate();
+				setTimeout(temp_drawGrowingCircles, 200);
+			}
+
+			tableHelperGrowingCircles.drawGrowingCircles('resultsContainerGrowingCircles', miniCanvasDivSize);
+		}
+
+		function manualSizeUpdate() {
+			let templateDiv = document.getElementById("sizeRef");
+
+			if (templateDiv) {
+				templateDiv.style.display = "inherit";
+				miniCanvasDivSize = templateDiv.offsetWidth;
+				templateDiv.style.display = "none";
+			}
+		}
+	</script>
+</body>
 
 </html>

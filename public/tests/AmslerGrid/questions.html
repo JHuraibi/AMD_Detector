@@ -46,46 +46,89 @@
 			
 			<main role="main" class="inner cover">
 				<header style="text-align: center; font-size: 40px;">Amsler Grid Test Questions</header>
-				<div id="q1">
+				
+				<div id="q1" style="border: solid black 2px;">
 					<label for="questions">Question 1</label>
-					<p>Please select section(s) that gave your vision a problem</p>
-					<input type="radio"> Section 1
-					<input type="radio"> Section 2
-					<input type="radio"> Section 3
-					<input type="radio"> Section 4
+					<p>Which eye did you test?</p>
+					<form>
+						<input type="radio" id="right" name="questions" value="right">
+						<label for="right">Right</label><br>
+						<input type="radio" id="left" name="questions" value="left">
+						<label for="left">Left</label><br>
+					  </form> 
 					</div>
-                <div id="q2">
-                <label for="questions">Question 2</label>
+					
+				<div id="q2" style="border: solid black 2px;">
+					<label for="questions">Question 2</label>
+					<p>Which section(s) did you have trouble seeing?</p>
+					<form>
+						<input type="radio" id="secion1" name="questions" value="secion1">
+						<label for="secion1"> Section 1</label><br>
+						<input type="radio" id="section2" name="questions" value="section2">
+						<label for="section2"> Section 2</label><br>
+						<input type="radio" id="section3" name="questions" value="section3">
+						<label for="secction3"> Section 3</label><br>
+						<input type="radio" id="section4" name="questions" value="section4">
+						<label for="secction4"> Section 4</label><br>
+					  </form> 
+	
+
+				</div>
+
+                <div id="q3" style="border: solid black 2px;">
+				<label for="questions">Question 3</label>
 				<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
-				<input type="radio"> Yes
-				<input type="radio"> No
+				<form>
+					<input type="radio" id="yes" name="questions" value="yes">
+					<label for="yes">Yes</label><br>
+					<input type="radio" id="no" name="questions" value="no">
+					<label for="no">No</label><br>
+				  </form> 
+				</div>
+				
+                <div id="q4" style="border: solid black 2px;">
+					<label for="questions">Question 4 </label>
+					<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
+					<form>
+						<input type="radio" id="yes" name="questions" value="yes">
+						<label for="yes">Yes</label><br>
+						<input type="radio" id="no" name="questions" value="no">
+						<label for="no">No</label><br>
+					  </form> 
+					
                 </div>
-                <div id="q3">
-                    <label for="questions">Question 3 </label>
-                    <p>Do all the boxes in the grid look square and the same size?</p>
-					<input type="radio"> Yes
-					<input type="radio"> No
-                </div>
-                <div id="q4">
-                    <label for="questions">Question 4</label>
-					<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
-					<input type="radio"> Yes
-					<input type="radio"> No
-                </div>
-                <div id="q5">
+                <div id="q5" style="border: solid black 2px;">
                     <label for="questions">Question 5</label>
-                    <p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
-					<input type="radio"> Yes
-					<input type="radio"> No
-                </div>
-                <div style="text-align: right; " class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-					<button id="nxt" type="button" onClick="location.href='../../home.html'"
-							class="btn btn-sm btn-outline-secondary">Done
-					</button>
-                </div>
+					<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
+					<form>
+						<input type="radio" id="yes" name="questions" value="yes">
+						<label for="yes">Yes</label><br>
+						<input type="radio" id="no" name="questions" value="no">
+						<label for="no">No</label><br>
+					  </form> 
+				</div>
+				
+                <div id="q6" style="border: solid black 2px;">
+                    <label for="questions">Question 6</label>
+					<p >Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
+					<form>
+						<input type="radio" id="yes" name="questions" value="yes">
+						<label for="yes">Yes</label><br>
+						<input type="radio" id="no" name="questions" value="no">
+						<label for="no">No</label><br>
+					  </form> 
+				</div>
+				<form>
+					<label  for="concerns">Is there any other details you would like to mention?</label><br>
+					<textarea name="concerns" id="concerns" cols="50" rows="10"></textarea>
+				</form> 
+
+				<form action="../../home.html">
+					<input type="submit" value="Submit">
+				</form>
 			</main>
 			
-			<footer class="mastfoot mt-auto">
+			<footer class="mastfoot mt-auto"></footer>
 				<div class="inner">
 				</div>
 			</footer>

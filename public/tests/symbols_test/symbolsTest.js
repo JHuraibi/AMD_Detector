@@ -10,12 +10,15 @@
 let timestamp = Date.now();
 var testOneInProgress = true;
 
+
+var strt1 = document.getElementById('start_test1');
+var strt2 = document.getElementById('start_test2');
 var canvas = document.getElementById('canvas1');
 var canvas2 = document.getElementById("canvas2");
 var c = canvas.getContext('2d');
 var c2 = canvas2.getContext('2d');
 
-var size = 500;
+var size = 750;
 canvas.style.width = size + "px";
 canvas.style.height = size + "px";
 canvas2.style.width = size + "px";
@@ -29,15 +32,36 @@ canvas2.height = size * scale;
 
 c.scale(scale, scale);
 c2.scale(scale, scale);
+var speed = 3000;
+var id;
+var db = firebase.firestore();
+getUid();
+async function getUid() {
+	//let user = await firebase.auth().currentUser;
+	await firebase.auth().onAuthStateChanged(user => {
+		if (user) {
+			id = user.uid;
+			console.log(id);
+			db.collection("users").doc(user.uid)
+				.get()
+				.then(doc => {
+
+					let newgrowingspeed = (doc.data().testSpeeds);
+					speed = newgrowingspeed * 1000;
+
+				});
+		}
+	});
+}
 
 window.addEventListener('keydown', function (e) {
 	// WebStorm saying keyCode is deprecated. It might not work in all browsers (-Jay)
 	// var key = e.keyCode;
-	
+
 	// key variable
 	var key = e.key;
 	key = key.toLowerCase();
-	
+
 	if (key === 's') {
 		//if key pressed is s
 		console.log("KeyPress: S");
@@ -61,11 +85,11 @@ window.addEventListener('keydown', function (e) {
 	else {
 		console.log("KeyPress: Other");
 	}
-	
+
 });
 
 c.fillStyle = "White";
-c.fillRect(0, 0, 500, 500);
+c.fillRect(0, 0, 750, 750);
 
 // Variable
 var x, y, y2, x2;
@@ -77,8 +101,9 @@ var resultY2 = [];
 var resultsSymbolsOne = [];
 var resultsSymbolsTwo = [];
 
-
+// Not displaying second canvas
 canvas2.style.display = "none";
+
 // index to capture result
 var t = 0;
 var t2 = 0;
@@ -91,7 +116,6 @@ function aKey() {
 			resultX[t] = x;
 			resultY[t] = y;
 			t++;
-			
 		}
 	}
 	else {
@@ -100,12 +124,8 @@ function aKey() {
 			resultX2[t2] = x;
 			resultY2[t2] = y;
 			t2++;
-			
 		}
-		
 	}
-	
-	
 }
 
 function sKey() {
@@ -115,7 +135,7 @@ function sKey() {
 			resultX[t] = x;
 			resultY[t] = y;
 			t++;
-			
+
 		}
 	}
 	else {
@@ -124,12 +144,12 @@ function sKey() {
 			resultX2[t2] = x;
 			resultY2[t2] = y;
 			t2++;
-			
+
 		}
-		
+
 	}
-	
-	
+
+
 }
 
 function xKey() {
@@ -139,7 +159,7 @@ function xKey() {
 			resultX[t] = x;
 			resultY[t] = y;
 			t++;
-			
+
 		}
 	}
 	else {
@@ -148,12 +168,12 @@ function xKey() {
 			resultX2[t2] = x;
 			resultY2[t2] = y;
 			t2++;
-			
+
 		}
-		
+
 	}
-	
-	
+
+
 }
 
 function dKey() {
@@ -163,7 +183,7 @@ function dKey() {
 			resultX[t] = x;
 			resultY[t] = y;
 			t++;
-			
+
 		}
 	}
 	else {
@@ -174,34 +194,34 @@ function dKey() {
 			t2++;
 			console.log("")
 		}
-		
+
 	}
-	
+
 }
 
 
 //function to clear canvas
 function clearCanvas() {
-	c.clearRect(0, 0, 500, 500);
+	c.clearRect(0, 0, 750, 750);
 	c.fillStyle = "White";
-	c.fillRect(0, 0, 500, 500);
-	
+	c.fillRect(0, 0, 750, 750);
+
 	// Canvas 2
-	c2.clearRect(0, 0, 500, 500);
+	c2.clearRect(0, 0, 750, 750);
 	c2.fillStyle = "White";
-	c2.fillRect(0, 0, 500, 500);
+	c2.fillRect(0, 0, 750, 750);
 }
 
 //Function have black dot in the center
 function blackDot() {
 	c.fillStyle = "black";
 	c.beginPath();
-	c.arc(250, 250, 4, 0, Math.PI * 2);
+	c.arc(375, 375, 4, 0, Math.PI * 2);
 	c.fill();
-// Canvas 2
+	// Canvas 2
 	c2.fillStyle = "black";
 	c2.beginPath();
-	c2.arc(250, 250, 4, 0, Math.PI * 2);
+	c2.arc(375, 375, 4, 0, Math.PI * 2);
 	c2.fill();
 }
 
@@ -212,9 +232,9 @@ var r2;
 function randomSymbol() {
 	r = Math.floor(Math.random() * 4);
 	r2 = Math.floor(Math.random() * 4);
-	x = Math.floor(Math.random() * 500);
-	y = Math.floor(Math.random() * 500);
-	
+	x = Math.floor(Math.random() * 750);
+	y = Math.floor(Math.random() * 750);
+
 	if (testOneInProgress) {
 		c.beginPath();
 		c.fillStyle = "red";
@@ -229,14 +249,15 @@ function randomSymbol() {
 		c2.font = "40px Arial";
 		c2.fillText(symbols[r2], x, y);
 	}
-	
+
 }
 
 // Vaariable representing iterations
 var i = 0;
 
 function test1() {
-	
+
+	strt1.style.display = "none";
 	console.log("test 1");
 	blackDot();
 	if (i < 5) {
@@ -244,34 +265,35 @@ function test1() {
 		blackDot();
 		randomSymbol();
 		i++;
-		setTimeout(test1, 3000);
+		setTimeout(test1, speed);
 		// setTimeout(test1, 1000);	// !! FOR TESTING
 	}
 	else {
 		console.log("Going to next test");
 		nexttest();
 	}
-	
+
 }
 
 function nexttest() {
 	// TODO: canvas2 is shifting to left between switching (might be display attr)
 	canvas.style.display = "none";
 	canvas2.style.display = "inline-block";
-	
+
 	var startTest1 = document.getElementById("start_test1");
 	var startTest2 = document.getElementById("start_test2");
-	
+
 	startTest1.style.display = "none";
-	startTest2.style.display = "inherit";
-	
+	startTest2.style.display = "inline-block";
+
 	testOneInProgress = false;
 }
 
 var a = 0;
 
 function test2() {
-	
+
+	strt2.style.display = "none";
 	// console.log("Test2");
 	if (a < 5) {
 		// console.log("In test 2 loop");
@@ -279,7 +301,7 @@ function test2() {
 		blackDot();
 		randomSymbol();
 		a++;
-		setTimeout(test2, 3000);
+		setTimeout(test2, speed);
 		// setTimeout(test2, 1000);	// !! FOR TESTING
 	}
 	else results();
@@ -293,15 +315,15 @@ var j2;
 // orange represents left eye
 // function to show the erros after test is conducted
 function results() {
-	
+
 	// console.log("Result Symbols: " + resultsSymbols);
-	
+
 	// TODO: The two canvases are being stacked on top of each other
 	canvas.style.display = "inline-block";
-	canvas2.style.display = "none";
+	canvas2.style.display = "inline-block";
 	clearCanvas();
 	blackDot();
-	
+
 	for (j = 0; j < resultsSymbolsOne.length; j++) {
 		c.fillStyle = "blue";
 		c.font = "35 px Arial";
@@ -313,25 +335,26 @@ function results() {
 	// Im a comment
 	for (j2 = 0; j2 < resultsSymbolsTwo.length; j2++) {
 		console.log("In loop of c2 results ");
-		c.fillStyle = "orange";
-		c.font = "35 px Arial";
-		c.fillText(resultsSymbolsTwo[j2], resultX2[j2], resultY2[j2]);
+		c2.fillStyle = "orange";
+		c2.font = "35 px Arial";
+		c2.fillText(resultsSymbolsTwo[j2], resultX2[j2], resultY2[j2]);
 		// console.log("Result 2: " + resultsSymbolsTwo[j2]);
 		// console.log("X2: " + resultX[j2]);
 		// console.log("Y2: " + resultY[j2]);
 	}
+	showExitButton();
 }
 
 function showExitButton() {
 	let exitBtns = document.getElementById('exitTestBtns');
 	let fadeInSpeed = 1;
-	
+
 	exitBtns.style.display = "inherit";
 	exitBtns.style.opacity = 0.0;
-	
+
 	let fadeIn = setInterval(function () {
 		if (exitBtns.style.opacity < 1.0) {
-			
+
 			// Needs the plus sign before "exitBtns"
 			exitBtns.style.opacity = +exitBtns.style.opacity + 0.01;
 		}

@@ -31,11 +31,19 @@ authSwitchLinks.forEach(link => {
   }).then(() => {
         var user = firebase.auth().currentUser;
         user.sendEmailVerification();
+        console.log(user.uid);
+        db.collection("TestResults")
+                .doc(user.uid).set({
+                  exists: true
+                });
         alert("verification email sent");
         console.log('Email verification sent', user);
   }).catch(error => {
     registerForm.querySelector('.error').textContent = error.message;
   });
+
+
+
 });
   
   // login form
