@@ -57,6 +57,35 @@
 			</main>
 			
 			<div>
+				<div class="instruct" id="leftEye">
+					<p>
+						Click to Start Left Eye Test
+					</p>
+					<button id="firstEyeBtn" class="btn btn-sm btn-outline-secondary"
+							onclick="hideLeftEyeBtn(); startFirstEye();">
+						Start Left Eye
+					</button>
+				</div>
+				<div class="instruct" id="rightEye" style="display: none">
+					<p>
+						Click to Start Right Eye Test
+					</p>
+					<button id="nexttestbtn" class="btn btn-sm btn-outline-secondary"
+							onclick="hideRightEyeBtn(); startNextTest();">
+						Start Right Eye
+					</button>
+				</div>
+				
+				<script>
+					function hideLeftEyeBtn() {
+						document.getElementById("leftEye").style.display = "none";
+					}
+					
+					function hideRightEyeBtn() {
+						document.getElementById("rightEye").style.display = "none";
+					}
+				</script>
+				
 				<!-- These buttons will only become visible once the user has finished the test -->
 				<div class="btn-group" id="exitTestBtns" style="display: none">
 					<button type="button" onClick="sendToFirestore();showStatusIndicator();"

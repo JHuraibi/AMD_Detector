@@ -26,6 +26,8 @@ let barsCounter = 0;			// Used to determine when half bars are drawn (thus switc
 let clickUsedThisRound = false;
 
 let leftEyeTestInProgress = true;
+let transition = false;
+let transitionButton;
 let testFinished = false;
 
 
@@ -40,6 +42,18 @@ function setup() {
 	timestamp = Date.now();
 	// !! TODO: This variable needs to be updated when dynamic canvas size is implemented
 	canvasSize = 800;
+	
+	// NOTE: The button's label text may need to be different based on
+	//		how we implement the user's option to select which eye to test
+	// transitionButton = createButton('Start Left Eye');
+	// transitionButton.position(width / 2, height / 2);
+	// transitionButton.mousePressed(function () {
+	// 	transition = false;
+	// });
+	//
+	// transitionButton.style.display = "none";
+	
+	noLoop();
 }
 
 /**
@@ -47,16 +61,19 @@ function setup() {
  * drawStaticGrid: Draws the grid (called first so other items can be drawn on top of it)
  *
  * If the test IS NOT done:
- *        - Updates the next bar position every n-seconds. (n set by "sec" variable)
- *        - Draws the bar.
- *        - Increment the timer counter.
+ * 		- Updates the next bar position every n-seconds. (n set by "sec" variable)
+ * 		- Draws the bar.
+ * 		- Increment the timer counter.
  *
  * If test IS done:
- *        - Show results by drawing bars at the positions that were clicked.
+ * 		- Show results by drawing bars at the positions that were clicked.
+ *
+ * If transition is TRUE:
+ * 		- Wait for the user to click the button before next test round.
  *
  * Always:
- *        - Draw the center black dot.
- *        - Draw the border around the canvas.
+ * 		- Draw the center black dot.
+ * 		- Draw the border around the canvas.
  */
 function draw() {
 	background(backgroundColor);
@@ -78,6 +95,10 @@ function draw() {
 	
 	drawCenterDot();
 	drawStaticBorder();
+}
+
+function startFirstEye() {
+	loop();
 }
 
 /**
@@ -218,8 +239,7 @@ function updateAll() {
 function loadNextBarPos() {
 	if (!posQueue.length && leftEyeTestInProgress) {
 		fillPositionQueue();
-		leftEyeTestInProgress = false;
-		barsCounter = 0;
+		transitionToNextEye();
 	}
 	else if (!posQueue.length && !leftEyeTestInProgress) {
 		testFinished = true;
@@ -244,6 +264,21 @@ function setNextBarAxis() {
 	else {
 		currentAxis = 'y';
 	}
+}
+
+function transitionToNextEye(){
+	leftEyeTestInProgress = false;
+	barsCounter = 0;
+	noLoop();
+	
+	document.getElementById("rightEye").style.display = "inherit";
+}
+
+/**
+ * Wait for user to click the button to start the next eye test.
+ */
+function startNextTest() {
+	loop();
 }
 
 /**
