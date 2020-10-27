@@ -1,143 +1,156 @@
-let numBars = 2; // VALUE 2 FOR TESTING
+// TODO: Add pause or confirmation before switching eyes
+// TODO: When drawing the results at the end, the first Left Y is black
 
-let posQueue = [];				// Holds the randomly-shuffled locations to draw the bars
-let currentPos = 0;				// X or Y value to draw the next bar at
-
-let xClickLocations = [];
-let yClickLocations = [];
-let validClickCount = 0;
-
-let barFillAlpha = 0;			// Will control the alpha
-let opacityIncrease = 15;		// How much to increase the opacity
-
-let timer = 0;
-let sec = 2;					// Seconds between showing each bar
-
-let testFinished = false;
-let xBarsDone = false;
 
 let timestamp;					// Will record the time the test was started (in milliseconds since Epoch)
 let canvasSize = 0;				// Will record the size of the canvas the test was taken at
+let backgroundColor = 220;		// Greyscale color for canvas background (0:Black, 255:White)
+let barFillAlpha = 0;			// Will control the alpha
+let opacityIncrease = 15;		// How much to increase the opacity
+
+let timer = 1;					// Frame counter (start at 1 to avoid "if (timer % (60 * sec) === 0)" being true)
+let sec = 2;					// Seconds between showing each bar
+
+let posQueue = [];				// Holds the randomly-shuffled locations to draw the bars
+let currentPos = 0;				// X or Y coordinate value to draw the next bar at
+let currentAxis = 0;			// X or Y axis to draw the next bar on
+
+let xLocationLeft = [];			// LEFT EYE: Clicked X locations
+let yLocationLeft = [];			// LEFT EYE: Clicked Y locations
+let xLocationRight = [];		// RIGHT EYE: Clicked X locations
+let yLocationRight = [];		// RIGHT EYE: Clicked Y locations
+
+let numBars = 6;				// !! numBars HAS TO BE A MULTIPLE OF 2
+let barsCounter = 0;			// Used to determine when half bars are drawn (thus switch bar axis)
+
+let clickUsedThisRound = false;
+
+let leftEyeTestInProgress = true;
+let transition = false;
+let testFinished = false;
 
 
 /**
- * Sets up the speed to match the user preference 
- */
-var id;
-var db = firebase.firestore();
-getUid();
-async function getUid() {
-	//let user = await firebase.auth().currentUser;
-	await firebase.auth().onAuthStateChanged(user => {
-		if (user) {
-			id = user.uid;
-			console.log(id);
-			db.collection("users").doc(user.uid)
-				.get()
-				.then(doc => {
-
-					let newgrowingspeed = (doc.data().testSpeeds);
-					sec = newgrowingspeed;
-					console.log(sec);
-
-				});
-		}
-	});
-}
-
-/**
- * Runs only once.
- * Sets up the canvas, sets background color, initializes the positions queue, and records current time.
+ * Runs once upon page loading.
+ * Sets up the canvas, sets background color, initializes the positions queue,
+ * 	and records current time.
  */
 function setup() {
 	createCanvas(800, 800);
 	fillPositionQueue();
 	timestamp = Date.now();
-
 	// !! TODO: This variable needs to be updated when dynamic canvas size is implemented
 	canvasSize = 800;
+	
+	// NOTE: The button's label text may need to be different based on
+	//		how we implement the user's option to select which eye to test
+	// transitionButton = createButton('Start Left Eye');
+	// transitionButton.position(width / 2, height / 2);
+	// transitionButton.mousePressed(function () {
+	// 	transition = false;
+	// });
+	//
+	// transitionButton.style.display = "none";
+	
+	noLoop();
 }
 
 /**
  * Runs 60 times each second. Is the main game controller.
  * drawStaticGrid: Draws the grid (called first so other items can be drawn on top of it)
  *
- * If the game IS NOT done:
- *        Updates the next bar position every n-seconds. (n set by "sec" variable)
- *        Draws the bar.
- *        Increment the timer counter.
+ * If the test IS NOT done:
+ * 		- Updates the next bar position every n-seconds. (n set by "sec" variable)
+ * 		- Draws the bar.
+ * 		- Increment the timer counter.
  *
- * If game IS done:
- *        [This is for debugging. Results probably won't immediately be shown to user after test]
- *        Show results by drawing the bars that were clicked.
+ * If test IS done:
+ * 		- Show results by drawing bars at the positions that were clicked.
+ *
+ * If transition is TRUE:
+ * 		- Wait for the user to click the button before next test round.
  *
  * Always:
- *        Draw the center black dot.
- *        Draw the border around the canvas.
+ * 		- Draw the center black dot.
+ * 		- Draw the border around the canvas.
  */
 function draw() {
-	// TODO: Move the items within "else" below to their own function
-	background(220);
-
-	// drawStaticGrid();	// Grid
-
-	if (!testFinished) {
-
-		if (timer % (60 * sec) === 0) {
-			loadNextBarPos();
-			barFillAlpha = 0;
-		}
-
-		drawBar();
-		timer++;
-	}
-	else {
-		drawClickedBars();
-		noLoop();
+	background(backgroundColor);
+	
+	if (testFinished) {
+		showLeftResults();
+		showRightResults();
 		showExitButton();
+		noLoop();
+		console.log("TEST DONE");
 	}
-
+	
+	if (timer % (60 * sec) === 0) {
+		updateAll();
+	}
+	
+	drawBar();
+	timer++;
+	
 	drawCenterDot();
 	drawStaticBorder();
 }
 
+function startFirstEye() {
+	loop();
+}
+
 /**
  * Records the location of the currently-shown bar whenever a click is registered.
- * Will handle multiple clicks for the same bar by using validClickCounter as index to
- *    check that the most current array (xClickLocations or yClickLocations) index is
- *    not the same as the current bar. If the bar IS new, save its coordinate
- *    value and increment validClickCounter.
+ * Will handle multiple clicks for the same bar by using a boolean click listener.
  *
  * If testFinished (i.e. the test is over)
- * 		Take no action if the user clicks.
+ * 		Take no action.
  *
- * If xBarsDone is FALSE:
- *		This means vertical bars are still being shown, so add locations when clicked to xClickLocations.
+ * If clickUsedThisRound (user already clicked this iteration)
+ * 		Take no action.
  *
- * If xBarsDone is TRUE:
- *		This means horizontal bars are being shown, so add locations when clicked to yClickLocations.
+ * If testOneInProgress is TRUE:
+ *		The user is doing the test for their LEFT eye.
+ *
+ * If testOneInProgress is FALSE:
+ *		The user is doing the test for their RIGHT eye.
  */
 function mousePressed() {
 	if (testFinished) {
 		return;
 	}
-
-	if (!xBarsDone) {
-		if (xClickLocations[validClickCount] !== currentPos) {
-			xClickLocations[validClickCount] = currentPos;
-			validClickCount++;
+	
+	if (clickUsedThisRound) {
+		return;
+	}
+	
+	if (leftEyeTestInProgress) {
+		if (currentAxis === 'x') {
+			xLocationLeft.push(currentPos);
+			console.log("CLICK: Left X");
+		}
+		else {
+			yLocationLeft.push(currentPos);
+			console.log("CLICK: Left Y");
 		}
 	}
 	else {
-		if (yClickLocations[validClickCount] !== currentPos) {
-			yClickLocations[validClickCount] = currentPos;
-			validClickCount++;
+		if (currentAxis === 'x') {
+			xLocationRight.push(currentPos);
+			console.log("CLICK: Right X");
+		}
+		else {
+			yLocationRight.push(currentPos);
+			console.log("CLICK: Right Y");
 		}
 	}
+	
+	clickUsedThisRound = true;
 }
 
 /**
- * Loads posQueue[] with the locations to draw the lines.
+ * Fills posQueue[] with the locations to draw the lines.
  * To keep two bars from being drawn in the same place:
  *    Divide the width of the canvas by number of bars to get an interval,
  *    then draw each bar at increments of this interval.
@@ -148,82 +161,125 @@ function mousePressed() {
 function fillPositionQueue() {
 	// TODO: Don't draw bars at edges of canvas?
 	var interval = (width / numBars);
-
-	for (let i = 0; i
-		< numBars; i++) {
+	
+	for (let i = 0; i < numBars; i++) {
 		posQueue[i] = interval * i;
 	}
-
+	
 	posQueue = shuffle(posQueue);
 }
 
 /**
- * Increases the Alpha (opacity) of the bar fill color. This will create
- * an animation illusion that makes it look like a single bar is fading in.
+ * Incrementally increases the Alpha (opacity) of the bar fill color. This will
+ * 		create an animation that makes it look like a single bar is fading in.
+ * 		Maximum alpha/opacity value is 255.
  */
 function fadeIn() {
 	barFillAlpha += opacityIncrease;
-
+	
 	if (barFillAlpha > 255) {
 		barFillAlpha = 255;
 	}
-
+	
 	fill(0, barFillAlpha);
 }
 
 /**
  * Draws a basic rectangle at currentPos. Whether drawn vertically or
- *    horizontally is controlled by xBarsDone.
- *    When xBarsDone is FALSE:
+ *    horizontally is controlled by currentAxis.
+ *    When currentAxis === X:
  *        - currentPos is the position on the x-axis where to draw the next bar
  *        - Draw a rectangle that starts at x=currentPos and y=0,
  *            with width=barW, and length=height of the canvas
- *    When xBarsDone is TRUE:
+ *    When currentAxis === Y:
  *        - currentPos is the position on the y-axis where to draw the next bar
  *        - Draw a rectangle that starts at x=0 and y=currentPos,
  *            with width=width of the canvas, and length=barW
  */
 function drawBar() {
+	console.log("Axis: " + currentAxis);
+	let barW = (width / 80);
+	
 	fill(0);
-
-	let barW = (width / 20) / 4;
 	noStroke();
-
+	
 	fadeIn();
-
-	if (!xBarsDone) {
+	
+	if (currentAxis === 'x') {
 		rect(currentPos, 0, barW, height);
 	}
-	else {
+	else if (currentAxis === 'y') {
 		rect(0, currentPos, width, barW);
+	}
+	else {
+		console.log("drawBar called when currentAxis not 'X' or 'Y'");
 	}
 }
 
 /**
+ * Fires off the events that occur every n-seconds of the test (n set by "sec" variable)
+ */
+function updateAll() {
+	setNextBarAxis();
+	loadNextBarPos();
+	clickUsedThisRound = false;
+	barFillAlpha = 0;
+	barsCounter++;
+}
+
+/**
  * Pops off the next coordinate from posQueue[]. This is where the next bar will be drawn.
- * If xBarsDone is TRUE and posQueue is EMPTY: Fills queue with new values. Resets clickCount. Sets xBarDone to true.
- * If xBarsDone is FALSE and posQueue is EMPTY: Sets gameFinished boolean flag to true. Exit the function.
- * Otherwise: Set currentPos to the value where the next bar should be drawn.
+ * If leftEyeTestInProgress is TRUE and posQueue is EMPTY:
+ * 		- Refills queue with new values.
+ * 		- Sets leftEyeTestInProgress to false.
+ * 		- Resets barsCounter
+ * If leftEyeTestInProgress is FALSE and posQueue is EMPTY:
+ * 		Sets gameFinished boolean flag to true.
+ * 		Exit the function.
+ * Otherwise:
+ * 		Set currentPos to where the next bar should be drawn (rounded to nearest whole).
  */
 function loadNextBarPos() {
-	// TODO: Refactor (mainly how/where currentPos pops values)
-	if (!xBarsDone) {
-		if (!posQueue.length) {
-			console.log("Vertical Bars (x) DONE");
-			fillPositionQueue();
-			validClickCount = 0;
-			xBarsDone = true;
-		}
+	if (!posQueue.length && leftEyeTestInProgress) {
+		fillPositionQueue();
+		transitionToNextEye();
 	}
-	else if (xBarsDone) {
-		if (!posQueue.length) {
-			console.log("Horizontal Bars (Y) DONE");
-			testFinished = true;
-			return;
-		}
+	else if (!posQueue.length && !leftEyeTestInProgress) {
+		testFinished = true;
+		return;
 	}
+	
+	currentPos = Math.round(posQueue.pop());
+}
 
-	currentPos = posQueue.pop();
+/**
+ * First half of bars will be drawn vertically (X-Axis).
+ * Second half of bars will be drawn horizontally (Y-Axis).
+ */
+function setNextBarAxis() {
+	let midPoint = numBars / 2;
+	
+	if (barsCounter > midPoint) {
+		currentAxis = 'x';
+	}
+	else {
+		currentAxis = 'y';
+	}
+}
+
+function transitionToNextEye(){
+	leftEyeTestInProgress = false;
+	barsCounter = 0;
+	noLoop();
+	
+	document.getElementById("rightEye").style.display = "inherit";
+}
+
+/**
+ * Wait for user to click the button to start the next eye test.
+ */
+function startNextTest() {
+	loop();
 }
 
 /**
@@ -233,14 +289,14 @@ function loadNextBarPos() {
 function drawStaticGrid() {
 	fill(0);
 	noStroke();
-
+	
 	var interval = width / 20;
-
+	
 	// Vertical grid lines
 	for (let i = 0; i < 20; i++) {
 		rect((i * interval), 0, 1, height);
 	}
-
+	
 	// Horizontal grid lines
 	for (let i = 0; i < 20; i++) {
 		rect(0, (i * interval), width, 1);
@@ -248,12 +304,12 @@ function drawStaticGrid() {
 }
 
 /**
- * Draws a black dot with white outline at the center of canvas.
+ * Draws a black dot with grey outline (matches canvas color) at the center of canvas.
  */
 function drawCenterDot() {
 	fill(0);
 	strokeWeight(2);
-	stroke(255);
+	stroke(backgroundColor);
 	ellipse(width / 2, height / 2, 20);
 }
 
@@ -268,26 +324,58 @@ function drawStaticBorder() {
 }
 
 /**
- * Debugging. Draws the bars that were clicked.
+ * Draws the bars that were clicked during the Left eye test.
  */
-function drawClickedBars() {
-	let numClickedX = xClickLocations.length;
-	let numClickedY = yClickLocations.length;
-
+function showLeftResults() {
+	let numClickedX = xLocationLeft.length;
+	let numClickedY = yLocationLeft.length;
+	
 	let barW = width / 20;
-
+	
 	for (let i = 0; i < numClickedX; i++) {
-		let x = xClickLocations[i];
+		let x = xLocationLeft[i];
 		noStroke();
-		fill(70, 0, 70, 50);
+		fill(255, 194, 114, 50);
 		rect(x, 0, barW, height);
+		
+		console.log("X LOC LEFT: " + x);
 	}
-
+	
 	for (let i = 0; i < numClickedY; i++) {
-		let y = yClickLocations[i];
+		let y = yLocationLeft[i];
 		noStroke();
-		fill(70, 0, 70, 50);
+		fill(255, 194, 114, 50);
 		rect(0, y, width, barW);
+		
+		console.log("Y LOC LEFT: " + y);
+	}
+}
+
+/**
+ * Draws the bars that were clicked during the Right eye test.
+ */
+function showRightResults() {
+	let numClickedX = xLocationRight.length;
+	let numClickedY = yLocationRight.length;
+	
+	let barW = width / 20;
+	
+	for (let i = 0; i < numClickedX; i++) {
+		let x = xLocationRight[i];
+		noStroke();
+		fill(133, 114, 255, 50);
+		rect(x, 0, barW, height);
+		
+		console.log("X LOC RIGHT: " + x);
+	}
+	
+	for (let i = 0; i < numClickedY; i++) {
+		let y = yLocationRight[i];
+		noStroke();
+		fill(133, 114, 255, 50);
+		rect(0, y, width, barW);
+		
+		console.log("Y LOC RIGHT: " + y);
 	}
 }
 
@@ -302,13 +390,13 @@ function drawClickedBars() {
 function showExitButton() {
 	let exitBtns = document.getElementById('exitTestBtns');
 	let fadeInSpeed = 1;
-
+	
 	exitBtns.style.display = "inherit";
 	exitBtns.style.opacity = 0.0;
-
+	
 	let fadeIn = setInterval(function () {
 		if (exitBtns.style.opacity < 1.0) {
-
+			
 			// Needs the plus sign before "exitBtns"
 			exitBtns.style.opacity = +exitBtns.style.opacity + 0.01;
 		}
@@ -320,44 +408,20 @@ function showExitButton() {
 }
 
 /**
- * Formats the relevant data into a JSON.
- * @returns {{TestName: string, XLocations: [], TimeStampMS: Number, YLocations: []}}
+ * Formats the relevant results data into a JSON.
  */
 function getFullBarsResults() {
+	// console.log("Left-XLocations" + xLocationLeft);
+	// console.log("Left-YLocations" + yLocationLeft);
+	// console.log("Right-XLocations" + xLocationRight);
+	// console.log("Right-YLocations" + yLocationRight);
 	return {
 		"TestName": "full_bars",
 		"TimeStampMS": timestamp,
 		"TestCanvasSize": canvasSize,
-		"XLocations": xClickLocations,
-		"YLocations": yClickLocations
+		"Left-XLocations": xLocationLeft,
+		"Left-YLocations": yLocationLeft,
+		"Right-XLocations": xLocationRight,
+		"Right-YLocations": yLocationRight
 	}
-}
-
-function sendToFirestore() {
-
-	var dataToWrite = getFullBarsResults();
-	var db = firebase.firestore();
-	var id = firebase.auth().currentUser.uid;
-	db.collection("TestResults")
-		.doc(id)
-		.collection("FullBars")
-		.add(dataToWrite)
-		.then(() => {
-			uploadSuccess();
-			setTimeout(() => {
-				// Use replace() to disallow back button to come back to this page
-				window.location.replace("../../home.html");
-			}, 1000);
-		});
-
-}
-
-function uploadSuccess() {
-	let uploadStatusIndicator = document.getElementById('uploadStatus');
-	uploadStatusIndicator.textContent = "Results Saved!";
-}
-
-function showStatusIndicator() {
-	let uploadStatusIndicator = document.getElementById('uploadStatus');
-	uploadStatusIndicator.style.display = "inherit";
 }
