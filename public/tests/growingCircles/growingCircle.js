@@ -415,11 +415,16 @@ function sendToFirestore() {
         .collection("GrowingCircles")
         .add(dataToWrite)
         .then(() => {
-            //uploadSuccess();
+            uploadSuccess();
             setTimeout(() => {
                 // Use replace() to disallow back button to come back to this page
                 window.location.replace("../../home.html");
             }, 1000);
         });
 
+}
+
+function uploadSuccess() {
+    let uploadStatusIndicator = document.getElementById('uploadStatus');
+    uploadStatusIndicator.textContent = "Results Saved!";
 }
