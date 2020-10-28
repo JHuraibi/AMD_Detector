@@ -26,6 +26,17 @@
 				-ms-user-select: none;
 				user-select: none;
 			}
+			.instruct {
+            width: 400px;
+            padding: 30px;
+            margin: 100px auto;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: #282828;
+        }
+
 			
 			@media (min-width: 768px) {
 				.bd-placeholder-img-lg {
@@ -55,19 +66,20 @@
 					<canvas id="canvas2"></canvas>
 				</div>
 				<div style="text-align: center;" id="start_test1">
-					<button onclick="test1()">Start</button>
+					<button onclick="rightEyeTest()">Start</button>
 				</div>
 				<div style="text-align: center; display: none" id="start_test2">
-					<button onclick="test2()">Next Eye</button>
+					<button onclick="leftEyeTest()">Next Eye</button>
 				</div>
-				<!-- <div class="instruct" id="nextEye">
+				<div class="instruct" id="nextEye">
 					<p>
-						Great! Now cover your left eye and begin the same test
+						Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
+						Follow same directions as previous test.
 					</p>
-					<button id="nexttestbtn" class="btn btn-sm btn-outline-secondary">Start next eye</button>
+					<button onclick="leftEyeTest()" id="nexttestbtn" class="btn btn-sm btn-outline-secondary"
+						style="color: #282828; border-color: #282828;">Start next eye</button>
 				</div>
-			  -->
-
+		
 
 			</main>
 			
@@ -124,7 +136,7 @@
 		</script>
 		
 		<script>
-			// !! TODO: Handle errors with getFullBarsResults()
+			// !! TODO: Handle errors with getsybolsTestResults()
 			// !! TODO: Docstrings and comments
 			// If Time: Use event listeners instead of onclick (Unobtrusive Javascript)
 			let maxWaitTime = 2000;
