@@ -179,7 +179,8 @@ class SymbolsDAO {
 		minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
 		hoursString = hoursString % 12;
 		
-		return dateString + " at " + hoursString + ":" + minutesString + postfix;
+		// return dateString + " at " + hoursString + ":" + minutesString + postfix;
+		return dateString;
 	}
 	
 }// class [ SymbolsDAO ]

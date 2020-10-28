@@ -39,10 +39,12 @@ class FullBarsDAO {
 		let ctxLeft = leftEyeCanvas.getContext('2d');
 		let ctxRight = rightEyeCanvas.getContext('2d');
 		
+		// Prototype 2 edit
 		let leftX = doc.data().LeftXLocations;
 		let leftY = doc.data().LeftYLocations;
 		let rightX = doc.data().RightXLocations;
 		let rightY = doc.data().RightYLocations;
+		
 		
 		let timeStamp = doc.data().TimeStampMS;
 		let testCanvasSize = doc.data().TestCanvasSize;
@@ -181,14 +183,15 @@ class FullBarsDAO {
 		let minutesString = date.getUTCMinutes();
 		let postfix = hoursString > 11 ? "PM" : "AM";
 		
-		if (hoursString === 0){
+		if (hoursString === 0) {
 			hoursString = 12;
 		}
 		
 		minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
 		hoursString = hoursString % 12;
 		
-		return dateString + " at " + hoursString + ":" + minutesString + postfix;
+		// return dateString + " at " + hoursString + ":" + minutesString + postfix;
+		return dateString;
 	}
 	
 }// class [ FullBarsDAO ]

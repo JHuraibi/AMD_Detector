@@ -463,9 +463,9 @@ function getFullBarsResults() {
 		"TestName": "full_bars",
 		"TimeStampMS": timestamp,
 		"TestCanvasSize": canvasSize,
-		"Left-XLocations": xLocationLeft,
-		"Left-YLocations": yLocationLeft,
-		"Right-XLocations": xLocationRight,
-		"Right-YLocations": yLocationRight
+		"LeftXLocations": xLocationLeft,
+		"LeftYLocations": yLocationLeft,
+		"RightXLocations": xLocationRight,
+		"RightYLocations": yLocationRight
 	}
 }

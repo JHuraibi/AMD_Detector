@@ -163,7 +163,9 @@ class growingCirclesDAO {
 		minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
 		hoursString = hoursString % 12;
 		
-		return dateString + " at " + hoursString + ":" + minutesString + postfix;
+		// Prototype 2 edit
+		// return dateString + " at " + hoursString + ":" + minutesString + postfix;
+		return dateString;
 	}
 
 }// class [ FirebaseDAO ]
