@@ -67,7 +67,7 @@ class FullBarsDAO {
 			for (let i = 0; i < leftY.length; i++) {
 				let yPos = leftY[i];
 				ctxLeft.fillStyle = "#460046";
-				ctxLeft.fillRect(0, (yPos * ratio), sizeRef, barW);
+				ctxLeft.fillRect(0, (yPos * ratio), ctxLeft.canvas.width, barW);
 			}
 		}
 		
@@ -85,7 +85,7 @@ class FullBarsDAO {
 			for (let i = 0; i < rightY.length; i++) {
 				let yPos = rightY[i];
 				ctxRight.fillStyle = "#b86214";
-				ctxRight.fillRect(0, (yPos * ratio), sizeRef, barW);
+				ctxRight.fillRect(0, (yPos * ratio), ctxLeft.canvas.width, barW);
 			}
 		}
 		
@@ -98,6 +98,9 @@ class FullBarsDAO {
 		// grid-area: Row#, Column#, Row Span, Column Span
 		leftEyeCanvas.style.gridArea = "1 / 1 / 2 / 2";
 		rightEyeCanvas.style.gridArea = "1 / 2 / 2 / 2";
+		
+		leftEyeCanvas.setAttribute('class', 'fullBarsCanvasStyle');
+		rightEyeCanvas.setAttribute('class', 'fullBarsCanvasStyle');
 		
 		newDivContainer.appendChild(leftEyeCanvas);
 		newDivContainer.appendChild(rightEyeCanvas);
