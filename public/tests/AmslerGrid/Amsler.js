@@ -1,9 +1,22 @@
-var countDown = 10;
+var sd = document.getElementById("strtdiv");
+var Ampic = document.getElementById("amslerpic");
 var next = document.getElementById("nxt");
+var start = document.getElementById("strt");
+var time = document.getElementById("timer");
 next.style.display = "none";
 
+// Ampic.style.display = "none"
+
+start.style.display = "inline-block";
+
+var countDown = 10;
+document.getElementById("timer").innerHTML =  countDown +" seconds"; 
 function interval()
 {
+    
+    start.style.display = "none";
+    Ampic.style.display = "inline-block"
+    
     document.getElementById("timer").innerHTML = countDown +" seconds"; 
     if(countDown != 0)
     {
@@ -17,40 +30,14 @@ function interval()
     }
        
 }
-interval();
+
 
 function displayNext()
 {
     next.style.display = "block";
 }
 
-// var i = 0;
-// function test()
-// {
 
-//     if(i ==  0)
-//     {
-//         interval();
-//         i++;
-//     }
-
-//     if(i == 1)
-//     {
-//         alert("Switch eyes! ");
-//         interval();
-//         i++;
-
-//         if(i == 2)
-//         {
-//             next.style.display = "in-line block";
-            
-//         }
-//     }
-
-
-
-// }
-// test();
 
 
 
