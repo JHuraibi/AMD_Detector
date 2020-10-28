@@ -2,25 +2,21 @@ var countDown = 10;
 var next = document.getElementById("nxt");
 next.style.display = "none";
 
-function interval()
-{
-    document.getElementById("timer").innerHTML = countDown +" seconds"; 
-    if(countDown != 0)
-    {
+function interval() {
+    document.getElementById("timer").innerHTML = countDown + " seconds";
+    if (countDown != 0) {
         setTimeout(interval, 1000)
         countDown--;
 
     }
-    else
-    {
+    else {
         displayNext();
     }
-       
+
 }
 interval();
 
-function displayNext()
-{
+function displayNext() {
     next.style.display = "block";
 }
 
@@ -43,7 +39,7 @@ function displayNext()
 //         if(i == 2)
 //         {
 //             next.style.display = "in-line block";
-            
+
 //         }
 //     }
 
