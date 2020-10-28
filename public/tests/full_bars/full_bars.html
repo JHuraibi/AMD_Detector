@@ -34,6 +34,17 @@
 					font-size: 3.5rem;
 				}
 			}
+			
+			.instruct {
+				width: 400px;
+				padding: 30px;
+				margin: 100px auto;
+				border-radius: 10px;
+				background: white;
+				box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+				text-align: center;
+				color: #282828;
+			}
 		
 		</style>
 		<!-- Custom styles for this template -->
@@ -54,11 +65,9 @@
 			<main role="main">
 				<script src="./p5.js"></script>
 				<script src="full_bars.js"></script>
-			</main>
-			
-			<div>
 				<div class="instruct" id="leftEye">
 					<p>
+						Cover your right eye, and with your left eye focus on the black dot in the center.
 						Click to Start Left Eye Test
 					</p>
 					<button id="firstEyeBtn" class="btn btn-sm btn-outline-secondary"
@@ -66,23 +75,26 @@
 						Start Left Eye
 					</button>
 				</div>
-				<div class="instruct" id="rightEye" style="display: none">
+				<div class="instruct" id="nextEye" style="display: none">
 					<p>
-						Click to Start Right Eye Test
+						Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
+						Click to Start Right Eye Test.
 					</p>
 					<button id="nexttestbtn" class="btn btn-sm btn-outline-secondary"
 							onclick="hideRightEyeBtn(); startTest();">
 						Start Right Eye
 					</button>
 				</div>
-				
+			</main>
+			
+			<div>
 				<script>
 					function hideLeftEyeBtn() {
 						document.getElementById("leftEye").style.display = "none";
 					}
 					
 					function hideRightEyeBtn() {
-						document.getElementById("rightEye").style.display = "none";
+						document.getElementById("nextEye").style.display = "none";
 					}
 				</script>
 				

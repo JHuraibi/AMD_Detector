@@ -33,8 +33,10 @@ let transition = false;
 let testFinished = false;
 let waitingToStart = true;
 
+let canvasRef;
 
 function startTest() {
+	canvasRef.show();
 	waitingToStart = false;
 	loop();
 }
@@ -45,12 +47,15 @@ function startTest() {
  * 	and records current time.
  */
 function setup() {
-	createCanvas(800, 800);
+	canvasRef = createCanvas(800, 800);
+	canvasRef.id('canvasRef');
+	
 	fillPositionQueue();
 	timestamp = Date.now();
 	// !! TODO: This variable needs to be updated when dynamic canvas size is implemented
 	canvasSize = 800;
 	
+	canvasRef.hide();
 	noLoop();
 }
 
@@ -277,8 +282,12 @@ function transitionToNextEye() {
 	barsCounter = 0;
 	// timer = 0;
 	noLoop();
+	canvasRef.hide();
 	
-	document.getElementById("rightEye").style.display = "inherit";
+	document.getElementById("nextEye").style.display = "block";
+	
+	//start the next test
+	// nexteye.style.display = "block";
 }
 
 /**
