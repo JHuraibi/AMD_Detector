@@ -53,39 +53,52 @@
 				<div id="q1" style="border: solid black 2px;">
 					<label for="questions">Question 1</label>
 					<p>Which eye did you test?</p>
-
-					<input type="radio" id="right" name="q1" value="right">
-					<label for="right">Right</label><br>
-					<input type="radio" id="left" name="q1" value="left">
-					<label for="left">Left</label><br>
-
+					<form>
+						<input type="radio" id="right" name="questions" value="right">
+						<label for="right">Right</label><br>
+						<input type="radio" id="left" name="questions" value="left">
+						<label for="left">Left</label><br>
+					</form>
 				</div>
 
 				<div id="q2" style="border: solid black 2px;">
 					<label for="questions">Question 2</label>
 					<p>Which section(s) did you have trouble seeing?</p>
-
-					<input type="checkbox" id="section1" name="q2" value="section1">
-					<label for="secion1"> Section 1</label><br>
-					<input type="checkbox" id="section2" name="q2" value="section2">
-					<label for="section2"> Section 2</label><br>
-					<input type="checkbox" id="section3" name="q2" value="section3">
-					<label for="secction3"> Section 3</label><br>
-					<input type="checkbox" id="section4" name="q2" value="section4">
+					<div>
+						<img src="amslerS1.png" width="105" height="105">
+					</div>
+					<input type="radio" id="secion1" name="q2" value="secion1">
+					<label for="secion1"> Section 1</label>
+					<br>
+					<div>
+						<img src="amslerS2.png" width="105" height="105">
+					</div>
+					<input type="radio" id="section2" name="q2" value="section2">
+					<label for="section2"> Section 2</label>
+					<br>
+					<div>
+						<img src="amslerS3.png" width="105" height="105">
+					</div>
+					<input type="radio" id="section3" name="q2" value="section3">
+					<label for="secction3"> Section 3</label>
+					<br>
+					<div>
+						<img src="amslerS4.png" width="105" height="105">
+					</div>
+					<input type="radio" id="section4" name="q2" value="section4">
 					<label for="secction4"> Section 4</label><br>
 
 
 
 				</div>
-
 				<div id="q3" style="border: solid black 2px;">
 					<label for="questions">Question 3</label>
 					<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
-
-					<input type="radio" id="yes" name="q3" value="yes">
-					<label for="yes">Yes</label><br>
-					<input type="radio" id="no" name="q3" value="no">
-					<label for="no">No</label><br>
+					<form>
+						<input type="radio" id="yes" name="questions" value="yes">
+						<label for="yes">Yes</label><br>
+						<input type="radio" id="no" name="q3" value="no">
+						<label for="no">No</label><br>
 
 				</div>
 
@@ -142,12 +155,12 @@
 
 	<script src="/__/firebase/7.21.0/firebase-app.js"></script>
 
-    <script src="/__/firebase/7.7.0/firebase-auth.js"></script>
-    <script src="/__/firebase/7.7.0/firebase-firestore.js"></script>
-    <script src="/__/firebase/7.7.0/firebase-functions.js"></script>
+	<script src="/__/firebase/7.7.0/firebase-auth.js"></script>
+	<script src="/__/firebase/7.7.0/firebase-firestore.js"></script>
+	<script src="/__/firebase/7.7.0/firebase-functions.js"></script>
 
-    <!-- Initialize Firebase -->
-    <script src="/__/firebase/init.js"></script>
+	<!-- Initialize Firebase -->
+	<script src="/__/firebase/init.js"></script>
 	<script src="questions.js"></script>
 
 </body>
