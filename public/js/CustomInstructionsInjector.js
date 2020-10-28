@@ -25,7 +25,8 @@ function retrieveInstructions(target_test) {
 		
 		// AMSLER GRID
 		case "amsler_grid":
-			return "You are about to take the Amsler Grid test. You will need to start by cupping the eye that isn't being tested. Face must be 14 inches away from the screen. Focus on the black dot in the center. Press next after timer is done.";
+			return "You are about to take the Amsler Grid test. You will need to start by cupping the eye that isn't being tested.\n" +
+			 "Focus on the black dot in the center. Press next after timer is zero.";
 		
 		// GROWING CIRCLES
 		case "growing_circles":
@@ -40,9 +41,8 @@ function retrieveInstructions(target_test) {
 		// SYMBOLS
 		case "symbols":
 			return "You will need to start by cupping your right eye with your hand." +
-				"Move 14 inches away from your screen and" +
-				"focus on the black dot in the center" +
-				"You will see random objects appearing on the screen" +
+				" Focus on the black dot in the center " +
+				"You will see random objects appearing on the screen " +
 				"if you see \"+\" press \"A\", \"-\" press \"S\", \"x\" press \"X\", and \"÷\" press \"D\"";
 		
 		// FULL BARS
