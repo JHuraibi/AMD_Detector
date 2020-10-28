@@ -58,7 +58,7 @@ class SymbolsDAO {
 		if (leftResultSymbols) {
 			
 			ctxLeft.fillStyle = "blue";
-			ctxLeft.font = (ratio * 70) + "px Arial";
+			ctxLeft.font = (ratio * 100) + "px Arial";
 			
 			for (let i = 0; i < leftXLocations.length; i++) {
 				let symbol = leftResultSymbols[i];
@@ -73,7 +73,7 @@ class SymbolsDAO {
 		if (rightResultSymbols) {
 			
 			ctxRight.fillStyle = "orange";
-			ctxRight.font = (ratio * 35) + "px Arial";
+			ctxRight.font = (ratio * 100) + "px Arial";
 			
 			for (let i = 0; i < leftYLocations.length; i++) {
 				let symbol = rightResultSymbols[i];
