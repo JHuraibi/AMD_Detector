@@ -25,15 +25,25 @@ authSwitchLinks.forEach(link => {
       firstname: registerForm['firstname'].value,
       lastname: registerForm['lastname'].value,
       birthday: registerForm['birthdate'].value,
+      gender: registerForm['gender'].value,
+      testSpeeds: 1
     });
   }).then(() => {
         var user = firebase.auth().currentUser;
         user.sendEmailVerification();
+        console.log(user.uid);
+        db.collection("TestResults")
+                .doc(user.uid).set({
+                  exists: true
+                });
         alert("verification email sent");
         console.log('Email verification sent', user);
   }).catch(error => {
     registerForm.querySelector('.error').textContent = error.message;
   });
+
+
+
 });
   
   // login form

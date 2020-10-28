@@ -8,6 +8,7 @@
     <style>
         canvas {
             border: 1px solid black;
+            background-color: #fff;
         }
 
         button {
@@ -15,6 +16,12 @@
             text-align: center;
             display: inline-block;
             font-size: 25px;
+        }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
         }
 
         .column {
@@ -31,70 +38,77 @@
             background: white;
             box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
+            color: #282828;
+        }
+
+        a,
+        a:focus,
+        a:hover {
+            color: #fff;
+        }
+
+        html,
+        body {
+            color: #333;
+            background-color: #333;
         }
     </style>
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/cover/">
     <link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/cover.css" rel="stylesheet">
 </head>
 
 <body>
-    <header>
-        <div class="navbar navbar-dark bg-dark shadow-sm">
-            <div class="container d-flex justify-content-between">
-                <a href="#" class="navbar-brand d-flex align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
-                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2"
-                        viewBox="0 0 100 100" focusable="false">
-                        <path d="M 10,30 A 20,20 0,0,1 50,30 A 20,20 0,0,1 90,30 Q 90,60 50,90 Q 10,60 10,30 z" />
-                        <circle cx="12" cy="13" r="4" />
-                    </svg>
-                    <!--        <strong>Your Results</strong>-->
-                </a>
-
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
-                    aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-                    <a class="sign-out"><span style="color: #007bff">Sign Out</span></a>
-                </button>
+    <div class="d-flex w-auto h-auto p-3 mx-auto flex-column" style="height: 900px;">
+        <header class="masthead mb-auto">
+            <div class="inner">
+                <h3 class="masthead-brand">Vision Monitor</h3>
+                <nav class="nav nav-masthead justify-content-center">
+                    <a class="nav-link active" href="../../home.html">Home</a>
+                    <a class="nav-link" href="../../dashboard.html">My Dashboard</a>
+                </nav>
+            </div>
+        </header>
+        <br>
+        <div class="row">
+            <div class="column" id="leftEyeResults">
+                <b>Left Eye Results</b>
+            </div>
+            <div class="column" id="rightEyeResults">
+                <b>Right Eye Results</b>
             </div>
         </div>
-    </header>
+        <div style="text-align: center;">
+            <canvas></canvas>
+            <canvas id="canvas2"></canvas>
+        </div>
 
-    <br>
-    <div class="column" id="leftEyeResults">
-        <b>Left Eye Results</b>
-    </div>
-    <div class="column" id="rightEyeResults">
-        <b>Right Eye Results</b>
-    </div>
+        <div class="instruct" id="nextEye">
+            <p>
+                Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
+                Click the "seen" button whenever you notice a red dot appear.
+            </p>
+            <button id="nexttestbtn" class="btn btn-sm btn-outline-secondary"
+                style="color: #282828; border-color: #282828;">Start next eye</button>
+        </div>
 
-    <div style="text-align: center;">
-        <canvas></canvas>
-        <canvas id="canvas2"></canvas>
-    </div>
-
-    <div class="instruct" id="nextEye">
-        <p>
-            Great! Now cover your left eye, and with your right eye focus on the black dot in the center. 
-            Click the "seen" button whenever you notice a red dot appear. 
-        </p>
-        <button id="nexttestbtn" class="btn btn-sm btn-outline-secondary">Start next eye</button>
-    </div>
-
-    <div style="text-align: center;">
-        <button id="start" class="btn btn-sm btn-outline-secondary">
-            Start Test
-        </button>
-        <button id="button" class="btn btn-sm btn-outline-secondary">
-            Seen
-        </button>
-        <button id="retakebtn" class="btn btn-sm btn-outline-secondary" onclick="location.href='growingCircle.html'">
-            Retake Test
-        </button>
-        <button id="savebtn" class="btn btn-sm btn-outline-secondary">
-            Save Results
-        </button>
+        <div style="text-align: center;">
+            <button id="start" class="btn btn-sm btn-outline-secondary test-buttons">
+                Start Test
+            </button>
+            <button id="button" class="btn btn-sm btn-outline-secondary test-buttons">
+                Seen
+            </button>
+            <button id="retakebtn" class="btn btn-sm btn-outline-secondary test-buttons"
+                onclick="location.href='growingCircle.html'">
+                Retake Test
+            </button>
+            <button id="savebtn" class="btn btn-sm btn-outline-secondary test-buttons">
+                Save Results
+            </button>
+        </div>
     </div>
 
-    <br>
     <script src="/__/firebase/7.21.0/firebase-app.js"></script>
 
     <script src="/__/firebase/7.7.0/firebase-auth.js"></script>
@@ -105,7 +119,8 @@
     <script src="/__/firebase/init.js"></script>
 
     <script src="growingCircle.js"></script>
-    <script src="../../home.js"></script>
+
+    <script src="../speed.js"></script>
 </body>
 
 </html>

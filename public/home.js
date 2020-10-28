@@ -4,7 +4,11 @@ const signOut = document.querySelector('.sign-out');
 signOut.addEventListener('click', () => {
   firebase.auth().signOut()
     .then(() => console.log('signed out'));
-  window.location = 'index.html';
+    var url=location.href.split("/").slice(-1) + "";
+    if(url.startsWith("instructions_page.html", 0)){
+      window.location = '../index.html';
+    }else
+      window.location = 'index.html'; 
 });
 
 // auth listener
