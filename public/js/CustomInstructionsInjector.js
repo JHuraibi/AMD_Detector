@@ -40,14 +40,14 @@ function retrieveInstructions(target_test) {
 		
 		// SYMBOLS
 		case "symbols":
-			return "You will need to start by cupping your right eye with your hand." +
+			return "You will need to start by covering your right eye with your hand." +
 				" Focus on the black dot in the center " +
 				"You will see random objects appearing on the screen " +
 				"if you see \"+\" press \"A\", \"-\" press \"S\", \"x\" press \"X\", and \"÷\" press \"D\"";
 		
 		// FULL BARS
 		case "full_bars":
-			return "Shut one eye. " +
+			return "You will need to start by covering your right eye with your hand. " +
 				"Focus on black dot in the center. If any of the bars are broken or are bent " +
 				"click your mouse anywhere on the window. \n\n\n" +
 				"When you are ready to begin the test click the \"Start Test\" button below.";
