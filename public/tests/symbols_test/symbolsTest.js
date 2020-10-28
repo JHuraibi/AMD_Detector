@@ -10,7 +10,7 @@
 let timestamp = Date.now();
 var testOneInProgress = true;
 
-
+var nexteye = document.getElementById('nextEye');
 var strt1 = document.getElementById('start_test1');
 var strt2 = document.getElementById('start_test2');
 var canvas = document.getElementById('canvas1');
@@ -94,15 +94,16 @@ c.fillRect(0, 0, 750, 750);
 // Variable
 var x, y, y2, x2;
 var symbols = ["+", "-", "x", "÷"];
-var resultX = [];
-var resultY = [];
-var resultX2 = [];
-var resultY2 = [];
-var resultsSymbolsOne = [];
-var resultsSymbolsTwo = [];
+var rightResultX = [];
+var rightResultY = [];
+var leftResultX = [];
+var leftResultY = [];
+var rightResultsSymbols = [];
+var leftResultsSymbols = [];
 
 // Not displaying second canvas
 canvas2.style.display = "none";
+nexteye.style.display = "none";
 
 // index to capture result
 var t = 0;
@@ -112,17 +113,17 @@ var t2 = 0;
 function aKey() {
 	if (testOneInProgress) {
 		if (symbols[r] != "+") {
-			resultsSymbolsOne[t] = symbols[r];
-			resultX[t] = x;
-			resultY[t] = y;
+			rightResultsSymbols[t] = symbols[r];
+			rightResultX[t] = x;
+			rightResultY[t] = y;
 			t++;
 		}
 	}
 	else {
 		if (symbols[r2] != "+") {
-			resultsSymbolsTwo[t2] = symbols[r2];
-			resultX2[t2] = x;
-			resultY2[t2] = y;
+			leftResultsSymbols[t2] = symbols[r2];
+			leftResultX[t2] = x;
+			leftResultY[t2] = y;
 			t2++;
 		}
 	}
@@ -131,18 +132,18 @@ function aKey() {
 function sKey() {
 	if (testOneInProgress) {
 		if (symbols[r] != "-") {
-			resultsSymbolsOne[t] = symbols[r];
-			resultX[t] = x;
-			resultY[t] = y;
+			rightResultsSymbols[t] = symbols[r];
+			rightResultX[t] = x;
+			rightResultY[t] = y;
 			t++;
 
 		}
 	}
 	else {
 		if (symbols[r2] != "-") {
-			resultsSymbolsTwo[t2] = symbols[r2];
-			resultX2[t2] = x;
-			resultY2[t2] = y;
+			leftResultsSymbols[t2] = symbols[r2];
+			leftResultX[t2] = x;
+			leftResultY[t2] = y;
 			t2++;
 
 		}
@@ -155,18 +156,18 @@ function sKey() {
 function xKey() {
 	if (testOneInProgress) {
 		if (symbols[r] != "x") {
-			resultsSymbolsOne[t] = symbols[r];
-			resultX[t] = x;
-			resultY[t] = y;
+			rightResultsSymbols[t] = symbols[r];
+			rightResultX[t] = x;
+			rightResultY[t] = y;
 			t++;
 
 		}
 	}
 	else {
 		if (symbols[r2] != "x") {
-			resultsSymbolsTwo[t2] = symbols[r2];
-			resultX2[t2] = x;
-			resultY2[t2] = y;
+			leftResultsSymbols[t2] = symbols[r2];
+			leftResultX[t2] = x;
+			leftResultY[t2] = y;
 			t2++;
 
 		}
@@ -179,18 +180,18 @@ function xKey() {
 function dKey() {
 	if (testOneInProgress) {
 		if (symbols[r] != "÷") {
-			resultsSymbolsOne[t] = symbols[r];
-			resultX[t] = x;
-			resultY[t] = y;
+			rightResultsSymbols[t] = symbols[r];
+			rightResultX[t] = x;
+			righResultY[t] = y;
 			t++;
 
 		}
 	}
 	else {
 		if (symbols[r2] != "÷") {
-			resultsSymbolsTwo[t2] = symbols[r2];
-			resultX2[t2] = x;
-			resultY2[t2] = y;
+			leftResultsSymbols[t2] = symbols[r2];
+			leftResultX[t2] = x;
+			leftResultY[t2] = y;
 			t2++;
 			console.log("")
 		}
@@ -255,7 +256,7 @@ function randomSymbol() {
 // Vaariable representing iterations
 var i = 0;
 
-function test1() {
+function rightEyeTest() {
 
 	strt1.style.display = "none";
 	console.log("test 1");
@@ -265,7 +266,7 @@ function test1() {
 		blackDot();
 		randomSymbol();
 		i++;
-		setTimeout(test1, speed);
+		setTimeout(rightEyeTest, speed);
 		// setTimeout(test1, 1000);	// !! FOR TESTING
 	}
 	else {
@@ -278,22 +279,24 @@ function test1() {
 function nexttest() {
 	// TODO: canvas2 is shifting to left between switching (might be display attr)
 	canvas.style.display = "none";
-	canvas2.style.display = "inline-block";
+	canvas2.style.display = "none";
 
 	var startTest1 = document.getElementById("start_test1");
 	var startTest2 = document.getElementById("start_test2");
 
 	startTest1.style.display = "none";
-	startTest2.style.display = "inline-block";
+	// startTest2.style.display = "inline-block";
+	nexteye.style.display = "block";
 
 	testOneInProgress = false;
 }
 
 var a = 0;
 
-function test2() {
+function leftEyeTest() {
 
-	strt2.style.display = "none";
+	canvas2.style.display = "inline-block";
+	nexteye.style.display = "none";
 	// console.log("Test2");
 	if (a < 5) {
 		// console.log("In test 2 loop");
@@ -301,7 +304,7 @@ function test2() {
 		blackDot();
 		randomSymbol();
 		a++;
-		setTimeout(test2, speed);
+		setTimeout(leftEyeTest, speed);
 		// setTimeout(test2, 1000);	// !! FOR TESTING
 	}
 	else results();
@@ -324,20 +327,20 @@ function results() {
 	clearCanvas();
 	blackDot();
 
-	for (j = 0; j < resultsSymbolsOne.length; j++) {
+	for (j = 0; j < rightResultsSymbols.length; j++) {
 		c.fillStyle = "blue";
 		c.font = "35 px Arial";
-		c.fillText(resultsSymbolsOne[j], resultX[j], resultY[j]);
+		c.fillText(rightResultsSymbols[j], rightResultX[j], rightResultY[j]);
 		// console.log("Result: " + resultsSymbolsOne[j]);
 		// console.log("X: " + resultX[j]);
 		// console.log("Y: " + resultY[j]);
 	}
 	// Im a comment
-	for (j2 = 0; j2 < resultsSymbolsTwo.length; j2++) {
+	for (j2 = 0; j2 < leftResultsSymbols.length; j2++) {
 		console.log("In loop of c2 results ");
 		c2.fillStyle = "orange";
 		c2.font = "35 px Arial";
-		c2.fillText(resultsSymbolsTwo[j2], resultX2[j2], resultY2[j2]);
+		c2.fillText(leftResultsSymbols[j2], leftResultX[j2], leftResultY[j2]);
 		// console.log("Result 2: " + resultsSymbolsTwo[j2]);
 		// console.log("X2: " + resultX[j2]);
 		// console.log("Y2: " + resultY[j2]);
