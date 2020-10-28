@@ -52,13 +52,13 @@ class SymbolsDAO {
 		let timeStamp = doc.data().TimeStampMS;
 		let testCanvasSize = doc.data().TestCanvasSize;
 		
-		let ratio = sizeRef / testCanvasSize;
+		let ratio = sizeRef / 1000;
 		
 		// NOTE: The font size (see below) of 35 is hardcoded in symbols_test.js
 		if (leftResultSymbols) {
 			
 			ctxLeft.fillStyle = "blue";
-			ctxLeft.font = (ratio * 35) + "px Arial";
+			ctxLeft.font = (ratio * 70) + "px Arial";
 			
 			for (let i = 0; i < leftXLocations.length; i++) {
 				let symbol = leftResultSymbols[i];
