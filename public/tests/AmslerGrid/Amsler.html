@@ -16,12 +16,12 @@
 
 	<style>
 		.instruct {
-			width: 40px;
-			padding: 10px;
-			margin: 50px auto;
-			border-radius: 10px;
+			width: 75px;
+			/* padding: 10px; */
+			/* margin: 50px auto; */
+			/* border-radius: 10px; */
 			background: white;
-			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+			/* box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1); */
 			text-align: center;
 			color: #282828;
 		}
@@ -59,16 +59,17 @@
 
 		<main role="main" class="inner cover">
 			<!-- added begin button -->
-			<div class="instruct" id="strtdiv">
+
+			
+			<div style="text-align: center;">
+				<p id="timer" style="text-align: right;"></p>
+				<img src="amsler.png" alt="amslerGrid" id="amslerpic" width="700" height="700">
+			<!-- </div>
+			 begin button for test 
+			<div style="text-align: center;" class="instruct" id="strtdiv" > -->
 
 				<button id="strt" class="btn btn-sm btn-outline-secondary"
-					style="color: #282828; border-color: #282828;" onclick="interval();">Begin</button>
-			</div>
-
-
-			<p id="timer" style="text-align: right;"></p>
-			<div style="text-align: center;">
-				<img src="amsler.png" alt="amslerGrid" id="amslerpic" width="700" height="700">
+					style="color: #282828; border-color: #282828; text-align: center; background-color: white;" onclick="interval();">Begin</button>
 			</div>
 			<div id="nxt" style="text-align: right;">
 				<div>
