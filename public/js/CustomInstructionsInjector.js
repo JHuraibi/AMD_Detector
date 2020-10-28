@@ -39,7 +39,7 @@ function retrieveInstructions(target_test) {
 		
 		// SYMBOLS
 		case "symbols":
-			return "You will need to start by cupping one eye with your hand." +
+			return "You will need to start by cupping your right eye with your hand." +
 				"Move 14 inches away from your screen and" +
 				"focus on the black dot in the center" +
 				"You will see random objects appearing on the screen" +
