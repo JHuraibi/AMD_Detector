@@ -1,69 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="description" content="">
-		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-		<meta name="generator" content="Jekyll v4.1.1">
-		<title>Amsler Grid · Test</title>
-		
-		<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/cover/">
-		
-		<!-- Bootstrap core CSS -->
-		<link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
-		
-		<style>
-					.bd-placeholder-img {
-						font-size: 1.125rem;
-						text-anchor: middle;
-						-webkit-user-select: none;
-						-moz-user-select: none;
-						-ms-user-select: none;
-						user-select: none;
-					}
-					
-					@media (min-width: 768px) {
-						.bd-placeholder-img-lg {
-							font-size: 3.5rem;
-						}
-					}
-		</style>
-		<!-- Custom styles for this template -->
-		<link href="../../css/cover.css" rel="stylesheet">
-	</head>
-	<body class="text-center">
-		<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-			<header class="masthead mb-auto">
-				<div class="inner">
-					<h3 class="masthead-brand">Vision Monitor</h3>
-					<nav class="nav nav-masthead justify-content-center">
-						<a class="nav-link active" href="../../home.html">Home</a>
-						<a class="nav-link" href="../../dashboard.html">My Dashboard</a>
-					</nav>
-				</div>
-			</header>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+	<meta name="generator" content="Jekyll v4.1.1">
+	<title>Amsler Grid · Test</title>
+
+	<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/cover/">
+
+	<!-- Bootstrap core CSS -->
+	<link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+
+	<style>
+		.instruct {
+			width: 75px;
+			/* padding: 10px; */
+			/* margin: 50px auto; */
+			/* border-radius: 10px; */
+			background: white;
+			/* box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1); */
+			text-align: center;
+			color: #282828;
+		}
+
+		.bd-placeholder-img {
+			font-size: 1.125rem;
+			text-anchor: middle;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		@media (min-width: 768px) {
+			.bd-placeholder-img-lg {
+				font-size: 3.5rem;
+			}
+		}
+	</style>
+	<!-- Custom styles for this template -->
+	<link href="../../css/cover.css" rel="stylesheet">
+</head>
+
+<body class="text-center">
+	<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+		<header class="masthead mb-auto">
+			<div class="inner">
+				<h3 class="masthead-brand">Vision Monitor</h3>
+				<nav class="nav nav-masthead justify-content-center">
+					<a class="nav-link active" href="../../home.html">Home</a>
+					<a class="nav-link" href="../../dashboard.html">My Dashboard</a>
+				</nav>
+			</div>
+		</header>
+
+		<main role="main" class="inner cover">
+			<!-- added begin button -->
+
 			
-			<main role="main" class="inner cover">
-                <p id="timer" style="text-align: right;"></p>
-                <div style="text-align: center;">
-                <img src="amsler.png" alt="amslerGrid" width="700" height="700">
-				</div> 
-				<div id="nxt" style="text-align: right;"> 
+			<div style="text-align: center;">
+				<p id="timer" style="text-align: right;"></p>
+				<img src="amsler.png" alt="amslerGrid" id="amslerpic" width="650" height="650">
+			<!-- </div>
+			 begin button for test 
+			<div style="text-align: center;" class="instruct" id="strtdiv" > -->
+
+				<button id="strt" class="btn btn-sm btn-outline-secondary"
+					style="color: #282828; border-color: #282828; text-align: center; background-color: white;" onclick="interval();">Begin</button>
+			</div>
+			<div id="nxt" style="text-align: right;">
+				<div>
 					<button style="background-color: white;" id="nxt" type="button" onClick="location.href='questions.html'"
-							class="btn btn-sm btn-outline-secondary">Next
+						class="btn btn-sm btn-outline-secondary">Next
 					</button>
-				</div>   
-                <script src="Amsler.js"></script>
-                
-
-			</main>
-			
-			<footer class="mastfoot mt-auto">
-				<div class="inner">
 				</div>
-			</footer>
-		</div>
-	</body>
-</html>
+			</div>
+			<script src="Amsler.js"></script>
 
+
+		</main>
+
+		<footer class="mastfoot mt-auto">
+			<div class="inner">
+			</div>
+		</footer>
+	</div>
+</body>
+
+</html>
