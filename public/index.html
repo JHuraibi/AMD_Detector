@@ -40,16 +40,16 @@
           <input type="radio" id="female" name="gender" value="female">
         </div>
         <div>
-          <p>Disclaimer: Be advised no test should replace any facility<br> based test. These test are simply a tool to help individuals track any vision impairments</p>
+          <p>Disclaimer: Be advised no test should replace any facility based test. These test are simply a tool to help individuals track any vision impairments</p>
         </div>
-        <button>Register</button>
+        <button id="reg">Register</button>
         <p class="error"></p>
       </form>
       <div>Got an account? <a class="switch">Login instead</a></div>
+      <div>New physician account? <a href="./physicians/physicians.html">Physician Registration</a></div>
     </div>
   </div>
-
-
+<br><br><br>
   <!-- The core Firebase JS SDK is always required and must be listed first -->
 
   <script src="/__/firebase/7.21.0/firebase-app.js"></script>
@@ -75,9 +75,11 @@
         document.getElementById('confirm_password').value) {
         document.getElementById('message').style.color = 'green';
         document.getElementById('message').innerHTML = 'matching';
+        document.getElementById('reg').disabled = false;
       } else {
         document.getElementById('message').style.color = 'red';
         document.getElementById('message').innerHTML = 'not matching';
+        document.getElementById('reg').disabled = true;
       }
     }
 
