@@ -64,7 +64,7 @@ class SymbolsDAO {
 		// let testCanvasSize = doc.data().TestCanvasSize;
 		
 		// CHECK: Using leftCanvas width sufficient?
-		let ratio = leftCanvas.style.width / this.hardCodedCanvasSize;
+		let ratio = leftCanvas.width / this.hardCodedCanvasSize;
 		
 		// CHECK: Alpha Needed?
 		// ctxLeft.globalAlpha = 0.5;

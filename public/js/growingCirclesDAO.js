@@ -59,7 +59,10 @@ class GrowingCirclesDAO {
 		let zLocationsRight = doc.data().ZLocationsRight;
 		
 		// CHECK: Using leftCanvas width sufficient?
-		let ratio = leftCanvas.style.width / this.hardCodedCanvasSize;
+		let ratio = leftCanvas.width / this.hardCodedCanvasSize;
+		// console.log("CANVAS SIZE: " + leftCanvas);
+		// console.log("HARD CODED: " + this.hardCodedCanvasSize);
+		// console.log("RATIO: " + ratio);
 		
 		// CHECK: Alpha Needed?
 		// ctxLeft.globalAlpha = 0.5;
@@ -75,6 +78,8 @@ class GrowingCirclesDAO {
 			ctxLeft.beginPath();
 			ctxLeft.arc(x, y, z, 0, Math.PI * 2);
 			ctxLeft.fill();
+			
+			// console.log("LEFT Circle Location: " + x + ", " + y + ", " + z);
 		}
 		
 		for (let i = 0; i < xLocationsRight.length; i++) {
@@ -85,6 +90,8 @@ class GrowingCirclesDAO {
 			ctxRight.beginPath();
 			ctxRight.arc(x, y, z, 0, Math.PI * 2);
 			ctxRight.fill();
+			
+			// console.log("RIGHT Circle Location: " + x + ", " + y + ", " + z);
 		}
 	}
 	
