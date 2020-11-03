@@ -111,7 +111,7 @@ class FullBarsDAO {
 	}
 	
 	// CHECK: How can I make this more modular for different tables?
-	populateFullBarsTable(targetTableID) {
+	populateHistoryTable(targetTableID) {
 		if (!userRef) {
 			console.log("[FullBarsDAO: populateFullBarsTable] - User is null");
 			return;

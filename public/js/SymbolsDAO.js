@@ -100,7 +100,7 @@ class SymbolsDAO {
 	}
 	
 	// CHECK: How can I make this more modular for different tables?
-	populateSymbolsTable(targetTableID) {
+	populateHistoryTable(targetTableID) {
 		if (!userRef) {
 			console.log("[SymbolsDAO: populateFullBarsTable] - User is null");
 			return;

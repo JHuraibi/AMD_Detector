@@ -124,7 +124,7 @@
 		
 		<!-- Initialize Firebase -->
 		<script src="/__/firebase/init.js"></script>
-		<script src="../../auth.js"></script>
+		<script src="./auth.js"></script>
 		
 		<script src="./js/growingCirclesDAO.js"></script>
 		<script src="./js/SymbolsDAO.js"></script>
@@ -143,16 +143,14 @@
 		
 		<script>
 			// TODO: Docstrings and comments
-			// var growingCirclesDAO = new growingCirclesDAO(dbRef);
+			var growingCirclesDAO = new GrowingCirclesDAO(dbRef);
 			var symbolsDAO = new SymbolsDAO(dbRef);
 			var fullBarsDAO = new FullBarsDAO(dbRef);
 			
 			let maxWaitTime = 2000;
 			let waitTime = 200;
 			
-			// NOTE TO TEAM:
-			// From testing, the user lookup below is taking about 400-600ms to
-			// 	recognize a user while using local Firebase hosting.
+			// NOTE: Takes about 400-600ms to recognize a user
 			(function attemptUserLookup() {
 				console.log("attemptLookup");
 				if (!userRef && maxWaitTime > 0) {
@@ -164,13 +162,13 @@
 					console.log("User Lookup Timed Out");
 				}
 				else if (userRef) {
-					// growingCirclesDAO.updateUserReference(userRef);
+					growingCirclesDAO.updateUserReference(userRef);
 					symbolsDAO.updateUserReference(userRef);
 					fullBarsDAO.updateUserReference(userRef);
 					
-					// growingCirclesDAO.populateGrowingCirclesTable("historyTable");
-					symbolsDAO.populateSymbolsTable("historyTable");
-					fullBarsDAO.populateFullBarsTable("historyTable");
+					growingCirclesDAO.populateHistoryTable("historyTable");
+					symbolsDAO.populateHistoryTable("historyTable");
+					fullBarsDAO.populateHistoryTable("historyTable");
 				}
 			})();
 			

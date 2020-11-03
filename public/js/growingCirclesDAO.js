@@ -1,4 +1,4 @@
-class growingCirclesDAO {
+class GrowingCirclesDAO {
     constructor(dbRef) {
         this.dbRef = dbRef;
         this.userRef = null;
@@ -81,8 +81,7 @@ class growingCirclesDAO {
 
     }
 
-    // CHECK: How can I make this more modular for different tables?
-    populateGrowingCirclesTable(targetTableID) {
+    populateHistoryTable(targetTableID) {
         if (!userRef) {
             console.log("[GrowingCirclesDAO: populateGrowingCirclesTable] - User is null");
             return;
