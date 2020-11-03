@@ -11,12 +11,13 @@ class SymbolsDAO {
 		this.userRef = userRef;
 	}
 	
-	drawSymbols(containerID, sizeRef) {
+	drawSymbols(leftCanvasID, rightCanvasID, sizeRef) {
 		if (!userRef) {
 			console.log("[FullBarsDAO: drawFullBars] - User is null");
 			return;
 		}
 		
+		// Update limit() to just 1
 		this.dbRef
 			.collection("TestResults")
 			.doc(userRef.uid)
@@ -26,22 +27,17 @@ class SymbolsDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.populateAggregate(containerID, sizeRef, doc);
+					this.populateAggregate(leftCanvasID, rightCanvasID, sizeRef, doc);
 				});
 			});
 	}
 	
 	// !! TODO: Error handling (especially getting values from Firebase)
 	// !! TODO: Refactor to make reading easier
-	populateAggregate(containerID, sizeRef, doc) {
-		let parent = document.getElementById(containerID);
+	populateAggregate(leftCanvasID, rightCanvasID, sizeRef, doc) {
+		let leftCanvas = document.getElementById(leftCanvasID);
+		let rightCanvas = document.getElementById(rightCanvasID);
 		
-		let newDivContainer = document.createElement("div");
-		
-		let leftCanvas = document.createElement("canvas");
-		let rightCanvas = document.createElement("canvas");
-		
-		let caption = document.createElement("p");
 		let ctxLeft = leftCanvas.getContext('2d');
 		let ctxRight = rightCanvas.getContext('2d');
 		
@@ -52,15 +48,20 @@ class SymbolsDAO {
 		let rightResultSymbols = doc.data().RightResultsSymbols;
 		let rightXLocations = doc.data().RightXLocations;
 		let rightYLocations = doc.data().RightXLocations;
-		let timeStamp = doc.data().TimeStampMS;
-		let testCanvasSize = doc.data().TestCanvasSize;
+		// let timeStamp = doc.data().TimeStampMS;
+		// let testCanvasSize = doc.data().TestCanvasSize;
 		
 		let ratio = sizeRef / this.hardCodedCanvasSize;
+		
+		// CHECK: Alpha Needed?
+		// ctxLeft.globalAlpha = 0.5;
+		// ctxRight.globalAlpha = 0.5;
+		ctxLeft.fillStyle = "red";
+		ctxRight.fillStyle = "red";
 		
 		// NOTE: The font size (see below) of 35 is hardcoded in symbols_test.js
 		if (leftResultSymbols) {
 			
-			ctxLeft.fillStyle = "blue";
 			ctxLeft.font = (ratio * 100) + "px Arial";
 			
 			for (let i = 0; i < leftXLocations.length; i++) {
@@ -75,7 +76,6 @@ class SymbolsDAO {
 		// !! TODO: Right canvas has nothing on it when printing to the webpage
 		if (rightResultSymbols) {
 			
-			ctxRight.fillStyle = "orange";
 			ctxRight.font = (ratio * 100) + "px Arial";
 			
 			for (let i = 0; i < leftYLocations.length; i++) {
@@ -86,20 +86,6 @@ class SymbolsDAO {
 				ctxRight.fillText(symbol, xPos, yPos);
 			}
 		}
-		
-		let dateTakenMsg = "Date Taken: " + this.formatDate(timeStamp);
-		let captionTextNode = document.createTextNode(dateTakenMsg);
-		
-		caption.appendChild(captionTextNode);
-		
-		// grid-area: Row#, Column#, Row Span, Column Span
-		leftCanvas.style.gridArea = "1 / 1 / 2 / 2";
-		rightCanvas.style.gridArea = "1 / 2 / 2 / 2";
-		
-		newDivContainer.appendChild(leftCanvas);
-		newDivContainer.appendChild(rightCanvas);
-		
-		parent.appendChild(newDivContainer);
 	}
 	
 	// CHECK: How can I make this more modular for different tables?

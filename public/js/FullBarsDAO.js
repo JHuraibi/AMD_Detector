@@ -11,7 +11,7 @@ class FullBarsDAO {
 		this.userRef = userRef;
 	}
 	
-	drawFullBars(containerID, sizeRef) {
+	drawFullBars(leftCanvasID, rightCanvasID, sizeRef) {
 		if (!userRef) {
 			console.log("[FullBarsDAO: drawFullBars] - User is null");
 			return;
@@ -26,92 +26,64 @@ class FullBarsDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.populateAggregate(containerID, sizeRef, doc);
+					this.populateAggregate(leftCanvasID, rightCanvasID, sizeRef, doc);
 				});
 			});
 	}
 	
 	// TODO: Refactor to make reading easier (perhaps split the two canvases to two functions)
-	populateAggregate(containerID, sizeRef, doc) {
-		let parent = document.getElementById(containerID);
+	populateAggregate(leftCanvasID, rightCanvasID, sizeRef, doc) {
+		let leftCanvas = document.getElementById(leftCanvasID);
+		let rightCanvas = document.getElementById(rightCanvasID);
 		
-		let newDivContainer = document.createElement("div");
-		let leftEyeCanvas = document.createElement("canvas");
-		let rightEyeCanvas = document.createElement("canvas");
-		let caption = document.createElement("p");
-		let ctxLeft = leftEyeCanvas.getContext('2d');
-		let ctxRight = rightEyeCanvas.getContext('2d');
+		let ctxLeft = leftCanvas.getContext('2d');
+		let ctxRight = rightCanvas.getContext('2d');
 		
-		// Prototype 2 edit
-		let leftX = doc.data().LeftXLocations;
-		let leftY = doc.data().LeftYLocations;
-		let rightX = doc.data().RightXLocations;
-		let rightY = doc.data().RightYLocations;
+		let xLocationsLeft = doc.data().LeftXLocations;
+		let yLocationsLeft = doc.data().LeftYLocations;
+		let xLocationsRight = doc.data().RightXLocations;
+		let yLocationsRight = doc.data().RightYLocations;
 		
-		
-		let timeStamp = doc.data().TimeStampMS;
-		let testCanvasSize = doc.data().TestCanvasSize;
-		
-		let barW = 10;
-		// let ratio = sizeRef / testCanvasSize;
 		let ratio = sizeRef / this.hardCodedCanvasSize;
 		
-		ctxLeft.globalAlpha = 0.5;
-		ctxRight.globalAlpha = 0.5;
+		// CHECK: Alpha Needed?
+		let barW = 10;
+		// ctxLeft.globalAlpha = 0.5;
+		// ctxRight.globalAlpha = 0.5;
+		ctxLeft.fillStyle = "red";
+		ctxRight.fillStyle = "red";
 		
-		// Left Eye - X
-		if (leftX) {
-			for (let i = 0; i < leftX.length; i++) {
-				let xPos = leftX[i];
-				ctxLeft.fillStyle = "#460046";
-				ctxLeft.fillRect((xPos * ratio), 0, barW + 10, sizeRef);
+		if (xLocationsLeft) {
+			// Left Eye - X
+			for (let i = 0; i < xLocationsLeft.length; i++) {
+				let x = xLocationsLeft[i] * ratio;
+				ctxLeft.fillRect(x, 0, barW + 10, ctxLeft.canvas.width);
 			}
 		}
 		
-		// Left Eye - Y
-		if (leftY) {
-			for (let i = 0; i < leftY.length; i++) {
-				let yPos = leftY[i];
-				ctxLeft.fillStyle = "#460046";
-				ctxLeft.fillRect(0, (yPos * ratio), ctxLeft.canvas.width, barW);
+		if (yLocationsLeft) {
+			// Left Eye - Y
+			for (let i = 0; i < yLocationsLeft.length; i++) {
+				let y = yLocationsLeft[i] * ratio;
+				ctxLeft.fillRect(0, y, ctxLeft.canvas.width, barW);
 			}
 		}
 		
-		if (rightX) {
+		if (xLocationsRight) {
 			// Right Eye - X
-			for (let i = 0; i < rightX.length; i++) {
-				let xPos = rightX[i];
-				ctxRight.fillStyle = "#b86214";
-				ctxRight.fillRect((xPos * ratio), 0, barW + 10, sizeRef);
+			for (let i = 0; i < xLocationsRight.length; i++) {
+				let x = xLocationsRight[i] * ratio;
+				ctxRight.fillRect(x, 0, barW, ctxRight.canvas.width);
 			}
 		}
 		
-		if (rightY) {
+		if (yLocationsRight) {
 			// Right Eye - Y
-			for (let i = 0; i < rightY.length; i++) {
-				let yPos = rightY[i];
-				ctxRight.fillStyle = "#b86214";
-				ctxRight.fillRect(0, (yPos * ratio), ctxLeft.canvas.width, barW);
+			for (let i = 0; i < yLocationsRight.length; i++) {
+				let y = yLocationsRight[i] * ratio;
+				ctxRight.fillRect(0, y, ctxRight.canvas.width, barW);
 			}
 		}
-		
-		
-		// let dateTakenMsg = "Date Taken: " + this.formatDate(timeStamp);
-		// let captionTextNode = document.createTextNode(dateTakenMsg);
-		//
-		// caption.appendChild(captionTextNode);
-		
-		// grid-area: Row#, Column#, Row Span, Column Span
-		leftEyeCanvas.style.gridArea = "1 / 1 / 2 / 2";
-		rightEyeCanvas.style.gridArea = "1 / 2 / 2 / 2";
-		
-		leftEyeCanvas.setAttribute('class', 'fullBarsCanvasStyle');
-		rightEyeCanvas.setAttribute('class', 'fullBarsCanvasStyle');
-		
-		newDivContainer.appendChild(leftEyeCanvas);
-		newDivContainer.appendChild(rightEyeCanvas);
-		
-		parent.appendChild(newDivContainer);
 	}
 	
 	// CHECK: How can I make this more modular for different tables?

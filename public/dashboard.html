@@ -111,7 +111,8 @@
 				
 				<h4 style="margin-top: 2rem">Aggregate Data</h4>
 				<div style="border: dotted red">
-					<canvas id="aggregateCanvas"></canvas>
+					<canvas id="aggregateCanvasLeft"></canvas>
+					<canvas id="aggregateRightCanvas"></canvas>
 				</div>
 			</main>
 		
@@ -177,9 +178,9 @@
 					// symbolsDAO.populateHistoryTable("historyTable");
 					// fullBarsDAO.populateHistoryTable("historyTable");
 					//
-					growingCirclesDAO.populateAggregate("aggregateCanvas");
-					symbolsDAO.populateAggregate("aggregateCanvas");
-					fullBarsDAO.populateAggregate("aggregateCanvas");
+					growingCirclesDAO.populateAggregate("aggregateCanvasLeft", "aggregateCanvasRight");
+					symbolsDAO.populateAggregate("aggregateCanvasLeft", "aggregateCanvasRight");
+					fullBarsDAO.populateAggregate("aggregateCanvasLeft", "aggregateCanvasRight");
 				}
 			})();
 			
