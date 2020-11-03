@@ -22,6 +22,26 @@ class GrowingCirclesDAO {
 			.doc(userRef.uid)
 			.collection("GrowingCircles")
 			.orderBy("TimeStampMS", "desc")
+			.limit(3)
+			.get()
+			.then((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
+				});
+			});
+	}
+	
+	populateMostRecent(leftCanvasID, rightCanvasID) {
+		if (!userRef) {
+			console.log("[GrowingCirclesDAO: growingCircles] - User is null");
+			return;
+		}
+		
+		this.dbRef
+			.collection("TestResults")
+			.doc(userRef.uid)
+			.collection("GrowingCircles")
+			.orderBy("TimeStampMS", "desc")
 			.limit(1)
 			.get()
 			.then((querySnapshot) => {

@@ -31,6 +31,26 @@ class FullBarsDAO {
 			});
 	}
 	
+	populateMostRecent(leftCanvasID, rightCanvasID, sizeRef) {
+		if (!userRef) {
+			console.log("[FullBarsDAO: drawFullBars] - User is null");
+			return;
+		}
+		
+		this.dbRef
+			.collection("TestResults")
+			.doc(userRef.uid)
+			.collection("FullBars")
+			.orderBy("TimeStampMS", "desc")
+			.limit(1)
+			.get()
+			.then((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					this.drawToCanvas(leftCanvasID, rightCanvasID, sizeRef, doc);
+				});
+			});
+	}
+	
 	// TODO: Refactor to make reading easier (perhaps split the two canvases to two functions)
 	drawToCanvas(leftCanvasID, rightCanvasID, sizeRef, doc) {
 		let leftCanvas = document.getElementById(leftCanvasID);
@@ -75,7 +95,6 @@ class FullBarsDAO {
 				let bl = cornerR;
 				let br = cornerR;
 				
-				// ctxLeft.fillRect(x, 0, barW + 10, ctxLeft.canvas.width);
 				// Draw shape as rectangle with rounded corners
 				ctxLeft.beginPath();
 				ctxLeft.moveTo(x + tl, y);
@@ -94,7 +113,6 @@ class FullBarsDAO {
 			for (let i = 0; i < yLocationsLeft.length; i++) {
 				let y = yLocationsLeft[i] * ratio;
 				let x = 0;
-				// ctxLeft.fillRect(0, y, ctxLeft.canvas.width, barW);
 				let w = ctxRight.canvas.width;
 				let h = barW;
 				let tl = cornerR;
@@ -102,7 +120,6 @@ class FullBarsDAO {
 				let bl = cornerR;
 				let br = cornerR;
 				
-				// ctxLeft.fillRect(x, 0, barW + 10, ctxLeft.canvas.width);
 				// Draw shape as rectangle with rounded corners
 				ctxLeft.beginPath();
 				ctxLeft.moveTo(x + tl, y);
@@ -128,8 +145,6 @@ class FullBarsDAO {
 				let bl = cornerR;
 				let br = cornerR;
 				
-				// ctxRight.fillRect(x, 0, barW, ctxRight.canvas.width);
-				// ctxLeft.fillRect(x, 0, barW + 10, ctxLeft.canvas.width);
 				// Draw shape as rectangle with rounded corners
 				ctxRight.beginPath();
 				ctxRight.moveTo(x + tl, y);
@@ -155,8 +170,6 @@ class FullBarsDAO {
 				let bl = cornerR;
 				let br = cornerR;
 				
-				// ctxRight.fillRect(0, y, ctxRight.canvas.width, barW);
-				// ctxLeft.fillRect(x, 0, barW + 10, ctxLeft.canvas.width);
 				// Draw shape as rectangle with rounded corners
 				ctxRight.beginPath();
 				ctxRight.moveTo(x + tl, y);

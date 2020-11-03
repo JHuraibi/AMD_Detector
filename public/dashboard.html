@@ -112,7 +112,7 @@
 						</tr>
 						</thead>
 						<tbody>
-							<!-- Table is Populated by the DAO objects -->
+						<!-- Table is Populated by the DAO objects -->
 						</tbody>
 					</table>
 				</div>
@@ -178,22 +178,36 @@
 					console.log("User Lookup Timed Out");
 				}
 				else if (userRef) {
+					// CHECK: These next 3 methods needed?
 					// growingCirclesDAO.updateUserReference(userRef);
 					// symbolsDAO.updateUserReference(userRef);
 					// fullBarsDAO.updateUserReference(userRef);
-					//
+					
 					// growingCirclesDAO.populateHistoryTable("historyTable");
 					// symbolsDAO.populateHistoryTable("historyTable");
 					// fullBarsDAO.populateHistoryTable("historyTable");
-					//
-					setCanvasGradient();
-					// growingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
-					symbolsDAO.populateAggregate("canvasLeft", "canvasRight");
-					// fullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
+					
+					// setCanvasGradient();
+					// aggregate();
+					mostRecent();
 				}
 			})();
 			
-			function setCanvasGradient(){
+			// Draws the last THREE results to the canvases
+			function aggregate() {
+				growingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
+				symbolsDAO.populateAggregate("canvasLeft", "canvasRight");
+				fullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
+			}
+			
+			// Draws SINGLE most recent results to the canvases
+			function mostRecent() {
+				growingCirclesDAO.populateMostRecent("canvasLeft", "canvasRight");
+				symbolsDAO.populateMostRecent("canvasLeft", "canvasRight");
+				fullBarsDAO.populateMostRecent("canvasLeft", "canvasRight");
+			}
+			
+			function setCanvasGradient() {
 				let canvasLeft = document.getElementById("canvasLeft");
 				let canvasRight = document.getElementById("canvasRight");
 				let ctxLeft = canvasLeft.getContext("2d");
@@ -211,7 +225,7 @@
 				let grdRight = ctxRight.createRadialGradient(centerX, centerY, 50, centerX, centerY, outerRadius);
 				grdRight.addColorStop(0, "#7e1111");
 				grdRight.addColorStop(1, "#ffffff");
-
+				
 				// Fill with gradient
 				ctxLeft.fillStyle = grdLeft;
 				ctxRight.fillStyle = grdLeft;

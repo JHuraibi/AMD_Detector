@@ -17,7 +17,6 @@ class SymbolsDAO {
 			return;
 		}
 		
-		// Update limit() to just 1
 		this.dbRef
 			.collection("TestResults")
 			.doc(userRef.uid)
@@ -31,6 +30,29 @@ class SymbolsDAO {
 				});
 			});
 	}
+	
+	populateMostRecent(leftCanvasID, rightCanvasID, sizeRef) {
+		if (!userRef) {
+			console.log("[FullBarsDAO: drawFullBars] - User is null");
+			return;
+		}
+		
+		// Update limit() to just 1
+		this.dbRef
+			.collection("TestResults")
+			.doc(userRef.uid)
+			.collection("Symbols")
+			.orderBy("TimeStampMS", "desc")
+			.limit(1)
+			.get()
+			.then((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					this.drawToCanvas(leftCanvasID, rightCanvasID, sizeRef, doc);
+				});
+			});
+	}
+	
+	
 	
 	// !! TODO: Error handling (especially getting values from Firebase)
 	// !! TODO: Refactor to make reading easier
@@ -66,17 +88,14 @@ class SymbolsDAO {
 		// CHECK: Using leftCanvas width sufficient?
 		let ratio = leftCanvas.width / this.hardCodedCanvasSize;
 		
-		// NOTE: The font size (see below) of 35 is hardcoded in symbols_test.js
+		// NOTE: Font size was hardcoded at 35 in symbols_test.js. So: rectangle with w = 35 and h = 35
 		if (leftResultSymbols) {
-			
-			ctxLeft.font = (ratio * 100) + "px Arial";
-			
 			for (let i = 0; i < leftXLocations.length; i++) {
 				let x = leftXLocations[i] * ratio;
 				let y = leftYLocations[i] * ratio;
 				
-				let w = 100;
-				let h = 100;
+				let w = 35;
+				let h = 35;
 				let tl = 5;
 				let tr = 5;
 				let bl = 5;
@@ -97,14 +116,11 @@ class SymbolsDAO {
 		
 		// !! TODO: Right canvas has nothing on it when printing to the webpage
 		if (rightResultSymbols) {
-			
-			ctxRight.font = (ratio * 100) + "px Arial";
-			
 			for (let i = 0; i < leftYLocations.length; i++) {
 				let x = rightXLocations[i] * ratio;
 				let y = rightYLocations[i] * ratio;
-				let w = 100;
-				let h = 100;
+				let w = 35;
+				let h = 35;
 				let tl = 5;
 				let tr = 5;
 				let bl = 5;
