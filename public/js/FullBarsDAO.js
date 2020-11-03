@@ -58,13 +58,7 @@ class FullBarsDAO {
 		
 		// CHECK: Using leftCanvas width sufficient?
 		let ratio = leftCanvas.width / this.hardCodedCanvasSize;
-		
-		// CHECK: Alpha Needed?
 		let barW = 10;
-		// ctxLeft.globalAlpha = 0.5;
-		// ctxRight.globalAlpha = 0.5;
-		ctxLeft.fillStyle = "red";
-		ctxRight.fillStyle = "red";
 		
 		if (xLocationsLeft) {
 			// Left Eye - X

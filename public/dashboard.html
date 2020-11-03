@@ -186,11 +186,35 @@
 					// symbolsDAO.populateHistoryTable("historyTable");
 					// fullBarsDAO.populateHistoryTable("historyTable");
 					//
+					setCanvasGradient();
 					growingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
 					symbolsDAO.populateAggregate("canvasLeft", "canvasRight");
 					fullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
 				}
 			})();
+			
+			function setCanvasGradient(){
+				let canvasLeft = document.getElementById("canvasLeft");
+				let canvasRight = document.getElementById("canvasRight");
+				let ctxLeft = canvasLeft.getContext("2d");
+				let ctxRight = canvasRight.getContext("2d");
+				
+				let centerX = canvasLeft.width / 2;
+				let centerY = canvasLeft.height / 2;
+				let outerRadius = canvasLeft.height
+				// Create gradient
+				let grdLeft = ctxLeft.createRadialGradient(centerX, centerY, 50, centerX, centerY, outerRadius);
+				grdLeft.addColorStop(0, "#7e1111");
+				grdLeft.addColorStop(1, "#ffffff");
+				
+				let grdRight = ctxRight.createRadialGradient(centerX, centerY, 50, centerX, centerY, outerRadius);
+				grdRight.addColorStop(0, "#7e1111");
+				grdRight.addColorStop(1, "#ffffff");
+
+				// Fill with gradient
+				ctxLeft.fillStyle = grdLeft;
+				ctxRight.fillStyle = grdLeft;
+			}
 			
 			// function manualSizeUpdate() {
 			// 	let templateDiv = document.getElementById("sizeRef");

@@ -64,12 +64,6 @@ class GrowingCirclesDAO {
 		// console.log("HARD CODED: " + this.hardCodedCanvasSize);
 		// console.log("RATIO: " + ratio);
 		
-		// CHECK: Alpha Needed?
-		// ctxLeft.globalAlpha = 0.5;
-		// ctxRight.globalAlpha = 0.5;
-		ctxLeft.fillStyle = "red";
-		ctxRight.fillStyle = "red";
-		
 		for (let i = 0; i < xLocationsLeft.length; i++) {
 			let x = xLocationsLeft[i] * ratio;
 			let y = yLocationsLeft[i] * ratio;
