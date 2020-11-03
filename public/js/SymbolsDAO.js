@@ -11,7 +11,7 @@ class SymbolsDAO {
 		this.userRef = userRef;
 	}
 	
-	drawSymbols(leftCanvasID, rightCanvasID, sizeRef) {
+	populateAggregate(leftCanvasID, rightCanvasID, sizeRef) {
 		if (!userRef) {
 			console.log("[FullBarsDAO: drawFullBars] - User is null");
 			return;
@@ -27,14 +27,14 @@ class SymbolsDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.populateAggregate(leftCanvasID, rightCanvasID, sizeRef, doc);
+					this.drawToCanvas(leftCanvasID, rightCanvasID, sizeRef, doc);
 				});
 			});
 	}
 	
 	// !! TODO: Error handling (especially getting values from Firebase)
 	// !! TODO: Refactor to make reading easier
-	populateAggregate(leftCanvasID, rightCanvasID, sizeRef, doc) {
+	drawToCanvas(leftCanvasID, rightCanvasID, sizeRef, doc) {
 		let leftCanvas = document.getElementById(leftCanvasID);
 		let rightCanvas = document.getElementById(rightCanvasID);
 		
@@ -63,7 +63,8 @@ class SymbolsDAO {
 		// let timeStamp = doc.data().TimeStampMS;
 		// let testCanvasSize = doc.data().TestCanvasSize;
 		
-		let ratio = sizeRef / this.hardCodedCanvasSize;
+		// CHECK: Using leftCanvas width sufficient?
+		let ratio = leftCanvas.style.width / this.hardCodedCanvasSize;
 		
 		// CHECK: Alpha Needed?
 		// ctxLeft.globalAlpha = 0.5;

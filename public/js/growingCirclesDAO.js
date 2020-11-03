@@ -11,7 +11,7 @@ class GrowingCirclesDAO {
 		this.userRef = userRef;
 	}
 	
-	drawGrowingCircles(leftCanvasID, rightCanvasID, sizeRef) {
+	populateAggregate(leftCanvasID, rightCanvasID) {
 		if (!userRef) {
 			console.log("[GrowingCirclesDAO: growingCircles] - User is null");
 			return;
@@ -22,17 +22,17 @@ class GrowingCirclesDAO {
 			.doc(userRef.uid)
 			.collection("GrowingCircles")
 			.orderBy("TimeStampMS", "desc")
-			.limit(3)
+			.limit(1)
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.populateAggregate(leftCanvasID, rightCanvasID, sizeRef, doc);
+					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
 				});
 			});
 	}
 	
 	// !! TODO: Refactor to make reading easier
-	populateAggregate(leftCanvasID, rightCanvasID, sizeRef, doc) {
+	drawToCanvas(leftCanvasID, rightCanvasID, doc) {
 		let leftCanvas = document.getElementById(leftCanvasID);
 		let rightCanvas = document.getElementById(rightCanvasID);
 		
@@ -58,7 +58,8 @@ class GrowingCirclesDAO {
 		let yLocationsRight = doc.data().YLocationsRight;
 		let zLocationsRight = doc.data().ZLocationsRight;
 		
-		let ratio = sizeRef / this.hardCodedCanvasSize;
+		// CHECK: Using leftCanvas width sufficient?
+		let ratio = leftCanvas.style.width / this.hardCodedCanvasSize;
 		
 		// CHECK: Alpha Needed?
 		// ctxLeft.globalAlpha = 0.5;

@@ -11,7 +11,7 @@ class FullBarsDAO {
 		this.userRef = userRef;
 	}
 	
-	drawFullBars(leftCanvasID, rightCanvasID, sizeRef) {
+	populateAggregate(leftCanvasID, rightCanvasID, sizeRef) {
 		if (!userRef) {
 			console.log("[FullBarsDAO: drawFullBars] - User is null");
 			return;
@@ -26,13 +26,13 @@ class FullBarsDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.populateAggregate(leftCanvasID, rightCanvasID, sizeRef, doc);
+					this.drawToCanvas(leftCanvasID, rightCanvasID, sizeRef, doc);
 				});
 			});
 	}
 	
 	// TODO: Refactor to make reading easier (perhaps split the two canvases to two functions)
-	populateAggregate(leftCanvasID, rightCanvasID, sizeRef, doc) {
+	drawToCanvas(leftCanvasID, rightCanvasID, sizeRef, doc) {
 		let leftCanvas = document.getElementById(leftCanvasID);
 		let rightCanvas = document.getElementById(rightCanvasID);
 		
@@ -56,7 +56,8 @@ class FullBarsDAO {
 		let xLocationsRight = doc.data().RightXLocations;
 		let yLocationsRight = doc.data().RightYLocations;
 		
-		let ratio = sizeRef / this.hardCodedCanvasSize;
+		// CHECK: Using leftCanvas width sufficient?
+		let ratio = leftCanvas.style.width / this.hardCodedCanvasSize;
 		
 		// CHECK: Alpha Needed?
 		let barW = 10;
