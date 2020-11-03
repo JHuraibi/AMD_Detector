@@ -36,6 +36,18 @@ class GrowingCirclesDAO {
 		let leftCanvas = document.getElementById(leftCanvasID);
 		let rightCanvas = document.getElementById(rightCanvasID);
 		
+		if (!leftCanvas || !rightCanvas){
+			if (!leftCanvas){
+				console.log("LEFT Canvas - null");
+			}
+			
+			if (!rightCanvas){
+				console.log("RIGHT Canvas - null");
+			}
+			
+			return;
+		}
+		
 		let ctxLeft = leftCanvas.getContext('2d');
 		let ctxRight = rightCanvas.getContext('2d');
 		
