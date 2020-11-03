@@ -187,9 +187,9 @@
 					// fullBarsDAO.populateHistoryTable("historyTable");
 					//
 					setCanvasGradient();
-					growingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
+					// growingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
 					symbolsDAO.populateAggregate("canvasLeft", "canvasRight");
-					fullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
+					// fullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
 				}
 			})();
 			
@@ -204,8 +204,9 @@
 				let outerRadius = canvasLeft.height
 				// Create gradient
 				let grdLeft = ctxLeft.createRadialGradient(centerX, centerY, 50, centerX, centerY, outerRadius);
-				grdLeft.addColorStop(0, "#7e1111");
-				grdLeft.addColorStop(1, "#ffffff");
+				grdLeft.addColorStop(0, "#7e1111ff");
+				grdLeft.addColorStop(0, "#7e11117e");
+				// grdLeft.addColorStop(1, "#ffffff");
 				
 				let grdRight = ctxRight.createRadialGradient(centerX, centerY, 50, centerX, centerY, outerRadius);
 				grdRight.addColorStop(0, "#7e1111");

@@ -73,10 +73,10 @@ class SymbolsDAO {
 			
 			for (let i = 0; i < leftXLocations.length; i++) {
 				let symbol = leftResultSymbols[i];
-				let xPos = leftXLocations[i] * ratio;
-				let yPos = leftYLocations[i] * ratio;
-				
-				ctxLeft.fillText(symbol, xPos, yPos);
+				let x = leftXLocations[i] * ratio;
+				let y = leftYLocations[i] * ratio;
+				ctxLeft.fillRect(x - 50, y - 50, 100, 100);
+				// ctxLeft.fillText(symbol, x, y);
 			}
 		}
 		
@@ -87,10 +87,11 @@ class SymbolsDAO {
 			
 			for (let i = 0; i < leftYLocations.length; i++) {
 				let symbol = rightResultSymbols[i];
-				let xPos = rightXLocations[i] * ratio;
-				let yPos = rightYLocations[i] * ratio;
+				let x = rightXLocations[i] * ratio;
+				let y = rightYLocations[i] * ratio;
 				
-				ctxRight.fillText(symbol, xPos, yPos);
+				ctxRight.fillRect(x - 50, y - 50, 100, 100);
+				// ctxRight.fillText(symbol, x, y);
 			}
 		}
 	}
