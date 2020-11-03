@@ -2,6 +2,9 @@ class SymbolsDAO {
 	constructor(dbRef) {
 		this.dbRef = dbRef;
 		this.userRef = null;
+		
+		// !! TODO: This value to be dynamically set
+		this.hardCodedCanvasSize = 600;
 	}
 	
 	updateUserReference(userRef) {
@@ -23,14 +26,14 @@ class SymbolsDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.populateCanvas(containerID, sizeRef, doc);
+					this.populateAggregate(containerID, sizeRef, doc);
 				});
 			});
 	}
 	
 	// !! TODO: Error handling (especially getting values from Firebase)
 	// !! TODO: Refactor to make reading easier
-	populateCanvas(containerID, sizeRef, doc) {
+	populateAggregate(containerID, sizeRef, doc) {
 		let parent = document.getElementById(containerID);
 		
 		let newDivContainer = document.createElement("div");
@@ -52,7 +55,7 @@ class SymbolsDAO {
 		let timeStamp = doc.data().TimeStampMS;
 		let testCanvasSize = doc.data().TestCanvasSize;
 		
-		let ratio = sizeRef / 1000;
+		let ratio = sizeRef / this.hardCodedCanvasSize;
 		
 		// NOTE: The font size (see below) of 35 is hardcoded in symbols_test.js
 		if (leftResultSymbols) {

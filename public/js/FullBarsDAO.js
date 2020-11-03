@@ -2,6 +2,9 @@ class FullBarsDAO {
 	constructor(dbRef) {
 		this.dbRef = dbRef;
 		this.userRef = null;
+		
+		// !! TODO: This value to be dynamically set
+		this.hardCodedCanvasSize = 800;
 	}
 	
 	updateUserReference(userRef) {
@@ -23,13 +26,13 @@ class FullBarsDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.populateCanvas(containerID, sizeRef, doc);
+					this.populateAggregate(containerID, sizeRef, doc);
 				});
 			});
 	}
 	
 	// TODO: Refactor to make reading easier (perhaps split the two canvases to two functions)
-	populateCanvas(containerID, sizeRef, doc) {
+	populateAggregate(containerID, sizeRef, doc) {
 		let parent = document.getElementById(containerID);
 		
 		let newDivContainer = document.createElement("div");
@@ -50,7 +53,8 @@ class FullBarsDAO {
 		let testCanvasSize = doc.data().TestCanvasSize;
 		
 		let barW = 10;
-		let ratio = sizeRef / testCanvasSize;
+		// let ratio = sizeRef / testCanvasSize;
+		let ratio = sizeRef / this.hardCodedCanvasSize;
 		
 		ctxLeft.globalAlpha = 0.5;
 		ctxRight.globalAlpha = 0.5;

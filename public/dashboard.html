@@ -111,6 +111,7 @@
 				
 				<h4 style="margin-top: 2rem">Aggregate Data</h4>
 				<div style="border: dotted red">
+					<canvas id="aggregateCanvas"></canvas>
 				</div>
 			</main>
 		
@@ -148,6 +149,7 @@
 		
 		<script>
 			// TODO: Docstrings and comments
+			// TODO: Convert to non-object scripts
 			var growingCirclesDAO = new GrowingCirclesDAO(dbRef);
 			var symbolsDAO = new SymbolsDAO(dbRef);
 			var fullBarsDAO = new FullBarsDAO(dbRef);
@@ -174,6 +176,10 @@
 					// growingCirclesDAO.populateHistoryTable("historyTable");
 					// symbolsDAO.populateHistoryTable("historyTable");
 					// fullBarsDAO.populateHistoryTable("historyTable");
+					//
+					growingCirclesDAO.populateAggregate("aggregateCanvas");
+					symbolsDAO.populateAggregate("aggregateCanvas");
+					fullBarsDAO.populateAggregate("aggregateCanvas");
 				}
 			})();
 			

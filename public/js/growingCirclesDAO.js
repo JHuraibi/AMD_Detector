@@ -2,6 +2,9 @@ class GrowingCirclesDAO {
     constructor(dbRef) {
         this.dbRef = dbRef;
         this.userRef = null;
+	
+		// !! TODO: This value to be dynamically set
+		this.hardCodedCanvasSize = 700;
     }
 
     updateUserReference(userRef) {
@@ -23,13 +26,13 @@ class GrowingCirclesDAO {
             .get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
-                    this.populateCanvas(containerID, sizeRef, doc);
+                    this.populateAggregate(containerID, sizeRef, doc);
                 });
             });
     }
 
     // !! TODO: Refactor to make reading easier
-    populateCanvas(containerID, sizeRef, doc) {
+	populateAggregate(containerID, sizeRef, doc) {
         let parent = document.getElementById(containerID);
 
         let newDivContainer = document.createElement("div");
@@ -41,15 +44,17 @@ class GrowingCirclesDAO {
         let zLocations = doc.data().ZLocationsLeft;
         let timeStamp = doc.data().TimeStampMS;
         //let testCanvasSize = doc.data().TestCanvasSize;
-        let testCanvasSize = sizeRef;
 
-        let ratio = sizeRef / testCanvasSize;
+        // let ratio = sizeRef / testCanvasSize;
+		let ratio = sizeRef / this.hardCodedCanvasSize;
         let ctx = newCanvas.getContext('2d');
         console.log(newCanvas.width + "This is the new canvas width");
         ctx.globalAlpha = 0.5;
-        console.log("Original: " + testCanvasSize);
+        
+        // console.log("Original: " + testCanvasSize);
         console.log("Ref: " + sizeRef);
         console.log("Ratio: " + ratio);
+        
         ctx.fillStyle = "black";
         ctx.beginPath();
         ctx.arc(((350 * 207.22) / 700), ((350 * 207.22) / 700), 2, 0, Math.PI * 2, false);
