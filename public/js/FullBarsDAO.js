@@ -36,12 +36,12 @@ class FullBarsDAO {
 		let leftCanvas = document.getElementById(leftCanvasID);
 		let rightCanvas = document.getElementById(rightCanvasID);
 		
-		if (!leftCanvas || !rightCanvas){
-			if (!leftCanvas){
+		if (!leftCanvas || !rightCanvas) {
+			if (!leftCanvas) {
 				console.log("LEFT Canvas - null");
 			}
 			
-			if (!rightCanvas){
+			if (!rightCanvas) {
 				console.log("RIGHT Canvas - null");
 			}
 			
@@ -58,13 +58,34 @@ class FullBarsDAO {
 		
 		// CHECK: Using leftCanvas width sufficient?
 		let ratio = leftCanvas.width / this.hardCodedCanvasSize;
-		let barW = 10;
+		let barW = 20;
+		
+		// !! MAXIMUM radius is half the bar's thickness. Hence the (barW / 2) THEN additional "/ 1.5"
+		let cornerR = (barW / 2) / 1.5;
 		
 		if (xLocationsLeft) {
 			// Left Eye - X
 			for (let i = 0; i < xLocationsLeft.length; i++) {
 				let x = xLocationsLeft[i] * ratio;
-				ctxLeft.fillRect(x, 0, barW + 10, ctxLeft.canvas.width);
+				let y = 0;
+				let w = barW;
+				let h = ctxLeft.canvas.width;
+				let tl = cornerR;
+				let tr = cornerR;
+				let bl = cornerR;
+				let br = cornerR;
+				
+				// ctxLeft.fillRect(x, 0, barW + 10, ctxLeft.canvas.width);
+				// Draw shape as rectangle with rounded corners
+				ctxLeft.beginPath();
+				ctxLeft.moveTo(x + tl, y);
+				ctxLeft.arcTo(x + w, y, x + w, y + h, tr);
+				ctxLeft.arcTo(x + w, y + h, x, y + h, br);
+				ctxLeft.arcTo(x, y + h, x, y, bl);
+				ctxLeft.arcTo(x, y, x + w, y, tl);
+				ctxLeft.closePath();
+				
+				ctxLeft.fill();
 			}
 		}
 		
@@ -72,7 +93,26 @@ class FullBarsDAO {
 			// Left Eye - Y
 			for (let i = 0; i < yLocationsLeft.length; i++) {
 				let y = yLocationsLeft[i] * ratio;
-				ctxLeft.fillRect(0, y, ctxLeft.canvas.width, barW);
+				let x = 0;
+				// ctxLeft.fillRect(0, y, ctxLeft.canvas.width, barW);
+				let w = ctxRight.canvas.width;
+				let h = barW;
+				let tl = cornerR;
+				let tr = cornerR;
+				let bl = cornerR;
+				let br = cornerR;
+				
+				// ctxLeft.fillRect(x, 0, barW + 10, ctxLeft.canvas.width);
+				// Draw shape as rectangle with rounded corners
+				ctxLeft.beginPath();
+				ctxLeft.moveTo(x + tl, y);
+				ctxLeft.arcTo(x + w, y, x + w, y + h, tr);
+				ctxLeft.arcTo(x + w, y + h, x, y + h, br);
+				ctxLeft.arcTo(x, y + h, x, y, bl);
+				ctxLeft.arcTo(x, y, x + w, y, tl);
+				ctxLeft.closePath();
+				
+				ctxLeft.fill();
 			}
 		}
 		
@@ -80,7 +120,26 @@ class FullBarsDAO {
 			// Right Eye - X
 			for (let i = 0; i < xLocationsRight.length; i++) {
 				let x = xLocationsRight[i] * ratio;
-				ctxRight.fillRect(x, 0, barW, ctxRight.canvas.width);
+				let y = 0;
+				let w = barW;
+				let h = ctxLeft.canvas.width;
+				let tl = cornerR;
+				let tr = cornerR;
+				let bl = cornerR;
+				let br = cornerR;
+				
+				// ctxRight.fillRect(x, 0, barW, ctxRight.canvas.width);
+				// ctxLeft.fillRect(x, 0, barW + 10, ctxLeft.canvas.width);
+				// Draw shape as rectangle with rounded corners
+				ctxRight.beginPath();
+				ctxRight.moveTo(x + tl, y);
+				ctxRight.arcTo(x + w, y, x + w, y + h, tr);
+				ctxRight.arcTo(x + w, y + h, x, y + h, br);
+				ctxRight.arcTo(x, y + h, x, y, bl);
+				ctxRight.arcTo(x, y, x + w, y, tl);
+				ctxRight.closePath();
+				
+				ctxRight.fill();
 			}
 		}
 		
@@ -88,7 +147,26 @@ class FullBarsDAO {
 			// Right Eye - Y
 			for (let i = 0; i < yLocationsRight.length; i++) {
 				let y = yLocationsRight[i] * ratio;
-				ctxRight.fillRect(0, y, ctxRight.canvas.width, barW);
+				let x = 0;
+				let w = ctxRight.canvas.width;
+				let h = barW;
+				let tl = cornerR;
+				let tr = cornerR;
+				let bl = cornerR;
+				let br = cornerR;
+				
+				// ctxRight.fillRect(0, y, ctxRight.canvas.width, barW);
+				// ctxLeft.fillRect(x, 0, barW + 10, ctxLeft.canvas.width);
+				// Draw shape as rectangle with rounded corners
+				ctxRight.beginPath();
+				ctxRight.moveTo(x + tl, y);
+				ctxRight.arcTo(x + w, y, x + w, y + h, tr);
+				ctxRight.arcTo(x + w, y + h, x, y + h, br);
+				ctxRight.arcTo(x, y + h, x, y, bl);
+				ctxRight.arcTo(x, y, x + w, y, tl);
+				ctxRight.closePath();
+				
+				ctxRight.fill();
 			}
 		}
 	}

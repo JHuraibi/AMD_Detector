@@ -72,11 +72,26 @@ class SymbolsDAO {
 			ctxLeft.font = (ratio * 100) + "px Arial";
 			
 			for (let i = 0; i < leftXLocations.length; i++) {
-				let symbol = leftResultSymbols[i];
 				let x = leftXLocations[i] * ratio;
 				let y = leftYLocations[i] * ratio;
-				ctxLeft.fillRect(x - 50, y - 50, 100, 100);
-				// ctxLeft.fillText(symbol, x, y);
+				
+				let w = 100;
+				let h = 100;
+				let tl = 5;
+				let tr = 5;
+				let bl = 5;
+				let br = 5;
+				
+				// Draw shape as rectangle with rounded corners
+				ctxLeft.beginPath();
+				ctxLeft.moveTo(x + tl, y);
+				ctxLeft.arcTo(x + w, y, x + w, y + h, tr);
+				ctxLeft.arcTo(x + w, y + h, x, y + h, br);
+				ctxLeft.arcTo(x, y + h, x, y, bl);
+				ctxLeft.arcTo(x, y, x + w, y, tl);
+				ctxLeft.closePath();
+				
+				ctxLeft.fill();
 			}
 		}
 		
@@ -86,12 +101,25 @@ class SymbolsDAO {
 			ctxRight.font = (ratio * 100) + "px Arial";
 			
 			for (let i = 0; i < leftYLocations.length; i++) {
-				let symbol = rightResultSymbols[i];
 				let x = rightXLocations[i] * ratio;
 				let y = rightYLocations[i] * ratio;
+				let w = 100;
+				let h = 100;
+				let tl = 5;
+				let tr = 5;
+				let bl = 5;
+				let br = 5;
 				
-				ctxRight.fillRect(x - 50, y - 50, 100, 100);
-				// ctxRight.fillText(symbol, x, y);
+				// Draw shape as rectangle with rounded corners
+				ctxRight.beginPath();
+				ctxRight.moveTo(x + tl, y);
+				ctxRight.arcTo(x + w, y, x + w, y + h, tr);
+				ctxRight.arcTo(x + w, y + h, x, y + h, br);
+				ctxRight.arcTo(x, y + h, x, y, bl);
+				ctxRight.arcTo(x, y, x + w, y, tl);
+				ctxRight.closePath();
+				
+				ctxRight.fill();
 			}
 		}
 	}
