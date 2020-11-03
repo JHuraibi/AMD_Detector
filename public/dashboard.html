@@ -78,9 +78,9 @@
 			</div>
 			
 			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-				<div
-						class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+				<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 					<h1 class="h2">My Progress</h1>
+					<!-- Additional Links -->
 					<!-- <div class="btn-toolbar mb-2 mb-md-0">-->
 					<!-- 	<div class="btn-group mr-2">-->
 					<!-- 		<button type="button" class="btn btn-sm btn-outline-secondary">Share</button>-->
@@ -93,7 +93,7 @@
 					<!-- </div>-->
 				</div>
 				
-				<h2 style="margin-top: 2rem">History</h2>
+				<h4 style="margin-top: 2rem">History</h4>
 				<div class="table-responsive">
 					<table class="table table-striped table-sm" id="historyTable">
 						<thead>
@@ -104,9 +104,13 @@
 						</tr>
 						</thead>
 						<tbody>
-						<!-- Table is Populated by file: "FirebaseDAO.js" -->
+							<!-- Table is Populated by the DAO objects -->
 						</tbody>
 					</table>
+				</div>
+				
+				<h4 style="margin-top: 2rem">Aggregate Data</h4>
+				<div style="border: dotted red">
 				</div>
 			</main>
 		
@@ -126,7 +130,8 @@
 		<script src="/__/firebase/init.js"></script>
 		<script src="./auth.js"></script>
 		
-		<script src="./js/growingCirclesDAO.js"></script>
+		<!-- DAO JavaScripts -->
+		<script src="./js/GrowingCirclesDAO.js"></script>
 		<script src="./js/SymbolsDAO.js"></script>
 		<script src="./js/FullBarsDAO.js"></script>
 		
@@ -162,13 +167,13 @@
 					console.log("User Lookup Timed Out");
 				}
 				else if (userRef) {
-					growingCirclesDAO.updateUserReference(userRef);
-					symbolsDAO.updateUserReference(userRef);
-					fullBarsDAO.updateUserReference(userRef);
-					
-					growingCirclesDAO.populateHistoryTable("historyTable");
-					symbolsDAO.populateHistoryTable("historyTable");
-					fullBarsDAO.populateHistoryTable("historyTable");
+					// growingCirclesDAO.updateUserReference(userRef);
+					// symbolsDAO.updateUserReference(userRef);
+					// fullBarsDAO.updateUserReference(userRef);
+					//
+					// growingCirclesDAO.populateHistoryTable("historyTable");
+					// symbolsDAO.populateHistoryTable("historyTable");
+					// fullBarsDAO.populateHistoryTable("historyTable");
 				}
 			})();
 			
