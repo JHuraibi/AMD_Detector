@@ -117,6 +117,8 @@
 					</table>
 				</div>
 				
+				<!-- IDEA: Can I make a mouseover event on a list of dates to show/hide for that date? (-J) -->
+				<!-- IDEA: Add optional settings/buttons to select what data to show -->
 				<h4 style="margin-top: 2rem">Aggregate Data</h4>
 				<div style="border: dotted red">
 					<canvas id="canvasLeft" width="400" height="400"></canvas>
@@ -187,21 +189,22 @@
 					// symbolsDAO.populateHistoryTable("historyTable");
 					// fullBarsDAO.populateHistoryTable("historyTable");
 					
-					// setCanvasGradient();
-					// aggregate();
-					mostRecent();
+					aggregate();
+					// mostRecent();
 				}
 			})();
 			
-			// Draws the last THREE results to the canvases
+			// Draws the last THREE results of each test to the canvases
 			function aggregate() {
+				// TODO: Show a legend for the different opacities/colors and their meanings
 				growingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
 				symbolsDAO.populateAggregate("canvasLeft", "canvasRight");
 				fullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
 			}
 			
-			// Draws SINGLE most recent results to the canvases
+			// Draws SINGLE most recent result of each test to the canvases
 			function mostRecent() {
+				// setCanvasGradient();
 				growingCirclesDAO.populateMostRecent("canvasLeft", "canvasRight");
 				symbolsDAO.populateMostRecent("canvasLeft", "canvasRight");
 				fullBarsDAO.populateMostRecent("canvasLeft", "canvasRight");

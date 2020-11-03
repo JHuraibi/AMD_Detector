@@ -5,17 +5,28 @@ class SymbolsDAO {
 		
 		// !! TODO: This value to be dynamically set
 		this.hardCodedCanvasSize = 600;
+		this.useAlpha = false;
+		
+		// These values are equal to 20, 45, and 95% opacity levels respectively
+		// Max alpha in hex is FF or 255 in decimal
+		// e.g. [Hex F3 == Dec 243]
+		// 			(243 / 255) -> 95%
+		//			(F3 / FF)   -> 95%
+		this.alphaLevels = ["33", "73", "F3"];
+		this.aIndex = 0;
 	}
 	
 	updateUserReference(userRef) {
 		this.userRef = userRef;
 	}
 	
-	populateAggregate(leftCanvasID, rightCanvasID, sizeRef) {
+	populateAggregate(leftCanvasID, rightCanvasID) {
 		if (!userRef) {
 			console.log("[FullBarsDAO: drawFullBars] - User is null");
 			return;
 		}
+		this.useAlpha = true;
+		this.aIndex = 0;
 		
 		this.dbRef
 			.collection("TestResults")
@@ -26,12 +37,17 @@ class SymbolsDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.drawToCanvas(leftCanvasID, rightCanvasID, sizeRef, doc);
+					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
 				});
+			})
+			.then(() => {
+				// Once DB query and drawing are complete, reset variables specific to populateAggregate()
+				this.useAlpha = false;
+				this.aIndex = 0;
 			});
 	}
 	
-	populateMostRecent(leftCanvasID, rightCanvasID, sizeRef) {
+	populateMostRecent(leftCanvasID, rightCanvasID) {
 		if (!userRef) {
 			console.log("[FullBarsDAO: drawFullBars] - User is null");
 			return;
@@ -47,25 +63,23 @@ class SymbolsDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.drawToCanvas(leftCanvasID, rightCanvasID, sizeRef, doc);
+					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
 				});
 			});
 	}
 	
-	
-	
 	// !! TODO: Error handling (especially getting values from Firebase)
 	// !! TODO: Refactor to make reading easier
-	drawToCanvas(leftCanvasID, rightCanvasID, sizeRef, doc) {
+	drawToCanvas(leftCanvasID, rightCanvasID, doc) {
 		let leftCanvas = document.getElementById(leftCanvasID);
 		let rightCanvas = document.getElementById(rightCanvasID);
 		
-		if (!leftCanvas || !rightCanvas){
-			if (!leftCanvas){
+		if (!leftCanvas || !rightCanvas) {
+			if (!leftCanvas) {
 				console.log("LEFT Canvas - null");
 			}
 			
-			if (!rightCanvas){
+			if (!rightCanvas) {
 				console.log("RIGHT Canvas - null");
 			}
 			
@@ -75,7 +89,6 @@ class SymbolsDAO {
 		let ctxLeft = leftCanvas.getContext('2d');
 		let ctxRight = rightCanvas.getContext('2d');
 		
-		// TODO: Error handling for discrepancy between Symbols[] and Locations[] lengths
 		let leftResultSymbols = doc.data().LeftResultsSymbols;
 		let leftXLocations = doc.data().LeftXLocations;
 		let leftYLocations = doc.data().LeftYLocations;
@@ -85,8 +98,15 @@ class SymbolsDAO {
 		// let timeStamp = doc.data().TimeStampMS;
 		// let testCanvasSize = doc.data().TestCanvasSize;
 		
-		// CHECK: Using leftCanvas width sufficient?
+		// CHECK: Using only leftCanvas's width sufficient?
 		let ratio = leftCanvas.width / this.hardCodedCanvasSize;
+		
+		if (this.useAlpha) {
+			let alpha = this.alphaLevels[this.aIndex];
+			ctxLeft.fillStyle = "#f47171" + alpha;
+			ctxRight.fillStyle = "#f47171" + alpha;
+			this.aIndex++;
+		}
 		
 		// NOTE: Font size was hardcoded at 35 in symbols_test.js. So: rectangle with w = 35 and h = 35
 		if (leftResultSymbols) {
@@ -213,7 +233,7 @@ class SymbolsDAO {
 		let minutesString = date.getUTCMinutes();
 		let postfix = hoursString > 11 ? "PM" : "AM";
 		
-		if (hoursString === 0){
+		if (hoursString === 0) {
 			hoursString = 12;
 		}
 		

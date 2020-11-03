@@ -5,17 +5,28 @@ class FullBarsDAO {
 		
 		// !! TODO: This value to be dynamically set
 		this.hardCodedCanvasSize = 800;
+		this.useAlpha = false;
+		
+		// These values are equal to 20, 45, and 95% opacity levels respectively
+		// Max alpha in hex is FF or 255 in decimal
+		// e.g. [Hex F3 == Dec 243]
+		// 			(243 / 255) -> 95%
+		//			(F3 / FF)   -> 95%
+		this.alphaLevels = ["33", "73", "F3"];
+		this.aIndex = 0;
 	}
 	
 	updateUserReference(userRef) {
 		this.userRef = userRef;
 	}
 	
-	populateAggregate(leftCanvasID, rightCanvasID, sizeRef) {
+	populateAggregate(leftCanvasID, rightCanvasID) {
 		if (!userRef) {
 			console.log("[FullBarsDAO: drawFullBars] - User is null");
 			return;
 		}
+		this.useAlpha = true;
+		this.aIndex = 0;
 		
 		this.dbRef
 			.collection("TestResults")
@@ -26,12 +37,17 @@ class FullBarsDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.drawToCanvas(leftCanvasID, rightCanvasID, sizeRef, doc);
+					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
 				});
+			})
+			.then(() => {
+				// Once DB query and drawing are complete, reset variables specific to populateAggregate()
+				this.useAlpha = false;
+				this.aIndex = 0;
 			});
 	}
 	
-	populateMostRecent(leftCanvasID, rightCanvasID, sizeRef) {
+	populateMostRecent(leftCanvasID, rightCanvasID) {
 		if (!userRef) {
 			console.log("[FullBarsDAO: drawFullBars] - User is null");
 			return;
@@ -46,13 +62,13 @@ class FullBarsDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.drawToCanvas(leftCanvasID, rightCanvasID, sizeRef, doc);
+					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
 				});
 			});
 	}
 	
 	// TODO: Refactor to make reading easier (perhaps split the two canvases to two functions)
-	drawToCanvas(leftCanvasID, rightCanvasID, sizeRef, doc) {
+	drawToCanvas(leftCanvasID, rightCanvasID, doc) {
 		let leftCanvas = document.getElementById(leftCanvasID);
 		let rightCanvas = document.getElementById(rightCanvasID);
 		
@@ -79,9 +95,15 @@ class FullBarsDAO {
 		// CHECK: Using leftCanvas width sufficient?
 		let ratio = leftCanvas.width / this.hardCodedCanvasSize;
 		let barW = 20;
-		
 		// !! MAXIMUM radius is half the bar's thickness. Hence the (barW / 2) THEN additional "/ 1.5"
 		let cornerR = (barW / 2) / 1.5;
+		
+		if (this.useAlpha) {
+			let alpha = this.alphaLevels[this.aIndex];
+			ctxLeft.fillStyle = "#f47171" + alpha;
+			ctxRight.fillStyle = "#f47171" + alpha;
+			this.aIndex++;
+		}
 		
 		if (xLocationsLeft) {
 			// Left Eye - X

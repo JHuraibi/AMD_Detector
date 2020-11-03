@@ -5,6 +5,15 @@ class GrowingCirclesDAO {
 		
 		// !! TODO: This value to be dynamically set
 		this.hardCodedCanvasSize = 700;
+		this.useAlpha = false;
+		
+		// These values are equal to 20, 45, and 90% opacity levels respectively
+		// Max alpha in hex is FF or 255 in decimal
+		// e.g. [Hex F3 == Dec 243]
+		// 			(243 / 255) -> 95%
+		//			(F3 / FF)   -> 95%
+		this.alphaLevels = ["33", "73", "F3"];
+		this.aIndex = 0;
 	}
 	
 	updateUserReference(userRef) {
@@ -16,6 +25,8 @@ class GrowingCirclesDAO {
 			console.log("[GrowingCirclesDAO: growingCircles] - User is null");
 			return;
 		}
+		this.useAlpha = true;
+		this.aIndex = 0;
 		
 		this.dbRef
 			.collection("TestResults")
@@ -28,6 +39,11 @@ class GrowingCirclesDAO {
 				querySnapshot.forEach((doc) => {
 					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
 				});
+			})
+			.then(() => {
+				// Once DB query and drawing are complete, reset variables specific to populateAggregate()
+				this.useAlpha = false;
+				this.aIndex = 0;
 			});
 	}
 	
@@ -56,12 +72,12 @@ class GrowingCirclesDAO {
 		let leftCanvas = document.getElementById(leftCanvasID);
 		let rightCanvas = document.getElementById(rightCanvasID);
 		
-		if (!leftCanvas || !rightCanvas){
-			if (!leftCanvas){
+		if (!leftCanvas || !rightCanvas) {
+			if (!leftCanvas) {
 				console.log("LEFT Canvas - null");
 			}
 			
-			if (!rightCanvas){
+			if (!rightCanvas) {
 				console.log("RIGHT Canvas - null");
 			}
 			
@@ -83,6 +99,13 @@ class GrowingCirclesDAO {
 		// console.log("CANVAS SIZE: " + leftCanvas);
 		// console.log("HARD CODED: " + this.hardCodedCanvasSize);
 		// console.log("RATIO: " + ratio);
+		
+		if (this.useAlpha) {
+			let alpha = this.alphaLevels[this.aIndex];
+			ctxLeft.fillStyle = "#f47171" + alpha;
+			ctxRight.fillStyle = "#f47171" + alpha;
+			this.aIndex++;
+		}
 		
 		for (let i = 0; i < xLocationsLeft.length; i++) {
 			let x = xLocationsLeft[i] * ratio;
