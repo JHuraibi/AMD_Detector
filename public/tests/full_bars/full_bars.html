@@ -69,6 +69,7 @@
 			</main>
 			
 			<div>
+				
 				<script>
 					function hideLeftEyeBtn() {
 						document.getElementById("leftEyeInstruct").style.display = "none";
@@ -81,18 +82,24 @@
 				
 				<!-- These buttons will only become visible once the user has finished the test -->
 				<div class="btn-group" id="exitTestBtns" style="display: none">
-					<button type="button" onClick="sendToFirestore();showStatusIndicator();"
+					<button type="button" id="uploadBtn" onClick="sendToFirestore();showStatusIndicator();updateButtons()"
 							class="btn btn-sm btn-outline-secondary">
 						Upload Results
 					</button>
-					<button type="button" onClick="location.href='../../home.html'"
+					<button type="button" id="exitBtn" onClick="window.location.replace('../../home.html')"
 							class="btn btn-sm btn-outline-secondary">
 						Exit without Upload
 					</button>
+					<button type="button" onClick="window.location.replace('./full_bars_questions.html')"
+							class="btn btn-sm btn-outline-secondary">
+						Continue to Questions
+					</button>
+					<!-- TODO: Change to popup button (like leftEyeInstruct) -->
 					<p id="uploadStatus" style="display: none">
-						<br>Uploading Your Results...
+						<br> Uploading Your Results...
 					</p>
 				</div>
+				
 			</div>
 			
 			<footer class="mastfoot mt-auto">
@@ -114,7 +121,6 @@
 		<!-- Initialize Firebase -->
 		<script src="/__/firebase/init.js"></script>
 		<script src="../../auth.js"></script>
-		
 		
 		<script>
 			let dbRef = firebase.firestore();
@@ -146,10 +152,6 @@
 						.add(dataToWrite)
 						.then(() => {
 							uploadSuccess();
-							setTimeout(() => {
-								// Use replace() to disallow back button to come back to this page
-								window.location.replace("../../home.html");
-							}, 1000);
 						});
 				}
 			}
@@ -174,6 +176,16 @@
 				// TODO: Better error message and format
 				let uploadStatusIndicator = document.getElementById('uploadStatus');
 				uploadStatusIndicator.textContent = "Upload failed. Please Try Again Later.";
+			}
+		</script>
+		
+		<script>
+			function updateButtons() {
+				let uploadBtn = document.getElementById("uploadBtn");
+				let exitBtn = document.getElementById("exitBtn");
+				
+				uploadBtn.style.display = "none";
+				exitBtn.innerText = "Skip Questions";
 			}
 		</script>
 		
