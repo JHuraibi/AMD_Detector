@@ -46,22 +46,22 @@
 			<main role="main">
 				<script src="./p5.js"></script>
 				<script src="full_bars.js"></script>
-				<div class="instruct" id="leftEye">
+				<div class="instruct" id="leftEyeInstruct">
 					<p>
 						Cover your right eye, and with your left eye focus on the black dot in the center.
 						Click to Start Left Eye Test
 					</p>
-					<button id="firstEyeBtn" class="btn btn-sm btn-outline-secondary"
+					<button class="btn btn-sm btn-outline-secondary"
 							onclick="hideLeftEyeBtn(); startTest();">
 						Start Left Eye
 					</button>
 				</div>
-				<div class="instruct" id="nextEye" style="display: none">
+				<div class="instruct" id="rightEyeInstruct" style="display: none">
 					<p>
 						Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
 						Click to Start Right Eye Test.
 					</p>
-					<button id="nexttestbtn" class="btn btn-sm btn-outline-secondary"
+					<button class="btn btn-sm btn-outline-secondary"
 							onclick="hideRightEyeBtn(); startTest();">
 						Start Right Eye
 					</button>
@@ -71,11 +71,11 @@
 			<div>
 				<script>
 					function hideLeftEyeBtn() {
-						document.getElementById("leftEye").style.display = "none";
+						document.getElementById("leftEyeInstruct").style.display = "none";
 					}
 					
 					function hideRightEyeBtn() {
-						document.getElementById("nextEye").style.display = "none";
+						document.getElementById("rightEyeInstruct").style.display = "none";
 					}
 				</script>
 				
