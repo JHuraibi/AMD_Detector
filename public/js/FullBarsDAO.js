@@ -94,7 +94,7 @@ class FullBarsDAO {
 		
 		// CHECK: Using leftCanvas width sufficient?
 		let ratio = leftCanvas.width / this.hardCodedCanvasSize;
-		let barW = 20;
+		let barW = 10;
 		// !! MAXIMUM radius is half the bar's thickness. Hence the (barW / 2) THEN additional "/ 1.5"
 		let cornerR = (barW / 2) / 1.5;
 		
