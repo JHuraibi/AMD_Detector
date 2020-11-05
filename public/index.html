@@ -1,17 +1,36 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Vision Monitor</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
-	<link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
+  <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
+  <style>
+    .logo{
+      height: 125px;
+      text-align: center;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    body{
+    height: 100%;
+    width: 100%;
+    overflow: scroll;
+}
+  </style>
 </head>
 
-<body>
+<body style="overflow: scroll;">
 
-  <div class="auth open">
+  <div class="logo" style="background-color: white;">
+    <img src="images/index.png" alt="logo" class="logo" />
+  </div>
+
+  <div class="auth open" style="margin-bottom: 5px;">
     <div class="modal active">
       <h2>Login</h2>
       <form class="login">
@@ -42,16 +61,19 @@
           <input type="radio" id="female" name="gender" value="female">
         </div>
         <div>
-          <p>Disclaimer: Be advised no test should replace any facility based test. These test are simply a tool to help individuals track any vision impairments</p>
+          <p>Disclaimer: Be advised no test should replace any facility based test. These test are simply a tool to help
+            individuals track any vision impairments</p>
         </div>
         <button id="reg">Register</button>
         <p class="error"></p>
       </form>
       <div>Got an account? <a class="switch">Login instead</a></div>
       <div>New physician account? <a href="./physicians/physicians.html">Physician Registration</a></div>
+      <br>
     </div>
   </div>
-<br><br><br>
+
+
   <!-- The core Firebase JS SDK is always required and must be listed first -->
 
   <script src="/__/firebase/7.21.0/firebase-app.js"></script>
@@ -66,7 +88,7 @@
   <script>
     const auth = firebase.auth();
     const db = firebase.firestore();
-	console.log("[DEBUG] - From index.html");
+    console.log("[DEBUG] - From index.html");
   </script>
 
   <script src="auth.js"></script>

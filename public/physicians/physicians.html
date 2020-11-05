@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Vision Monitor</title>
     <link rel="icon" type="image/png" href="../images/favicon-32x32.png" sizes="32x32" />
-	<link rel="icon" type="image/png" href="../images/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="../images/favicon-16x16.png" sizes="16x16" />
     <link rel="stylesheet" href="../css/styles.css">
     <style>
         .register {
             width: 100%;
-            position: fixed;
             background: #fafafa;
             display: block;
             z-index: 1;
@@ -24,9 +23,10 @@
             box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
             left: 50%;
+            overflow: scroll;
         }
 
-        .com{
+        .com {
             width: 400px;
             padding: 30px;
             margin: 100px auto;
@@ -41,11 +41,22 @@
             text-decoration: underline;
             cursor: pointer;
         }
+
+        .logo {
+            height: 125px;
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
     </style>
 
 </head>
 
 <body>
+
+    <div class="logo" style="background-color: white;">
+        <img src="../images/index.png" alt="logo" class="logo" />
+    </div>
 
     <div style="display: block;">
         <div class="register">
