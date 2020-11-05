@@ -2,39 +2,43 @@
 // TODO: Add pause or confirmation before switching eyes
 // TODO: When drawing the results at the end, the first Left Y is black
 
-let timestamp;					// Will record the time the test was started (in milliseconds since Epoch)
-let canvasSize = 0;				// Will record the size of the canvas the test was taken at
-let backgroundColor = 220;		// Greyscale color for canvas background (0:Black, 255:White)
-let barFillAlpha = 0;			// Will control the bars' alpha
-let opacityIncrease = 15;		// How much to incrementally increase bar opacity
-let clickFillAlpha = 0;			// Will control the click indicator's alpha
+let timestamp;						// Will record the time the test was started (in milliseconds since Epoch)
+let backgroundColor = 220;			// Greyscale color for canvas background (0:Black, 255:White)
+let barFillAlpha = 0;				// Will control the bars' alpha
+let opacityIncrease = 15;			// How much to incrementally increase bar opacity
+let clickFillAlpha = 0;				// Will control the click indicator's alpha
 
-let timer = 0;					// Frame counter
-let sec = 2;					// Seconds between showing each bar
-let indicatorStartTime = 0;		// Will track the current timer value when a click is registered
-let indicatorDuration = 65;		// How many frames to show the indicator (60 frames is 1 second)
+let timer = 0;						// Frame counter
+let sec = 2;						// Seconds between showing each bar
+let indicatorStartTime = 0;			// Will track the current timer value when a click is registered
+let indicatorDuration = 65;			// How many frames to show the indicator (60 frames is 1 second)
 
-let posQueue = [];				// Holds the randomly-shuffled locations to draw the bars
-let currentPos = 0;				// X or Y coordinate value to draw the next bar at
-let currentAxis = 0;			// X or Y axis to draw the next bar on
+let posQueue = [];					// Holds the randomly-shuffled locations to draw the bars
+let currentPos = 0;					// X or Y coordinate value to draw the next bar at
+let currentAxis = 0;				// X or Y axis to draw the next bar on
 
-let xLocationLeft = [];			// LEFT EYE: Clicked X locations
-let yLocationLeft = [];			// LEFT EYE: Clicked Y locations
-let xLocationRight = [];		// RIGHT EYE: Clicked X locations
-let yLocationRight = [];		// RIGHT EYE: Clicked Y locations
+let xLocationLeft = [];				// LEFT EYE: X locations at the time of a click event
+let yLocationLeft = [];				// LEFT EYE: Y locations at the time of a click event
+let xLocationRight = [];			// RIGHT EYE: X locations at the time of a click event
+let yLocationRight = [];			// RIGHT EYE: Y locations at the time of a click event
 
-let numBars = 6;				// !! numBars HAS TO BE A MULTIPLE OF 2
-let barsCounter = 0;			// Used to determine when half bars are drawn (thus switch bar axis)
+let numBars = 40;					// How many bars to draw
+let barW;							// How thick each bar will be (is a function of numbers of bars vs canvas size)
+let canvasSize = 800;				// Size of width and height of the canvas (in pixels)
 
-let clickUsedThisRound = false;
+let clickUsedThisRound = false;		// Disables click if one was already received for current bar being shown
+let verticalInProgress = true;		// Indicates whether bars are currently being drawn vertically or horizontally
+let leftEyeTestInProgress = true;	// Indicates if bars are currently being drawn vertically or horizontally
 
-let leftEyeTestInProgress = true;
-let transition = false;
-let testFinished = false;
-let waitingToStart = true;
+let waitingToStart = true;			// Status indicator: Waiting for user to click "Start (X) Eye" button
+let testFinished = false;			// Status indicator: Waiting for user to click "Start (X) Eye" button
 
-let canvasRef;
+let canvasRef;						// Reference object to the DOM canvas element
 
+/**
+ * Note: This function runs after user clicks button on instructions page.
+ * 	Upon page loading, setup() and draw() both run once.
+ */
 function startTest() {
 	canvasRef.show();
 	waitingToStart = false;
@@ -47,16 +51,23 @@ function startTest() {
  * 	and records current time.
  */
 function setup() {
+	// canvasRef = createCanvas(canvasSize, canvasSize);
+	noLoop();
 	canvasRef = createCanvas(800, 800);
 	canvasRef.id('canvasRef');
+	timestamp = Date.now();
+	
+	barW = canvasSize / numBars;
+	currentAxis = 'x';
+	
+	// numBars needs to be a multiple of 2
+	if (numBars % 2 !== 0) {
+		numBars--;
+	}
 	
 	fillPositionQueue();
-	timestamp = Date.now();
-	// !! TODO: This variable needs to be updated when dynamic canvas size is implemented
-	canvasSize = 800;
 	
 	canvasRef.hide();
-	noLoop();
 }
 
 /**
@@ -79,6 +90,10 @@ function setup() {
  * 		- Draw the border around the canvas.
  */
 function draw() {
+	if (waitingToStart) {
+		// Force draw not to execute
+		return;
+	}
 	background(backgroundColor);
 	
 	if (testFinished) {
@@ -86,7 +101,6 @@ function draw() {
 		showRightResults();
 		showExitButton();
 		noLoop();
-		console.log("TEST DONE");
 	}
 	
 	if (timer % (60 * sec) === 0) {
@@ -94,14 +108,12 @@ function draw() {
 	}
 	
 	drawBar();
-	timer++;
-	
-	
 	drawCenterDot();
 	drawClickIndicator();
 	drawStaticBorder();
+	
+	timer++;
 }
-
 
 /**
  * Records the location of the currently-shown bar whenever a click is registered.
@@ -162,7 +174,7 @@ function mousePressed() {
  */
 function fillPositionQueue() {
 	// TODO: Don't draw bars at edges of canvas?
-	var interval = (width / numBars);
+	let interval = (canvasSize / numBars);
 	
 	for (let i = 0; i < numBars; i++) {
 		posQueue[i] = interval * i;
@@ -204,7 +216,7 @@ function drawBar() {
 		return;
 	}
 	
-	let barW = (width / 50);
+	// let barW = (width / 50);
 	
 	fill(0);
 	noStroke();
@@ -227,67 +239,86 @@ function drawBar() {
  * Fires off the events that occur every n-seconds of the test (n set by "sec" variable)
  */
 function updateAll() {
-	setNextBarAxis();
 	loadNextBarPos();
 	clickUsedThisRound = false;
 	barFillAlpha = 0;
-	barsCounter++;
 }
 
-/**
- * Pops off the next coordinate from posQueue[]. This is where the next bar will be drawn.
- * If leftEyeTestInProgress is TRUE and posQueue is EMPTY:
- * 		- Refills queue with new values.
- * 		- Sets leftEyeTestInProgress to false.
- * 		- Resets barsCounter
- * If leftEyeTestInProgress is FALSE and posQueue is EMPTY:
- * 		Sets gameFinished boolean flag to true.
- * 		Exit the function.
- * Otherwise:
- * 		Set currentPos to where the next bar should be drawn (rounded to nearest whole).
- */
 function loadNextBarPos() {
-	if (!posQueue.length && leftEyeTestInProgress) {
-		fillPositionQueue();
-		transitionToNextEye();
-	}
-	else if (!posQueue.length && !leftEyeTestInProgress) {
-		testFinished = true;
-		return;
+	if (!posQueue.length) {
+		updateBarStatus();
 	}
 	
-	currentPos = Math.round(posQueue.pop());
+	if (!testFinished) {
+		currentPos = Math.round(posQueue.pop());
+	}
 }
 
+// CHECK: Consider alternative if/else replacement:
+//			toggleVerticalHorizontal() {vertical = !vertical; horizontal = !horizontal;}
+//				if (leftEye && vertical) {toggle(); switchAxis();}
+//				if (leftEye && !vertical) {toggle(); transition();}
+//				if (rightEye && vertical) {toggle(); switchAxis();}
+//				if (rightEye && !vertical) {toggle(); endTest();}
 /**
- * First half of bars will be drawn vertically (X-Axis).
- * Second half of bars will be drawn horizontally (Y-Axis).
+ * Handles events to run when the position queue becomes empty.
+ * [1] Left Eye
+ * 		- [A] Vertical Bars are done. Move on to horizontal bars.
+ * 		- [B] Horizontal bars are done. Move to right eye.
+ * [2] Right Eye
+ * 		- [A] Vertical Bars are done. Move on to horizontal bars.
+ * 		- [B] Horizontal bars are done. Test is done.
  */
-function setNextBarAxis() {
-	let midPoint = numBars / 2;
-	
-	if (barsCounter > midPoint) {
-		currentAxis = 'x';
+function updateBarStatus() {
+	// [1]
+	if (leftEyeTestInProgress) {
+		// [1A]
+		if (verticalInProgress) {
+			fillPositionQueue();
+			switchAxis();
+		}
+		// [1B]
+		else {
+			fillPositionQueue();
+			switchAxis();
+			transitionToNextEye();
+		}
+	}
+	// [2]
+	else {
+		// [2A]
+		if (verticalInProgress) {
+			fillPositionQueue();
+			switchAxis();
+		}
+		// [2B]
+		else {
+			testFinished = true;
+		}
+	}
+}
+
+function switchAxis() {
+	if (currentAxis === 'x') {
+		currentAxis = 'y';
+		verticalInProgress = false;
 	}
 	else {
-		currentAxis = 'y';
+		currentAxis = 'x';
+		verticalInProgress = true;
 	}
 }
 
+// TODO: Refactor to more intuitive method name (maybe reset()?)
 function transitionToNextEye() {
 	leftEyeTestInProgress = false;
 	waitingToStart = true;
 	
 	indicatorStartTime = 0;
-	barsCounter = 0;
 	// timer = 0;
 	noLoop();
 	canvasRef.hide();
-	
-	document.getElementById("nextEye").style.display = "block";
-	
-	//start the next test
-	// nexteye.style.display = "block";
+	document.getElementById("rightEyeInstruct").style.display = "block";
 }
 
 /**
@@ -381,8 +412,6 @@ function showLeftResults() {
 		noStroke();
 		fill(255, 194, 114, 50);
 		rect(x, 0, barW, height);
-		
-		console.log("X LOC LEFT: " + x);
 	}
 	
 	for (let i = 0; i < numClickedY; i++) {
@@ -390,8 +419,6 @@ function showLeftResults() {
 		noStroke();
 		fill(255, 194, 114, 50);
 		rect(0, y, width, barW);
-		
-		console.log("Y LOC LEFT: " + y);
 	}
 }
 
@@ -409,8 +436,6 @@ function showRightResults() {
 		noStroke();
 		fill(133, 114, 255, 50);
 		rect(x, 0, barW, height);
-		
-		console.log("X LOC RIGHT: " + x);
 	}
 	
 	for (let i = 0; i < numClickedY; i++) {
@@ -418,8 +443,6 @@ function showRightResults() {
 		noStroke();
 		fill(133, 114, 255, 50);
 		rect(0, y, width, barW);
-		
-		console.log("Y LOC RIGHT: " + y);
 	}
 }
 
@@ -455,10 +478,6 @@ function showExitButton() {
  * Formats the relevant results data into a JSON.
  */
 function getFullBarsResults() {
-	// console.log("Left-XLocations" + xLocationLeft);
-	// console.log("Left-YLocations" + yLocationLeft);
-	// console.log("Right-XLocations" + xLocationRight);
-	// console.log("Right-YLocations" + yLocationRight);
 	return {
 		"TestName": "full_bars",
 		"TimeStampMS": timestamp,

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<title>Full Bars · Questions</title>
+		
+		<!-- Bootstrap core CSS -->
+		<link href="../../scss/custom.css" rel="stylesheet">
+		<!-- Custom styles for this template -->
+		<link href="../../css/cover.css" rel="stylesheet">
+		
+		<style>
+			.formContainer {
+				width: 80%;
+				margin: auto;
+				/*text-align: center;*/
+			}
+			
+			form > div {
+				padding: 1% 2% 2% 1%;
+				border: solid #000000 2px;
+				background: #58626d;
+			}
+			
+			h4 {
+				text-align: center;
+			}
+			
+			h5 {
+				margin-top: 2em;
+				text-align: center;
+				/*font-size: 40px;*/
+			}
+			
+			p {
+				margin: auto;
+			}
+		</style>
+	</head>
+	
+	<body class="text-center">
+		<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+			<header class="masthead mb-auto">
+				<div class="inner">
+					<h3 class="masthead-brand">Vision Monitor</h3>
+					<nav class="nav nav-masthead justify-content-center">
+						<a class="nav-link active" href="../../home.html">Home</a>
+						<a class="nav-link" href="../../dashboard.html">My Dashboard</a>
+					</nav>
+				</div>
+			</header>
+			
+			<main role="main" class="inner cover" style="">
+				<h5>Full Bars</h5>
+				<h4>Follow Up Questions</h4>
+				<div class="formContainer">
+					<form id="fullBarsQuestions">
+						<div>
+							<p>Which Eye(s) Was Tested</p>
+							<!-- <p>Which eye did you test?</p> -->
+							<!--
+								TODO: These should be read only.
+								TODO: Value should be set automatically by which eyes the user chose to test.
+							-->
+							<input type="radio" id="left" name="whichEyes">
+							<label for="left">Left</label><br>
+							
+							<input type="radio" id="right" name="whichEyes">
+							<label for="right">Right</label><br>
+							
+							<input type="radio" id="both" name="whichEyes">
+							<label for="both">Both</label><br>
+						</div>
+						
+						<div>
+							<p>Question 1</p>
+							<input type="radio" id="emptyID1" name="emptyName1">
+							<label for="emptyID1">Yes</label><br>
+							
+							<input type="radio" id="emptyID2" name="emptyName1">
+							<label for="emptyID2">No</label><br>
+						</div>
+						
+						<div>
+							<p>Question 2</p>
+							<input type="radio" id="emptyID3" name="emptyName2">
+							<label for="emptyID3">Yes</label><br>
+							
+							<input type="radio" id="emptyID4" name="emptyName2">
+							<label for="emptyID4">No</label><br>
+						</div>
+						
+						<div>
+							<label for="concerns">Are there any other details you would like to mention?</label><br>
+							<textarea name="concerns" id="concerns" cols="50" rows="10"></textarea>
+						</div>
+						
+						<div>
+							<input type="submit" value="Submit" id="submit">
+						</div>
+					</form>
+				</div>
+			</main>
+			
+			<footer class="mastfoot mt-auto"></footer>
+			<div class="inner">
+			</div>
+		</div>
+		
+		<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+		<script src="/__/firebase/7.23.0/firebase-app.js"></script>
+		
+		<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+		<script src="/__/firebase/7.23.0/firebase-analytics.js"></script>
+		
+		<!-- Add Firebase products that you want to use -->
+		<script src="/__/firebase/7.23.0/firebase-auth.js"></script>
+		<script src="/__/firebase/7.23.0/firebase-firestore.js"></script>
+		
+		<!-- Initialize Firebase -->
+		<script src="/__/firebase/init.js"></script>
+		<script src="../../auth.js"></script>
+		<script src="full_bars_questions.js"></script>
+		
+		<script>
+			let dbRef = firebase.firestore();
+			let userRef = null;
+			
+			firebase.auth().onAuthStateChanged(user => {
+				console.log("[full_bars_questions.html] - USER LOCATED");
+				console.log(user);
+				userRef = user;
+			});
+		</script>
+		
+		<script>
+			let maxWaitTime = 2000;
+			let waitTime = 200;
+			
+			function attemptUserLookup() {
+				if (!userRef && maxWaitTime > 0) {
+					maxWaitTime -= waitTime;
+					console.log("No User. Reattempting Lookup.");
+					setTimeout(attemptUserLookup, waitTime);
+				}
+				else if (maxWaitTime < 0) {
+					userLookupFailed();
+				}
+			}
+		</script>
+		
+		<script>
+			let formRef = document.getElementById('fullBarsQuestions');
+			
+			formRef.addEventListener('submit', (event) => {
+				event.preventDefault();
+				
+				console.log("FUNCTIONALITY DISABLED");
+				
+				attemptUserLookup();
+				let dataToWrite = formResultsJSON();
+				
+				dbRef.collection("QuestionResponses")
+					.doc(userRef.uid)
+					.collection("FullBars")
+					.add(dataToWrite)
+					.then(() => {
+						//uploadSuccess();
+						setTimeout(() => {
+							window.location.replace("../../home.html");
+						}, 1000);
+					});
+			});
+			
+			function formResultsJSON() {
+				// TODO: Error handling
+				//if (!formRef) {}
+				
+				// TODO: Have full_bars.html retrieve the new test doc ID to attach here
+				let testID = "temp";
+				return {
+					"TestID": testID,
+					"WhichEyes": formRef.whichEyes.value,
+					"Question1": formRef.emptyName1.value,
+					"Question2": formRef.emptyName2.value
+				}
+			}
+		</script>
+	</body>
+
+</html>
