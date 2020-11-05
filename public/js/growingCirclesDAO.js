@@ -1,152 +1,202 @@
-class growingCirclesDAO {
-    constructor(dbRef) {
-        this.dbRef = dbRef;
-        this.userRef = null;
-    }
-
-    updateUserReference(userRef) {
-        this.userRef = userRef;
-    }
-
-    drawGrowingCircles(containerID, sizeRef) {
-        if (!userRef) {
-            console.log("[GrowingCirclesDAO: growingCircles] - User is null");
-            return;
-        }
-
-        this.dbRef
-            .collection("TestResults")
-            .doc(userRef.uid)
-            .collection("GrowingCircles")
-            .orderBy("TimeStampMS", "desc")
-            .limit(3)
-            .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    this.populateCanvas(containerID, sizeRef, doc);
-                });
-            });
-    }
-
-    // !! TODO: Refactor to make reading easier
-    populateCanvas(containerID, sizeRef, doc) {
-        let parent = document.getElementById(containerID);
-
-        let newDivContainer = document.createElement("div");
-        let newCanvas = document.createElement("canvas");
-        let caption = document.createElement("p");
-
-        let xLocations = doc.data().XLocationsLeft;
-        let yLocations = doc.data().YLocationsLeft;
-        let zLocations = doc.data().ZLocationsLeft;
-        let timeStamp = doc.data().TimeStampMS;
-        //let testCanvasSize = doc.data().TestCanvasSize;
-        let testCanvasSize = sizeRef;
-
-        let ratio = sizeRef / testCanvasSize;
-        let ctx = newCanvas.getContext('2d');
-        console.log(newCanvas.width + "This is the new canvas width");
-        ctx.globalAlpha = 0.5;
-        console.log("Original: " + testCanvasSize);
-        console.log("Ref: " + sizeRef);
-        console.log("Ratio: " + ratio);
-        ctx.fillStyle = "black";
-        ctx.beginPath();
-        ctx.arc(((350 * 207.22) / 700), ((350 * 207.22) / 700), 2, 0, Math.PI * 2, false);
-        ctx.fill();
-        ctx.stroke();
-
-
-        for (let i = 0; i < xLocations.length; i++) {
-            let x = (207.22 * xLocations[i]) / 700;
-            let y = (207.22 * yLocations[i]) / 700;
-            let z = (207.22*zLocations[i])/700;
-            ctx.fillStyle = "red";
-            ctx.beginPath();
-            ctx.arc(x, y, z, 0, Math.PI * 2, false);
-            ctx.fill();
-            ctx.stroke();
-            console.log("Point Drawn At: " + x + " " + y + " " + z);
-        }
-
-        let dateTakenMsg = "Date Taken: " + this.formatDate(timeStamp);
-        let captionTextNode = document.createTextNode(dateTakenMsg);
-
-        caption.appendChild(captionTextNode);
-
-        newDivContainer.appendChild(newCanvas);
-        newDivContainer.appendChild(caption);
-
-        parent.appendChild(newDivContainer);
-
-    }
-
-    // CHECK: How can I make this more modular for different tables?
-    populateGrowingCirclesTable(targetTableID) {
-        if (!userRef) {
-            console.log("[GrowingCirclesDAO: populateGrowingCirclesTable] - User is null");
-            return;
-        }
-
-        this.dbRef
-            .collection("TestResults")
-            .doc(userRef.uid)
-            .collection("GrowingCircles")
-            .orderBy("TimeStampMS", "desc")
-            .limit(3)
-            .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    let timeStamp = doc.data().TimeStampMS;
-                    this.addRowToTableGC(timeStamp, targetTableID);
-
-                    // console.log("TimeStamp: " + timeStamp);
-                });
-            });
-    }
-
-    // TODO: Refactor variable names below to be more readable
-    addRowToTableGC(timeStamp, targetTableID) {
-        let testName = "Growing Circles";
-        let time = this.formatDate(timeStamp);
-        let urlOfTest = "../tests/instructions_page.html?growing_circles";
-
-        // ID of which table to put the data into (HTML Attribute ID)
-        let tableBody = document.getElementById(targetTableID);
-
-        // Table Row
-        let row = document.createElement("tr");
-
-        // Table Columns
-        let columnTestName = document.createElement("td");
-        let columnTime = document.createElement("td");
-        let columnURL = document.createElement("td");
-
-        // Will be a child of columnURL so we can add hyperlink
-        let linkForURL = document.createElement("a");
-
-        // Text to be put in the Columns
-        let textTestName = document.createTextNode(testName);
-        let textTime = document.createTextNode(time);
-        let textURL = document.createTextNode("Take this Test");
-
-        // Set href attribute for link to test
-        linkForURL.appendChild(textURL);
-        linkForURL.setAttribute("href", urlOfTest);
-
-        // Put the Text into their respective Columns
-        columnTestName.appendChild(textTestName);
-        columnTime.appendChild(textTime);
-        columnURL.appendChild(linkForURL);
-
-        // Add each the Columns to the Row
-        row.appendChild(columnTestName);
-        row.appendChild(columnTime);
-        row.appendChild(columnURL);
-
-        // Add the Row to the Table
-        tableBody.appendChild(row);
-    }
+class GrowingCirclesDAO {
+	constructor(dbRef) {
+		this.dbRef = dbRef;
+		this.userRef = null;
+		
+		// !! TODO: This value to be dynamically set
+		this.hardCodedCanvasSize = 700;
+		this.useAlpha = false;
+		
+		// These values are equal to 20, 45, and 90% opacity levels respectively
+		// Max alpha in hex is FF or 255 in decimal
+		// e.g. [Hex F3 == Dec 243]
+		// 			(243 / 255) -> 95%
+		//			(F3 / FF)   -> 95%
+		this.alphaLevels = ["33", "73", "F3"];
+		this.aIndex = 0;
+	}
+	
+	updateUserReference(userRef) {
+		this.userRef = userRef;
+	}
+	
+	populateAggregate(leftCanvasID, rightCanvasID) {
+		if (!userRef) {
+			console.log("[GrowingCirclesDAO: growingCircles] - User is null");
+			return;
+		}
+		this.useAlpha = true;
+		this.aIndex = 0;
+		
+		this.dbRef
+			.collection("TestResults")
+			.doc(userRef.uid)
+			.collection("GrowingCircles")
+			.orderBy("TimeStampMS", "desc")
+			.limit(3)
+			.get()
+			.then((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
+				});
+			})
+			.then(() => {
+				// Once DB query and drawing are complete, reset variables specific to populateAggregate()
+				this.useAlpha = false;
+				this.aIndex = 0;
+			});
+	}
+	
+	populateMostRecent(leftCanvasID, rightCanvasID) {
+		if (!userRef) {
+			console.log("[GrowingCirclesDAO: growingCircles] - User is null");
+			return;
+		}
+		
+		this.dbRef
+			.collection("TestResults")
+			.doc(userRef.uid)
+			.collection("GrowingCircles")
+			.orderBy("TimeStampMS", "desc")
+			.limit(1)
+			.get()
+			.then((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
+				});
+			});
+	}
+	
+	// !! TODO: Refactor to make reading easier
+	drawToCanvas(leftCanvasID, rightCanvasID, doc) {
+		let leftCanvas = document.getElementById(leftCanvasID);
+		let rightCanvas = document.getElementById(rightCanvasID);
+		
+		if (!leftCanvas || !rightCanvas) {
+			if (!leftCanvas) {
+				console.log("LEFT Canvas - null");
+			}
+			
+			if (!rightCanvas) {
+				console.log("RIGHT Canvas - null");
+			}
+			
+			return;
+		}
+		
+		let ctxLeft = leftCanvas.getContext('2d');
+		let ctxRight = rightCanvas.getContext('2d');
+		
+		let xLocationsLeft = doc.data().XLocationsLeft;
+		let yLocationsLeft = doc.data().YLocationsLeft;
+		let zLocationsLeft = doc.data().ZLocationsLeft;
+		let xLocationsRight = doc.data().XLocationsRight;
+		let yLocationsRight = doc.data().YLocationsRight;
+		let zLocationsRight = doc.data().ZLocationsRight;
+		
+		// CHECK: Using leftCanvas width sufficient?
+		let ratio = leftCanvas.width / this.hardCodedCanvasSize;
+		// console.log("CANVAS SIZE: " + leftCanvas);
+		// console.log("HARD CODED: " + this.hardCodedCanvasSize);
+		// console.log("RATIO: " + ratio);
+		
+		if (this.useAlpha) {
+			let alpha = this.alphaLevels[this.aIndex];
+			ctxLeft.fillStyle = "#f47171" + alpha;
+			ctxRight.fillStyle = "#f47171" + alpha;
+			this.aIndex++;
+		}
+		
+		for (let i = 0; i < xLocationsLeft.length; i++) {
+			let x = xLocationsLeft[i] * ratio;
+			let y = yLocationsLeft[i] * ratio;
+			let z = zLocationsLeft[i] * ratio;
+			
+			ctxLeft.beginPath();
+			ctxLeft.arc(x, y, z, 0, Math.PI * 2);
+			ctxLeft.fill();
+			
+			// console.log("LEFT Circle Location: " + x + ", " + y + ", " + z);
+		}
+		
+		for (let i = 0; i < xLocationsRight.length; i++) {
+			let x = xLocationsRight[i] * ratio;
+			let y = yLocationsRight[i] * ratio;
+			let z = zLocationsRight[i] * ratio;
+			
+			ctxRight.beginPath();
+			ctxRight.arc(x, y, z, 0, Math.PI * 2);
+			ctxRight.fill();
+			
+			// console.log("RIGHT Circle Location: " + x + ", " + y + ", " + z);
+		}
+	}
+	
+	populateHistoryTable(targetTableID) {
+		if (!userRef) {
+			console.log("[GrowingCirclesDAO: populateGrowingCirclesTable] - User is null");
+			return;
+		}
+		
+		this.dbRef
+			.collection("TestResults")
+			.doc(userRef.uid)
+			.collection("GrowingCircles")
+			.orderBy("TimeStampMS", "desc")
+			.limit(3)
+			.get()
+			.then((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					let timeStamp = doc.data().TimeStampMS;
+					this.addRowToTableGC(timeStamp, targetTableID);
+					
+					// console.log("TimeStamp: " + timeStamp);
+				});
+			});
+	}
+	
+	// TODO: Refactor variable names below to be more readable
+	addRowToTableGC(timeStamp, targetTableID) {
+		let testName = "Growing Circles";
+		let time = this.formatDate(timeStamp);
+		let urlOfTest = "../tests/instructions_page.html?growing_circles";
+		
+		// ID of which table to put the data into (HTML Attribute ID)
+		let tableBody = document.getElementById(targetTableID);
+		
+		// Table Row
+		let row = document.createElement("tr");
+		
+		// Table Columns
+		let columnTestName = document.createElement("td");
+		let columnTime = document.createElement("td");
+		let columnURL = document.createElement("td");
+		
+		// Will be a child of columnURL so we can add hyperlink
+		let linkForURL = document.createElement("a");
+		
+		// Text to be put in the Columns
+		let textTestName = document.createTextNode(testName);
+		let textTime = document.createTextNode(time);
+		let textURL = document.createTextNode("Take this Test");
+		
+		// Set href attribute for link to test
+		linkForURL.appendChild(textURL);
+		linkForURL.setAttribute("href", urlOfTest);
+		
+		// Put the Text into their respective Columns
+		columnTestName.appendChild(textTestName);
+		columnTime.appendChild(textTime);
+		columnURL.appendChild(linkForURL);
+		
+		// Add each the Columns to the Row
+		row.appendChild(columnTestName);
+		row.appendChild(columnTime);
+		row.appendChild(columnURL);
+		
+		// Add the Row to the Table
+		tableBody.appendChild(row);
+	}
 	
 	formatDate(milliseconds) {
 		let date = new Date(milliseconds);
@@ -156,7 +206,7 @@ class growingCirclesDAO {
 		let minutesString = date.getUTCMinutes();
 		let postfix = hoursString > 11 ? "PM" : "AM";
 		
-		if (hoursString === 0){
+		if (hoursString === 0) {
 			hoursString = 12;
 		}
 		
@@ -167,5 +217,5 @@ class growingCirclesDAO {
 		// return dateString + " at " + hoursString + ":" + minutesString + postfix;
 		return dateString;
 	}
-
+	
 }// class [ FirebaseDAO ]

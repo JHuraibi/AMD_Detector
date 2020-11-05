@@ -2,17 +2,31 @@ class FullBarsDAO {
 	constructor(dbRef) {
 		this.dbRef = dbRef;
 		this.userRef = null;
+		
+		// !! TODO: This value to be dynamically set
+		this.hardCodedCanvasSize = 800;
+		this.useAlpha = false;
+		
+		// These values are equal to 20, 45, and 95% opacity levels respectively
+		// Max alpha in hex is FF or 255 in decimal
+		// e.g. [Hex F3 == Dec 243]
+		// 			(243 / 255) -> 95%
+		//			(F3 / FF)   -> 95%
+		this.alphaLevels = ["33", "73", "F3"];
+		this.aIndex = 0;
 	}
 	
 	updateUserReference(userRef) {
 		this.userRef = userRef;
 	}
 	
-	drawFullBars(containerID, sizeRef) {
+	populateAggregate(leftCanvasID, rightCanvasID) {
 		if (!userRef) {
 			console.log("[FullBarsDAO: drawFullBars] - User is null");
 			return;
 		}
+		this.useAlpha = true;
+		this.aIndex = 0;
 		
 		this.dbRef
 			.collection("TestResults")
@@ -23,95 +37,177 @@ class FullBarsDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.populateCanvas(containerID, sizeRef, doc);
+					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
+				});
+			})
+			.then(() => {
+				// Once DB query and drawing are complete, reset variables specific to populateAggregate()
+				this.useAlpha = false;
+				this.aIndex = 0;
+			});
+	}
+	
+	populateMostRecent(leftCanvasID, rightCanvasID) {
+		if (!userRef) {
+			console.log("[FullBarsDAO: drawFullBars] - User is null");
+			return;
+		}
+		
+		this.dbRef
+			.collection("TestResults")
+			.doc(userRef.uid)
+			.collection("FullBars")
+			.orderBy("TimeStampMS", "desc")
+			.limit(1)
+			.get()
+			.then((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
 				});
 			});
 	}
 	
 	// TODO: Refactor to make reading easier (perhaps split the two canvases to two functions)
-	populateCanvas(containerID, sizeRef, doc) {
-		let parent = document.getElementById(containerID);
+	drawToCanvas(leftCanvasID, rightCanvasID, doc) {
+		let leftCanvas = document.getElementById(leftCanvasID);
+		let rightCanvas = document.getElementById(rightCanvasID);
 		
-		let newDivContainer = document.createElement("div");
-		let leftEyeCanvas = document.createElement("canvas");
-		let rightEyeCanvas = document.createElement("canvas");
-		let caption = document.createElement("p");
-		let ctxLeft = leftEyeCanvas.getContext('2d');
-		let ctxRight = rightEyeCanvas.getContext('2d');
+		if (!leftCanvas || !rightCanvas) {
+			if (!leftCanvas) {
+				console.log("LEFT Canvas - null");
+			}
+			
+			if (!rightCanvas) {
+				console.log("RIGHT Canvas - null");
+			}
+			
+			return;
+		}
 		
-		// Prototype 2 edit
-		let leftX = doc.data().LeftXLocations;
-		let leftY = doc.data().LeftYLocations;
-		let rightX = doc.data().RightXLocations;
-		let rightY = doc.data().RightYLocations;
+		let ctxLeft = leftCanvas.getContext('2d');
+		let ctxRight = rightCanvas.getContext('2d');
 		
+		let xLocationsLeft = doc.data().LeftXLocations;
+		let yLocationsLeft = doc.data().LeftYLocations;
+		let xLocationsRight = doc.data().RightXLocations;
+		let yLocationsRight = doc.data().RightYLocations;
 		
-		let timeStamp = doc.data().TimeStampMS;
-		let testCanvasSize = doc.data().TestCanvasSize;
-		
+		// CHECK: Using leftCanvas width sufficient?
+		let ratio = leftCanvas.width / this.hardCodedCanvasSize;
 		let barW = 10;
-		let ratio = sizeRef / testCanvasSize;
+		// !! MAXIMUM radius is half the bar's thickness. Hence the (barW / 2) THEN additional "/ 1.5"
+		let cornerR = (barW / 2) / 1.5;
 		
-		ctxLeft.globalAlpha = 0.5;
-		ctxRight.globalAlpha = 0.5;
+		if (this.useAlpha) {
+			let alpha = this.alphaLevels[this.aIndex];
+			ctxLeft.fillStyle = "#f47171" + alpha;
+			ctxRight.fillStyle = "#f47171" + alpha;
+			this.aIndex++;
+		}
 		
-		// Left Eye - X
-		if (leftX) {
-			for (let i = 0; i < leftX.length; i++) {
-				let xPos = leftX[i];
-				ctxLeft.fillStyle = "#460046";
-				ctxLeft.fillRect((xPos * ratio), 0, barW + 10, sizeRef);
+		if (xLocationsLeft) {
+			// Left Eye - X
+			for (let i = 0; i < xLocationsLeft.length; i++) {
+				let x = xLocationsLeft[i] * ratio;
+				let y = 0;
+				let w = barW;
+				let h = ctxLeft.canvas.width;
+				let tl = cornerR;
+				let tr = cornerR;
+				let bl = cornerR;
+				let br = cornerR;
+				
+				// Draw shape as rectangle with rounded corners
+				ctxLeft.beginPath();
+				ctxLeft.moveTo(x + tl, y);
+				ctxLeft.arcTo(x + w, y, x + w, y + h, tr);
+				ctxLeft.arcTo(x + w, y + h, x, y + h, br);
+				ctxLeft.arcTo(x, y + h, x, y, bl);
+				ctxLeft.arcTo(x, y, x + w, y, tl);
+				ctxLeft.closePath();
+				
+				ctxLeft.fill();
 			}
 		}
 		
-		// Left Eye - Y
-		if (leftY) {
-			for (let i = 0; i < leftY.length; i++) {
-				let yPos = leftY[i];
-				ctxLeft.fillStyle = "#460046";
-				ctxLeft.fillRect(0, (yPos * ratio), ctxLeft.canvas.width, barW);
+		if (yLocationsLeft) {
+			// Left Eye - Y
+			for (let i = 0; i < yLocationsLeft.length; i++) {
+				let y = yLocationsLeft[i] * ratio;
+				let x = 0;
+				let w = ctxRight.canvas.width;
+				let h = barW;
+				let tl = cornerR;
+				let tr = cornerR;
+				let bl = cornerR;
+				let br = cornerR;
+				
+				// Draw shape as rectangle with rounded corners
+				ctxLeft.beginPath();
+				ctxLeft.moveTo(x + tl, y);
+				ctxLeft.arcTo(x + w, y, x + w, y + h, tr);
+				ctxLeft.arcTo(x + w, y + h, x, y + h, br);
+				ctxLeft.arcTo(x, y + h, x, y, bl);
+				ctxLeft.arcTo(x, y, x + w, y, tl);
+				ctxLeft.closePath();
+				
+				ctxLeft.fill();
 			}
 		}
 		
-		if (rightX) {
+		if (xLocationsRight) {
 			// Right Eye - X
-			for (let i = 0; i < rightX.length; i++) {
-				let xPos = rightX[i];
-				ctxRight.fillStyle = "#b86214";
-				ctxRight.fillRect((xPos * ratio), 0, barW + 10, sizeRef);
+			for (let i = 0; i < xLocationsRight.length; i++) {
+				let x = xLocationsRight[i] * ratio;
+				let y = 0;
+				let w = barW;
+				let h = ctxLeft.canvas.width;
+				let tl = cornerR;
+				let tr = cornerR;
+				let bl = cornerR;
+				let br = cornerR;
+				
+				// Draw shape as rectangle with rounded corners
+				ctxRight.beginPath();
+				ctxRight.moveTo(x + tl, y);
+				ctxRight.arcTo(x + w, y, x + w, y + h, tr);
+				ctxRight.arcTo(x + w, y + h, x, y + h, br);
+				ctxRight.arcTo(x, y + h, x, y, bl);
+				ctxRight.arcTo(x, y, x + w, y, tl);
+				ctxRight.closePath();
+				
+				ctxRight.fill();
 			}
 		}
 		
-		if (rightY) {
+		if (yLocationsRight) {
 			// Right Eye - Y
-			for (let i = 0; i < rightY.length; i++) {
-				let yPos = rightY[i];
-				ctxRight.fillStyle = "#b86214";
-				ctxRight.fillRect(0, (yPos * ratio), ctxLeft.canvas.width, barW);
+			for (let i = 0; i < yLocationsRight.length; i++) {
+				let y = yLocationsRight[i] * ratio;
+				let x = 0;
+				let w = ctxRight.canvas.width;
+				let h = barW;
+				let tl = cornerR;
+				let tr = cornerR;
+				let bl = cornerR;
+				let br = cornerR;
+				
+				// Draw shape as rectangle with rounded corners
+				ctxRight.beginPath();
+				ctxRight.moveTo(x + tl, y);
+				ctxRight.arcTo(x + w, y, x + w, y + h, tr);
+				ctxRight.arcTo(x + w, y + h, x, y + h, br);
+				ctxRight.arcTo(x, y + h, x, y, bl);
+				ctxRight.arcTo(x, y, x + w, y, tl);
+				ctxRight.closePath();
+				
+				ctxRight.fill();
 			}
 		}
-		
-		
-		// let dateTakenMsg = "Date Taken: " + this.formatDate(timeStamp);
-		// let captionTextNode = document.createTextNode(dateTakenMsg);
-		//
-		// caption.appendChild(captionTextNode);
-		
-		// grid-area: Row#, Column#, Row Span, Column Span
-		leftEyeCanvas.style.gridArea = "1 / 1 / 2 / 2";
-		rightEyeCanvas.style.gridArea = "1 / 2 / 2 / 2";
-		
-		leftEyeCanvas.setAttribute('class', 'fullBarsCanvasStyle');
-		rightEyeCanvas.setAttribute('class', 'fullBarsCanvasStyle');
-		
-		newDivContainer.appendChild(leftEyeCanvas);
-		newDivContainer.appendChild(rightEyeCanvas);
-		
-		parent.appendChild(newDivContainer);
 	}
 	
 	// CHECK: How can I make this more modular for different tables?
-	populateFullBarsTable(targetTableID) {
+	populateHistoryTable(targetTableID) {
 		if (!userRef) {
 			console.log("[FullBarsDAO: populateFullBarsTable] - User is null");
 			return;
