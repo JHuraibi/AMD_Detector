@@ -2,17 +2,31 @@ class SymbolsDAO {
 	constructor(dbRef) {
 		this.dbRef = dbRef;
 		this.userRef = null;
+		
+		// !! TODO: This value to be dynamically set
+		this.hardCodedCanvasSize = 600;
+		this.useAlpha = false;
+		
+		// These values are equal to 20, 45, and 95% opacity levels respectively
+		// Max alpha in hex is FF or 255 in decimal
+		// e.g. [Hex F3 == Dec 243]
+		// 			(243 / 255) -> 95%
+		//			(F3 / FF)   -> 95%
+		this.alphaLevels = ["33", "73", "F3"];
+		this.aIndex = 0;
 	}
 	
 	updateUserReference(userRef) {
 		this.userRef = userRef;
 	}
 	
-	drawSymbols(containerID, sizeRef) {
+	populateAggregate(leftCanvasID, rightCanvasID) {
 		if (!userRef) {
 			console.log("[FullBarsDAO: drawFullBars] - User is null");
 			return;
 		}
+		this.useAlpha = true;
+		this.aIndex = 0;
 		
 		this.dbRef
 			.collection("TestResults")
@@ -23,84 +37,131 @@ class SymbolsDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.populateCanvas(containerID, sizeRef, doc);
+					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
+				});
+			})
+			.then(() => {
+				// Once DB query and drawing are complete, reset variables specific to populateAggregate()
+				this.useAlpha = false;
+				this.aIndex = 0;
+			});
+	}
+	
+	populateMostRecent(leftCanvasID, rightCanvasID) {
+		if (!userRef) {
+			console.log("[FullBarsDAO: drawFullBars] - User is null");
+			return;
+		}
+		
+		// Update limit() to just 1
+		this.dbRef
+			.collection("TestResults")
+			.doc(userRef.uid)
+			.collection("Symbols")
+			.orderBy("TimeStampMS", "desc")
+			.limit(1)
+			.get()
+			.then((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
 				});
 			});
 	}
 	
 	// !! TODO: Error handling (especially getting values from Firebase)
 	// !! TODO: Refactor to make reading easier
-	populateCanvas(containerID, sizeRef, doc) {
-		let parent = document.getElementById(containerID);
+	drawToCanvas(leftCanvasID, rightCanvasID, doc) {
+		let leftCanvas = document.getElementById(leftCanvasID);
+		let rightCanvas = document.getElementById(rightCanvasID);
 		
-		let newDivContainer = document.createElement("div");
+		if (!leftCanvas || !rightCanvas) {
+			if (!leftCanvas) {
+				console.log("LEFT Canvas - null");
+			}
+			
+			if (!rightCanvas) {
+				console.log("RIGHT Canvas - null");
+			}
+			
+			return;
+		}
 		
-		let leftCanvas = document.createElement("canvas");
-		let rightCanvas = document.createElement("canvas");
-		
-		let caption = document.createElement("p");
 		let ctxLeft = leftCanvas.getContext('2d');
 		let ctxRight = rightCanvas.getContext('2d');
 		
-		// TODO: Error handling for discrepancy between Symbols[] and Locations[] lengths
 		let leftResultSymbols = doc.data().LeftResultsSymbols;
 		let leftXLocations = doc.data().LeftXLocations;
 		let leftYLocations = doc.data().LeftYLocations;
 		let rightResultSymbols = doc.data().RightResultsSymbols;
 		let rightXLocations = doc.data().RightXLocations;
 		let rightYLocations = doc.data().RightXLocations;
-		let timeStamp = doc.data().TimeStampMS;
-		let testCanvasSize = doc.data().TestCanvasSize;
+		// let timeStamp = doc.data().TimeStampMS;
+		// let testCanvasSize = doc.data().TestCanvasSize;
 		
-		let ratio = sizeRef / 1000;
+		// CHECK: Using only leftCanvas's width sufficient?
+		let ratio = leftCanvas.width / this.hardCodedCanvasSize;
 		
-		// NOTE: The font size (see below) of 35 is hardcoded in symbols_test.js
+		if (this.useAlpha) {
+			let alpha = this.alphaLevels[this.aIndex];
+			ctxLeft.fillStyle = "#f47171" + alpha;
+			ctxRight.fillStyle = "#f47171" + alpha;
+			this.aIndex++;
+		}
+		
+		// NOTE: Font size was hardcoded at 35 in symbols_test.js. So: rectangle with w = 35 and h = 35
 		if (leftResultSymbols) {
-			
-			ctxLeft.fillStyle = "blue";
-			ctxLeft.font = (ratio * 100) + "px Arial";
-			
 			for (let i = 0; i < leftXLocations.length; i++) {
-				let symbol = leftResultSymbols[i];
-				let xPos = leftXLocations[i] * ratio;
-				let yPos = leftYLocations[i] * ratio;
+				let x = leftXLocations[i] * ratio;
+				let y = leftYLocations[i] * ratio;
 				
-				ctxLeft.fillText(symbol, xPos, yPos);
+				let w = 35;
+				let h = 35;
+				let tl = 5;
+				let tr = 5;
+				let bl = 5;
+				let br = 5;
+				
+				// Draw shape as rectangle with rounded corners
+				ctxLeft.beginPath();
+				ctxLeft.moveTo(x + tl, y);
+				ctxLeft.arcTo(x + w, y, x + w, y + h, tr);
+				ctxLeft.arcTo(x + w, y + h, x, y + h, br);
+				ctxLeft.arcTo(x, y + h, x, y, bl);
+				ctxLeft.arcTo(x, y, x + w, y, tl);
+				ctxLeft.closePath();
+				
+				ctxLeft.fill();
 			}
 		}
 		
 		// !! TODO: Right canvas has nothing on it when printing to the webpage
 		if (rightResultSymbols) {
-			
-			ctxRight.fillStyle = "orange";
-			ctxRight.font = (ratio * 100) + "px Arial";
-			
 			for (let i = 0; i < leftYLocations.length; i++) {
-				let symbol = rightResultSymbols[i];
-				let xPos = rightXLocations[i] * ratio;
-				let yPos = rightYLocations[i] * ratio;
+				let x = rightXLocations[i] * ratio;
+				let y = rightYLocations[i] * ratio;
+				let w = 35;
+				let h = 35;
+				let tl = 5;
+				let tr = 5;
+				let bl = 5;
+				let br = 5;
 				
-				ctxRight.fillText(symbol, xPos, yPos);
+				// Draw shape as rectangle with rounded corners
+				ctxRight.beginPath();
+				ctxRight.moveTo(x + tl, y);
+				ctxRight.arcTo(x + w, y, x + w, y + h, tr);
+				ctxRight.arcTo(x + w, y + h, x, y + h, br);
+				ctxRight.arcTo(x, y + h, x, y, bl);
+				ctxRight.arcTo(x, y, x + w, y, tl);
+				ctxRight.closePath();
+				
+				ctxRight.fill();
 			}
 		}
-		
-		let dateTakenMsg = "Date Taken: " + this.formatDate(timeStamp);
-		let captionTextNode = document.createTextNode(dateTakenMsg);
-		
-		caption.appendChild(captionTextNode);
-		
-		// grid-area: Row#, Column#, Row Span, Column Span
-		leftCanvas.style.gridArea = "1 / 1 / 2 / 2";
-		rightCanvas.style.gridArea = "1 / 2 / 2 / 2";
-		
-		newDivContainer.appendChild(leftCanvas);
-		newDivContainer.appendChild(rightCanvas);
-		
-		parent.appendChild(newDivContainer);
 	}
 	
 	// CHECK: How can I make this more modular for different tables?
-	populateSymbolsTable(targetTableID) {
+	populateHistoryTable(targetTableID) {
 		if (!userRef) {
 			console.log("[SymbolsDAO: populateFullBarsTable] - User is null");
 			return;
@@ -172,7 +233,7 @@ class SymbolsDAO {
 		let minutesString = date.getUTCMinutes();
 		let postfix = hoursString > 11 ? "PM" : "AM";
 		
-		if (hoursString === 0){
+		if (hoursString === 0) {
 			hoursString = 12;
 		}
 		

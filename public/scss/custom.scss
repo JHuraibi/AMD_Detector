@@ -1,0 +1,21 @@
+// Custom.scss
+// Using Bootstrap Tutorial's Option A: Include all of Bootstrap
+// Terminal Command to Compile SCSS
+//    1. [cd into AMD_Detector]
+//    2. [Type cmd]: sass ./public/scss/custom.scss custom.css
+//        "primary": #6e148f,
+
+$theme-colors: (
+        "primary": #1aa4b8
+);
+
+.navbar {
+  padding: 0.8rem 1rem;
+}
+
+.sign-out {
+  color: #1aa4b8;
+  font-size: 1em;
+}
+
+@import "../bootstrap/scss/bootstrap";
