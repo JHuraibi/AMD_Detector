@@ -3,6 +3,7 @@ const authModals = document.querySelectorAll('.auth .modal');
 const authWrapper = document.querySelector('.auth');
 const loginForm = document.querySelector('.login');
 const registerForm = document.querySelector('.register');
+var usertype;
 
 authSwitchLinks.forEach(link => {
   link.addEventListener('click', () => {
@@ -52,30 +53,49 @@ registerForm.addEventListener('submit', (e) => {
 // login form
 loginForm.addEventListener('submit', (e) => {
   e.preventDefault();
-
   const email = loginForm.email.value;
   const password = loginForm.password.value;
 
   firebase.auth().signInWithEmailAndPassword(email, password)
     .then(user => {
       var user = firebase.auth().currentUser;
+      getType();
       if (!(user.emailVerified)) {
         alert("Email not verified");
         loginForm.reset();
-      }
-      else if(user.physician == "true"){
-        loginForm.reset();
-        window.location = 'dashboard.html';
-      }
-      else {
-        console.log('logged in', user);
-        loginForm.reset();
-        window.location = 'home.html';
       }
     })
     .catch(error => {
       loginForm.querySelector('.error').textContent = error.message;
     });
 });
+
+async function getType() {
+  //let user = await firebase.auth().currentUser;
+  await firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+          id = user.uid;
+          console.log(id);
+          db.collection("users").doc(user.uid)
+              .get()
+              .then(doc => {
+
+                  let type = (doc.data().type);
+                  usertype = type;
+                  console.log(usertype);
+                  if(usertype == 'physician'){
+                    loginForm.reset();
+                    console.log("true")
+                    window.location = 'physicians/physiciansHome.html';
+                  }
+                  else {
+                    console.log('logged in', user);
+                    loginForm.reset();
+                    window.location = 'home.html'; 
+                  } 
+              });
+      }
+  });
+}
 
 
