@@ -14,6 +14,9 @@ function retrieveTestTitle(target_test) {
 		
 		case "full_bars":
 			return "Full Bars";
+		
+		case "fractal":
+			return "Fractal";
 	}
 }
 
@@ -51,6 +54,10 @@ function retrieveInstructions(target_test) {
 				"Focus on black dot in the center. If any of the bars are broken or are bent " +
 				"click your mouse anywhere on the window. \n\n\n" +
 				"When you are ready to begin the test click the \"Start Test\" button below.";
+		
+		// FRACTAL
+		case "fractal":
+			return "[FRACTAL INSTRUCTIONS]";
 	}
 }
 
@@ -67,5 +74,7 @@ function retrieveURLLink(target_test) {
 			return "./symbols_test/symbolsTest.html";
 		case "full_bars":
 			return "./full_bars/full_bars.html";
+		case "fractal":
+			return "./fractal/fractal.html";
 	}
 }
