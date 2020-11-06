@@ -1,56 +1,53 @@
-// TODO: Update docstrings
-// TODO: Add pause or confirmation before switching eyes
-// TODO: When drawing the results at the end, the first Left Y is black
+// TODO: Update/add docstrings
+// TODO: Add a timeout function to quit test after certain time
+// TODO: Add additional instructions for how to end current eye or quit test
+
 
 let timestamp;						// Will record the time the test was started (in milliseconds since Epoch)
 let backgroundColor = 220;			// Greyscale color for canvas background (0:Black, 255:White)
 let barFillAlpha = 0;				// Will control the bars' alpha
 let opacityIncrease = 15;			// How much to incrementally increase bar opacity
-let keyPressFillAlpha = 0;				// Will control the click indicator's alpha
+let keyPressFillAlpha = 0;			// Will control the click indicator's alpha
 
 let timer = 0;						// Frame counter
 let sec = 2;						// Seconds between showing each bar
 let indicatorStartTime = 0;			// Will track the current timer value when a click is registered
-let indicatorDuration = 65;			// How many frames to show the indicator (60 frames is 1 second)
+let indicatorDuration = 30;			// How many frames to show the indicator (60 frames is 1 second)
 
-let posQueue = [];					// Holds the randomly-shuffled locations to draw the bars
+let xCoordinateLeft;				// LEFT EYE: X locations at the time of a click event
+let yCoordinateLeft;				// LEFT EYE: Y locations at the time of a click event
+let widthLeft;						// LEFT EYE: Width of final rectangle
+let heightLeft;						// LEFT EYE: Height of final rectangle
 
-
-let xLocationLeft = [];				// LEFT EYE: X locations at the time of a click event
-let yLocationLeft = [];				// LEFT EYE: Y locations at the time of a click event
-let xLocationRight = [];			// RIGHT EYE: X locations at the time of a click event
-let yLocationRight = [];			// RIGHT EYE: Y locations at the time of a click event
-
-// let numBars = 40;					// How many bars to draw
-// let barW;							// How thick each bar will be (is a function of numbers of bars vs canvas size)
-let canvasSize = 800;				// Size of width and height of the canvas (in pixels)
+let xCoordinateRight;				// RIGHT EYE: X locations at the time of a click event
+let yCoordinateRight;				// RIGHT EYE: Y locations at the time of a click event
+let widthRight;						// RIGHT EYE: Width of final rectangle
+let heightRight;					// RIGHT EYE: Height of final rectangle
 
 let verticalInProgress = true;		// Indicates whether bars are currently being drawn vertically or horizontally
 let leftEyeTestInProgress = true;	// Indicates if bars are currently being drawn vertically or horizontally
 
 let waitingToStart = true;			// Status indicator: Waiting for user to click "Start (X) Eye" button
 let testFinished = false;			// Status indicator: Waiting for user to click "Start (X) Eye" button
+let inputUsedThisRound = false;		// Disables key presses if one was already received for current bars being shown
+let iterations = 7;					// Maximum numbers of times to halve the sections
 
 let canvasRef;						// Reference object to the DOM canvas element
+let canvasSize;						// Size of width and height of the canvas (in pixels)
 
-let inputReceived = false;		// Disables click if one was already received for current bar being shown
-
-// NOTE: Testing out using 'c' instead of 'current'
-let currentAxis = 'x';
-let cX = 0;
-let cY = 0;
-let cW = canvasSize / 2;
-let cH = canvasSize;
+let cX;
+let cY;
+let cW;
+let cH;
 
 /**
  * Note: This function runs after user clicks button on instructions page.
  * 	Upon page loading, setup() and draw() both run once.
  */
 function startTest() {
-	// CURRENT: Line 51 is undefined
-	console.log("START");
 	canvasRef.show();
 	waitingToStart = false;
+	timestamp = Date.now();
 	loop();
 }
 
@@ -60,29 +57,26 @@ function startTest() {
  * 	and records current time.
  */
 function setup() {
-	// canvasRef = createCanvas(canvasSize, canvasSize);
-	canvasRef = createCanvas(800, 800);
+	canvasSize = 800;
+	canvasRef = createCanvas(canvasSize, canvasSize);
 	canvasRef.id('canvasRef');
-	timestamp = Date.now();
 	
 	currentAxis = 'x';
+	cX = 0;
+	cY = 0;
+	cW = canvasSize / 2;
+	cH = canvasSize;
 	
 	canvasRef.hide();
-	console.log("SETUP");
 	noLoop();
 }
 
 /**
  * Runs 60 times each second. Is the main game controller.
- * drawStaticGrid: Draws the grid (called first so other items can be drawn on top of it)
  *
  * If the test IS NOT done:
- * 		- Updates the next bar position every n-seconds. (n set by "sec" variable)
- * 		- Draws the bar.
- * 		- Increment the timer counter.
  *
  * If test IS done:
- * 		- Show results by drawing bars at the positions that were clicked.
  *
  * If transition is TRUE:
  * 		- Wait for the user to click the button before next test round.
@@ -96,16 +90,20 @@ function draw() {
 		// Force draw not to execute
 		return;
 	}
+	
 	background(backgroundColor);
 	
 	if (testFinished) {
-		showLeftResults();
-		showRightResults();
+		showResults();
 		showExitButton();
 		noLoop();
 	}
 	
-	if (inputReceived) {
+	if (iterations < 0) {
+		transitionToNextEye();
+	}
+	
+	if (inputUsedThisRound) {
 		updateAll();
 		// switchAxis
 	}
@@ -120,49 +118,61 @@ function draw() {
 
 
 function keyPressed() {
-	if (waitingToStart || inputReceived || testFinished) {
+	if (inputUsedThisRound || waitingToStart || testFinished) {
 		return;
 	}
 	
-	// CHECK: Might be easier to just use leftEyeTestInProgress to set JSON value
-	if (leftEyeTestInProgress) {
-		if (currentAxis === 'x') {
-			
-			
-			if (keyCode === LEFT_ARROW) {
-				console.log("X Axis - KeyPress: LEFT ARROW");
-				cH = cH / 2;
-				currentAxis = 'y';
-			}
-			else if (keyCode === RIGHT_ARROW) {
-				console.log("X Axis - KeyPress: RIGHT ARROW");
-				cH = cH / 2;
-				cX = cX + cW;
-				currentAxis = 'y';
-			}
-			else {
-				console.log("KeyPress Other: " + keyCode);
-			}
+	if (keyCode === ENTER) {
+		transitionToNextEye();
+		// return;	// CHECK: Needed?
+	}
+	
+	if (keyCode === ESCAPE || keyCode === BACKSPACE){
+		// TODO: Show quit confirmation
+		noLoop();
+		showExitButton();
+		
+		// Below function is defined in fractal.html.
+		// It hides the button to upload to Firestore.
+		updateButtons();
+	}
+	
+	// CHECK: Extract into separate functions?
+	if (currentAxis === 'x') {
+		if (keyCode === LEFT_ARROW) {
+			console.log("X Axis - KeyPress: LEFT ARROW");
+			cH = cH / 2;
+			currentAxis = 'y';
+			iterations--;
 		}
-		else if (currentAxis === 'y') {
-			if (keyCode === UP_ARROW) {
-				console.log("Y Axis - KeyPress: UP ARROW");
-				cW = cW / 2;
-				currentAxis = 'x';
-			}
-			else if (keyCode === DOWN_ARROW) {
-				console.log("Y Axis - KeyPress: UP ARROW");
-				currentAxis = 'x';
-				cW = cW / 2;
-				cY = cY + cH;
-			}
-			else {
-				console.log("Y Axis - KeyPress Other: " + keyCode);
-			}
+		else if (keyCode === RIGHT_ARROW) {
+			console.log("X Axis - KeyPress: RIGHT ARROW");
+			cH = cH / 2;
+			cX = cX + cW;
+			currentAxis = 'y';
+			iterations--;
+		}
+		else {
+			console.log("KeyPress Other: " + keyCode);
 		}
 	}
-	else {
-	
+	else if (currentAxis === 'y') {
+		if (keyCode === UP_ARROW) {
+			console.log("Y Axis - KeyPress: UP ARROW");
+			cW = cW / 2;
+			currentAxis = 'x';
+			iterations--;
+		}
+		else if (keyCode === DOWN_ARROW) {
+			console.log("Y Axis - KeyPress: UP ARROW");
+			currentAxis = 'x';
+			cW = cW / 2;
+			cY = cY + cH;
+			iterations--;
+		}
+		else {
+			console.log("Y Axis - KeyPress Other: " + keyCode);
+		}
 	}
 	
 	indicatorStartTime = timer;
@@ -188,37 +198,27 @@ function drawBar() {
 	if (waitingToStart || testFinished) {
 		return;
 	}
-	let barColor;
+	
+	//Orange: 		"rgb(240, 90, 40)"
+	//Red-Orange: 	"rgb(200, 80, 67)"
+	//Blue: 		"rgb(27, 160, 150)"
+	//Light Green: 	"rgb(68, 201, 114)"
 	
 	noStroke();
 	fadeInBar();
 	
 	if (currentAxis === 'x') {
-		// Orange: "rgb(240, 90, 40)"
-		barColor = color(240, 90, 40);
-		barColor.setAlpha(barFillAlpha);
-		fill(barColor);
+		fill(200, 80, 67, barFillAlpha);
 		rect(cX, cY, cW, cH);
 		
-		// Blue: "rgb(27, 160, 150)"
-		barColor = color(27, 160, 150);
-		barColor.setAlpha(barFillAlpha);
-		fill(barColor);
+		fill(68, 201, 114, barFillAlpha);
 		rect(cX + cW, cY, cW, cH);
-		
-		console.log("cX + cW: " + (cX + cW));
 	}
 	else if (currentAxis === 'y') {
-		// Orange: "rgb(240, 90, 40)"
-		barColor = color(240, 90, 40);
-		barColor.setAlpha(barFillAlpha);
-		fill(barColor);
+		fill(200, 80, 67, barFillAlpha);
 		rect(cX, cY, cW, cH);
 		
-		// Blue: "rgb(27, 160, 150)"
-		barColor = color(27, 160, 150);
-		barColor.setAlpha(barFillAlpha);
-		fill(barColor);
+		fill(68, 201, 114, barFillAlpha);
 		rect(cX, cY + cH, cW, cH);
 	}
 	else {
@@ -232,58 +232,27 @@ function drawBar() {
  */
 function updateAll() {
 	loadNextBarPos();
-	inputReceived = false;
+	inputUsedThisRound = false;
 	barFillAlpha = 0;
 }
 
-function switchToYAxis(whichSide) {
-	cH = cH / 2;
-	
-	if (whichSide === "right") {
-		cX = cX + cW;
-	}
-}
+// CHECK: Probably unneeded
+// function switchToYAxis(whichSide) {
+// 	cH = cH / 2;
+//
+// 	if (whichSide === "right") {
+// 		cX = cX + cW;
+// 	}
+// }
+//
+// function switchToXAxis(whichSide) {
+// 	cW = cW / 2;
+//
+// 	if (whichSide === "down") {
+// 		cY = cY + cH;
+// 	}
+// }
 
-function switchToXAxis(whichSide) {
-	cW = cW / 2;
-	
-	if (whichSide === "down") {
-		cY = cY + cH;
-	}
-}
-
-// TODO: Refactor to more intuitive method name (maybe reset()?)
-function transitionToNextEye() {
-	leftEyeTestInProgress = false;
-	waitingToStart = true;
-	
-	indicatorStartTime = 0;
-	// timer = 0;
-	noLoop();
-	canvasRef.hide();
-	document.getElementById("rightEyeInstruct").style.display = "block";
-}
-
-/**
- * Draws a grid by using vertical/horizontal black lines.
- * The number of lines was taken from example Amsler Grid Tests.
- */
-function drawStaticGrid() {
-	fill(0);
-	noStroke();
-	
-	var interval = width / 20;
-	
-	// Vertical grid lines
-	for (let i = 0; i < 20; i++) {
-		rect((i * interval), 0, 1, height);
-	}
-	
-	// Horizontal grid lines
-	for (let i = 0; i < 20; i++) {
-		rect(0, (i * interval), width, 1);
-	}
-}
 
 /**
  * Incrementally decreases the Alpha (opacity) of the click indicator fill color. This will
@@ -309,7 +278,7 @@ function fadeOutIndicator() {
 function drawKeyPressIndicator() {
 	fadeOutIndicator();
 	
-	// Hex: "#2846be"
+	// Blue: "#2846BE"
 	fill(40, 70, 190, keyPressFillAlpha);
 	
 	strokeWeight(2);
@@ -318,6 +287,58 @@ function drawKeyPressIndicator() {
 	
 	fill(0, 255);
 }
+
+function recordCurrentResults() {
+	let fullWidth = cW;
+	let fullHeight = cH;
+	
+	if (currentAxis === 'x'){
+		fullWidth = cW * 2;
+	}
+	else {
+		fullHeight = cH * 2;
+	}
+	
+	if (leftEyeTestInProgress) {
+		xCoordinateLeft = cX;
+		yCoordinateLeft = cY;
+		widthLeft = fullWidth;
+		heightLeft = fullHeight;
+	}
+	else {
+		xCoordinateRight = cX;
+		yCoordinateRight = cY;
+		widthRight = fullWidth;
+		heightRight = fullHeight;
+	}
+}
+
+// TODO: Refactor to more intuitive method name (maybe reset()?)
+function transitionToNextEye() {
+	// noLoop();
+	recordCurrentResults();
+	
+	if (!leftEyeTestInProgress) {
+		testFinished = true;
+		return;
+	}
+	
+	currentAxis = 'x';
+	cX = 0;
+	cY = 0;
+	cW = canvasSize / 2;
+	cH = canvasSize;
+	
+	iterations = 7;
+	indicatorStartTime = 0;
+	
+	leftEyeTestInProgress = false;
+	waitingToStart = true;
+	
+	canvasRef.hide();
+	document.getElementById("rightEyeInstruct").style.display = "block";
+}
+
 
 /**
  * Draws a black dot with grey outline (that matches canvas color) at the center of canvas.
@@ -328,7 +349,6 @@ function drawCenterDot() {
 	stroke(backgroundColor);
 	ellipse(width / 2, height / 2, 20);
 }
-
 
 /**
  * Draws an outline around the canvas.
@@ -343,49 +363,23 @@ function drawStaticBorder() {
 /**
  * Draws the bars that were clicked during the Left eye test.
  */
-function showLeftResults() {
-	let numClickedX = xLocationLeft.length;
-	let numClickedY = yLocationLeft.length;
+function showResults() {
+	let xL = xCoordinateLeft;
+	let yL = yCoordinateLeft;
+	let wL = widthLeft;
+	let hL = heightLeft;
 	
-	let barW = width / 20;
+	let xR = xCoordinateRight;
+	let yR = yCoordinateRight;
+	let wR = widthRight;
+	let hR = heightRight;
 	
-	for (let i = 0; i < numClickedX; i++) {
-		let x = xLocationLeft[i];
-		noStroke();
-		fill(255, 194, 114, 50);
-		rect(x, 0, barW, height);
-	}
+	noStroke();
+	fill(240, 90, 40, 50);
+	rect(xL, yL, wL, hL);
 	
-	for (let i = 0; i < numClickedY; i++) {
-		let y = yLocationLeft[i];
-		noStroke();
-		fill(255, 194, 114, 50);
-		rect(0, y, width, barW);
-	}
-}
-
-/**
- * Draws the bars that were clicked during the Right eye test.
- */
-function showRightResults() {
-	let numClickedX = xLocationRight.length;
-	let numClickedY = yLocationRight.length;
-	
-	let barW = width / 20;
-	
-	for (let i = 0; i < numClickedX; i++) {
-		let x = xLocationRight[i];
-		noStroke();
-		fill(133, 114, 255, 50);
-		rect(x, 0, barW, height);
-	}
-	
-	for (let i = 0; i < numClickedY; i++) {
-		let y = yLocationRight[i];
-		noStroke();
-		fill(133, 114, 255, 50);
-		rect(0, y, width, barW);
-	}
+	fill(240, 90, 40, 50);
+	rect(xR, yR, wR, hR);
 }
 
 /**
@@ -419,14 +413,18 @@ function showExitButton() {
 /**
  * Formats the relevant results data into a JSON.
  */
-function getFullBarsResults() {
+function getFractalResults() {
 	return {
 		"TestName": "full_bars",
 		"TimeStampMS": timestamp,
 		"TestCanvasSize": canvasSize,
-		"LeftXLocations": xLocationLeft,
-		"LeftYLocations": yLocationLeft,
-		"RightXLocations": xLocationRight,
-		"RightYLocations": yLocationRight
+		"LeftXCoordinate": xCoordinateLeft,
+		"LeftYCoordinate": yCoordinateLeft,
+		"LeftWidth": widthLeft,
+		"LeftHeight": heightLeft,
+		"RightXCoordinate": xCoordinateRight,
+		"RightYCoordinate": yCoordinateRight,
+		"RightWidth": widthRight,
+		"RightHeight": heightRight,
 	}
 }

@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta name="description" content="">
 		
-		<title>Full Bars · Test</title>
+		<title>Fractal · Test</title>
 		
 		<!-- Bootstrap core CSS -->
 		<link href="../../scss/custom.css" rel="stylesheet">
@@ -90,7 +90,7 @@
 							class="btn btn-sm btn-outline-secondary">
 						Exit without Upload
 					</button>
-					<button type="button" onClick="window.location.replace('./full_bars_questions.html')"
+					<button type="button" onClick="window.location.replace('./fractal_questions.html')"
 							class="btn btn-sm btn-outline-secondary">
 						Continue to Questions
 					</button>
@@ -134,7 +134,7 @@
 		</script>
 		
 		<script>
-			// !! TODO: Handle errors with getFullBarsResults()
+			// !! TODO: Handle errors with getFractalResults()
 			// !! TODO: Docstrings and comments
 			// If Time: Use event listeners instead of onclick (Unobtrusive Javascript)
 			let maxWaitTime = 2000;
@@ -143,12 +143,12 @@
 			function sendToFirestore() {
 				attemptUserLookup();
 				
-				var dataToWrite = getFullBarsResults();
+				let dataToWrite = getFractalResults();
 				
 				if (userRef) {
 					dbRef.collection("TestResults")
 						.doc(userRef.uid)
-						.collection("FullBars")
+						.collection("Fractal")
 						.add(dataToWrite)
 						.then(() => {
 							uploadSuccess();
@@ -180,6 +180,7 @@
 		</script>
 		
 		<script>
+			// TODO: Refactor this functions name (!! keyPressed() of fractal.js uses it also!)
 			function updateButtons() {
 				let uploadBtn = document.getElementById("uploadBtn");
 				let exitBtn = document.getElementById("exitBtn");
