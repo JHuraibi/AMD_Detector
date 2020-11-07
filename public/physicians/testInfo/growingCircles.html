@@ -41,13 +41,17 @@
 
 		.columns {
 			float: left;
-			width: 50%;
+			width: 48%;
 			padding: 30px;
 			margin-top: 25px;
 			border-radius: 10px;
 			background: white;
 			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
 			text-align: center;
+			display: table-cell;
+			height: 200px;
+			margin-right: 2px;
+			margin-left: 2px;
 		}
 
 		.rows:after {
@@ -55,6 +59,7 @@
 			display: table;
 			clear: both;
 			width: 100%;
+			text-align: center;
 
 		}
 	</style>
@@ -80,15 +85,25 @@
 	<main role="main">
 
 		<div style="text-align: center;">
-		<div class="rows">
-			<div class="columns">images here</div>
-			<div class="columns">
-				<p>This is the Growing Circles Test. The aim of of it is to detect if the user has
-					any blind spots in their vision, as well as the size of said spots.
-				</p>
+			<div class="rows">
+				<div class="columns" >
+					<img src="../../images/thumbnail_growing_circles.png" alt="Growing Circles Test" style="height: 150px; width: 150px;">
+				</div>
+				<div class="columns">
+					<p>This is the Growing Circles Test. The aim of of it is to detect if the user has
+						any blind spots in their vision, as well as the size of said spots.
+					</p>
+				</div>
+			</div>
+			<div class="rows">
+				<div class="columns">images here</div>
+				<div class="columns">
+					<p>This is the Growing Circles Test. The aim of of it is to detect if the user has
+						any blind spots in their vision, as well as the size of said spots.
+					</p>
+				</div>
 			</div>
 		</div>
-	</div>
 
 
 	</main>
