@@ -39,8 +39,25 @@
 			position: relative;
 		}
 
+		.columns {
+			float: left;
+			width: 50%;
+			padding: 30px;
+			margin-top: 25px;
+			border-radius: 10px;
+			background: white;
+			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+			text-align: center;
+		}
+
+		.rows:after {
+			content: "";
+			display: table;
+			clear: both;
+			width: 100%;
+
+		}
 	</style>
-	<!-- Custom styles for this template -->
 	<link href="../.././css/home.css" rel="stylesheet">
 </head>
 
@@ -49,9 +66,9 @@
 		<div class="navbar navbar-dark bg-dark shadow-sm">
 			<div class="container d-flex justify-content-between">
 				<a class="nav-link active" href="../physiciansHome.html">
-                    <span data-feather="home"></span>
-                    Home <span class="sr-only">(current)</span>
-                </a>
+					<span data-feather="home"></span>
+					Home <span class="sr-only">(current)</span>
+				</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
 					aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
 					<a class="sign-out">Sign Out</a>
@@ -62,7 +79,16 @@
 
 	<main role="main">
 
-
+		<div style="text-align: center;">
+		<div class="rows">
+			<div class="columns">images here</div>
+			<div class="columns">
+				<p>This is the Growing Circles Test. The aim of of it is to detect if the user has
+					any blind spots in their vision, as well as the size of said spots.
+				</p>
+			</div>
+		</div>
+	</div>
 
 
 	</main>
