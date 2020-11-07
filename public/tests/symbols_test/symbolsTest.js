@@ -88,8 +88,10 @@ window.addEventListener('keydown', function (e) {
 
 });
 
+// initalizing canvas
 c.fillStyle = "White";
 c.fillRect(0, 0, 600, 600);
+blackDot();
 
 // Variable
 var x, y, y2, x2;
