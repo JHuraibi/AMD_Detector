@@ -55,7 +55,7 @@ async function getUid() {
 }
 
 window.addEventListener('keydown', function (e) {
-	// WebStorm saying keyCode is deprecated. It might not work in all browsers (-Jay)
+	
 	// var key = e.keyCode;
 
 	// key variable
@@ -287,7 +287,6 @@ function nexttest() {
 	var startTest2 = document.getElementById("start_test2");
 
 	startTest1.style.display = "none";
-	// startTest2.style.display = "inline-block";
 	nexteye.style.display = "block";
 
 	testOneInProgress = false;
@@ -333,19 +332,15 @@ function results() {
 		c.fillStyle = "blue";
 		c.font = "35 px Arial";
 		c.fillText(rightResultsSymbols[j], rightResultX[j], rightResultY[j]);
-		// console.log("Result: " + resultsSymbolsOne[j]);
-		// console.log("X: " + resultX[j]);
-		// console.log("Y: " + resultY[j]);
+
 	}
-	// Im a comment
+
 	for (j2 = 0; j2 < leftResultsSymbols.length; j2++) {
 		console.log("In loop of c2 results ");
 		c2.fillStyle = "orange";
 		c2.font = "35 px Arial";
 		c2.fillText(leftResultsSymbols[j2], leftResultX[j2], leftResultY[j2]);
-		// console.log("Result 2: " + resultsSymbolsTwo[j2]);
-		// console.log("X2: " + resultX[j2]);
-		// console.log("Y2: " + resultY[j2]);
+		
 	}
 	showExitButton();
 }
