@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vision Monitor</title>
+    <link rel="icon" type="image/png" href="../images/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="../images/favicon-16x16.png" sizes="16x16" />
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .register {
+            width: 100%;
+            background: #fafafa;
+            display: block;
+            z-index: 1;
+            width: 400px;
+            padding: 30px;
+            margin: 100px auto;
+            margin-top: 25px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            left: 50%;
+            overflow: scroll;
+        }
+
+        .com {
+            width: 400px;
+            padding: 30px;
+            margin: 100px auto;
+            margin-top: 25px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .register a {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .logo {
+            height: 125px;
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="logo" style="background-color: white;">
+        <img src="../images/index.png" alt="logo" class="logo" />
+    </div>
+
+    <div style="display: block;">
+        <div class="register">
+            <h2>Physician Registration</h2>
+            <form class="physician">
+                <input type="text" id="firstname" name="firstname" placeholder="First Name">
+                <input type="text" id="lastname" name="lastname" placeholder="Last Name">
+                <input type="text" name="email" placeholder="Email">
+                <input type="text" name="title" placeholder="Title">
+                <input name="password" id="password" type="password" onkeyup='check();' placeholder="Password">
+                <input type="password" name="confirm_password" id="confirm_password" onkeyup='check();'
+                    placeholder="Confirm password">
+                <span id='message'></span>
+                <button id="reg">Register</button>
+                <p class="error"></p>
+            </form>
+            <div>Got an account? <a href="../index.html">Login instead</a></div>
+        </div>
+    </div>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+
+    <script src="/__/firebase/7.21.0/firebase-app.js"></script>
+
+    <script src="/__/firebase/7.7.0/firebase-auth.js"></script>
+    <script src="/__/firebase/7.7.0/firebase-firestore.js"></script>
+    <script src="/__/firebase/7.7.0/firebase-functions.js"></script>
+
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
+
+    <script>
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        console.log("[DEBUG] - From index.html");
+    </script>
+
+    <script src="physiciansAuth.js"></script>
+
+    <script>
+        var check = function () {
+            if (document.getElementById('password').value ==
+                document.getElementById('confirm_password').value) {
+                document.getElementById('message').style.color = 'green';
+                document.getElementById('message').innerHTML = 'matching';
+                document.getElementById('reg').disabled = false;
+            } else {
+                document.getElementById('message').style.color = 'red';
+                document.getElementById('message').innerHTML = 'not matching';
+                document.getElementById('reg').disabled = true;
+            }
+        }
+
+    </script>
+</body>
+
+</html>

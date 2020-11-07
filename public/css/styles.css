@@ -49,7 +49,7 @@ header a:hover{
 
 /* modal styles */
 .modal{
-  width: 300px;
+  width: 400px;
   padding: 30px;
   margin: 100px auto;
   margin-top: 25px;
@@ -57,6 +57,7 @@ header a:hover{
   background: white;
   box-shadow: 0px 0px 8px rgba(0,0,0,0.1);
   text-align: center;
+  overflow: scroll;
 }
 
 
@@ -86,6 +87,7 @@ button{
   background: #fafafa;
   display: none;
   z-index: 1;
+  overflow: scroll;
 }
 .auth.open{
   display: block;
