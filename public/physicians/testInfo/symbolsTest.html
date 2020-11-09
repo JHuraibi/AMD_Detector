@@ -7,7 +7,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 	<meta name="generator" content="Jekyll v4.1.1">
-	<title>Symbols · Vision Monitor</title>
+	<title>Symbols Test · Vision Monitor</title>
 	<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32" />
 	<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16" />
 	<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/album/">
@@ -39,8 +39,30 @@
 			position: relative;
 		}
 
+		.columns {
+			float: left;
+			width: 48%;
+			padding: 30px;
+			margin-top: 25px;
+			border-radius: 10px;
+			background: white;
+			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+			text-align: center;
+			display: table-cell;
+			height: 250px;
+			margin-right: 2px;
+			margin-left: 15px;
+		}
+
+		.rows:after {
+			content: "";
+			display: table;
+			clear: both;
+			width: 100%;
+			text-align: center;
+
+		}
 	</style>
-	<!-- Custom styles for this template -->
 	<link href="../.././css/home.css" rel="stylesheet">
 </head>
 
@@ -49,9 +71,9 @@
 		<div class="navbar navbar-dark bg-dark shadow-sm">
 			<div class="container d-flex justify-content-between">
 				<a class="nav-link active" href="../physiciansHome.html">
-                    <span data-feather="home"></span>
-                    Home <span class="sr-only">(current)</span>
-                </a>
+					<span data-feather="home"></span>
+					Home <span class="sr-only">(current)</span>
+				</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
 					aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
 					<a class="sign-out">Sign Out</a>
@@ -62,8 +84,49 @@
 
 	<main role="main">
 
+		<div style="text-align: center;">
+			<div class="rows">
+				<div class="columns">
+					<img src="../../images/thumbnail_symbols.png" alt="Symbols Test"
+						style="height: 200px; width: 200px;">
+				</div>
+				<div class="columns" style="padding: 35px;">
+					<p>
+						brief test info
+					</p>
+				</div>
+			</div>
+			<div class="rows">
+				<div class="columns">
 
+				</div>
+				<div class="columns">
+					<p style="padding: 45px;">
+						normal test page
+					</p>
+				</div>
+			</div>
+			<div class="rows">
+				<div class="columns">
 
+				</div>
+				<div class="columns">
+					<p style="padding: 20px;">
+						symbols appearing
+					</p>
+				</div>
+			</div>
+			<div class="rows">
+				<div class="columns">
+
+				</div>
+				<div class="columns">
+					<p style="padding: 45px;">
+						results
+					</p>
+				</div>
+			</div>
+		</div>
 
 	</main>
 
