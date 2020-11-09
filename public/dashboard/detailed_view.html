@@ -101,12 +101,14 @@
 					<!-- </div>-->
 				</div>
 				
-				<h3 id="testTitle" style="margin-top: 2rem">Detailed View
-					<!-- Remainder of title is set by DashboardInjector.js -->
+				<h3 id="testTitle" style="margin-top: 2rem">
+					Detailed View
+					<!-- Remainder of title (i.e. test name) is set by DashboardInjector.js -->
 				</h3>
 				
 				<h5 id="dateSubtitle">
-					<!-- Date is set by DashboardInjector.js -->
+					Date Test Taken:&nbsp;
+					<!-- Remainder of subtitle (i.e. Date taken) is set by DashboardInjector.js -->
 				</h5>
 				
 				<div class="canvas-container">
@@ -305,7 +307,9 @@
 				minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
 				hoursString = hoursString % 12;
 				
-				subtitleElement.innerText = dateString + " at " + hoursString + ":" + minutesString + postfix;
+				subtitleElement.innerText =
+					subtitleElement.innerText +
+					dateString + " at " + hoursString + ":" + minutesString + postfix;
 				// return dateString + " at " + hoursString + ":" + minutesString + postfix;
 			}
 			

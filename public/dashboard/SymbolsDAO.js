@@ -182,10 +182,12 @@ class SymbolsDAO {
 			});
 	}
 	
+	// TODO: Update with actual method for detailed view
 	// TODO: Refactor variable names below to be more readable
 	addRowToTable(timeStamp, targetTableID) {
 		let testName = "Symbols";
 		let time = this.formatDate(timeStamp);
+		// let urlOfDetailedView = this.URIBuilder(docID);
 		let urlOfTest = "../tests/instructions_page.html?symbols";
 		
 		// ID of which table to put the data into (HTML Attribute ID)
@@ -197,6 +199,7 @@ class SymbolsDAO {
 		// Table Columns
 		let columnTestName = document.createElement("td");
 		let columnTime = document.createElement("td");
+		let columnID = document.createElement("td");
 		let columnURL = document.createElement("td");
 		
 		// Will be a child of columnURL so we can add hyperlink
@@ -205,20 +208,25 @@ class SymbolsDAO {
 		// Text to be put in the Columns
 		let textTestName = document.createTextNode(testName);
 		let textTime = document.createTextNode(time);
+		let textID = document.createTextNode("Details");
 		let textURL = document.createTextNode("Take this Test");
 		
 		// Set href attribute for link to test
+		let linkForDetailedView = document.createElement("a");
+		linkForDetailedView.setAttribute("href", "#");
 		linkForURL.appendChild(textURL);
 		linkForURL.setAttribute("href", urlOfTest);
 		
 		// Put the Text into their respective Columns
 		columnTestName.appendChild(textTestName);
 		columnTime.appendChild(textTime);
+		columnID.appendChild(textID);
 		columnURL.appendChild(linkForURL);
 		
 		// Add each the Columns to the Row
 		row.appendChild(columnTestName);
 		row.appendChild(columnTime);
+		row.appendChild(columnID);
 		row.appendChild(columnURL);
 		
 		// Add the Row to the Table
