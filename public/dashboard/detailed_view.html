@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+	
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32"/>
+		<link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16"/>
+		
+		<title>AMD Detector · Dashboard</title>
+		
+		<!-- Bootstrap core CSS -->
+		<link href="../scss/custom.css" rel="stylesheet">
+		<!-- Custom styles for this template -->
+		<link href="../css/dashboard.css" rel="stylesheet">
+		<style>
+			.canvas-container {
+				/*margin: 1.5rem;*/
+				border-radius: 1rem;
+				background: #7171f47E;
+				
+				/*margin-top: 1em;*/
+				/*Light Orange: ffecc7*/
+				/*Lavender ffe4ff*/
+				/*Light Green: f7ffe4*/
+			}
+			
+			.canvas-container > table {
+				height: 90%;
+				margin-bottom: 5em;
+				text-align: center !important;
+				font-size: large;
+			}
+			
+			canvas {
+				width: 90%;
+				/*height: 400px;*/
+				border: 5px solid black;
+				background-color: #fff;
+				margin: 1.5rem;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+			<a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="../home.html">Vision Monitor</a>
+			<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
+					data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+			<ul class="navbar-nav px-3">
+				<li class="nav-item text-nowrap">
+					<a class="sign-out">Sign Out</a>
+				</li>
+			</ul>
+		</nav>
+		<div class="container-fluid">
+			<div class="row">
+				<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+					<div class="sidebar-sticky pt-3">
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link active" href="../home.html">
+									<span data-feather="home"></span>
+									Home <span class="sr-only">(current)</span>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="../home.html">
+									<span data-feather="file"></span>
+									Tests
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="mailto:mail@example.org">
+									<span data-feather="users"></span>
+									Contact Physician
+								</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+			
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+				<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+					<h1 class="h2">My Progress</h1>
+					<!-- Additional Links -->
+					<!-- <div class="btn-toolbar mb-2 mb-md-0">-->
+					<!-- 	<div class="btn-group mr-2">-->
+					<!-- 		<button type="button" class="btn btn-sm btn-outline-secondary">Share</button>-->
+					<!-- 		<button type="button" class="btn btn-sm btn-outline-secondary">Export</button>-->
+					<!-- 	</div>-->
+					<!-- 	<button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">-->
+					<!-- 		<span data-feather="calendar"></span>-->
+					<!-- 		This week-->
+					<!-- 	</button>-->
+					<!-- </div>-->
+				</div>
+				
+				<h3 id="testTitle" style="margin-top: 2rem">Detailed View
+					<!-- Remainder of title is set by DashboardInjector.js -->
+				</h3>
+				
+				<h5 id="dateSubtitle">
+					<!-- Date is set by DashboardInjector.js -->
+				</h5>
+				
+				<div class="canvas-container">
+					<!-- <table border="3"> -->
+					<table class="canvas-table">
+						<tr>
+							<td>
+								<canvas id="detailedCanvasLeft" width="400" height="400"></canvas>
+							</td>
+							<td>
+								<canvas id="detailedCanvasRight" width="400" height="400"></canvas>
+							</td>
+						</tr>
+						<tr>
+							<td>Left Eye</td>
+							<td>Right Eye</td>
+						</tr>
+					</table>
+				</div>
+			
+			</main>
+		
+		</div>
+		
+		<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+		<script src="/__/firebase/7.23.0/firebase-app.js"></script>
+		
+		<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+		<script src="/__/firebase/7.23.0/firebase-analytics.js"></script>
+		
+		<!-- Add Firebase products that you want to use -->
+		<script src="/__/firebase/7.23.0/firebase-auth.js"></script>
+		<script src="/__/firebase/7.23.0/firebase-firestore.js"></script>
+		
+		<!-- Initialize Firebase -->
+		<script src="/__/firebase/init.js"></script>
+		<script src="../auth.js"></script>
+		
+		<!-- DAO JavaScript -->
+		<!--		<script src="./DashboardInjector.js"></script>-->
+		
+		<script>
+			let dbRef = firebase.firestore();
+			let userRef = null;
+			
+			firebase.auth().onAuthStateChanged(user => {
+				console.log("[detailed_view.html] - USER LOCATED");
+				console.log(user);
+				userRef = user;
+			});
+		</script>
+		
+		<script>
+			let uriPassedIn = new URLSearchParams(window.location.search);
+			let testName = uriPassedIn.get("TEST_NAME");
+			let testID = uriPassedIn.get("TEST_ID");
+			
+			let maxWaitTime = 2000;
+			let waitTime = 200;
+			// let confirmedID = false;
+			
+			// NOTE: Takes about 400-600ms to recognize a user
+			(function attemptUserLookup() {
+				if (!userRef && maxWaitTime > 0) {
+					maxWaitTime -= waitTime;
+					console.log("No User. Reattempting Lookup.");
+					setTimeout(attemptUserLookup, waitTime);
+				}
+				else if (maxWaitTime < 0) {
+					console.log("User Lookup Timed Out");
+				}
+				else if (userRef) {
+					console.log("User found.");
+					router();
+					
+					// console.log("ID: " + testID);
+					// dashboardHelper.updateInfo(userRef, testID);
+					// canvasLeft
+					// dashboardHelper.canvasHelper(testName);
+				}
+			})();
+		</script>
+		
+		<script>
+			let docRef = null;
+			let jsonData = {};
+			
+			/**
+			 * The test name passed into queryingDatabase() needs to match the
+			 * 	collections name in Firestore (TestResults>UID>[TestName]).
+			 */
+			function router() {
+				if (!testName) {
+					console.log("Error with Test Name.")
+					return;
+				}
+				
+				console.log("Test Name: " + testName);
+				switch (testName) {
+					default:
+						console.log("[detailed_view] router() Default Case");
+						break;
+					
+					case "GrowingCircles":
+						console.log("Growing Circles");
+						
+						setTestNameTitle("Growing Circles");
+						queryDatabase("GrowingCircles");
+						// this.redrawGrowingCircles(doc);
+						break;
+					
+					case "Symbols":
+						console.log("Symbols");
+						
+						setTestNameTitle("Symbols");
+						queryDatabase("Symbols");
+						// this.redrawSymbols(doc);
+						break;
+					
+					case "FullBars":
+						console.log("Full Bars");
+						
+						setTestNameTitle("Full Bars");
+						queryDatabase("FullBars");
+						// setDateSubtitle("Full Bars");
+						// redrawFullBars();
+						break;
+					
+					case "Fractal":
+						console.log("Fractal");
+						
+						setTestNameTitle("Fractal");
+						queryDatabase("Fractal");
+						// this.redrawFractal(doc);
+						break;
+				}
+			}
+			
+			function queryDatabase(testName) {
+				dbRef.collection("TestResults")
+					.doc(userRef.uid)
+					.collection(testName)
+					.doc(testID)
+					.get()
+					.then(function (doc) {
+						if (doc.exists) {
+							console.log("DOC FOUND");
+							redrawFullBars(doc);
+							setDateSubtitle(doc.data().TimeStampMS);
+							
+							// test = doc.data();
+							// jsonData = JSON.parse(doc.data());
+						}
+						else {
+							console.log("Failed to load document");
+						}
+					})
+					.catch(function (error) {
+						console.log("Error getting document:", error);
+					});
+				
+				// console.log("JSON DATA: " + jsonData);
+				// console.log("Time: " + test.TimeStampMS);
+			}
+			
+			
+			// TODO: Make all the test names in Firestore have the same formatting
+			// NOTE: The single dash and space characters are here so that
+			//			if this function fails to return a test name to
+			//			the header, the header then won't look incomplete.
+			//			(See the testTitle <h3> in detailed_view.html).
+			function setTestNameTitle(testName) {
+				let title = document.getElementById('testTitle');
+				let postfix = " - " + testName;
+				
+				title.innerText = title.innerText + postfix;
+			}
+			
+			function setDateSubtitle(milliseconds) {
+				// if (!docRef) {
+				// 	console.log("The earlier document lookup was unsuccessful.")
+				// 	return;
+				// }
+				let subtitleElement = document.getElementById("dateSubtitle");
+				let date = new Date(milliseconds);
+				
+				let dateString = date.toDateString();
+				let hoursString = date.getUTCHours();
+				let minutesString = date.getUTCMinutes();
+				let postfix = hoursString > 11 ? "PM" : "AM";
+				
+				if (hoursString === 0) {
+					hoursString = 12;
+				}
+				
+				minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
+				hoursString = hoursString % 12;
+				
+				subtitleElement.innerText = dateString + " at " + hoursString + ":" + minutesString + postfix;
+				// return dateString + " at " + hoursString + ":" + minutesString + postfix;
+			}
+			
+			function recordsRouter(doc, testName) {
+				//empty
+				return;
+			}
+			
+			// TODO: Refactor!!
+			function redrawFullBars(doc) {
+				let leftCanvas = document.getElementById("detailedCanvasLeft");
+				let rightCanvas = document.getElementById("detailedCanvasRight");
+				
+				if (!leftCanvas || !rightCanvas) {
+					if (!leftCanvas) {
+						console.log("LEFT Canvas - null");
+					}
+					
+					if (!rightCanvas) {
+						console.log("RIGHT Canvas - null");
+					}
+					
+					return;
+				}
+				
+				let ctxLeft = leftCanvas.getContext('2d');
+				let ctxRight = rightCanvas.getContext('2d');
+				
+				// let xLocationsLeft = jsonData.LeftXLocations;
+				// let yLocationsLeft = jsonData.LeftYLocations;
+				// let xLocationsRight = jsonData.RightXLocations;
+				// let yLocationsRight = jsonData.RightYLocations;
+				let xLocationsLeft = doc.data().LeftXLocations;
+				let yLocationsLeft = doc.data().LeftYLocations;
+				let xLocationsRight = doc.data().RightXLocations;
+				let yLocationsRight = doc.data().RightYLocations;
+				
+				
+				// CHECK: Using leftCanvas width sufficient?
+				let ratio = leftCanvas.width / 800;
+				let barW = 10;
+				// !! MAXIMUM radius is half the bar's thickness. Hence the (barW / 2) THEN additional "/ 1.5"
+				let cornerR = (barW / 2) / 1.5;
+				
+				ctxLeft.fillStyle = "rgba(0, 0, 0, 50)";
+				ctxRight.fillStyle = "rgba(0, 0, 0, 50)";
+				
+				if (xLocationsLeft) {
+					// Left Eye - X
+					for (let i = 0; i < xLocationsLeft.length; i++) {
+						let x = xLocationsLeft[i] * ratio;
+						let y = 0;
+						let w = barW;
+						let h = ctxLeft.canvas.width;
+						let tl = cornerR;
+						let tr = cornerR;
+						let bl = cornerR;
+						let br = cornerR;
+						
+						// Draw shape as rectangle with rounded corners
+						ctxLeft.beginPath();
+						ctxLeft.moveTo(x + tl, y);
+						ctxLeft.arcTo(x + w, y, x + w, y + h, tr);
+						ctxLeft.arcTo(x + w, y + h, x, y + h, br);
+						ctxLeft.arcTo(x, y + h, x, y, bl);
+						ctxLeft.arcTo(x, y, x + w, y, tl);
+						ctxLeft.closePath();
+						
+						ctxLeft.fill();
+					}
+				}
+				
+				if (yLocationsLeft) {
+					// Left Eye - Y
+					for (let i = 0; i < yLocationsLeft.length; i++) {
+						let y = yLocationsLeft[i] * ratio;
+						let x = 0;
+						let w = ctxRight.canvas.width;
+						let h = barW;
+						let tl = cornerR;
+						let tr = cornerR;
+						let bl = cornerR;
+						let br = cornerR;
+						
+						// Draw shape as rectangle with rounded corners
+						ctxLeft.beginPath();
+						ctxLeft.moveTo(x + tl, y);
+						ctxLeft.arcTo(x + w, y, x + w, y + h, tr);
+						ctxLeft.arcTo(x + w, y + h, x, y + h, br);
+						ctxLeft.arcTo(x, y + h, x, y, bl);
+						ctxLeft.arcTo(x, y, x + w, y, tl);
+						ctxLeft.closePath();
+						
+						ctxLeft.fill();
+					}
+				}
+				
+				if (xLocationsRight) {
+					// Right Eye - X
+					for (let i = 0; i < xLocationsRight.length; i++) {
+						let x = xLocationsRight[i] * ratio;
+						let y = 0;
+						let w = barW;
+						let h = ctxLeft.canvas.width;
+						let tl = cornerR;
+						let tr = cornerR;
+						let bl = cornerR;
+						let br = cornerR;
+						
+						// Draw shape as rectangle with rounded corners
+						ctxRight.beginPath();
+						ctxRight.moveTo(x + tl, y);
+						ctxRight.arcTo(x + w, y, x + w, y + h, tr);
+						ctxRight.arcTo(x + w, y + h, x, y + h, br);
+						ctxRight.arcTo(x, y + h, x, y, bl);
+						ctxRight.arcTo(x, y, x + w, y, tl);
+						ctxRight.closePath();
+						
+						ctxRight.fill();
+					}
+				}
+				
+				if (yLocationsRight) {
+					// Right Eye - Y
+					for (let i = 0; i < yLocationsRight.length; i++) {
+						let y = yLocationsRight[i] * ratio;
+						let x = 0;
+						let w = ctxRight.canvas.width;
+						let h = barW;
+						let tl = cornerR;
+						let tr = cornerR;
+						let bl = cornerR;
+						let br = cornerR;
+						
+						// Draw shape as rectangle with rounded corners
+						ctxRight.beginPath();
+						ctxRight.moveTo(x + tl, y);
+						ctxRight.arcTo(x + w, y, x + w, y + h, tr);
+						ctxRight.arcTo(x + w, y + h, x, y + h, br);
+						ctxRight.arcTo(x, y + h, x, y, bl);
+						ctxRight.arcTo(x, y, x + w, y, tl);
+						ctxRight.closePath();
+						
+						ctxRight.fill();
+					}
+				}
+			}
+		</script>
+	</body>
+
+</html>
