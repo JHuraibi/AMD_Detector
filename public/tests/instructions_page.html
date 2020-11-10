@@ -4,8 +4,8 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="icon" type="image/png" href="../images/favicon-32x32.png" sizes="32x32" />
-		<link rel="icon" type="image/png" href="../images/favicon-16x16.png" sizes="16x16" />
+		<link rel="icon" type="image/png" href="../images/favicon-32x32.png" sizes="32x32"/>
+		<link rel="icon" type="image/png" href="../images/favicon-16x16.png" sizes="16x16"/>
 		
 		<title>Instructions</title>
 		
@@ -70,13 +70,14 @@
 					<script>
 						document.write(customInstructions);
 					</script>
-					<span style="color: red">
+					<span id="distancePrompt" style="color: red">
 						<br><br>Ensure That Your Eyes are 1 foot (12 inches) away from your screen.
 					</span>
 				</p>
 				
 				<div class="btn-group">
 					<button type="button" onClick="location.href=destinationTestPage"
+							id="startButton"
 							class="btn btn-sm btn-outline-secondary">Start Test
 					</button>
 				</div>
@@ -95,10 +96,20 @@
 			</div>
 			
 			<script>
-				// Hides the speed slider if the user is taking the Amsler Grid test
+				let distancePrompt = document.getElementById("distancePrompt");
+				let speedSlider = document.getElementById('speedSlider');
+				let startButton = document.getElementById('startButton');
+				
+				// Hide the speed slider if the user is taking the Amsler Grid test
 				if (whichTest == "amsler_grid") {
-					let speedSlider = document.getElementById('speedSlider');
 					speedSlider.style.display = "none";
+				}
+				
+				// Free Draw: Hide speed slider. Hide distance prompt. Button text "Start Test" to "Start".
+				if (whichTest == "free_draw") {
+					distancePrompt.style.display = "none";
+					speedSlider.style.display = "none";
+					startButton.innerText = "Start";
 				}
 			</script>
 		</div>

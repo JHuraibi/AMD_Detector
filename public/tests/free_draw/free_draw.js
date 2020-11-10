@@ -58,7 +58,7 @@ function mousePressed() {
 	
 	let clickedInCanvas =
 		mouseX > 0 && mouseX < width
-		&& mouseY > 0 && mouseY < height
+		&& mouseY > 0 && mouseY < height;
 	
 	if (canvasEmpty && clickedInCanvas) {
 		canvasEmpty = false;

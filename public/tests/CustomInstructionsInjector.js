@@ -15,6 +15,13 @@ function retrieveTestTitle(target_test) {
 		case "full_bars":
 			return "Full Bars";
 		
+		// case "smiley":
+		// 	return "Smiley";
+		//
+		
+		case "free_draw":
+			return "Free Draw";
+		
 		case "fractal":
 			return "Fractal";
 	}
@@ -23,7 +30,7 @@ function retrieveTestTitle(target_test) {
 function retrieveInstructions(target_test) {
 	switch (target_test) {
 		default:
-			return "[DEBUG] - NO INSTRUCTIONS RETURNED FROM FUNCTION"; // !! FOR TESTING
+			return "[DEBUG] - NO INSTRUCTIONS RETURNED. CHECK TEST NAME PROVIDED."; // !! FOR TESTING
 		// return "";
 		
 		// AMSLER GRID
@@ -55,6 +62,16 @@ function retrieveInstructions(target_test) {
 				"click your mouse anywhere on the window. \n\n\n" +
 				"When you are ready to begin the test click the \"Start Test\" button below.";
 		
+		// FREE DRAW
+		case 'free_draw':
+			return "Using your input device (mouse or touchscreen), try recreating areas of issue in your" +
+				" vision by drawing on the empty canvas." +
+				" To start over, click the \"Clear Canvas\" button.";
+			
+		// SMILEY
+		case "smiley":
+			return "[SMILEY INSTRUCTIONS]";
+		
 		// FRACTAL
 		case "fractal":
 			return "[FRACTAL INSTRUCTIONS]";
@@ -74,6 +91,10 @@ function retrieveURLLink(target_test) {
 			return "./symbols_test/symbolsTest.html";
 		case "full_bars":
 			return "./full_bars/full_bars.html";
+		case "free_draw":
+			return "./free_draw/free_draw.html";
+		case "smiley":
+			return "#";
 		case "fractal":
 			return "./fractal/fractal.html";
 	}
