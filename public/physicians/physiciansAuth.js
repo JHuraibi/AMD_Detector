@@ -13,6 +13,7 @@ physicianForm.addEventListener('submit', (e) => {
       firstname: physicianForm['firstname'].value,
       lastname: physicianForm['lastname'].value,
       title: physicianForm['title'].value,
+      location: physicianForm['location'].value,
       type: 'physician'
     });
   }).then(() => {
@@ -21,7 +22,7 @@ physicianForm.addEventListener('submit', (e) => {
     console.log(user.uid);
     alert("verification email sent");
     console.log('Email verification sent', user);
-    window.location = 'index.html';
+    window.location = '../index.html';
   }).catch(error => {
     physicianForm.querySelector('.error').textContent = error.message;
   });
