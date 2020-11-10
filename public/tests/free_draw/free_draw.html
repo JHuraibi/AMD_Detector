@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32"/>
+		<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16"/>
+		
+		<title>Free Draw · Test</title>
+		<!-- Bootstrap core CSS -->
+		<link href="../../scss/custom.css" rel="stylesheet">
+		<!-- Custom styles for this template (Later move to custom.scss) -->
+		<link href="../../css/cover.css" rel="stylesheet">
+		
+		<style>
+			main {
+				padding-top: 4em;
+				padding-bottom: 1em;
+			}
+			
+			.instruct {
+				width: 400px;
+				padding: 30px;
+				margin: 100px auto;
+				border-radius: 10px;
+				background: white;
+				box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+				text-align: center;
+				color: #282828;
+			}
+			
+			.inner {
+				position: relative;
+			}
+			
+			.vertical_slider {
+				/*-webkit-appearance: slider-vertical;*/
+			}
+			
+			.tools-container {
+				padding-bottom: 2%;
+			}
+		</style>
+	</head>
+	<body class="text-center">
+		<div class="d-flex w-auto h-auto p-3 mx-auto flex-column">
+			<header class="masthead mb-auto">
+				<div class="inner">
+					<h3 class="masthead-brand">Vision Monitor</h3>
+					<nav class="nav nav-masthead justify-content-center">
+						<a class="nav-link active" href="../../home.html">Home</a>
+						<a class="nav-link" href="../../dashboard.html">My Dashboard</a>
+					</nav>
+				</div>
+			</header>
+			
+			<main role="main">
+				<div class="tools-container">
+					<input id="brushSizeSlider" class="vertical_slider"
+						   type="range" min="5" max="45">
+					<p id="sliderSizeIndicator"></p>
+					<button class="btn btn-sm btn-outline-secondary" onclick="clearCanvas()">
+						Clear Canvas
+					</button>
+				</div>
+				
+				<div>
+					<script src="../p5.js"></script>
+					<script src="free_draw.js"></script>
+				</div>
+			</main>
+			
+			<div>
+				<!-- The buttons will update dependent on whether anything is drawn on the canvas -->
+				<div class="btn-group" id="exitTestBtns">
+<!--					<button type="button" id="uploadBtn" onClick="sendToFirestore();showStatusIndicator();"-->
+					<button type="button" id="uploadBtn" style="display: none"
+							onClick="" class="btn btn-sm btn-outline-secondary">
+						Upload Image (BUTTON DISABLED)
+					</button>
+					<button type="button" id="exitBtn" onClick="window.location.replace('../../home.html')"
+							class="btn btn-sm btn-outline-secondary">
+						Exit
+					</button>
+					<p id="uploadStatus" style="display: none">
+						<br> Uploading Your Results...
+					</p>
+				</div>
+			
+			</div>
+			
+			<footer class="mastfoot mt-auto">
+				<div class="inner">
+				</div>
+			</footer>
+		</div>
+		
+		<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+		<script src="/__/firebase/7.23.0/firebase-app.js"></script>
+		
+		<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+		<script src="/__/firebase/7.23.0/firebase-analytics.js"></script>
+		
+		<!-- Add Firebase products that you want to use -->
+		<script src="/__/firebase/7.23.0/firebase-auth.js"></script>
+		<script src="/__/firebase/7.23.0/firebase-firestore.js"></script>
+		
+		<!-- Initialize Firebase -->
+		<script src="/__/firebase/init.js"></script>
+		<script src="../../auth.js"></script>
+		
+		<script>
+			let dbRef = firebase.firestore();
+			let userRef = null;
+			
+			firebase.auth().onAuthStateChanged(user => {
+				console.log("[FullBars.html] - USER LOCATED");
+				console.log(user);
+				userRef = user;
+			});
+		</script>
+		
+		<script>
+			// !! TODO: Handle errors with getFullBarsResults()
+			// !! TODO: Docstrings and comments
+			// If Time: Use event listeners instead of onclick (Unobtrusive Javascript)
+			let maxWaitTime = 2000;
+			let waitTime = 200;
+			
+			function sendToFirestore() {
+				attemptUserLookup();
+				
+				var dataToWrite = getFullBarsResults();
+				
+				if (userRef) {
+					dbRef.collection("TestResults")
+						.doc(userRef.uid)
+						.collection("FullBars")
+						.add(dataToWrite)
+						.then(() => {
+							uploadSuccess();
+						});
+				}
+			}
+			
+			function attemptUserLookup() {
+				if (!userRef && maxWaitTime > 0) {
+					maxWaitTime -= waitTime;
+					console.log("No User. Reattempting Lookup.");
+					setTimeout(attemptUserLookup, waitTime);
+				}
+				else if (maxWaitTime < 0) {
+					userLookupFailed();
+				}
+			}
+			
+			function uploadSuccess() {
+				let uploadStatusIndicator = document.getElementById('uploadStatus');
+				uploadStatusIndicator.textContent = "Results Saved!";
+			}
+			
+			function userLookupFailed() {
+				// TODO: Better error message and format
+				let uploadStatusIndicator = document.getElementById('uploadStatus');
+				uploadStatusIndicator.textContent = "Upload failed. Please Try Again Later.";
+			}
+		</script>
+		
+		<script>
+			function updateButtons() {
+				let uploadBtn = document.getElementById("uploadBtn");
+				let exitBtn = document.getElementById("exitBtn");
+				
+				uploadBtn.style.display = "none";
+				exitBtn.innerText = "Skip Questions";
+			}
+		</script>
+		
+		<script>
+			function showStatusIndicator() {
+				let uploadStatusIndicator = document.getElementById('uploadStatus');
+				uploadStatusIndicator.style.display = "inherit";
+			}
+		</script>
+	</body>
+</html>
