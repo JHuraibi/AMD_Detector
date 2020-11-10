@@ -1,4 +1,5 @@
 // TODO: Update docstrings
+let canvasRef;
 
 let backgroundColor = 100;
 let timestamp;
@@ -15,6 +16,9 @@ let exitBtn;
 
 
 function setup() {
+	// canvasRef = createCanvas(600, 600);
+	// canvasRef.mousePressed(changeGray);
+	
 	createCanvas(600, 600);
 	background(backgroundColor);
 	stroke(255);
@@ -52,7 +56,11 @@ function updateSliderValue(updatedValue) {
 function mousePressed() {
 	brushActive = true;
 	
-	if (canvasEmpty) {
+	let clickedInCanvas =
+		mouseX > 0 && mouseX < width
+		&& mouseY > 0 && mouseY < height
+	
+	if (canvasEmpty && clickedInCanvas) {
 		canvasEmpty = false;
 		showButtons();
 	}
