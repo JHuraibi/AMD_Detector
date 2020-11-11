@@ -1,8 +1,14 @@
 var tableBody = document.getElementById('currentList');
+var tableBodySearch = document.getElementById('searchList');
+var title = document.getElementById('title');
 var docList = [];
 var db = firebase.firestore();
+var query = document.getElementById('query');
+document.getElementById("searchbtn").addEventListener("click", search);
 
 getDocs();
+loadAll();
+
 
 async function getDocs() {
     //let user = await firebase.auth().currentUser;
@@ -26,7 +32,7 @@ async function getDocs() {
 
 
                 });
-            
+
         }
 
     });
@@ -71,6 +77,56 @@ function addRow(data, targetTableID) {
     row.appendChild(columnUWork);
 
     // Add the Row to the Table
-    tableBody.appendChild(row);
+    targetTableID.appendChild(row);
+}
+
+function search() {
+    let input = query.value;
+    title.innerHTML = "Search Results For " + input;
+
+    var tableHeaderRowCount = 1;
+    var rowCount = tableBodySearch.rows.length;
+    for (var i = tableHeaderRowCount; i < rowCount; i++) {
+        tableBodySearch.deleteRow(tableHeaderRowCount);
+    }
+
+
+    db.collection("users").where("type", "==", "physician").where("firstname", "==", input)
+        .get()
+        .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                let docData = doc.data();
+                addRow(docData, tableBodySearch);
+            });
+        })
+        .catch(function (error) {
+            console.log("Error getting documents: ", error);
+        });
+
+    db.collection("users").where("type", "==", "physician").where("lastname", "==", input)
+        .get()
+        .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                let docData = doc.data();
+                addRow(docData, tableBodySearch);
+            });
+        })
+        .catch(function (error) {
+            console.log("Error getting documents: ", error);
+        });
+}
+
+function loadAll() {
+    db.collection("users").where("type", "==", "physician")
+        .get()
+        .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                let docData = doc.data();
+                addRow(docData, tableBodySearch);
+            });
+        })
+        .catch(function (error) {
+            console.log("Error getting documents: ", error);
+        });
 }
 
