@@ -67,7 +67,10 @@ function addRow(data, targetTableID, id, type) {
     button.onclick = function () {
         if (type == "users") {
             //delete this physician
+            var r = confirm("You are about to delete this physician. Are you sure? This cannot be reversed, and you must re-add your doctor.")
+            if(r == true){
             deletePhysician(id);
+            }
         }
         else {
             //add this physician
