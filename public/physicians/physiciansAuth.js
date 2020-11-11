@@ -11,9 +11,13 @@ physicianForm.addEventListener('submit', (e) => {
     return db.collection('users').doc(cred.user.uid).set({
       email: physicianForm['email'].value,
       firstname: physicianForm['firstname'].value,
+      firstlower: (physicianForm['firstname'].value).toLowerCase(),
       lastname: physicianForm['lastname'].value,
+      lastlower: (physicianForm['lastname'].value).toLowerCase(),
       title: physicianForm['title'].value,
+      titlelower: (physicianForm['title'].value).toLowerCase(),
       location: physicianForm['location'].value,
+      locationlower: (physicianForm['location'].value).toLowerCase(),
       type: 'physician'
     });
   }).then(() => {

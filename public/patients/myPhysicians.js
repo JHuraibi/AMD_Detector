@@ -80,9 +80,11 @@ function addRow(data, targetTableID) {
     targetTableID.appendChild(row);
 }
 
-function search() {
-    let input = query.value;
-    title.innerHTML = "Search Results For " + input;
+async function search() {
+    let input = query.value.toLowerCase();
+    title.innerHTML = "Search Results For " + query.value;
+    var splitInput = input.split(" ");
+
 
     var tableHeaderRowCount = 1;
     var rowCount = tableBodySearch.rows.length;
@@ -90,25 +92,68 @@ function search() {
         tableBodySearch.deleteRow(tableHeaderRowCount);
     }
 
+    for (var i = 0; i < splitInput.length; i++) {
 
-    db.collection("users").where("type", "==", "physician").where("firstname", "==", input)
+        var found = false;
+
+        await db.collection("users").where("type", "==", "physician").where("firstlower", "==", splitInput[i])
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    let docData = doc.data();
+                    addRow(docData, tableBodySearch);
+                    found = true;
+                });
+            })
+            .catch(function (error) {
+                console.log("Error getting documents: ", error);
+            });
+
+        if (found == true) {
+            console.log("Query found in firstnames. Breaking.")
+            break;
+        }
+
+        await db.collection("users").where("type", "==", "physician").where("lastlower", "==", splitInput[i])
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    let docData = doc.data();
+                    addRow(docData, tableBodySearch);
+                    found = true;
+                });
+            })
+            .catch(function (error) {
+                console.log("Error getting documents: ", error);
+            });
+
+        if (found == true) {
+            console.log("Query found in lastnames. Breaking.")
+            break;
+        }
+    }
+
+    await db.collection("users").where("type", "==", "physician").where("locationlower", "==", input)
         .get()
         .then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let docData = doc.data();
                 addRow(docData, tableBodySearch);
+                found = true;
             });
         })
         .catch(function (error) {
             console.log("Error getting documents: ", error);
         });
 
-    db.collection("users").where("type", "==", "physician").where("lastname", "==", input)
+
+    await db.collection("users").where("type", "==", "physician").where("titlelower", "==", input)
         .get()
         .then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let docData = doc.data();
                 addRow(docData, tableBodySearch);
+                found = true;
             });
         })
         .catch(function (error) {
