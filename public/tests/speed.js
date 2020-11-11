@@ -30,6 +30,7 @@ class FirebaseDAO {
             lastname: data.lastname,
             birthday: data.birthday,
             email: data.email,
+            physicians: data.physicians,
             testSpeeds: speed.value
         })
             .then(function () {

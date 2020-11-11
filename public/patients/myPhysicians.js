@@ -19,18 +19,16 @@ async function getDocs() {
                 .get()
                 .then(doc => {
                     docList = doc.data().physicians;
-                    console.log(docList);
 
                     for (var i = 0; i < docList.length; i++) {
                         db.collection("users").doc(docList[i])
                             .get()
                             .then(doc => {
                                 let docData = doc.data();
-                                addRow(docData, tableBody);
+                                let docID = doc.id;
+                                addRow(docData, tableBody, docID, "users");
                             });
                     }
-
-
                 });
 
         }
@@ -40,11 +38,10 @@ async function getDocs() {
 
 
 // TODO: Refactor variable names below to be more readable
-function addRow(data, targetTableID) {
+function addRow(data, targetTableID, id, type) {
     let name = data.firstname + " " + data.lastname;
     let speciality = data.title;
     let work = data.location;
-
 
     // Table Row
     let row = document.createElement("tr");
@@ -53,28 +50,47 @@ function addRow(data, targetTableID) {
     let columnName = document.createElement("td");
     let columnSpeciality = document.createElement("td");
     let columnUWork = document.createElement("td");
+    let columnAction = document.createElement("td");
 
-    // Will be a child of columnURL so we can add hyperlink
+    // Will be a child of columnAction so we can add hyperlink
     //let linkForURL = document.createElement("a");
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = "btn btn-secondary my-2";
+    if (type == "users") {
+        button.innerHTML = 'Delete';
+    }
+    else {
+        button.innerHTML = 'Add';
+    }
+
+    button.onclick = function () {
+        if (type == "users") {
+            //delete this physician
+            deletePhysician(id);
+        }
+        else {
+            //add this physician
+            addPhysician(id);
+        }
+    };
 
     // Text to be put in the Columns
     let textName = document.createTextNode(name);
     let textSpeciality = document.createTextNode(speciality);
     let textWork = document.createTextNode(work);
 
-    // Set href attribute for link to test
-    //linkForURL.appendChild(textURL);
-    //linkForURL.setAttribute("href", urlOfTest);
-
     // Put the Text into their respective Columns
     columnName.appendChild(textName);
     columnSpeciality.appendChild(textSpeciality);
     columnUWork.appendChild(textWork);
+    columnAction.appendChild(button);
 
     // Add each the Columns to the Row
     row.appendChild(columnName);
     row.appendChild(columnSpeciality);
     row.appendChild(columnUWork);
+    row.appendChild(columnAction);
 
     // Add the Row to the Table
     targetTableID.appendChild(row);
@@ -101,7 +117,8 @@ async function search() {
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
                     let docData = doc.data();
-                    addRow(docData, tableBodySearch);
+                    let docID = doc.id;
+                    addRow(docData, tableBodySearch, docID, "add");
                     found = true;
                 });
             })
@@ -119,7 +136,8 @@ async function search() {
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
                     let docData = doc.data();
-                    addRow(docData, tableBodySearch);
+                    let docID = doc.id;
+                    addRow(docData, tableBodySearch, docID, "add");
                     found = true;
                 });
             })
@@ -138,8 +156,8 @@ async function search() {
         .then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let docData = doc.data();
-                addRow(docData, tableBodySearch);
-                found = true;
+                let docID = doc.id;
+                addRow(docData, tableBodySearch, docID, "add");
             });
         })
         .catch(function (error) {
@@ -152,8 +170,8 @@ async function search() {
         .then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let docData = doc.data();
-                addRow(docData, tableBodySearch);
-                found = true;
+                let docID = doc.id;
+                addRow(docData, tableBodySearch, docID, "add");
             });
         })
         .catch(function (error) {
@@ -167,11 +185,59 @@ function loadAll() {
         .then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let docData = doc.data();
-                addRow(docData, tableBodySearch);
+                let docID = doc.id;
+                addRow(docData, tableBodySearch, docID, "add");
             });
         })
         .catch(function (error) {
             console.log("Error getting documents: ", error);
         });
+}
+
+function addPhysician(docID) {
+
+    var id = firebase.auth().currentUser.uid;
+    db.collection("users").doc(id)
+        .get()
+        .then(doc => {
+            let extractedData = doc.data();
+            let docs = doc.data().physicians;
+            docs.push(docID);
+            this.update(extractedData, docs);
+        });
+
+}
+
+function update(data, docs) {
+    var id = firebase.auth().currentUser.uid;
+    db.collection("users").doc(id).set({
+        firstname: data.firstname,
+        lastname: data.lastname,
+        birthday: data.birthday,
+        email: data.email,
+        physicians: docs,
+        testSpeeds: data.testSpeeds
+    })
+        .then(function () {
+            console.log("Document successfully written!");
+            location.reload();
+        })
+        .catch(function (error) {
+            console.error("Error writing document: ", error);
+        });
+}
+
+async function deletePhysician(docID) {
+    var id = firebase.auth().currentUser.uid;
+    db.collection("users").doc(id)
+        .get()
+        .then(doc => {
+            let extractedData = doc.data();
+            let docs = doc.data().physicians;
+            const index = docs.indexOf(docID);
+            docs.splice(index, 1);
+            this.update(extractedData, docs);
+        });
+
 }
 
