@@ -1,7 +1,10 @@
 class SymbolsDAO {
-	constructor(dbRef) {
+	constructor(dbRef, leftCanvasID, rightCanvasID) {
 		this.dbRef = dbRef;
 		this.userRef = null;
+		
+		this.leftCanvas = document.getElementById(leftCanvasID);
+		this.rightCanvas = document.getElementById(rightCanvasID);
 		
 		// !! TODO: This value to be dynamically set
 		this.hardCodedCanvasSize = 600;
@@ -13,20 +16,21 @@ class SymbolsDAO {
 		// 			(243 / 255) -> 95%
 		//			(F3 / FF)   -> 95%
 		this.alphaLevels = ["33", "73", "F3"];
-		this.aIndex = 0;
+		this.leftAlphaIndex = 0;
+		this.rightAlphaIndex = 0;
+		this.useAlpha = false;
 	}
 	
 	updateUserReference(userRef) {
 		this.userRef = userRef;
 	}
 	
-	populateAggregate(leftCanvasID, rightCanvasID) {
+	populateAggregate() {
 		if (!userRef) {
-			console.log("[FullBarsDAO: drawFullBars] - User is null");
+			console.log("[SymbolsDAO] User is null");
 			return;
 		}
 		this.useAlpha = true;
-		this.aIndex = 0;
 		
 		this.dbRef
 			.collection("TestResults")
@@ -37,19 +41,21 @@ class SymbolsDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
+					this.drawLeftToCanvas(doc);
+					this.drawRightToCanvas(doc);
 				});
 			})
 			.then(() => {
 				// Once DB query and drawing are complete, reset variables specific to populateAggregate()
 				this.useAlpha = false;
-				this.aIndex = 0;
+				this.leftAlphaIndex = 0;
+				this.rightAlphaIndex = 0;
 			});
 	}
 	
-	populateMostRecent(leftCanvasID, rightCanvasID) {
+	populateMostRecent() {
 		if (!userRef) {
-			console.log("[FullBarsDAO: drawFullBars] - User is null");
+			console.log("[Symbols: drawFullBars] - User is null");
 			return;
 		}
 		
@@ -63,101 +69,99 @@ class SymbolsDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
+					this.drawLeftToCanvas(doc);
+					this.drawRightToCanvas(doc);
 				});
 			});
 	}
 	
 	// !! TODO: Error handling (especially getting values from Firebase)
 	// !! TODO: Refactor to make reading easier
-	drawToCanvas(leftCanvasID, rightCanvasID, doc) {
-		let leftCanvas = document.getElementById(leftCanvasID);
-		let rightCanvas = document.getElementById(rightCanvasID);
-		
-		if (!leftCanvas || !rightCanvas) {
-			if (!leftCanvas) {
-				console.log("LEFT Canvas - null");
-			}
-			
-			if (!rightCanvas) {
-				console.log("RIGHT Canvas - null");
-			}
-			
+	// NOTE: Font size was hardcoded to 35px in symbols_test.js. So rectangle w = 35 and h = 35
+	drawLeftToCanvas(doc) {
+		if (!doc) {
+			console.log("FireStore document provided was null.");
 			return;
 		}
 		
-		let ctxLeft = leftCanvas.getContext('2d');
-		let ctxRight = rightCanvas.getContext('2d');
+		if (!this.leftCanvas) {
+			console.log("Left Canvas DOM not found.");
+			return;
+		}
 		
 		let leftResultSymbols = doc.data().LeftResultsSymbols;
-		let leftXLocations = doc.data().LeftXLocations;
-		let leftYLocations = doc.data().LeftYLocations;
-		let rightResultSymbols = doc.data().RightResultsSymbols;
-		let rightXLocations = doc.data().RightXLocations;
-		let rightYLocations = doc.data().RightXLocations;
-		// let timeStamp = doc.data().TimeStampMS;
-		// let testCanvasSize = doc.data().TestCanvasSize;
+		let xPositions = doc.data().LeftXLocations;
+		let yPositions = doc.data().LeftYLocations;
 		
-		// CHECK: Using only leftCanvas's width sufficient?
-		let ratio = leftCanvas.width / this.hardCodedCanvasSize;
+		let ctxLeft = this.leftCanvas.getContext('2d');
+		let ratio = this.leftCanvas.width / this.hardCodedCanvasSize;
+		let w = 35;
+		let h = 35;
+		let r = w / 6;
 		
 		if (this.useAlpha) {
-			let alpha = this.alphaLevels[this.aIndex];
+			let alpha = this.getNextLeftAlpha();
 			ctxLeft.fillStyle = "#f47171" + alpha;
-			ctxRight.fillStyle = "#f47171" + alpha;
-			this.aIndex++;
 		}
 		
-		// NOTE: Font size was hardcoded at 35 in symbols_test.js. So: rectangle with w = 35 and h = 35
 		if (leftResultSymbols) {
-			for (let i = 0; i < leftXLocations.length; i++) {
-				let x = leftXLocations[i] * ratio;
-				let y = leftYLocations[i] * ratio;
-				
-				let w = 35;
-				let h = 35;
-				let tl = 5;
-				let tr = 5;
-				let bl = 5;
-				let br = 5;
-				
+			for (let i = 0; i < xPositions.length; i++) {
+				let x = xPositions[i] * ratio;
+				let y = yPositions[i] * ratio;
+
 				// Draw shape as rectangle with rounded corners
-				ctxLeft.beginPath();
-				ctxLeft.moveTo(x + tl, y);
-				ctxLeft.arcTo(x + w, y, x + w, y + h, tr);
-				ctxLeft.arcTo(x + w, y + h, x, y + h, br);
-				ctxLeft.arcTo(x, y + h, x, y, bl);
-				ctxLeft.arcTo(x, y, x + w, y, tl);
-				ctxLeft.closePath();
-				
-				ctxLeft.fill();
+				this.roundedRectangle(ctxLeft, x, y, w, h, r);
 			}
+		}
+	}
+	
+	drawRightToCanvas(doc) {
+		if (!doc) {
+			console.log("FireStore document provided was null.");
+			return;
 		}
 		
-		// !! TODO: Right canvas has nothing on it when printing to the webpage
+		if (!this.rightCanvas) {
+			console.log("Right Canvas DOM not found.");
+			return;
+		}
+		
+		let rightResultSymbols = doc.data().RightResultsSymbols;
+		let xPositions = doc.data().RightXLocations;
+		let yPositions = doc.data().RightYLocations;
+		
+		let ctxRight = this.rightCanvas.getContext('2d');
+		let ratio = this.rightCanvas.width / this.hardCodedCanvasSize;
+		let w = 35;
+		let h = 35;
+		let r = w / 6;
+		
+		if (this.useAlpha) {
+			let alpha = this.getNextRightAlpha();
+			ctxRight.fillStyle = "#f47171" + alpha;
+		}
+		
 		if (rightResultSymbols) {
-			for (let i = 0; i < leftYLocations.length; i++) {
-				let x = rightXLocations[i] * ratio;
-				let y = rightYLocations[i] * ratio;
-				let w = 35;
-				let h = 35;
-				let tl = 5;
-				let tr = 5;
-				let bl = 5;
-				let br = 5;
+			for (let i = 0; i < xPositions.length; i++) {
+				let x = xPositions[i] * ratio;
+				let y = yPositions[i] * ratio;
 				
 				// Draw shape as rectangle with rounded corners
-				ctxRight.beginPath();
-				ctxRight.moveTo(x + tl, y);
-				ctxRight.arcTo(x + w, y, x + w, y + h, tr);
-				ctxRight.arcTo(x + w, y + h, x, y + h, br);
-				ctxRight.arcTo(x, y + h, x, y, bl);
-				ctxRight.arcTo(x, y, x + w, y, tl);
-				ctxRight.closePath();
-				
-				ctxRight.fill();
+				this.roundedRectangle(ctxRight, x, y, w, h, r);
 			}
 		}
+	}
+	
+	roundedRectangle(ctx, x, y, w, h, r) {
+		ctx.beginPath();
+		ctx.moveTo(x + r, y);
+		ctx.arcTo(x + w, y, x + w, y + h, r);
+		ctx.arcTo(x + w, y + h, x, y + h, r);
+		ctx.arcTo(x, y + h, x, y, r);
+		ctx.arcTo(x, y, x + w, y, r);
+		ctx.closePath();
+		
+		ctx.fill();
 	}
 	
 	// CHECK: How can I make this more modular for different tables?
@@ -242,6 +246,34 @@ class SymbolsDAO {
 		
 		// return dateString + " at " + hoursString + ":" + minutesString + postfix;
 		return dateString;
+	}
+	
+	// TODO: Can replace this.useAlpha?
+	// TODO: Refactor name
+	getNextLeftAlpha() {
+		let alpha = this.alphaLevels[this.leftAlphaIndex];
+		this.leftAlphaIndex++;
+		
+		if (this.leftAlphaIndex > 3) {
+			this.leftAlphaIndex = 0;
+			console.log("Warning: Left Alpha Index Exceeded 3 Iterations.");
+		}
+		
+		return alpha;
+	}
+	
+	// TODO: Can replace this.useAlpha?
+	// TODO: Refactor name
+	getNextRightAlpha() {
+		let alpha = this.alphaLevels[this.rightAlphaIndex];
+		this.rightAlphaIndex++;
+		
+		if (this.rightAlphaIndex > 3) {
+			this.rightAlphaIndex = 0;
+			console.log("Warning: Right Alpha Index Exceeded 3 Iterations.");
+		}
+		
+		return alpha;
 	}
 	
 }// class [ SymbolsDAO ]

@@ -180,9 +180,9 @@
 		<script>
 			// TODO: Docstrings and comments
 			// TODO: Convert to non-object scripts
-			var growingCirclesDAO = new GrowingCirclesDAO(dbRef);
-			var symbolsDAO = new SymbolsDAO(dbRef);
-			var fullBarsDAO = new FullBarsDAO(dbRef);
+			let growingCirclesDAO = new GrowingCirclesDAO(dbRef, "canvasLeft", "canvasRight");
+			let symbolsDAO = new SymbolsDAO(dbRef, "canvasLeft", "canvasRight");
+			let fullBarsDAO = new FullBarsDAO(dbRef, "canvasLeft", "canvasRight");
 			
 			let maxWaitTime = 2000;
 			let waitTime = 200;

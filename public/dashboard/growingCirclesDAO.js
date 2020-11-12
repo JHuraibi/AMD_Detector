@@ -1,32 +1,35 @@
 class GrowingCirclesDAO {
-	constructor(dbRef) {
+	constructor(dbRef, leftCanvasID, rightCanvasID) {
 		this.dbRef = dbRef;
 		this.userRef = null;
 		
+		this.leftCanvas = document.getElementById(leftCanvasID);
+		this.rightCanvas = document.getElementById(rightCanvasID);
+		
 		// !! TODO: This value to be dynamically set
 		this.hardCodedCanvasSize = 700;
-		this.useAlpha = false;
 		
-		// These values are equal to 20, 45, and 90% opacity levels respectively
+		// These values are equal to 20, 45, and 95% opacity levels respectively
 		// Max alpha in hex is FF or 255 in decimal
 		// e.g. [Hex F3 == Dec 243]
 		// 			(243 / 255) -> 95%
 		//			(F3 / FF)   -> 95%
 		this.alphaLevels = ["33", "73", "F3"];
-		this.aIndex = 0;
+		this.leftAlphaIndex = 0;
+		this.rightAlphaIndex = 0;
+		this.useAlpha = false;
 	}
 	
 	updateUserReference(userRef) {
 		this.userRef = userRef;
 	}
 	
-	populateAggregate(leftCanvasID, rightCanvasID) {
+	populateAggregate() {
 		if (!userRef) {
 			console.log("[GrowingCirclesDAO: growingCircles] - User is null");
 			return;
 		}
 		this.useAlpha = true;
-		this.aIndex = 0;
 		
 		this.dbRef
 			.collection("TestResults")
@@ -37,17 +40,19 @@ class GrowingCirclesDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
+					this.drawLeftToCanvas(doc);
+					this.drawRightToCanvas(doc);
 				});
 			})
 			.then(() => {
 				// Once DB query and drawing are complete, reset variables specific to populateAggregate()
 				this.useAlpha = false;
-				this.aIndex = 0;
+				this.leftAlphaIndex = 0;
+				this.rightAlphaIndex = 0;
 			});
 	}
 	
-	populateMostRecent(leftCanvasID, rightCanvasID) {
+	populateMostRecent() {
 		if (!userRef) {
 			console.log("[GrowingCirclesDAO: growingCircles] - User is null");
 			return;
@@ -62,73 +67,81 @@ class GrowingCirclesDAO {
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.drawToCanvas(leftCanvasID, rightCanvasID, doc);
+					this.drawLeftToCanvas(doc);
+					this.drawRightToCanvas(doc);
 				});
 			});
 	}
 	
 	// !! TODO: Refactor to make reading easier
-	drawToCanvas(leftCanvasID, rightCanvasID, doc) {
-		let leftCanvas = document.getElementById(leftCanvasID);
-		let rightCanvas = document.getElementById(rightCanvasID);
-		
-		if (!leftCanvas || !rightCanvas) {
-			if (!leftCanvas) {
-				console.log("LEFT Canvas - null");
-			}
-			
-			if (!rightCanvas) {
-				console.log("RIGHT Canvas - null");
-			}
-			
+	drawLeftToCanvas(doc) {
+		if (!doc) {
+			console.log("FireStore document provided was null.");
 			return;
 		}
 		
-		let ctxLeft = leftCanvas.getContext('2d');
-		let ctxRight = rightCanvas.getContext('2d');
-		
-		let xLocationsLeft = doc.data().XLocationsLeft;
-		let yLocationsLeft = doc.data().YLocationsLeft;
-		let zLocationsLeft = doc.data().ZLocationsLeft;
-		let xLocationsRight = doc.data().XLocationsRight;
-		let yLocationsRight = doc.data().YLocationsRight;
-		let zLocationsRight = doc.data().ZLocationsRight;
-		
-		// CHECK: Using leftCanvas width sufficient?
-		let ratio = leftCanvas.width / this.hardCodedCanvasSize;
-		// console.log("CANVAS SIZE: " + leftCanvas);
-		// console.log("HARD CODED: " + this.hardCodedCanvasSize);
-		// console.log("RATIO: " + ratio);
-		
-		if (this.useAlpha) {
-			let alpha = this.alphaLevels[this.aIndex];
-			ctxLeft.fillStyle = "#f47171" + alpha;
-			ctxRight.fillStyle = "#f47171" + alpha;
-			this.aIndex++;
+		if (!this.leftCanvas) {
+			console.log("Left Canvas DOM not found.");
+			return;
 		}
 		
-		for (let i = 0; i < xLocationsLeft.length; i++) {
-			let x = xLocationsLeft[i] * ratio;
-			let y = yLocationsLeft[i] * ratio;
-			let z = zLocationsLeft[i] * ratio;
+		let ctxLeft = this.leftCanvas.getContext('2d');
+		
+		let xPositions = doc.data().XLocationsLeft;
+		let yPositions = doc.data().YLocationsLeft;
+		let zPositions = doc.data().ZLocationsLeft;
+		
+		let ratio = this.leftCanvas.width / this.hardCodedCanvasSize;
+		
+		if (this.useAlpha) {
+			let alpha = this.getNextLeftAlpha();
+			ctxLeft.fillStyle = "#f47171" + alpha;
+		}
+		
+		for (let i = 0; i < xPositions.length; i++) {
+			let x = xPositions[i] * ratio;
+			let y = yPositions[i] * ratio;
+			let z = zPositions[i] * ratio;
 			
 			ctxLeft.beginPath();
 			ctxLeft.arc(x, y, z, 0, Math.PI * 2);
 			ctxLeft.fill();
-			
-			// console.log("LEFT Circle Location: " + x + ", " + y + ", " + z);
+		}
+	}
+	
+	drawRightToCanvas(doc) {
+		if (!doc) {
+			console.log("FireStore document provided was null.");
+			return;
 		}
 		
-		for (let i = 0; i < xLocationsRight.length; i++) {
-			let x = xLocationsRight[i] * ratio;
-			let y = yLocationsRight[i] * ratio;
-			let z = zLocationsRight[i] * ratio;
+		if (!this.leftCanvas) {
+			console.log("Left Canvas DOM not found.");
+			return;
+		}
+		
+		let ctxRight = this.rightCanvas.getContext('2d');
+		
+		let xPositions = doc.data().XLocationsRight;
+		let yPositions = doc.data().YLocationsRight;
+		let zPositions = doc.data().ZLocationsRight;
+		
+		// CHECK: Using leftCanvas width sufficient?
+		let ratio = this.rightCanvas.width / this.hardCodedCanvasSize;
+		
+		if (this.useAlpha) {
+			let alpha = this.getNextRightAlpha();
+			ctxRight.fillStyle = "#f47171" + alpha;
+		}
+		
+		for (let i = 0; i < xPositions.length; i++) {
+			let x = xPositions[i] * ratio;
+			let y = yPositions[i] * ratio;
+			let z = zPositions[i] * ratio;
 			
 			ctxRight.beginPath();
 			ctxRight.arc(x, y, z, 0, Math.PI * 2);
 			ctxRight.fill();
-			
-			// console.log("RIGHT Circle Location: " + x + ", " + y + ", " + z);
 		}
 	}
 	
@@ -149,8 +162,6 @@ class GrowingCirclesDAO {
 				querySnapshot.forEach((doc) => {
 					let timeStamp = doc.data().TimeStampMS;
 					this.addRowToTableGC(timeStamp, targetTableID);
-					
-					// console.log("TimeStamp: " + timeStamp);
 				});
 			});
 	}
@@ -213,9 +224,37 @@ class GrowingCirclesDAO {
 		minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
 		hoursString = hoursString % 12;
 		
-		// Prototype 2 edit
+		// Uncomment below line to add time of day
 		// return dateString + " at " + hoursString + ":" + minutesString + postfix;
 		return dateString;
+	}
+	
+	// TODO: Can replace this.useAlpha?
+	// TODO: Refactor name
+	getNextLeftAlpha() {
+		let alpha = this.alphaLevels[this.leftAlphaIndex];
+		this.leftAlphaIndex++;
+		
+		if (this.leftAlphaIndex > 3) {
+			this.leftAlphaIndex = 0;
+			console.log("Warning: Left Alpha Index Exceeded 3 Iterations.");
+		}
+		
+		return alpha;
+	}
+	
+	// TODO: Can replace this.useAlpha?
+	// TODO: Refactor name
+	getNextRightAlpha() {
+		let alpha = this.alphaLevels[this.rightAlphaIndex];
+		this.rightAlphaIndex++;
+		
+		if (this.rightAlphaIndex > 3) {
+			this.rightAlphaIndex = 0;
+			console.log("Warning: Right Alpha Index Exceeded 3 Iterations.");
+		}
+		
+		return alpha;
 	}
 	
 }// class [ FirebaseDAO ]
