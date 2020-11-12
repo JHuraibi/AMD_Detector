@@ -26,7 +26,7 @@ class FullBarsDAO {
 	
 	populateAggregate() {
 		if (!userRef) {
-			console.log("[FullBarsDAO: drawFullBars] - User is null");
+			console.log("User is null");
 			return;
 		}
 		this.useAlpha = true;

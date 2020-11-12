@@ -26,7 +26,7 @@ class GrowingCirclesDAO {
 	
 	populateAggregate() {
 		if (!userRef) {
-			console.log("[GrowingCirclesDAO: growingCircles] - User is null");
+			console.log("User is null");
 			return;
 		}
 		this.useAlpha = true;
@@ -54,7 +54,7 @@ class GrowingCirclesDAO {
 	
 	populateMostRecent() {
 		if (!userRef) {
-			console.log("[GrowingCirclesDAO: growingCircles] - User is null");
+			console.log("User is null");
 			return;
 		}
 		

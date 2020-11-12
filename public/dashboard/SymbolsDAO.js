@@ -8,7 +8,6 @@ class SymbolsDAO {
 		
 		// !! TODO: This value to be dynamically set
 		this.hardCodedCanvasSize = 600;
-		this.useAlpha = false;
 		
 		// These values are equal to 20, 45, and 95% opacity levels respectively
 		// Max alpha in hex is FF or 255 in decimal
@@ -27,7 +26,7 @@ class SymbolsDAO {
 	
 	populateAggregate() {
 		if (!userRef) {
-			console.log("[SymbolsDAO] User is null");
+			console.log("User is null");
 			return;
 		}
 		this.useAlpha = true;
@@ -55,11 +54,10 @@ class SymbolsDAO {
 	
 	populateMostRecent() {
 		if (!userRef) {
-			console.log("[Symbols: drawFullBars] - User is null");
+			console.log("User is null");
 			return;
 		}
 		
-		// Update limit() to just 1
 		this.dbRef
 			.collection("TestResults")
 			.doc(userRef.uid)
