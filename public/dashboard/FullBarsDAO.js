@@ -228,11 +228,9 @@ class FullBarsDAO {
 		let columnTestName = document.createElement("td");
 		let columnTime = document.createElement("td");
 		let columnID = document.createElement("td");
-		let columnURL = document.createElement("td");
 		
 		// Children of columnID and columnURL are hyperlinks
 		let linkForDetailedView = document.createElement("a");
-		let linkForURL = document.createElement("a");
 		
 		// Text to be put in the Columns
 		let textTestName = document.createTextNode(testName);
@@ -243,20 +241,16 @@ class FullBarsDAO {
 		// Set href attribute for links
 		linkForDetailedView.appendChild(textID);
 		linkForDetailedView.setAttribute("href", urlOfDetailedView);
-		linkForURL.appendChild(textURL);
-		linkForURL.setAttribute("href", urlOfTest);
 		
 		// Put the Text into their respective Columns
 		columnTestName.appendChild(textTestName);
 		columnTime.appendChild(textTime);
 		columnID.appendChild(linkForDetailedView);
-		columnURL.appendChild(linkForURL);
 		
 		// Add each the Columns to the Row
 		row.appendChild(columnTestName);
 		row.appendChild(columnTime);
 		row.appendChild(columnID);
-		row.appendChild(columnURL);
 		
 		// Add the Row to the Table
 		tableBody.appendChild(row);

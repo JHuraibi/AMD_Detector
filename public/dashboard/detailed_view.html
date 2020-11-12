@@ -147,8 +147,10 @@
 		<script src="/__/firebase/init.js"></script>
 		<script src="../auth.js"></script>
 		
-		<!-- DAO JavaScript -->
-		<!--		<script src="./DashboardInjector.js"></script>-->
+		<!-- DAO JavaScripts -->
+		<script src="growingCirclesDAO.js"></script>
+		<script src="SymbolsDAO.js"></script>
+		<script src="FullBarsDAO.js"></script>
 		
 		<script>
 			let dbRef = firebase.firestore();
@@ -170,6 +172,10 @@
 			let waitTime = 200;
 			// let confirmedID = false;
 			
+			let growingCirclesDAO = new GrowingCirclesDAO(dbRef, "detailedCanvasLeft", "detailedCanvasRight");
+			let symbolsDAO = new SymbolsDAO(dbRef, "detailedCanvasLeft", "detailedCanvasRight");
+			let fullBarsDAO = new FullBarsDAO(dbRef, "detailedCanvasLeft", "detailedCanvasRight");
+			
 			// NOTE: Takes about 400-600ms to recognize a user
 			(function attemptUserLookup() {
 				if (!userRef && maxWaitTime > 0) {
@@ -183,11 +189,6 @@
 				else if (userRef) {
 					console.log("User found.");
 					router();
-					
-					// console.log("ID: " + testID);
-					// dashboardHelper.updateInfo(userRef, testID);
-					// canvasLeft
-					// dashboardHelper.canvasHelper(testName);
 				}
 			})();
 		</script>
@@ -209,40 +210,27 @@
 				console.log("Test Name: " + testName);
 				switch (testName) {
 					default:
-						console.log("[detailed_view] router() Default Case");
+						console.log("[detailed_view] router(): Default Case");
 						break;
 					
 					case "GrowingCircles":
-						console.log("Growing Circles");
-						
 						setTestNameTitle("Growing Circles");
 						queryDatabase("GrowingCircles");
-						// this.redrawGrowingCircles(doc);
 						break;
 					
 					case "Symbols":
-						console.log("Symbols");
-						
 						setTestNameTitle("Symbols");
 						queryDatabase("Symbols");
-						// this.redrawSymbols(doc);
 						break;
 					
 					case "FullBars":
-						console.log("Full Bars");
-						
 						setTestNameTitle("Full Bars");
 						queryDatabase("FullBars");
-						// setDateSubtitle("Full Bars");
-						// redrawFullBars();
 						break;
 					
 					case "Fractal":
-						console.log("Fractal");
-						
 						setTestNameTitle("Fractal");
 						queryDatabase("Fractal");
-						// this.redrawFractal(doc);
 						break;
 				}
 			}
@@ -256,26 +244,31 @@
 					.then(function (doc) {
 						if (doc.exists) {
 							console.log("DOC FOUND");
-							redrawFullBars(doc);
+							// redrawFullBars(doc);
 							setDateSubtitle(doc.data().TimeStampMS);
 							
-							// test = doc.data();
-							// jsonData = JSON.parse(doc.data());
-						}
-						else {
-							console.log("Failed to load document");
+							if (testName === "GrowingCircles") {
+								growingCirclesDAO.drawLeftToCanvas(doc);
+								growingCirclesDAO.drawRightToCanvas(doc);
+							}
+							else if (testName === "Symbols") {
+								symbolsDAO.drawLeftToCanvas(doc);
+								symbolsDAO.drawRightToCanvas(doc);
+							}
+							else if (testName === "FullBars") {
+								fullBarsDAO.drawLeftToCanvas(doc);
+								fullBarsDAO.drawRightToCanvas(doc);
+							}
+							else if (testName === "Fractal") {
+								console.log("FRACTAL DAO NEEDED");
+							}
 						}
 					})
 					.catch(function (error) {
 						console.log("Error getting document:", error);
 					});
-				
-				// console.log("JSON DATA: " + jsonData);
-				// console.log("Time: " + test.TimeStampMS);
 			}
 			
-			
-			// TODO: Make all the test names in Firestore have the same formatting
 			// NOTE: The single dash and space characters are here so that
 			//			if this function fails to return a test name to
 			//			the header, the header then won't look incomplete.
@@ -310,152 +303,6 @@
 				subtitleElement.innerText =
 					subtitleElement.innerText +
 					dateString + " at " + hoursString + ":" + minutesString + postfix;
-				// return dateString + " at " + hoursString + ":" + minutesString + postfix;
-			}
-			
-			function recordsRouter(doc, testName) {
-				//empty
-				return;
-			}
-			
-			// TODO: Refactor!!
-			function redrawFullBars(doc) {
-				let leftCanvas = document.getElementById("detailedCanvasLeft");
-				let rightCanvas = document.getElementById("detailedCanvasRight");
-				
-				if (!leftCanvas || !rightCanvas) {
-					if (!leftCanvas) {
-						console.log("LEFT Canvas - null");
-					}
-					
-					if (!rightCanvas) {
-						console.log("RIGHT Canvas - null");
-					}
-					
-					return;
-				}
-				
-				let ctxLeft = leftCanvas.getContext('2d');
-				let ctxRight = rightCanvas.getContext('2d');
-				
-				// let xLocationsLeft = jsonData.LeftXLocations;
-				// let yLocationsLeft = jsonData.LeftYLocations;
-				// let xLocationsRight = jsonData.RightXLocations;
-				// let yLocationsRight = jsonData.RightYLocations;
-				let xLocationsLeft = doc.data().LeftXLocations;
-				let yLocationsLeft = doc.data().LeftYLocations;
-				let xLocationsRight = doc.data().RightXLocations;
-				let yLocationsRight = doc.data().RightYLocations;
-				
-				
-				// CHECK: Using leftCanvas width sufficient?
-				let ratio = leftCanvas.width / 800;
-				let barW = 10;
-				// !! MAXIMUM radius is half the bar's thickness. Hence the (barW / 2) THEN additional "/ 1.5"
-				let cornerR = (barW / 2) / 1.5;
-				
-				ctxLeft.fillStyle = "rgba(0, 0, 0, 50)";
-				ctxRight.fillStyle = "rgba(0, 0, 0, 50)";
-				
-				if (xLocationsLeft) {
-					// Left Eye - X
-					for (let i = 0; i < xLocationsLeft.length; i++) {
-						let x = xLocationsLeft[i] * ratio;
-						let y = 0;
-						let w = barW;
-						let h = ctxLeft.canvas.width;
-						let tl = cornerR;
-						let tr = cornerR;
-						let bl = cornerR;
-						let br = cornerR;
-						
-						// Draw shape as rectangle with rounded corners
-						ctxLeft.beginPath();
-						ctxLeft.moveTo(x + tl, y);
-						ctxLeft.arcTo(x + w, y, x + w, y + h, tr);
-						ctxLeft.arcTo(x + w, y + h, x, y + h, br);
-						ctxLeft.arcTo(x, y + h, x, y, bl);
-						ctxLeft.arcTo(x, y, x + w, y, tl);
-						ctxLeft.closePath();
-						
-						ctxLeft.fill();
-					}
-				}
-				
-				if (yLocationsLeft) {
-					// Left Eye - Y
-					for (let i = 0; i < yLocationsLeft.length; i++) {
-						let y = yLocationsLeft[i] * ratio;
-						let x = 0;
-						let w = ctxRight.canvas.width;
-						let h = barW;
-						let tl = cornerR;
-						let tr = cornerR;
-						let bl = cornerR;
-						let br = cornerR;
-						
-						// Draw shape as rectangle with rounded corners
-						ctxLeft.beginPath();
-						ctxLeft.moveTo(x + tl, y);
-						ctxLeft.arcTo(x + w, y, x + w, y + h, tr);
-						ctxLeft.arcTo(x + w, y + h, x, y + h, br);
-						ctxLeft.arcTo(x, y + h, x, y, bl);
-						ctxLeft.arcTo(x, y, x + w, y, tl);
-						ctxLeft.closePath();
-						
-						ctxLeft.fill();
-					}
-				}
-				
-				if (xLocationsRight) {
-					// Right Eye - X
-					for (let i = 0; i < xLocationsRight.length; i++) {
-						let x = xLocationsRight[i] * ratio;
-						let y = 0;
-						let w = barW;
-						let h = ctxLeft.canvas.width;
-						let tl = cornerR;
-						let tr = cornerR;
-						let bl = cornerR;
-						let br = cornerR;
-						
-						// Draw shape as rectangle with rounded corners
-						ctxRight.beginPath();
-						ctxRight.moveTo(x + tl, y);
-						ctxRight.arcTo(x + w, y, x + w, y + h, tr);
-						ctxRight.arcTo(x + w, y + h, x, y + h, br);
-						ctxRight.arcTo(x, y + h, x, y, bl);
-						ctxRight.arcTo(x, y, x + w, y, tl);
-						ctxRight.closePath();
-						
-						ctxRight.fill();
-					}
-				}
-				
-				if (yLocationsRight) {
-					// Right Eye - Y
-					for (let i = 0; i < yLocationsRight.length; i++) {
-						let y = yLocationsRight[i] * ratio;
-						let x = 0;
-						let w = ctxRight.canvas.width;
-						let h = barW;
-						let tl = cornerR;
-						let tr = cornerR;
-						let bl = cornerR;
-						let br = cornerR;
-						
-						// Draw shape as rectangle with rounded corners
-						ctxRight.beginPath();
-						ctxRight.moveTo(x + tl, y);
-						ctxRight.arcTo(x + w, y, x + w, y + h, tr);
-						ctxRight.arcTo(x + w, y + h, x, y + h, br);
-						ctxRight.arcTo(x, y + h, x, y, bl);
-						ctxRight.arcTo(x, y, x + w, y, tl);
-						ctxRight.closePath();
-						
-						ctxRight.fill();
-					}
-				}
 			}
 		</script>
 	</body>

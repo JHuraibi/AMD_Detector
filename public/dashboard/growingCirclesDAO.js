@@ -161,18 +161,17 @@ class GrowingCirclesDAO {
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
 					let timeStamp = doc.data().TimeStampMS;
-					this.addRowToTableGC(timeStamp, targetTableID);
+					this.addRowToTableGC(doc.id, timeStamp, targetTableID);
 				});
 			});
 	}
 	
 	// TODO: Update with actual method for detailed view
 	// TODO: Refactor variable names below to be more readable
-	addRowToTableGC(timeStamp, targetTableID) {
+	addRowToTableGC(docID, timeStamp, targetTableID) {
 		let testName = "Growing Circles";
 		let time = this.formatDate(timeStamp);
-		// let urlOfDetailedView = this.URIBuilder(docID);
-		let urlOfTest = "../tests/instructions_page.html?growing_circles";
+		let urlOfDetailedView = this.URIBuilder(docID);
 		
 		// ID of which table to put the data into (HTML Attribute ID)
 		let tableBody = document.getElementById(targetTableID);
@@ -184,38 +183,43 @@ class GrowingCirclesDAO {
 		let columnTestName = document.createElement("td");
 		let columnTime = document.createElement("td");
 		let columnID = document.createElement("td");
-		let columnURL = document.createElement("td");
 		
 		// Will be a child of columnURL so we can add hyperlink
 		let linkForDetailedView = document.createElement("a");
-		let linkForURL = document.createElement("a");
 		
 		// Text to be put in the Columns
 		let textTestName = document.createTextNode(testName);
 		let textTime = document.createTextNode(time);
 		let textID = document.createTextNode("Details");
-		let textURL = document.createTextNode("Take this Test");
 		
 		// Set href attribute for link to test
 		linkForDetailedView.appendChild(textID);
-		linkForDetailedView.setAttribute("href", "#");
-		linkForURL.appendChild(textURL);
-		linkForURL.setAttribute("href", urlOfTest);
+		linkForDetailedView.setAttribute("href", urlOfDetailedView);
 		
 		// Put the Text into their respective Columns
 		columnTestName.appendChild(textTestName);
 		columnTime.appendChild(textTime);
-		columnID.appendChild(textID);
-		columnURL.appendChild(linkForURL);
+		columnID.appendChild(linkForDetailedView);
 		
 		// Add each the Columns to the Row
 		row.appendChild(columnTestName);
 		row.appendChild(columnTime);
 		row.appendChild(columnID);
-		row.appendChild(columnURL);
 		
 		// Add the Row to the Table
 		tableBody.appendChild(row);
+	}
+	
+	// !! NOTE: URI's are relative to dashboard.html. NOT this DAO file.
+	// !! NOTE: The TEST_NAME key's value has to match Firestore's document exactly
+	//			e.g.
+	//			[CORRECT] 	urlOfDetailedView == ./dashboard/detailed_view.html
+	//			[INCORRECT] urlOfDetailedView == ./detailed_view.html
+	URIBuilder(docID) {
+		let uri = new URLSearchParams();
+		uri.append("TEST_NAME", "GrowingCircles");
+		uri.append("TEST_ID", docID);
+		return "./dashboard/detailed_view.html?" + uri.toString();
 	}
 	
 	formatDate(milliseconds) {
