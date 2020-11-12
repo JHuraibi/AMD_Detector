@@ -7,7 +7,7 @@
 		<meta name="description" content="">
 		<link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
 		<link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
-		
+		<!-- !! TODO: Fix title -->
 		<title>AMD Detector · Dashboard</title>
 		
 		<!-- Bootstrap core CSS -->
@@ -112,7 +112,8 @@
 						<tr>
 							<th>Test</th>
 							<th>Date Taken</th>
-							<th>Link to Test</th>
+							<th>Detailed View</th>
+							<th>Link to Take Test</th>
 						</tr>
 						</thead>
 						<tbody>
@@ -218,17 +219,17 @@
 			// Draws the last THREE results of each test to the canvases
 			function aggregate() {
 				// TODO: Show a legend for the different opacities/colors and their meanings
-				growingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
-				symbolsDAO.populateAggregate("canvasLeft", "canvasRight");
-				fullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
+				growingCirclesDAO.populateAggregate();
+				symbolsDAO.populateAggregate();
+				fullBarsDAO.populateAggregate();
 			}
 			
 			// Draws SINGLE most recent result of each test to the canvases
 			function mostRecent() {
 				// setCanvasGradient();
-				growingCirclesDAO.populateMostRecent("canvasLeft", "canvasRight");
-				symbolsDAO.populateMostRecent("canvasLeft", "canvasRight");
-				fullBarsDAO.populateMostRecent("canvasLeft", "canvasRight");
+				growingCirclesDAO.populateMostRecent();
+				symbolsDAO.populateMostRecent();
+				fullBarsDAO.populateMostRecent();
 			}
 			
 			function setCanvasGradient() {
