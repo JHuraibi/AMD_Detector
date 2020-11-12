@@ -206,15 +206,16 @@ class FullBarsDAO {
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
 					let timeStamp = doc.data().TimeStampMS;
-					this.addRowToTableFullBars(timeStamp, targetTableID);
+					this.addRowToTableFullBars(doc.id, timeStamp, targetTableID);
 				});
 			});
 	}
-	
+
 	// TODO: Refactor variable names below to be more readable
-	addRowToTableFullBars(timeStamp, targetTableID) {
+	addRowToTableFullBars(docID, timeStamp, targetTableID) {
 		let testName = "Full Bars";
 		let time = this.formatDate(timeStamp);
+		let urlOfDetailedView = this.URIBuilder(docID);
 		let urlOfTest = "../tests/instructions_page.html?full_bars";
 		
 		// ID of which table to put the data into (HTML Attribute ID)
@@ -226,34 +227,52 @@ class FullBarsDAO {
 		// Table Columns
 		let columnTestName = document.createElement("td");
 		let columnTime = document.createElement("td");
+		let columnID = document.createElement("td");
 		let columnURL = document.createElement("td");
 		
-		// Will be a child of columnURL so we can add hyperlink
+		// Children of columnID and columnURL are hyperlinks
+		let linkForDetailedView = document.createElement("a");
 		let linkForURL = document.createElement("a");
 		
 		// Text to be put in the Columns
 		let textTestName = document.createTextNode(testName);
 		let textTime = document.createTextNode(time);
-		let textURL = document.createTextNode("Take this Test");
+		let textID = document.createTextNode("Details");
+		let textURL = document.createTextNode("Take This Test");
 		
-		// Set href attribute for link to test
+		// Set href attribute for links
+		linkForDetailedView.appendChild(textID);
+		linkForDetailedView.setAttribute("href", urlOfDetailedView);
 		linkForURL.appendChild(textURL);
 		linkForURL.setAttribute("href", urlOfTest);
 		
 		// Put the Text into their respective Columns
 		columnTestName.appendChild(textTestName);
 		columnTime.appendChild(textTime);
+		columnID.appendChild(linkForDetailedView);
 		columnURL.appendChild(linkForURL);
 		
 		// Add each the Columns to the Row
 		row.appendChild(columnTestName);
 		row.appendChild(columnTime);
+		row.appendChild(columnID);
 		row.appendChild(columnURL);
 		
 		// Add the Row to the Table
 		tableBody.appendChild(row);
 	}
 	
+	// !! NOTE: URI's are relative to dashboard.html. NOT this DAO file.
+	// !! NOTE: The TEST_NAME key's value has to match Firestore's document exactly
+	//			e.g.
+	//			[CORRECT] 	urlOfDetailedView == ./dashboard/detailed_view.html
+	//			[INCORRECT] urlOfDetailedView == ./detailed_view.html
+	URIBuilder(docID) {
+		let uri = new URLSearchParams();
+		uri.append("TEST_NAME", "FullBars");
+		uri.append("TEST_ID", docID);
+		return "./dashboard/detailed_view.html?" + uri.toString();
+	}
 	
 	// canvasDOMProbe() {
 	// 	let leftCanvas = document.getElementById(this.leftCanvasID);
