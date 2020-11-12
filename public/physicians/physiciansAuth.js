@@ -18,6 +18,8 @@ physicianForm.addEventListener('submit', (e) => {
       titlelower: (physicianForm['title'].value).toLowerCase(),
       location: physicianForm['location'].value,
       locationlower: (physicianForm['location'].value).toLowerCase(),
+      patients: [],
+      patientRequests: [],
       type: 'physician'
     });
   }).then(() => {

@@ -68,13 +68,14 @@ function addRow(data, targetTableID, id, type) {
         if (type == "users") {
             //delete this physician
             var r = confirm("You are about to delete this physician. Are you sure? This cannot be reversed, and you must re-add your doctor.")
-            if(r == true){
-            deletePhysician(id);
+            if (r == true) {
+                deletePhysician(id);
             }
         }
         else {
             //add this physician
             addPhysician(id);
+            button.innerHTML = "Requested";
         }
     };
 
@@ -200,13 +201,33 @@ function loadAll() {
 function addPhysician(docID) {
 
     var id = firebase.auth().currentUser.uid;
-    db.collection("users").doc(id)
+    db.collection("users").doc(docID)
         .get()
         .then(doc => {
-            let extractedData = doc.data();
-            let docs = doc.data().physicians;
-            docs.push(docID);
-            this.update(extractedData, docs);
+            let array = doc.data().patientRequests;
+            var check = false;
+            for (var i = 0; i < array.length; i++) {
+                if (array[i] == id) {
+                    check = true;
+                    break;
+                }
+                console.log(array[i]);
+            }
+            if (check == false) {
+                array.push(id);
+                db.collection("users").doc(docID).update({
+                    patientRequests: array
+                })
+                    .then(function () {
+                        console.log("Request successfully written!");
+                    })
+                    .catch(function (error) {
+                        console.error("Error writing document: ", error);
+                    });
+
+            } else
+                console.log("Request already sent");
+
         });
 
 }
