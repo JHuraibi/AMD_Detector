@@ -27,7 +27,7 @@ async function checkForRequests() {
 
 function getRequests(array) {
 
-    for (var i = 0; i <array.length; i++) {
+    for (var i = 0; i < array.length; i++) {
         db.collection("users").doc(array[i])
             .get()
             .then(doc => {
@@ -70,14 +70,19 @@ function addRow(data, type, userID) {
             //add button that goes to dashboard and views the user data     
         }
         else {
-            var r = confirm("You are about to add this user as your patient.")
+            let r = confirm("You are about to add this user as your patient.")
             if (r == true) {
                 acceptUser(userID);
-            }else{
-                rejectUser(userID);
             }
         }
     };
+
+    reject.onclick = function () {
+        let r = confirm("You are about to delete this patient request.")
+        if (r == true) {
+            rejectUser(userID);
+        }
+    }
 
     reject.style.marginLeft = "5px";
 
@@ -100,10 +105,42 @@ function addRow(data, type, userID) {
     requestListTable.appendChild(row);
 }
 
-function acceptUser(id){
+async function acceptUser(pId) {
+    removeRequest(pId);
 
 }
 
-function rejectUser(id){
+function rejectUser(pId) {
+    removeRequest(pId);
+}
+
+//Removes the request from the physicians requests array and off the requests table.
+async function removeRequest(pID){
+
+    await firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            let id = user.uid;
+            db.collection("users").doc(id)
+                .get()
+                .then(doc => {
+                    let array = doc.data().patientRequests;
+                    const index = array.indexOf(pID);
+                    array.splice(index,1);
+
+
+                    db.collection("users").doc(id).update({
+                        patientRequests: array
+                    })
+                        .then(function () {
+                            console.log("Request successfully deleted!");
+                            location.reload();
+                        })
+                        .catch(function (error) {
+                            console.error("Error deleting request: ", error);
+                        });
+
+                });
+        }
+    });
 
 }
