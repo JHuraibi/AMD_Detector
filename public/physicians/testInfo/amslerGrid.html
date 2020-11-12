@@ -135,6 +135,16 @@
 	<!-- Initialize Firebase -->
 	<script src="/__/firebase/init.js"></script>
 
+	<script>
+		const signOut = document.querySelector('.sign-out');
+		// sign out
+		signOut.addEventListener('click', () => {
+			firebase.auth().signOut()
+				.then(() => console.log('signed out'));
+			window.location = '../../index.html';
+		});
+	</script>
+
 </body>
 
 </html>

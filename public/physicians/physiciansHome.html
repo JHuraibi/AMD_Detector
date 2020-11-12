@@ -200,12 +200,12 @@
 								alt="Fractal">
 							<div class="card-body">
 								<p class="card-text"><span style="font-weight: bold">Fractal</span></p>
-								<p class="card-text"><br>Coming Soon!</p>
+								<p class="card-text">Press the corresponding button to indicate an area of issue.</p>
 								<div class="d-flex justify-content-between align-items-center">
 									<div class="btn-group">
 
 										<button type="button" class="btn btn-sm btn-outline-secondary"
-											onClick="location.href='#'">
+											onClick="location.href='./testInfo/fractal.html'">
 											Test Info
 										</button>
 									</div>
@@ -243,6 +243,15 @@
 	<!-- Initialize Firebase -->
 	<script src="/__/firebase/init.js"></script>
 
+	<script>
+		const signOut = document.querySelector('.sign-out');
+		// sign out
+		signOut.addEventListener('click', () => {
+			firebase.auth().signOut()
+				.then(() => console.log('signed out'));
+			window.location = '../index.html';
+		});
+	</script>
 </body>
 
 </html>
