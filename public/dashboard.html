@@ -75,9 +75,13 @@
 								</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="mailto:mail@example.org">
-									<span data-feather="users"></span>
-									Contact Physician
+								<a class="nav-link" href="patients/myPhysicians.html">
+									My Physicians
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="patients/profile.html">
+									My Profile
 								</a>
 							</li>
 						</ul>
@@ -177,9 +181,9 @@
 		<script>
 			// TODO: Docstrings and comments
 			// TODO: Convert to non-object scripts
-			var growingCirclesDAO = new GrowingCirclesDAO(dbRef);
-			var symbolsDAO = new SymbolsDAO(dbRef);
-			var fullBarsDAO = new FullBarsDAO(dbRef);
+			let growingCirclesDAO = new GrowingCirclesDAO(dbRef, "canvasLeft", "canvasRight");
+			let symbolsDAO = new SymbolsDAO(dbRef, "canvasLeft", "canvasRight");
+			let fullBarsDAO = new FullBarsDAO(dbRef, "canvasLeft", "canvasRight");
 			
 			let maxWaitTime = 2000;
 			let waitTime = 200;

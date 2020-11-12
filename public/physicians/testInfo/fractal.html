@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="">
-	<title>Amsler Grid · Vision Monitor</title>
+	<title>Fractal · Vision Monitor</title>
 	<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32" />
 	<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16" />
 
@@ -78,38 +78,67 @@
 			</div>
 		</div>
 	</header>
-
+	
+	<!-- !! TODO: Update according to both how switching between eyes is done and if clicks AND buttons are allowed. -->
+	<!-- !! TODO: Update according to changes made to Fractal pertaining to sections. -->
 	<main role="main">
 
 		<div style="text-align: center;">
 			<div class="rows">
 				<div class="columns">
-					<img src="../../images/thumbnail_amsler_grid.png" alt="Amsler Grid Test"
+					<img src="../../images/thumbnail_fractal.png" alt="Fractal Test"
 						style="height: 200px; width: 200px;">
 				</div>
 				<div class="columns" style="padding: 35px;">
 					<p>
-						brief test info
+						This is the Fractal test. The aim of it is to allow the user a chance to be more direct in the
+						process of documenting any issues in their vision that they may have. Fractal differs from the others
+						tests in that it is mainly controlled by the user. The shapes drawn on the canvas are dependent on
+						the inputs the user provides. With the aid of shapes being drawn on the canvas, the user is
+						instructed to use their arrow keys to guide the recursively-dividing shapes to an area of issue in
+						their vision. Additionally, the user would be instructed to press their Enter/Return key when the
+						drawn shapes are roughly as large as the area of issue within their visual field they are trying to
+						record.
 					</p>
 				</div>
 			</div>
 			<div class="rows">
 				<div class="columns">
-
+					<img src="./images/fractal/fractal_start.png" alt="Fractal Test Start"
+						 style="height: 200px; width: 200px;">
 				</div>
 				<div class="columns">
+					<!-- TODO: Include wording about option of choosing eye(s) to test -->
 					<p style="padding: 45px;">
-						show normal grid
+						The test starts off with a canvas that is divided vertically into two equal halves
+						so that the left side of the canvas a single color and the right is single, different color.
 					</p>
 				</div>
 			</div>
 			<div class="rows">
 				<div class="columns">
-
+					<img src="./images/fractal/fractal_example_top_right.png" alt="Fractal Test Example"
+						 style="height: 200px; width: 200px;">
 				</div>
 				<div class="columns">
 					<p style="padding: 20px;">
-						show distorted grid example 
+						With each successive press of either the left/right or up/down arrow keys, the direction of
+						division will toggle. In this example, the user had pressed their right key when the division
+						was vertical; then pressed the Up key when the division was horizontal. This resulted in the
+						shapes being drawn in the right, top section of the canvas that you see in the image.
+					</p>
+				</div>
+			</div>
+			<div class="rows">
+				<div class="columns">
+					<img src="./images/fractal/fractal_result.png" alt="Fractal Test Start"
+						 style="height: 200px; width: 200px;">
+				</div>
+				<div class="columns">
+					<p style="padding: 45px;">
+						The results of the Fractal test is a single canvas with any areas that the user had provided
+						via the drawn shapes and their arrow keys. If no areas were provided, then nothing would be drawn
+						onto the results canvas.
 					</p>
 				</div>
 			</div>

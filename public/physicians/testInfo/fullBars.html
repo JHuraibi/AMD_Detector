@@ -5,12 +5,9 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="">
-	<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-	<meta name="generator" content="Jekyll v4.1.1">
 	<title>Full Bars · Vision Monitor</title>
 	<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32" />
 	<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16" />
-	<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/album/">
 
 	<!-- Bootstrap core CSS -->
 	<link href="../.././scss/custom.css" rel="stylesheet">
@@ -39,8 +36,30 @@
 			position: relative;
 		}
 
+		.columns {
+			float: left;
+			width: 48%;
+			padding: 30px;
+			margin-top: 25px;
+			border-radius: 10px;
+			background: white;
+			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+			text-align: center;
+			display: table-cell;
+			height: 250px;
+			margin-right: 2px;
+			margin-left: 15px;
+		}
+
+		.rows:after {
+			content: "";
+			display: table;
+			clear: both;
+			width: 100%;
+			text-align: center;
+
+		}
 	</style>
-	<!-- Custom styles for this template -->
 	<link href="../.././css/home.css" rel="stylesheet">
 </head>
 
@@ -49,9 +68,9 @@
 		<div class="navbar navbar-dark bg-dark shadow-sm">
 			<div class="container d-flex justify-content-between">
 				<a class="nav-link active" href="../physiciansHome.html">
-                    <span data-feather="home"></span>
-                    Home <span class="sr-only">(current)</span>
-                </a>
+					<span data-feather="home"></span>
+					Home <span class="sr-only">(current)</span>
+				</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
 					aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
 					<a class="sign-out">Sign Out</a>
@@ -59,11 +78,72 @@
 			</div>
 		</div>
 	</header>
-
+	
+	<!-- !! TODO: Update according to both how switching between eyes is done and if clicks AND buttons are allowed. -->
 	<main role="main">
 
-
-
+		<div style="text-align: center;">
+			<div class="rows">
+				<div class="columns">
+					<img src="../../images/thumbnail_full_bars.png" alt="Full Bars Test"
+						style="height: 200px; width: 200px;">
+				</div>
+				<div class="columns" style="padding: 35px;">
+					<p>
+						This is the Full Bars test. The aim of it is to help uncover any issues in an individual's field of view.
+						In this case, the <i>issues</i> are either empty blotches or wavy/distorted areas within an individual's
+						field of vision. Individual, thin bars spanning the entire drawing canvas will be shown in a random location.
+						First, the bars will be drawn vertically. Then they will switch to being drawn horizontally.
+						Though their locations are random, no two bars will be in the same place. They will instead be drawn
+						such that all the bars combined will cover the entire canvas. If any of those bars appear broken or distorted,
+						then the user is instructed to click their mouse.
+					</p>
+				</div>
+			</div>
+			<div class="rows">
+				<div class="columns">
+					<img src="./images/full_bars/full_bars_start.png" alt="Full Bars Test Start"
+						 style="height: 200px; width: 200px;">
+				</div>
+				<div class="columns">
+					<!-- TODO: Include wording about option of choosing eye(s) to test -->
+					<p style="padding: 45px;">
+						The test starts off with a blank canvas. The user is instructed to cover the eye they are not testing before
+						they start. The eye being tested must be focusing on the black dot in the center the entire time.
+						Once complete, the test will pause and instruction them to switch eyes.
+					</p>
+				</div>
+			</div>
+			<div class="rows">
+				<div class="columns">
+					<img src="./images/full_bars/full_bars_vertical_bar.png" alt="Full Bars Test Vertical"
+						 style="height: 200px; width: 200px;">
+					<img src="./images/full_bars/full_bars_horizontal_bar.png" alt="Full Bars Test Vertical"
+						 style="height: 200px; width: 200px;">
+				</div>
+				<div class="columns">
+					<p style="padding: 20px;">
+						During the test, vertical or horizontal bars will be drawn spanning the entire height or
+						width, respectively, of the canvas. If any of those bars appear broken or distorted,
+						then the user will click their mouse.
+					</p>
+				</div>
+			</div>
+			<div class="rows">
+				<div class="columns">
+					<img src="./images/full_bars/full_bars_results.png" alt="Full Bars Test Results"
+						 style="height: 200px; width: 200px;">
+				</div>
+				<div class="columns">
+					<p style="padding: 45px;">
+						The results of the Full Bars Test is one canvas that displays any bars their locations that were clicked
+						during the test. In this example, the user had clicked twice during the test. Once when a vertical bar
+						was shown above the center dot. And another time when a vertical bar was shown to the right of the
+						center dot.
+					</p>
+				</div>
+			</div>
+		</div>
 
 	</main>
 

@@ -4,9 +4,10 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta name="description" content="">
+		<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32"/>
+		<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16"/>
 		
-		<title>Fractal · Test</title>
-		
+		<title>Free Draw · Test</title>
 		<!-- Bootstrap core CSS -->
 		<link href="../../scss/custom.css" rel="stylesheet">
 		<!-- Custom styles for this template (Later move to custom.scss) -->
@@ -28,6 +29,18 @@
 				text-align: center;
 				color: #282828;
 			}
+			
+			.inner {
+				position: relative;
+			}
+			
+			.vertical_slider {
+				/*-webkit-appearance: slider-vertical;*/
+			}
+			
+			.tools-container {
+				padding-bottom: 2%;
+			}
 		</style>
 	</head>
 	<body class="text-center">
@@ -43,62 +56,38 @@
 			</header>
 			
 			<main role="main">
-				<script src="../p5.js"></script>
-				<script src="fractal.js"></script>
-				<div class="instruct" id="leftEyeInstruct">
-					<p>
-						Cover your right eye, and with your left eye focus on the black dot in the center.
-						Click to Start Left Eye Test
-					</p>
-					<button class="btn btn-sm btn-outline-secondary"
-							onclick="hideLeftEyeBtn(); startTest();">
-						Start Left Eye
+				<div class="tools-container">
+					<input id="brushSizeSlider" class="vertical_slider"
+						   type="range" min="5" max="45">
+					<p id="sliderSizeIndicator"></p>
+					<button class="btn btn-sm btn-outline-secondary" onclick="clearCanvas()">
+						Clear Canvas
 					</button>
 				</div>
-				<div class="instruct" id="rightEyeInstruct" style="display: none">
-					<p>
-						Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
-						Click to Start Right Eye Test.
-					</p>
-					<button class="btn btn-sm btn-outline-secondary"
-							onclick="hideRightEyeBtn(); startTest();">
-						Start Right Eye
-					</button>
+				
+				<div>
+					<script src="../p5.js"></script>
+					<script src="free_draw.js"></script>
 				</div>
 			</main>
 			
 			<div>
-				
-				<script>
-					function hideLeftEyeBtn() {
-						document.getElementById("leftEyeInstruct").style.display = "none";
-					}
-					
-					function hideRightEyeBtn() {
-						document.getElementById("rightEyeInstruct").style.display = "none";
-					}
-				</script>
-				
-				<!-- These buttons will only become visible once the user has finished the test -->
-				<div class="btn-group" id="exitTestBtns" style="display: none">
-					<button type="button" id="uploadBtn" onClick="sendToFirestore();showStatusIndicator();updateButtons()"
-							class="btn btn-sm btn-outline-secondary">
-						Upload Results
+				<!-- The buttons will update dependent on whether anything is drawn on the canvas -->
+				<div class="btn-group" id="exitTestBtns">
+<!--					<button type="button" id="uploadBtn" onClick="sendToFirestore();showStatusIndicator();"-->
+					<button type="button" id="uploadBtn" style="display: none"
+							onClick="" class="btn btn-sm btn-outline-secondary">
+						Upload Image (BUTTON DISABLED)
 					</button>
 					<button type="button" id="exitBtn" onClick="window.location.replace('../../home.html')"
 							class="btn btn-sm btn-outline-secondary">
-						Exit without Upload
+						Exit
 					</button>
-					<button type="button" onClick="window.location.replace('./fractal_questions.html')"
-							class="btn btn-sm btn-outline-secondary">
-						Continue to Questions
-					</button>
-					<!-- TODO: Change to popup button (like leftEyeInstruct) -->
 					<p id="uploadStatus" style="display: none">
 						<br> Uploading Your Results...
 					</p>
 				</div>
-				
+			
 			</div>
 			
 			<footer class="mastfoot mt-auto">
@@ -126,14 +115,14 @@
 			let userRef = null;
 			
 			firebase.auth().onAuthStateChanged(user => {
-				console.log("[fractal.html] - USER LOCATED");
+				console.log("[FullBars.html] - USER LOCATED");
 				console.log(user);
 				userRef = user;
 			});
 		</script>
 		
 		<script>
-			// !! TODO: Handle errors with getFractalResults()
+			// !! TODO: Handle errors with getFullBarsResults()
 			// !! TODO: Docstrings and comments
 			// If Time: Use event listeners instead of onclick (Unobtrusive Javascript)
 			let maxWaitTime = 2000;
@@ -142,12 +131,12 @@
 			function sendToFirestore() {
 				attemptUserLookup();
 				
-				let dataToWrite = getFractalResults();
+				var dataToWrite = getFullBarsResults();
 				
 				if (userRef) {
 					dbRef.collection("TestResults")
 						.doc(userRef.uid)
-						.collection("Fractal")
+						.collection("FullBars")
 						.add(dataToWrite)
 						.then(() => {
 							uploadSuccess();
@@ -179,7 +168,6 @@
 		</script>
 		
 		<script>
-			// TODO: Refactor this functions name (!! keyPressed() of fractal.js uses it also!)
 			function updateButtons() {
 				let uploadBtn = document.getElementById("uploadBtn");
 				let exitBtn = document.getElementById("exitBtn");

@@ -11,8 +11,15 @@ physicianForm.addEventListener('submit', (e) => {
     return db.collection('users').doc(cred.user.uid).set({
       email: physicianForm['email'].value,
       firstname: physicianForm['firstname'].value,
+      firstlower: (physicianForm['firstname'].value).toLowerCase(),
       lastname: physicianForm['lastname'].value,
+      lastlower: (physicianForm['lastname'].value).toLowerCase(),
       title: physicianForm['title'].value,
+      titlelower: (physicianForm['title'].value).toLowerCase(),
+      location: physicianForm['location'].value,
+      locationlower: (physicianForm['location'].value).toLowerCase(),
+      patients: [],
+      patientRequests: [],
       type: 'physician'
     });
   }).then(() => {
@@ -21,7 +28,7 @@ physicianForm.addEventListener('submit', (e) => {
     console.log(user.uid);
     alert("verification email sent");
     console.log('Email verification sent', user);
-    window.location = 'index.html';
+    window.location = '../index.html';
   }).catch(error => {
     physicianForm.querySelector('.error').textContent = error.message;
   });
