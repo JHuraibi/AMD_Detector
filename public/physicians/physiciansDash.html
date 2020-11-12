@@ -75,7 +75,7 @@
 								</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="myPatients.html">
+								<a class="nav-link" href="myPatients.html" id="newPatients">
 									New Patients
 								</a>
 							</li>
@@ -162,12 +162,13 @@
 		
 		<!-- Initialize Firebase -->
 		<script src="/__/firebase/init.js"></script>
-		<script src="./auth.js"></script>
+		<script src="../auth.js"></script>
 		
 		<!-- DAO JavaScripts -->
-		<script src="dashboard/growingCirclesDAO.js"></script>
-		<script src="dashboard/SymbolsDAO.js"></script>
-		<script src="dashboard/FullBarsDAO.js"></script>
+		<script src="../dashboard/growingCirclesDAO.js"></script>
+		<script src="../dashboard/SymbolsDAO.js"></script>
+		<script src="../dashboard/FullBarsDAO.js"></script>
+		<script src="physiciansDAO.js"></script>
 		
 		<script>
 			let dbRef = firebase.firestore();
