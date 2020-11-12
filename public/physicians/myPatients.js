@@ -232,3 +232,11 @@ async function getCurrent() {
         }
     });
 }
+
+const signOut = document.querySelector('.sign-out');
+		// sign out
+		signOut.addEventListener('click', () => {
+			firebase.auth().signOut()
+				.then(() => console.log('signed out'));
+			window.location = '../index.html';
+		});
