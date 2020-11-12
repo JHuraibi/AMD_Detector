@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<title>Smiley · Vision Monitor</title>
+	<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32" />
+	<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16" />
+
+	<!-- Bootstrap core CSS -->
+	<link href="../.././scss/custom.css" rel="stylesheet">
+
+	<style>
+		.bd-placeholder-img {
+			font-size: 1.125rem;
+			text-anchor: middle;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		@media (min-width: 768px) {
+			.bd-placeholder-img-lg {
+				font-size: 3.5rem;
+			}
+		}
+
+		.logo_background {
+			background-image: url(../../images/logo_small_offset_left_cropped.png);
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			position: relative;
+		}
+
+		.columns {
+			float: left;
+			width: 48%;
+			padding: 30px;
+			margin-top: 25px;
+			border-radius: 10px;
+			background: white;
+			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+			text-align: center;
+			display: table-cell;
+			height: 250px;
+			margin-right: 2px;
+			margin-left: 15px;
+		}
+
+		.rows:after {
+			content: "";
+			display: table;
+			clear: both;
+			width: 100%;
+			text-align: center;
+
+		}
+	</style>
+	<link href="../.././css/home.css" rel="stylesheet">
+</head>
+
+<body>
+	<header>
+		<div class="navbar navbar-dark bg-dark shadow-sm">
+			<div class="container d-flex justify-content-between">
+				<a class="nav-link active" href="../physiciansHome.html">
+					<span data-feather="home"></span>
+					Home <span class="sr-only">(current)</span>
+				</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
+					aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+					<a class="sign-out">Sign Out</a>
+				</button>
+			</div>
+		</div>
+	</header>
+
+	<main role="main">
+
+		<div style="text-align: center;">
+			<div class="rows">
+				<div class="columns">
+					<img src="../../images/thumbnail_smiley.png" alt="Smiley Test"
+						style="height: 200px; width: 200px;">
+				</div>
+				<div class="columns" style="padding: 35px;">
+					<p>
+						brief test info
+					</p>
+				</div>
+			</div>
+			<div class="rows">
+				<div class="columns">
+
+				</div>
+				<div class="columns">
+					<p style="padding: 45px;">
+						how test works
+					</p>
+				</div>
+			</div>
+			<div class="rows">
+				<div class="columns">
+
+				</div>
+				<div class="columns">
+					<p style="padding: 20px;">
+						results and meaning of them. feel free to add more rows
+					</p>
+				</div>
+			</div>
+		</div>
+
+	</main>
+
+	<footer class="text-muted">
+		<div class="container">
+			<p class="float-right">
+				<a href="#">Back to top</a>
+			</p>
+		</div>
+	</footer>
+
+	<!-- Firebase Items-->
+	<script src="/__/firebase/7.21.0/firebase-app.js"></script>
+
+	<script src="/__/firebase/7.7.0/firebase-auth.js"></script>
+	<script src="/__/firebase/7.7.0/firebase-firestore.js"></script>
+	<script src="/__/firebase/7.7.0/firebase-functions.js"></script>
+
+	<!-- Initialize Firebase -->
+	<script src="/__/firebase/init.js"></script>
+
+	<script>
+		const signOut = document.querySelector('.sign-out');
+		// sign out
+		signOut.addEventListener('click', () => {
+			firebase.auth().signOut()
+				.then(() => console.log('signed out'));
+			window.location = '../../index.html';
+		});
+	</script>
+
+</body>
+
+</html>
