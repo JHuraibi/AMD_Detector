@@ -186,7 +186,7 @@ function keyPressed() {
  * 		create an animation that makes it look like a single bar is fading in.
  * 		Maximum alpha/opacity value is 255.
  */
-function fadeInBar() {
+function updateOpacity() {
 	barFillAlpha += opacityIncrease;
 	
 	if (barFillAlpha > 255) {
@@ -216,7 +216,7 @@ function drawBar() {
 	// Very Light Blue: "rgb(145, 147, 255)"
 	
 	noStroke();
-	fadeInBar();
+	updateOpacity();
 	
 	if (currentAxis === 'x') {
 		// fill(200, 80, 67, barFillAlpha);		// Orange
