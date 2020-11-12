@@ -82,67 +82,47 @@
 		</div>
 	</header>
 	
-	<!-- !! TODO: Update according to both how switching between eyes is done and if clicks AND buttons are allowed. -->
 	<main role="main">
 
 		<div style="text-align: center;">
 			<div class="rows">
 				<div class="columns">
-					<img src="../../images/thumbnail_full_bars.png" alt="Full Bars Test"
+					<img src="../../images/thumbnail_free_draw.png" alt="Free Draw Test"
 						style="height: 200px; width: 200px;">
 				</div>
 				<div class="columns" style="padding: 35px;">
 					<p>
-						This is the Full Bars test. The aim of it is to help uncover any issues in an individual's field of view.
-						In this case, the <i>issues</i> are either empty blotches or wavy/distorted areas within an individual's
-						field of vision. Individual, thin bars spanning the entire drawing canvas will be shown in a random location.
-						First, the bars will be drawn vertically. Then they will switch to being drawn horizontally.
-						Though their locations are random, no two bars will be in the same place. They will instead be drawn
-						such that all the bars combined will cover the entire canvas. If any of those bars appear broken or distorted,
-						then the user is instructed to click their mouse.
+						This is the Free Draw test. The aim of it is to allow the user free reign in providing any
+						issues they are aware of in their vision. They will use their input device, such as their mouse,
+						to draw onto the canvas and attempt to visually recreate issues within their visual field.
 					</p>
 				</div>
 			</div>
 			<div class="rows">
 				<div class="columns">
-					<img src="./images/full_bars/full_bars_start.png" alt="Full Bars Test Start"
+					<img src="./images/free_draw/free_draw_start.png" alt="Free Draw Start"
 						 style="height: 200px; width: 200px;">
 				</div>
 				<div class="columns">
-					<!-- TODO: Include wording about option of choosing eye(s) to test -->
 					<p style="padding: 45px;">
-						The test starts off with a blank canvas. The user is instructed to cover the eye they are not testing before
-						they start. The eye being tested must be focusing on the black dot in the center the entire time.
-						Once complete, the test will pause and instruction them to switch eyes.
+						The test starts off with a blank canvas. The user at this point can freely draw onto the canvas.
+						Additional items are available around the canvas. There is a slider to change the size of the
+						brush, as well as a "Clear Canvas" button to erase anything they've drawn.
 					</p>
 				</div>
 			</div>
 			<div class="rows">
 				<div class="columns">
-					<img src="./images/full_bars/full_bars_vertical_bar.png" alt="Full Bars Test Vertical"
-						 style="height: 200px; width: 200px;">
-					<img src="./images/full_bars/full_bars_horizontal_bar.png" alt="Full Bars Test Vertical"
-						 style="height: 200px; width: 200px;">
+					<img src="./images/free_draw/free_draw_upload_button.png" alt="Free Draw Upload Button"
+						 style="height: 100px; width: 200px;">
+					<img src="./images/free_draw/free_draw_exit_button.png" alt="Free Draw Upload Button"
+						 style="height: 100px; width: 200px;">
 				</div>
 				<div class="columns">
 					<p style="padding: 20px;">
-						During the test, vertical or horizontal bars will be drawn spanning the entire height or
-						width, respectively, of the canvas. If any of those bars appear broken or distorted,
-						then the user will click their mouse.
-					</p>
-				</div>
-			</div>
-			<div class="rows">
-				<div class="columns">
-					<img src="./images/full_bars/full_bars_results.png" alt="Full Bars Test Results"
-						 style="height: 200px; width: 200px;">
-				</div>
-				<div class="columns">
-					<p style="padding: 45px;">
-						The results of the Full Bars Test is one canvas that displays any bars their locations that were clicked
-						during the test. In this example, the user had clicked twice during the test. Once when a vertical bar
-						was shown above the center dot. And another time when a vertical bar was shown to the right of the
-						center dot.
+						Once complete, the user may upload their drawing to save to their account (given that
+						something was drawn to the canvas). If nothing is on the canvas, the user will only
+						be shown an "Exit" button that they may press to take them back to the homepage.
 					</p>
 				</div>
 			</div>
