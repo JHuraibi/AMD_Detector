@@ -252,16 +252,53 @@ function update(data, docs) {
 }
 
 async function deletePhysician(docID) {
-    var id = firebase.auth().currentUser.uid;
-    db.collection("users").doc(id)
-        .get()
-        .then(doc => {
-            let extractedData = doc.data();
-            let docs = doc.data().physicians;
-            const index = docs.indexOf(docID);
-            docs.splice(index, 1);
-            this.update(extractedData, docs);
-        });
+
+    await firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            let id = user.uid;
+            db.collection("users").doc(id)
+                .get()
+                .then(doc => {
+                    let docs = doc.data().physicians;
+                    const index = docs.indexOf(docID);
+                    docs.splice(index, 1);
+
+
+                    db.collection("users").doc(id).update({
+                        physicians: docs
+                    })
+                        .then(function () {
+                            console.log("Doctor successfully deleted!");
+
+                            //delete from docs side
+                            db.collection("users").doc(docID)
+                                .get()
+                                .then(doc => {
+                                    let array2 = doc.data().patients;
+                                    const index2 = array2.indexOf(id);
+                                    array2.splice(index2, 1);
+
+
+                                    db.collection("users").doc(docID).update({
+                                        patients: array2
+                                    })
+                                        .then(function () {
+                                            console.log("patient deleted from docs side");
+                                            //location.reload();
+                                        })
+                                        .catch(function (error) {
+                                            console.error("Error deleting patient from docs side: ", error);
+                                        });
+
+                                });
+                        })
+                        .catch(function (error) {
+                            console.error("Error deleting doctor: ", error);
+                        });
+
+                });
+        }
+    });
 
 }
 
