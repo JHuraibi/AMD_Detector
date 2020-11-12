@@ -199,26 +199,45 @@ function drawBar() {
 		return;
 	}
 	
-	//Orange: 		"rgb(240, 90, 40)"
-	//Red-Orange: 	"rgb(200, 80, 67)"
-	//Blue: 		"rgb(27, 160, 150)"
-	//Light Green: 	"rgb(68, 201, 114)"
+	// Orange: 			"rgb(240, 90, 40)"
+	// Light Orange:	"rgb(238, 149, 120)"
+	
+	// Red-Orange: 		"rgb(200, 80, 67)"
+	// Light Red-Orange "rgb(202, 129, 122)"
+	
+	// Blue: 			"rgb(27, 160, 150)"
+	// Light Blue:		"rgb(88, 164, 158)"
+	
+	// Green: 			"rgb(68, 201, 114)"
+	// Light Green: 	"rgb(114, 207, 146)"
+	
+	// Very Light Green: "rgb(147, 255, 145)"
+	// Very Light Red: "rgb(255, 145, 147)"
+	// Very Light Blue: "rgb(145, 147, 255)"
 	
 	noStroke();
 	fadeInBar();
 	
 	if (currentAxis === 'x') {
-		fill(200, 80, 67, barFillAlpha);
+		// fill(200, 80, 67, barFillAlpha);		// Orange
+		// fill(202, 129, 122, barFillAlpha);	// Light Orange
+		fill(255, 145, 147, barFillAlpha);		// Light Red
 		rect(cX, cY, cW, cH);
 		
-		fill(68, 201, 114, barFillAlpha);
+		// fill(68, 201, 114, barFillAlpha);	// Green
+		// fill(114, 207, 146, barFillAlpha);	// Light Green
+		fill(147, 255, 145, barFillAlpha);		// Very Light Green
 		rect(cX + cW, cY, cW, cH);
 	}
 	else if (currentAxis === 'y') {
-		fill(200, 80, 67, barFillAlpha);
+		// fill(200, 80, 67, barFillAlpha);		// Orange
+		// fill(202, 129, 122, barFillAlpha);	// Light Orange
+		fill(255, 145, 147, barFillAlpha);		// Light Red
 		rect(cX, cY, cW, cH);
 		
-		fill(68, 201, 114, barFillAlpha);
+		// fill(68, 201, 114, barFillAlpha);	// Green
+		// fill(114, 207, 146, barFillAlpha);	// Light Green
+		fill(147, 255, 145, barFillAlpha);		// Very Light Green
 		rect(cX, cY + cH, cW, cH);
 	}
 	else {
