@@ -59,7 +59,9 @@
     <header>
         <div class="navbar navbar-dark bg-dark shadow-sm">
             <div class="container d-flex justify-content-between">
-                <a class="nav-link active" href="physiciansDash.html">
+				<!-- !! NOTE: href changed to onClick() to add URI items -->
+				<!-- NOTE: href="#" to make the cursor still change to a hand when hovering -->
+                <a class="nav-link active" href="#" onclick="loadPhysicianDashboard();">
                     <span data-feather="home"></span>
                     Back <span class="sr-only">(current)</span>
                 </a>
@@ -125,7 +127,18 @@
     <!-- Initialize Firebase -->
     <script src="/__/firebase/init.js"></script>
     <script src="myPatients.js"></script>
-
+	
+	<script>
+		function loadPhysicianDashboard() {
+			let uri = new URLSearchParams();
+			uri.append("DATA", "False");
+			uri.append("PATIENT_ID", "");
+			uri.append("FIRST", "");
+			uri.append("LAST", "");
+			window.location = "./physiciansDash.html?" + uri.toString();
+		}
+	</script>
+	
 </body>
 
 </html>
