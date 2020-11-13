@@ -16,7 +16,7 @@ let exitBtn;
 
 let drawing = [];
 
-
+// TODO: Draw single horizontal and vertical axis
 function setup() {
 	createCanvas(canvasSize, canvasSize);
 	background(backgroundColor);
@@ -103,6 +103,7 @@ function drawStaticBorder() {
 
 // !! NOTE: Button is declared in free_draw.html
 function clearCanvas() {
+	drawing.splice(0, drawing.length);
 	clear();
 	background(backgroundColor);
 	disableUpload();
