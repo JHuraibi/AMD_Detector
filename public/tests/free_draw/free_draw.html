@@ -75,9 +75,9 @@
 				<!-- The buttons will update dependent on whether anything is drawn on the canvas -->
 				<div class="btn-group" id="exitTestBtns">
 					<!--					<button type="button" id="uploadBtn" onClick="sendToFirestore();showStatusIndicator();"-->
-					<button type="button" id="uploadBtn" style="display: none"
-							onClick="sendToFirestore()" class="btn btn-sm btn-outline-secondary">
-						Upload Image (BUTTON DISABLED)
+					<button type="button" id="uploadBtn" style="display: none" class="btn btn-sm btn-outline-secondary"
+							onClick="sendToFirestore();showStatusIndicator();updateButtons()">
+						Upload Image
 					</button>
 					<button type="button" id="exitBtn" onClick="window.location.replace('../../home.html')"
 							class="btn btn-sm btn-outline-secondary">
@@ -109,7 +109,7 @@
 		<!-- Initialize Firebase -->
 		<script src="/__/firebase/init.js"></script>
 		<script src="../../auth.js"></script>
-		
+
 		<script>
 			let dbRef = firebase.firestore();
 			let userRef = null;
@@ -147,8 +147,6 @@
 							uploadSuccess();
 						});
 				}
-				
-				// CRITICAL: On success exit to home
 			}
 			
 			function attemptUserLookup() {

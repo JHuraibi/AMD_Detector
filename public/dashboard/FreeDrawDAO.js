@@ -47,6 +47,8 @@ class FreeDrawDAO {
 				this.line(ctxLeft, x, y, pX, pY, w);
 			}
 		}
+		
+		this.drawStaticAxes(ctxLeft, this.leftCanvas.width, this.leftCanvas.height);
 	}
 	
 	line(ctx, x, y, pX, pY, w) {
@@ -55,6 +57,20 @@ class FreeDrawDAO {
 		ctx.lineCap = "round";
 		ctx.moveTo(x, y);
 		ctx.lineTo(pX, pY);
+		ctx.stroke();
+	}
+	
+	drawStaticAxes(ctx, w, h) {
+		ctx.lineWidth = 2;
+		
+		ctx.beginPath();
+		ctx.moveTo(w / 2, 0);
+		ctx.lineTo(w / 2, h);
+		ctx.stroke();
+		
+		ctx.beginPath();
+		ctx.moveTo(0, h / 2);
+		ctx.lineTo(w, h / 2);
 		ctx.stroke();
 	}
 	

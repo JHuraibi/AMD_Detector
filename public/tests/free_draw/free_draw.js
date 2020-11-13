@@ -43,6 +43,7 @@ function draw() {
 	}
 	
 	updateSliderIndicator();
+	drawStaticAxes();
 	drawStaticBorder();
 }
 
@@ -80,7 +81,7 @@ function mouseReleased() {
 }
 
 // NOTE: Enable this to have brush stop drawing if cursor goes out
-//  	of canvas while it is draw a line that started IN the canvas
+//  	of canvas while it is drawing a line that started IN the canvas
 // function checkCursorBounds() {
 // 	if (mouseX < 0 || mouseX > width
 // 		|| mouseY < 0 || mouseY > height) {
@@ -88,10 +89,18 @@ function mouseReleased() {
 // 	}
 // }
 
-function updateSliderIndicator(){
-	if (currentSliderValue !== slider.value){
+function updateSliderIndicator() {
+	if (currentSliderValue !== slider.value) {
 		sliderSizeIndicator.innerText = "Brush Size: " + slider.value;
 	}
+}
+
+function drawStaticAxes() {
+	noFill();
+	strokeWeight(2);
+	stroke(0);
+	line(width / 2, 0, width / 2, height);
+	line(0, height / 2, width, height / 2);
 }
 
 function drawStaticBorder() {
