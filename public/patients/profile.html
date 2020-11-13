@@ -14,6 +14,20 @@
 	<link href="../scss/custom.css" rel="stylesheet">
 	<!-- Custom styles for this template -->
 	<link href="../css/dashboard.css" rel="stylesheet">
+
+	<style>
+		.block {
+			width: auto;
+			height: auto;
+			padding: 30px;
+			margin: 100px auto;
+			margin-top: 25px;
+			border-radius: 10px;
+			background: white;
+			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+			text-align: left;
+		}
+	</style>
 </head>
 
 <body>
@@ -40,14 +54,14 @@
 								<span data-feather="home"></span>
 								Home <span class="sr-only">(current)</span>
 							</a>
-                        </li>
+						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="../home.html">
 								<span data-feather="file"></span>
 								Tests
 							</a>
-                        </li>
-                        <li class="nav-item">
+						</li>
+						<li class="nav-item">
 							<a class="nav-link" href="../dashboard.html">
 								Dashboard
 							</a>
@@ -66,9 +80,17 @@
 			<div
 				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 				<h1 class="h2">My Profile</h1>
-            </div>
-            
-            
+			</div>
+
+			<div class="block">
+				<h5>Account Info</h5>
+				<input type="text" id="firstname" name="firstname" placeholder="First Name">
+			</div>
+
+			<div class="block">
+				<h5>Medical Info</h5>
+			</div>
+
 
 
 		</main>
@@ -87,6 +109,7 @@
 
 	<!-- Initialize Firebase -->
 	<script src="/__/firebase/init.js"></script>
+	<script src="profile.js"></script>
 
 	<script>
 		const signOut = document.querySelector('.sign-out');
