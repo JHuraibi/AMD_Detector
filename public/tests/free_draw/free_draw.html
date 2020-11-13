@@ -74,9 +74,9 @@
 			<div>
 				<!-- The buttons will update dependent on whether anything is drawn on the canvas -->
 				<div class="btn-group" id="exitTestBtns">
-<!--					<button type="button" id="uploadBtn" onClick="sendToFirestore();showStatusIndicator();"-->
+					<!--					<button type="button" id="uploadBtn" onClick="sendToFirestore();showStatusIndicator();"-->
 					<button type="button" id="uploadBtn" style="display: none"
-							onClick="" class="btn btn-sm btn-outline-secondary">
+							onClick="sendToFirestore()" class="btn btn-sm btn-outline-secondary">
 						Upload Image (BUTTON DISABLED)
 					</button>
 					<button type="button" id="exitBtn" onClick="window.location.replace('../../home.html')"
@@ -115,7 +115,7 @@
 			let userRef = null;
 			
 			firebase.auth().onAuthStateChanged(user => {
-				console.log("[FullBars.html] - USER LOCATED");
+				console.log("[FreeDraw.html] - USER LOCATED");
 				console.log(user);
 				userRef = user;
 			});
@@ -131,17 +131,24 @@
 			function sendToFirestore() {
 				attemptUserLookup();
 				
-				var dataToWrite = getFullBarsResults();
+				let dataToWrite = getFreeDrawResults();
+				
+				if (!dataToWrite) {
+					console.log("UPLOAD FAILED");
+					return;
+				}
 				
 				if (userRef) {
 					dbRef.collection("TestResults")
 						.doc(userRef.uid)
-						.collection("FullBars")
+						.collection("FreeDraw")
 						.add(dataToWrite)
 						.then(() => {
 							uploadSuccess();
 						});
 				}
+				
+				// CRITICAL: On success exit to home
 			}
 			
 			function attemptUserLookup() {
