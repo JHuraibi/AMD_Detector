@@ -166,6 +166,7 @@
 	<script src="dashboard/growingCirclesDAO.js"></script>
 	<script src="dashboard/SymbolsDAO.js"></script>
 	<script src="dashboard/FullBarsDAO.js"></script>
+	<script src="dashboard/FreeDrawDAO.js"></script>
 
 	<script>
 		let dbRef = firebase.firestore();
@@ -184,6 +185,7 @@
 		let growingCirclesDAO = new GrowingCirclesDAO(dbRef, "canvasLeft", "canvasRight");
 		let symbolsDAO = new SymbolsDAO(dbRef, "canvasLeft", "canvasRight");
 		let fullBarsDAO = new FullBarsDAO(dbRef, "canvasLeft", "canvasRight");
+		let freeDrawDAO = new FreeDrawDAO(dbRef, "canvasLeft", "canvasRight");
 
 		let maxWaitTime = 2000;
 		let waitTime = 200;
@@ -209,6 +211,7 @@
 				growingCirclesDAO.populateHistoryTable("historyTable");
 				symbolsDAO.populateHistoryTable("historyTable");
 				fullBarsDAO.populateHistoryTable("historyTable");
+				freeDrawDAO.populateHistoryTable("historyTable");
 
 				// !! NOTE: CHOOSE ONLY ONE BELOW TO EXECUTE
 				aggregate();
