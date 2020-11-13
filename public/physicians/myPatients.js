@@ -70,7 +70,9 @@ function addRow(data, type, userID) {
 
     button.onclick = function () {
         if (type == "current") {
-            window.location = "physiciansDash.html";  
+        	// CHECK
+            // window.location = "physiciansDash.html";
+            loadPhysicianDashboard();
         }
         else {
             let r = confirm("You are about to add this user as your patient.")
@@ -240,3 +242,15 @@ const signOut = document.querySelector('.sign-out');
 				.then(() => console.log('signed out'));
 			window.location = '../index.html';
 		});
+
+function loadPhysicianDashboard() {
+	let uri = new URLSearchParams();
+	uri.append("DATA", "False");
+	uri.append("PATIENT_ID", "");
+	uri.append("FIRST", "");
+	uri.append("LAST", "");
+	
+	// CHECK: replace() okay or use .location?
+	// window.location = "./physiciansDash.html?" + uri.toString();
+	window.location.replace("./physiciansDash.html?" + uri.toString());
+}
