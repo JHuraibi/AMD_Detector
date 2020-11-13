@@ -1,34 +1,32 @@
 // TODO: Update docstrings
-let canvasRef;
-
-let backgroundColor = 100;
+let canvasSize = 600;
 let timestamp;
 
-let canvasEmpty = true; // TODO: Rename!
+let backgroundColor = 100;
+
+let canvasEmpty = true;
 let brushActive = false;
-let currentSliderValue = 4;
 
 let slider;
 let sliderSizeIndicator;
+let currentSliderValue;
 
 let uploadBtn;
 let exitBtn;
 
+let drawing = [];
+
 
 function setup() {
-	// canvasRef = createCanvas(600, 600);
-	// canvasRef.mousePressed(changeGray);
-	
-	createCanvas(600, 600);
+	createCanvas(canvasSize, canvasSize);
 	background(backgroundColor);
 	stroke(255);
 	timestamp = Date.now();
 	
 	slider = document.getElementById("brushSizeSlider");
-	currentSliderValue = slider.value;
-	
 	sliderSizeIndicator = document.getElementById("sliderSizeIndicator");
-	updateSliderValue(slider.value);
+	sliderSizeIndicator.innerText = "Brush Size: " + slider.value;
+	currentSliderValue = slider.value;
 	
 	uploadBtn = document.getElementById("uploadBtn");
 	exitBtn = document.getElementById("exitBtn");
@@ -39,35 +37,61 @@ function draw() {
 		stroke(255);
 		strokeWeight(slider.value);
 		line(mouseX, mouseY, pmouseX, pmouseY);
+		saveLine(mouseX, mouseY, pmouseX, pmouseY, slider.value);
+		
+		// checkCursorBounds();		// See note
 	}
 	
-	if (currentSliderValue !== slider.value) {
-		updateSliderValue(slider.value);
-	}
-	
+	updateSliderIndicator();
 	drawStaticBorder();
 }
 
-function updateSliderValue(updatedValue) {
-	currentSliderValue = updatedValue;
-	sliderSizeIndicator.innerText = "Brush Size: " + currentSliderValue;
+
+function saveLine(x, y, pX, pY, w) {
+	let line = {
+		x: x,
+		y: y,
+		pX: pX,
+		pY: pY,
+		w: slider.value
+	}
+	
+	drawing.push(line)
 }
 
+
 function mousePressed() {
-	brushActive = true;
-	
 	let clickedInCanvas =
 		mouseX > 0 && mouseX < width
 		&& mouseY > 0 && mouseY < height;
 	
-	if (canvasEmpty && clickedInCanvas) {
+	if (clickedInCanvas) {
+		brushActive = true;
+	}
+	
+	if (clickedInCanvas && canvasEmpty) {
 		canvasEmpty = false;
-		showButtons();
+		enableUpload();
 	}
 }
 
 function mouseReleased() {
 	brushActive = false;
+}
+
+// NOTE: Enable this to have brush stop drawing if cursor goes out
+//  	of canvas while it is draw a line that started IN the canvas
+// function checkCursorBounds() {
+// 	if (mouseX < 0 || mouseX > width
+// 		|| mouseY < 0 || mouseY > height) {
+// 		brushActive = false;
+// 	}
+// }
+
+function updateSliderIndicator(){
+	if (currentSliderValue !== slider.value){
+		sliderSizeIndicator.innerText = "Brush Size: " + slider.value;
+	}
 }
 
 function drawStaticBorder() {
@@ -81,22 +105,26 @@ function drawStaticBorder() {
 function clearCanvas() {
 	clear();
 	background(backgroundColor);
-	hideButtons();
+	disableUpload();
 	
 	canvasEmpty = true;
 }
 
-function showButtons() {
+function enableUpload() {
 	uploadBtn.style.display = "block";
 	exitBtn.innerText = "Exit without Upload";
 }
 
-function hideButtons() {
+function disableUpload() {
 	uploadBtn.style.display = "none";
 	exitBtn.innerText = "Exit";
 }
 
-
-
-
-
+function getFreeDrawResults() {
+	return {
+		"TestName": "free_draw",
+		"TimeStampMS": timestamp,
+		"TestCanvasSize": canvasSize,
+		"ImageData": drawing,
+	}
+}
