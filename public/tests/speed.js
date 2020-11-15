@@ -25,12 +25,7 @@ class FirebaseDAO {
 
     savespeed(data) {
         var id = firebase.auth().currentUser.uid;
-        db.collection("users").doc(id).set({
-            firstname: data.firstname,
-            lastname: data.lastname,
-            birthday: data.birthday,
-            email: data.email,
-            physicians: data.physicians,
+        db.collection("users").doc(id).update({
             testSpeeds: speed.value
         })
             .then(function () {
