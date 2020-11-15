@@ -14,7 +14,7 @@ authSwitchLinks.forEach(link => {
 registerForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  
+
 
   // get user info
   const email = registerForm.email.value;
@@ -32,8 +32,9 @@ registerForm.addEventListener('submit', (e) => {
       type: user
     });
   }).then(() => {
-    var user = firebase.auth().currentUser;
-    user.sendEmailVerification();
+    /* var user = firebase.auth().currentUser;
+    user.sendEmailVerification() */;
+    email();
     console.log(user.uid);
     db.collection("TestResults")
       .doc(user.uid).set({
@@ -59,11 +60,12 @@ loginForm.addEventListener('submit', (e) => {
   firebase.auth().signInWithEmailAndPassword(email, password)
     .then(user => {
       var user = firebase.auth().currentUser;
-      getType();
       if (!(user.emailVerified)) {
         alert("Email not verified");
         loginForm.reset();
-      }
+        return;
+      } else
+        getType();
     })
     .catch(error => {
       loginForm.querySelector('.error').textContent = error.message;
@@ -73,29 +75,34 @@ loginForm.addEventListener('submit', (e) => {
 async function getType() {
   //let user = await firebase.auth().currentUser;
   await firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-          id = user.uid;
-          console.log(id);
-          db.collection("users").doc(user.uid)
-              .get()
-              .then(doc => {
+    if (user) {
+      id = user.uid;
+      console.log(id);
+      db.collection("users").doc(user.uid)
+        .get()
+        .then(doc => {
 
-                  let type = (doc.data().type);
-                  usertype = type;
-                  console.log(usertype);
-                  if(usertype == 'physician'){
-                    loginForm.reset();
-                    console.log("true")
-                    window.location = 'physicians/physiciansHome.html';
-                  }
-                  else {
-                    console.log('logged in', user);
-                    loginForm.reset();
-                    window.location = 'home.html'; 
-                  } 
-              });
-      }
+          let type = (doc.data().type);
+          usertype = type;
+          console.log(usertype);
+          if (usertype == 'physician') {
+            loginForm.reset();
+            console.log("true")
+            window.location = 'physicians/physiciansHome.html';
+          }
+          else {
+            console.log('logged in', user);
+            loginForm.reset();
+            window.location = 'home.html';
+          }
+        });
+    }
   });
+}
+
+async function email(){
+    var user = firebase.auth().currentUser;
+    await user.sendEmailVerification();
 }
 
 
