@@ -1,4 +1,3 @@
-// TODO: Update docstrings
 let canvasSize = 600;
 let timestamp;
 
@@ -36,7 +35,7 @@ function setup() {
 }
 
 /**
- * Main program controller. Automatically loops 60 times per second.
+ * Main test controller. Automatically loops 60 times per second.
  * If the brush is active:
  * 	Draws a new line from the previous mouse cursor location
  * 	to the current mouse cursor location. Sends the coordinates
@@ -172,7 +171,7 @@ function clearCanvas() {
 
 /**
  * Does the opposite complimentary actions of disableUpload().
- * Unhides the button to upload to FireStore. Updates the exit button text
+ * Shows the button to upload to FireStore. Updates the exit button text
  *	to say "Exit without Upload" to reflect that the canvas is no longer blank.
  * This function is called whenever the canvas is blank and the user draws their
  * 	first line or their first line after clearing the canvas.
