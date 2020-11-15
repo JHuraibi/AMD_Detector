@@ -18,11 +18,31 @@ async function loadInfo() {
 
 //load current user information
 function insertData(data) {
+
+    //account information
     document.getElementById('firstname').placeholder = data.firstname;
     document.getElementById('lastname').placeholder = data.lastname;
     document.getElementById('birthday').value = data.birthday;
     document.getElementById('email').placeholder = data.email;
 
+    //medical information
+    document.getElementById('meds').value = data.meds;
+    document.getElementById('sleep').value = data.sleep;
+    document.getElementById('eyewear').value = data.eyewear;
+    document.getElementById('disease').value = data.disease;
+    document.getElementById('areds').value = data.areds;
+
+    //if undefined, leave empty
+    if(data.meds == undefined){
+        document.getElementById('meds').value = "";
+    }
+    if(data.disease == undefined){
+        document.getElementById('disease').value = "";
+    }
+    if(data.eyewear == undefined){
+        document.getElementById('eyewear').value ="";
+    }
+    
 }
 
 
