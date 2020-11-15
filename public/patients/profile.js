@@ -39,13 +39,13 @@ accountForm.addEventListener('submit', (e) => {
     /* var password = accountForm['password'].value; */
     var birthday = accountForm['birthday'].value;
 
-    if(first == ""){
+    if (first == "") {
         first = userData.firstname;
     }
-    if(last == ""){
+    if (last == "") {
         last = userData.lastname;
     }
-    if(email == ""){
+    if (email == "") {
         email = userData.email;
     }
 
@@ -64,8 +64,8 @@ accountForm.addEventListener('submit', (e) => {
                     .update({
                         firstname: first,
                         lastname: last,
-                        birthday: email,
-                        email: birthday,
+                        birthday: birthday,
+                        email: email,
                     })
                     .then(doc => {
                         document.getElementById('saveAccount').value = "Saved!"
@@ -83,14 +83,41 @@ const medicalForm = document.querySelector('.medicalForm');
 medicalForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    var r = confirm("You are saving the following changes: ");
+    //read in form values
+    var sleep = medicalForm['sleep'].value;
+    var areds = medicalForm['areds'].value;
+    var eyewear = medicalForm['eyewear'].value;
+    var disease = medicalForm['disease'].value;
+    var meds = medicalForm['meds'].value;
+
+    /* if (sleep == "") {
+        sleep = userData.sleep;
+        alert(sleep);
+    }
+    if (areds == "") {
+        areds = userData.areds;
+    }
+    if (eyewear == "") {
+        eyewear = userData.eyewear;
+    }
+    if (disease == "") {
+        disease = userData.disease;
+    }
+    if (meds = "") {
+        meds = userData.meds;
+    } */
+
 
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
             id = user.uid;
             db.collection("users").doc(user.uid)
                 .update({
-
+                    sleep: sleep,
+                    areds: areds,
+                    eyewear: eyewear,
+                    disease: disease,
+                    meds: meds
                 })
                 .then(doc => {
                     document.getElementById('saveMedical').value = "Saved!"
