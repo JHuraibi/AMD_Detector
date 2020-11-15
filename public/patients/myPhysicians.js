@@ -234,7 +234,7 @@ function addPhysician(docID) {
 
 function update(data, docs) {
     var id = firebase.auth().currentUser.uid;
-    db.collection("users").doc(id).set({
+    db.collection("users").doc(id).update({
         firstname: data.firstname,
         lastname: data.lastname,
         birthday: data.birthday,

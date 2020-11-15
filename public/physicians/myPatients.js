@@ -61,7 +61,7 @@ function addRow(data, type, userID) {
     reject.className = "btn btn-secondary my-2";
     if (type == "current") {
         button.innerHTML = 'View Data';
-        reject.style.display="none";
+        reject.style.display = "none";
     }
     else {
         button.innerHTML = 'Accept';
@@ -70,7 +70,7 @@ function addRow(data, type, userID) {
 
     button.onclick = function () {
         if (type == "current") {
-        	// CHECK
+            // CHECK
             // window.location = "physiciansDash.html";
             loadPhysicianDashboard();
         }
@@ -146,9 +146,12 @@ async function acceptUser(pId) {
                                 db.collection("users").doc(pId)
                                     .get()
                                     .then(doc => {
-                                        let array2 = doc.data().physicians;
-                                        array2.push(id);
+                                        var array2 = [];
+                                        if(doc.data().physicians != undefined){
+                                            array2 = doc.data().physicians;
+                                        }
 
+                                        array2.push(id);
 
                                         db.collection("users").doc(pId).update({
                                             physicians: array2
@@ -167,9 +170,10 @@ async function acceptUser(pId) {
                                 console.error("Error adding patient to physicians side: ", error);
                             });
 
-                    } else
+                    } else {
+                        removeRequest(pId);
                         console.log("Patient already added");
-
+                    }
                 });
         }
     });
@@ -183,6 +187,8 @@ function rejectUser(pId) {
 
 //Removes the request from the physicians requests array and off the requests table.
 async function removeRequest(pID) {
+
+    console.log("Attempting to delete request");
 
     await firebase.auth().onAuthStateChanged(user => {
         if (user) {
@@ -236,21 +242,21 @@ async function getCurrent() {
 }
 
 const signOut = document.querySelector('.sign-out');
-		// sign out
-		signOut.addEventListener('click', () => {
-			firebase.auth().signOut()
-				.then(() => console.log('signed out'));
-			window.location = '../index.html';
-		});
+// sign out
+signOut.addEventListener('click', () => {
+    firebase.auth().signOut()
+        .then(() => console.log('signed out'));
+    window.location = '../index.html';
+});
 
 function loadPhysicianDashboard() {
-	let uri = new URLSearchParams();
-	uri.append("DATA", "False");
-	uri.append("PATIENT_ID", "");
-	uri.append("FIRST", "");
-	uri.append("LAST", "");
-	
-	// CHECK: replace() okay or use .location?
-	// window.location = "./physiciansDash.html?" + uri.toString();
-	window.location.replace("./physiciansDash.html?" + uri.toString());
+    let uri = new URLSearchParams();
+    uri.append("DATA", "False");
+    uri.append("PATIENT_ID", "");
+    uri.append("FIRST", "");
+    uri.append("LAST", "");
+
+    // CHECK: replace() okay or use .location?
+    // window.location = "./physiciansDash.html?" + uri.toString();
+    window.location.replace("./physiciansDash.html?" + uri.toString());
 }

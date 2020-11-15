@@ -11,10 +11,10 @@ async function checkForRequests() {
                 .get()
                 .then(doc => {
                     let array = doc.data().patientRequests;
-                    // COMMENTED OUT DURING TESTING BY J (11/13 @ 13:01)
-                    // if (array.length > 0) {
-                    //     newPatients.innerHTML = "New Patients (" + array.length + ")";
-                    // }
+                    //COMMENTED OUT DURING TESTING BY J (11/13 @ 13:01)
+                    if (array.length > 0) {
+                        newPatients.innerHTML = "New Patients (" + array.length + ")";
+                    }
 
                 });
         }
