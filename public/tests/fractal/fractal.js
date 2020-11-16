@@ -29,19 +29,23 @@ let leftEyeTestInProgress = true;	// Indicates if bars are currently being drawn
 
 let waitingToStart = true;			// Status indicator: Waiting for user to click "Start (X) Eye" button
 let testFinished = false;			// Status indicator: Waiting for user to click "Start (X) Eye" button
+// TODO: Refactor variable name
 let inputUsedThisRound = false;		// Disables key presses if one was already received for current bars being shown
 let iterations = 7;					// Maximum numbers of times to halve the sections
 
 let canvasRef;						// Reference object to the DOM canvas element
 let canvasSize;						// Size of width and height of the canvas (in pixels)
 
-let cX;
-let cY;
-let cW;
-let cH;
+let cX;								// Current X position of the GROUP of halves
+let cY;								// Current Y position of the GROUP of halves
+let cW;								// Current width of the INDIVIDUAL halves
+let cH;								// Current height of the INDIVIDUAL halves
+
 
 /**
- * Note: This function runs after user clicks button on instructions page.
+ * Unhides the test canvas. Enables canvas to update via setting
+ * 	waitingToStart to false. Records the current time and starts automatic looping of draw()
+ * This function runs after user clicks button on instructions page.
  * 	Upon page loading, setup() and draw() both run once.
  */
 function startTest() {
@@ -52,11 +56,13 @@ function startTest() {
 }
 
 /**
- * Runs once upon page loading.
- * Sets up the canvas, sets background color, initializes the positions queue,
- * 	and records current time.
+ * Halts the automatic looping of draw(), sets up the canvas,
+ * 	creates a new canvas and a reference to it, assigns an id to the
+ * 	canvas DOM element, sets the starting axis, and assigns the starting position
+ * 	and size values.
  */
 function setup() {
+	noLoop();
 	canvasSize = 800;
 	canvasRef = createCanvas(canvasSize, canvasSize);
 	canvasRef.id('canvasRef');
@@ -68,22 +74,30 @@ function setup() {
 	cH = canvasSize;
 	
 	canvasRef.hide();
-	noLoop();
 }
 
 /**
- * Runs 60 times each second. Is the main game controller.
+ * Main test controller. Automatically loops 60 times per second.
  *
- * If the test IS NOT done:
+ * If waitingToStart is true:
+ * 	- Prematurely returns so that nothing is attempted to be drawn to the canvas.
  *
- * If test IS done:
+ * If the test is done:
+ *  - Show the results.
+ *  - Unhide the exit button
+ *  - Halt automatic looping of draw()
  *
- * If transition is TRUE:
- * 		- Wait for the user to click the button before next test round.
+ * After set number of iterations:
+ *  - Starts transition process for switching testing eye
  *
- * Always:
- * 		- Draw the center black dot.
- * 		- Draw the border around the canvas.
+ * If user provides input:
+ *  - Updates the drawn halves and the position variables
+ *
+ * Always (given not waiting to start or test done):
+ *  - Draws the current halves
+ *  - Draw the center dot and static canvas border
+ *  - Draw the key press indicator (if keydown registered)
+ *  - Increment the timer
  */
 function draw() {
 	if (waitingToStart) {
@@ -108,6 +122,7 @@ function draw() {
 		// switchAxis
 	}
 	
+	// TODO: Refactor function name
 	drawBar();
 	drawCenterDot();
 	drawKeyPressIndicator();
@@ -123,11 +138,16 @@ function keyPressed() {
 	}
 	
 	if (keyCode === ENTER) {
+		recordCurrentResults();
 		transitionToNextEye();
 		// return;	// CHECK: Needed?
 	}
 	
-	if (keyCode === ESCAPE || keyCode === BACKSPACE){
+	if (keyCode === BACKSPACE) {
+		transitionToNextEye();
+	}
+	
+	if (keyCode === ESCAPE) {
 		// TODO: Show quit confirmation
 		noLoop();
 		showExitButton();
@@ -175,6 +195,7 @@ function keyPressed() {
 		}
 	}
 	
+	// TODO: Move these two into if/else
 	indicatorStartTime = timer;
 	keyPressFillAlpha = 255;
 	
@@ -247,7 +268,7 @@ function drawBar() {
 }
 
 /**
- * Fires off the events that occur every n-seconds of the test (n set by "sec" variable)
+ * Fires off the events that occur every n-seconds (n set by "sec" variable)
  */
 function updateAll() {
 	loadNextBarPos();
@@ -307,11 +328,14 @@ function drawKeyPressIndicator() {
 	fill(0, 255);
 }
 
+/**
+ * Records the current values and positions of the halves.
+ */
 function recordCurrentResults() {
 	let fullWidth = cW;
 	let fullHeight = cH;
 	
-	if (currentAxis === 'x'){
+	if (currentAxis === 'x') {
 		fullWidth = cW * 2;
 	}
 	else {
@@ -334,9 +358,6 @@ function recordCurrentResults() {
 
 // TODO: Refactor to more intuitive method name (maybe reset()?)
 function transitionToNextEye() {
-	// noLoop();
-	recordCurrentResults();
-	
 	if (!leftEyeTestInProgress) {
 		testFinished = true;
 		return;
