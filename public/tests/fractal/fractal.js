@@ -60,19 +60,19 @@ function startTest() {
  * 	creates a new canvas and a reference to it, assigns an id to the
  * 	canvas DOM element, sets the starting axis, and assigns the starting position
  * 	and size values.
-*/
+ */
 function setup() {
 	noLoop();
 	canvasSize = 800;
 	canvasRef = createCanvas(canvasSize, canvasSize);
 	canvasRef.id('canvasRef');
-
+	
 	currentAxis = 'x';
 	cX = 0;
 	cY = 0;
 	cW = canvasSize / 2;
 	cH = canvasSize;
-
+	
 	canvasRef.hide();
 }
 
@@ -121,7 +121,7 @@ function draw() {
 		updateAll();
 		// switchAxis
 	}
-
+	
 	// TODO: Refactor function name
 	drawBar();
 	drawCenterDot();
@@ -138,11 +138,16 @@ function keyPressed() {
 	}
 	
 	if (keyCode === ENTER) {
+		recordCurrentResults();
 		transitionToNextEye();
 		// return;	// CHECK: Needed?
 	}
 	
-	if (keyCode === ESCAPE || keyCode === BACKSPACE){
+	if (keyCode === BACKSPACE) {
+		transitionToNextEye();
+	}
+	
+	if (keyCode === ESCAPE) {
 		// TODO: Show quit confirmation
 		noLoop();
 		showExitButton();
@@ -189,7 +194,7 @@ function keyPressed() {
 			console.log("Y Axis - KeyPress Other: " + keyCode);
 		}
 	}
-
+	
 	// TODO: Move these two into if/else
 	indicatorStartTime = timer;
 	keyPressFillAlpha = 255;
@@ -330,7 +335,7 @@ function recordCurrentResults() {
 	let fullWidth = cW;
 	let fullHeight = cH;
 	
-	if (currentAxis === 'x'){
+	if (currentAxis === 'x') {
 		fullWidth = cW * 2;
 	}
 	else {
@@ -353,9 +358,6 @@ function recordCurrentResults() {
 
 // TODO: Refactor to more intuitive method name (maybe reset()?)
 function transitionToNextEye() {
-	// noLoop();
-	recordCurrentResults();
-	
 	if (!leftEyeTestInProgress) {
 		testFinished = true;
 		return;
