@@ -4,6 +4,7 @@ var title = document.getElementById('title');
 var docList = [];
 var db = firebase.firestore();
 var query = document.getElementById('query');
+var searchWarning = document.getElementById('searchWarning');
 document.getElementById("searchbtn").addEventListener("click", search);
 
 getDocs();
@@ -101,6 +102,13 @@ function addRow(data, targetTableID, id, type) {
 }
 
 async function search() {
+	if (query.value.length < 3) {
+		console.log("Less than 3");
+		searchWarning.style.visibility = "visible";
+		return;
+	}
+	
+	searchWarning.style.visibility = "hidden";
     let input = query.value.toLowerCase();
     title.innerHTML = "Search Results For " + query.value;
     var splitInput = input.split(" ");
