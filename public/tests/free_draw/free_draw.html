@@ -60,6 +60,12 @@
 					<input id="brushSizeSlider" class="vertical_slider"
 						   type="range" min="5" max="45">
 					<p id="sliderSizeIndicator"></p>
+					<button class="btn btn-sm btn-outline-secondary" onclick="undo()">
+						Undo
+					</button>
+					<button class="btn btn-sm btn-outline-secondary" onclick="redo()">
+						Redo
+					</button>
 					<button class="btn btn-sm btn-outline-secondary" onclick="clearCanvas()">
 						Clear Canvas
 					</button>
@@ -109,7 +115,7 @@
 		<!-- Initialize Firebase -->
 		<script src="/__/firebase/init.js"></script>
 		<script src="../../auth.js"></script>
-
+		
 		<script>
 			let dbRef = firebase.firestore();
 			let userRef = null;

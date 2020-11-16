@@ -15,6 +15,10 @@ let uploadBtn;
 let exitBtn;
 
 let drawing = [];
+let redoRecord = [];
+// let redo = {};
+let actions = [];
+let actionCounter;
 
 // TODO: Draw single horizontal and vertical axis
 function setup() {
@@ -36,10 +40,22 @@ function draw() {
 	if (brushActive) {
 		stroke(255);
 		strokeWeight(slider.value);
-		line(mouseX, mouseY, pmouseX, pmouseY);
+		// line(mouseX, mouseY, pmouseX, pmouseY);
 		saveLine(mouseX, mouseY, pmouseX, pmouseY, slider.value);
 		
 		// checkCursorBounds();		// See note
+	}
+	
+	if (drawing.length) {
+		// console.log("Length: " + drawing.length);
+		stroke(255);
+		for (let i = 0; i < drawing.length; i++) {
+			let segment = drawing[i];
+			strokeWeight(segment.w);
+			line(segment.x, segment.y, segment.pX, segment.pY);
+			
+			// console.log("X: " + segment.x);
+		}
 	}
 	
 	updateSliderIndicator();
@@ -54,12 +70,11 @@ function saveLine(x, y, pX, pY, w) {
 		y: y,
 		pX: pX,
 		pY: pY,
-		w: slider.value
+		w: w
 	}
 	
-	drawing.push(line)
+	drawing.push(line);
 }
-
 
 function mousePressed() {
 	let clickedInCanvas =
@@ -68,16 +83,19 @@ function mousePressed() {
 	
 	if (clickedInCanvas) {
 		brushActive = true;
+		actionCounter = drawing.length;
 	}
 	
 	if (clickedInCanvas && canvasEmpty) {
 		canvasEmpty = false;
+		actionCounter = drawing.length;
 		enableUpload();
 	}
 }
 
 function mouseReleased() {
 	brushActive = false;
+	actions.push(drawing.length - actionCounter);
 }
 
 // NOTE: Enable this to have brush stop drawing if cursor goes out
@@ -88,6 +106,59 @@ function mouseReleased() {
 // 		brushActive = false;
 // 	}
 // }
+
+function keyPressed() {
+	// 90 === 'z'
+	// 122 === 'Z'
+	if (keyIsDown(CONTROL) && (keyIsDown(90) || keyIsDown(122))) {
+		let removalIndex = drawing.length - actions.pop();
+		
+		recordLast(removalIndex);
+		
+		drawing.splice(removalIndex, drawing.length);
+		clear();
+		background(backgroundColor);
+	}
+	else if (keyIsDown(CONTROL) && (keyIsDown(89) || keyIsDown(121))) {
+		redo();
+		console.log("REDO RECORD LENGTH: " + redoRecord.length);
+	}
+	
+	return false; // prevent any default behaviour (P5.js reference recommendation)
+}
+
+/**
+ * Same functionality as pressing CTRL+Z (which is handled by keyPressed())
+ */
+function undo() {
+	let removalIndex = drawing.length - actions.pop();
+	
+	recordLast(removalIndex);
+	
+	drawing.splice(removalIndex, drawing.length);
+	clear();
+	background(backgroundColor);
+}
+
+function recordLast(index) {
+	redoRecord = [];
+	for (let i = index; i < drawing.length; i++) {
+		redoRecord.push(drawing[i]);
+	}
+	
+	console.log("RECORD LENGTH: " + redoRecord.length);
+}
+
+function redo() {
+	for (let i = 0; i < redoRecord.length; i++) {
+		drawing.push(redoRecord[i]);
+	}
+	redoRecord = [];
+	// let removalIndex = drawing.length - actions.pop();
+	// drawing.splice(removalIndex, drawing.length);
+	// clear();
+	// background(backgroundColor);
+}
 
 function updateSliderIndicator() {
 	if (currentSliderValue !== slider.value) {

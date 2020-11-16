@@ -28,6 +28,7 @@ function retrieveTestTitle(target_test) {
 }
 
 function retrieveInstructions(target_test) {
+	// NOTE: For a newline use: <br\> (Must be within the double quotes with the other text)
 	switch (target_test) {
 		default:
 			return "[DEBUG] - NO INSTRUCTIONS RETURNED. CHECK TEST NAME PROVIDED."; // !! FOR TESTING
@@ -64,9 +65,12 @@ function retrieveInstructions(target_test) {
 		
 		// FREE DRAW
 		case 'free_draw':
+			// CHECK: Wording of "... on Mac ..."
 			return "Using your input device (mouse or touchscreen), try recreating areas of issue in your" +
 				" vision by drawing on the empty canvas." +
-				" To start over, click the \"Clear Canvas\" button.";
+				"<br\><br\>To undo the last mark you made click the \"Undo\" button. " +
+				"You can also Press Ctrl+Z on Windows or CMD+Z on Mac." +
+				" To clear the entire canvas, click the \"Clear Canvas\" button.";
 			
 		// SMILEY
 		case "smiley":
