@@ -75,7 +75,8 @@ function setup() {
 	
 	fillPositionQueue();
 	
-	canvasRef.hide();
+	// TODO: Commented out to match start buttons of other tests
+	// canvasRef.hide();
 }
 
 /**
@@ -341,7 +342,7 @@ function transitionToNextEye() {
  */
 function drawCenterDot() {
 	fill(0);
-
+	
 	strokeWeight(2);
 	stroke(backgroundColor);
 	ellipse(width / 2, height / 2, 20);
@@ -374,7 +375,7 @@ function fadeOutIndicator() {
 	if (timer - indicatorStartTime > indicatorDuration) {
 		clickFillAlpha -= opacityIncrease;
 	}
-
+	
 	if (clickFillAlpha < 0) {
 		clickFillAlpha = 0;
 	}
