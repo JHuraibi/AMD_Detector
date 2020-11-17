@@ -1,7 +1,8 @@
 let canvasSize = 600;
 let timestamp;
 
-let backgroundColor = 100;
+let backgroundColor = 220;
+let strokeColor = 100;
 
 let canvasEmpty = true;
 let brushActive = false;
@@ -26,7 +27,7 @@ let actionCounter;
 function setup() {
 	createCanvas(canvasSize, canvasSize);
 	background(backgroundColor);
-	stroke(255);
+	// stroke(255);
 	timestamp = Date.now();
 	
 	slider = document.getElementById("brushSizeSlider");
@@ -36,6 +37,7 @@ function setup() {
 	
 	uploadBtn = document.getElementById("uploadBtn");
 	exitBtn = document.getElementById("exitBtn");
+	noCursor();
 }
 
 /**
@@ -48,28 +50,26 @@ function setup() {
  * 	Updates the click indicator and draws the static grid axes and canvas border.
  */
 function draw() {
+	clear();
+	background(backgroundColor);
+	
 	if (brushActive) {
-		stroke(255);
-		strokeWeight(slider.value);
-		// line(mouseX, mouseY, pmouseX, pmouseY);
 		saveLine(mouseX, mouseY, pmouseX, pmouseY, slider.value);
-		
 		// checkCursorBounds();		// See note
 	}
 	
 	if (drawing.length) {
-		// console.log("Length: " + drawing.length);
-		stroke(255);
+		stroke(strokeColor);
 		for (let i = 0; i < drawing.length; i++) {
 			let segment = drawing[i];
 			strokeWeight(segment.w);
 			line(segment.x, segment.y, segment.pX, segment.pY);
 			
-			// console.log("X: " + segment.x);
 		}
 	}
 	
 	updateSliderIndicator();
+	drawBrushIndicator();
 	drawStaticAxes();
 	drawStaticBorder();
 }
@@ -108,15 +108,15 @@ function mousePressed() {
 		mouseX > 0 && mouseX < width
 		&& mouseY > 0 && mouseY < height;
 	
-	if (clickedInCanvas) {
-		brushActive = true;
-		actionCounter = drawing.length;
-	}
-	
 	if (clickedInCanvas && canvasEmpty) {
+		brushActive = true;
 		canvasEmpty = false;
 		actionCounter = drawing.length;
 		enableUpload();
+	}
+	else if (clickedInCanvas) {
+		brushActive = true;
+		actionCounter = drawing.length;
 	}
 }
 
@@ -127,6 +127,7 @@ function mouseReleased() {
 	brushActive = false;
 	actions.push(drawing.length - actionCounter);
 }
+
 
 /**
  * Disables the brush if the cursor goes out of the bounds of the canvas
@@ -206,6 +207,18 @@ function updateSliderIndicator() {
 }
 
 /**
+ * Draws a circle that follows the mouse cursor. Indicates both where the mouse cursor is and
+ * 	the current size of the brush. This is intended to be a "preview" of what shape will be
+ * 	drawn and where it will be drawn before the user clicks to actually draw.
+ */
+function drawBrushIndicator() {
+	stroke(backgroundColor);
+	strokeWeight(1);
+	fill(strokeColor);
+	ellipse(mouseX, mouseY, slider.value);
+}
+
+/**
  * Draws the static vertical and horizontal axes at the center of the canvas.
  */
 function drawStaticAxes() {
@@ -238,6 +251,19 @@ function clearCanvas() {
 	disableUpload();
 	
 	canvasEmpty = true;
+}
+
+/**
+ * Swaps the greyscale colors of the canvas background and the brush color.
+ * Since the background is not being updated during draw(), background() must be called at
+ *  the end of this function to explicitly draw the new background color to the canvas.
+ */
+function invertColors() {
+	let clicheTemp = backgroundColor;
+	backgroundColor = strokeColor;
+	strokeColor = clicheTemp;
+	
+	background(backgroundColor);
 }
 
 /**
