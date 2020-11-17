@@ -132,6 +132,11 @@ async function search() {
 	// 			location: doc.location
 	// 			title: doc.title
 	for (let i = 0; i < splitInput.length; i++) {
+		if (splitInput[i].length < 3) {
+			console.log("Substring \"" + splitInput[i] + "\" too short. Skipping.");
+			continue;
+		}
+		
 		let searchTerm = splitInput[i].toLowerCase();
 		let found = false;
 		
@@ -166,13 +171,6 @@ async function search() {
 				// continue;	// Continue not needed. Kept to show it was intentionally left out.
 			}
 		}
-		
-		// if (found) {
-		// 	//addRow(data, targetTableID, id, type)
-		// 	// addRow(localPhysicians[j], tableBodySearch, localPhysicians[j].id, "add");
-		// 	console.log("Found. Breaking from Outer.")
-		// 	break;
-		// }
 	}
 	
 }
