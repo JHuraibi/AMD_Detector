@@ -110,10 +110,8 @@ async function search() {
 	}
 	
 	searchWarning.style.visibility = "hidden";
-	let input = query.value.toLowerCase();
-	title.innerHTML = "Search Results For " + query.value;
-	var splitInput = input.split(" ");
-	
+	title.innerHTML = "Search Results For: " + query.value;
+	var splitInput = query.value.split(" ");
 	
 	var tableHeaderRowCount = 1;
 	var rowCount = tableBodySearch.rows.length;
@@ -121,75 +119,62 @@ async function search() {
 		tableBodySearch.deleteRow(tableHeaderRowCount);
 	}
 	
-	for (var i = 0; i < splitInput.length; i++) {
+	// TODO: Handle items that would make ALL physicians a match and are not helpful to user
+	//			Things possibly like: ".com" "hospital" "dr"
+	//			But not things like: "Ophthalmologist"
+	// NOTE: Try ordering the matching from most likely to least likely (minimize computation time)
+	//			e.g. title(speciality)->lastname->firstname->location
+	// NOTE: JSON Structure
+	// 			id: docID
+	// 			email: doc.email
+	// 			firstname: doc.firstname
+	// 			lastname: doc.lastname
+	// 			location: doc.location
+	// 			title: doc.title
+	for (let i = 0; i < splitInput.length; i++) {
+		let searchTerm = splitInput[i].toLowerCase();
+		let found = false;
 		
-		var found = false;
-		
-		await db.collection("users").where("type", "==", "physician").where("firstlower", "==", splitInput[i])
-			.get()
-			.then(function (querySnapshot) {
-				querySnapshot.forEach(function (doc) {
-					let docData = doc.data();
-					let docID = doc.id;
-					addRow(docData, tableBodySearch, docID, "add");
-					found = true;
-				});
-			})
-			.catch(function (error) {
-				console.log("Error getting documents: ", error);
-			});
-		
-		if (found == true) {
-			console.log("Query found in firstnames. Breaking.")
-			break;
+		for (let j = 0; j < localPhysicians.length; j++) {
+			let p = localPhysicians[j];
+			
+			if (p.title.toLowerCase().includes(searchTerm)) {
+				console.log("Query found in title (speciality). Breaking from Inner.");
+				addRow(p, tableBodySearch, p.id, "add");
+				found = true;
+				continue;
+			}
+			
+			if (p.lastname.toLowerCase().includes(searchTerm)) {
+				console.log("Query found in lastnames. Breaking from Inner.");
+				addRow(p, tableBodySearch, p.id, "add");
+				found = true;
+				continue;
+			}
+			
+			if (p.firstname.toLowerCase().includes(searchTerm)) {
+				console.log("Query found in firstnames. Breaking from Inner.");
+				addRow(p, tableBodySearch, p.id, "add");
+				found = true;
+				continue;
+			}
+			
+			if (p.location.toLowerCase().includes(searchTerm)) {
+				console.log("Query found in location. Breaking from Inner.");
+				addRow(p, tableBodySearch, p.id, "add");
+				found = true;
+				// continue;	// Continue not needed. Kept to show it was intentionally left out.
+			}
 		}
 		
-		await db.collection("users").where("type", "==", "physician").where("lastlower", "==", splitInput[i])
-			.get()
-			.then(function (querySnapshot) {
-				querySnapshot.forEach(function (doc) {
-					let docData = doc.data();
-					let docID = doc.id;
-					addRow(docData, tableBodySearch, docID, "add");
-					found = true;
-				});
-			})
-			.catch(function (error) {
-				console.log("Error getting documents: ", error);
-			});
-		
-		if (found == true) {
-			console.log("Query found in lastnames. Breaking.")
-			break;
-		}
+		// if (found) {
+		// 	//addRow(data, targetTableID, id, type)
+		// 	// addRow(localPhysicians[j], tableBodySearch, localPhysicians[j].id, "add");
+		// 	console.log("Found. Breaking from Outer.")
+		// 	break;
+		// }
 	}
 	
-	await db.collection("users").where("type", "==", "physician").where("locationlower", "==", input)
-		.get()
-		.then(function (querySnapshot) {
-			querySnapshot.forEach(function (doc) {
-				let docData = doc.data();
-				let docID = doc.id;
-				addRow(docData, tableBodySearch, docID, "add");
-			});
-		})
-		.catch(function (error) {
-			console.log("Error getting documents: ", error);
-		});
-	
-	
-	await db.collection("users").where("type", "==", "physician").where("titlelower", "==", input)
-		.get()
-		.then(function (querySnapshot) {
-			querySnapshot.forEach(function (doc) {
-				let docData = doc.data();
-				let docID = doc.id;
-				addRow(docData, tableBodySearch, docID, "add");
-			});
-		})
-		.catch(function (error) {
-			console.log("Error getting documents: ", error);
-		});
 }
 
 function loadAll() {
@@ -200,7 +185,7 @@ function loadAll() {
 				let docData = doc.data();
 				let docID = doc.id;
 				addRow(docData, tableBodySearch, docID, "add");
-				saveToLocal(doc.data());
+				saveToLocal(doc.id, doc.data());
 			});
 		})
 		.then(testPrint)
@@ -211,13 +196,14 @@ function loadAll() {
 	
 }
 
-function saveToLocal(doc) {
+function saveToLocal(docID, data) {
 	let newPhysician = {
-		email: doc.email,
-		firstname: doc.firstname,
-		lastname: doc.lastname,
-		location: doc.location,
-		speciality: doc.title,
+		id: docID,
+		email: data.email,
+		firstname: data.firstname,
+		lastname: data.lastname,
+		location: data.location,
+		title: data.title,
 	};
 	
 	localPhysicians.push(newPhysician);
