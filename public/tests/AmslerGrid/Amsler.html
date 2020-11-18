@@ -5,8 +5,8 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta name="description" content="">
-		<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32" />
-		<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16" />
+		<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32"/>
+		<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16"/>
 		
 		<title>Amsler Grid · Test</title>
 		
@@ -16,6 +16,13 @@
 		<link href="../../css/cover.css" rel="stylesheet">
 		
 		<style>
+			.image-container {
+				/* Identical to .canvas-container */
+				text-align: center;
+				padding-top: 1em;
+				padding-bottom: 1em;
+			}
+			
 			.instruct {
 				width: 75px;
 				/* padding: 10px; */
@@ -30,7 +37,7 @@
 	</head>
 	
 	<body class="text-center">
-		<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+		<div class="d-flex w-auto h-auto p-3 mx-auto flex-column" style="height: 900px;">
 			<header class="masthead mb-auto">
 				<div class="inner">
 					<h3 class="masthead-brand">Vision Monitor</h3>
@@ -41,23 +48,20 @@
 				</div>
 			</header>
 			
-			<main role="main" class="inner cover">
+			<div class="image-container">
+				<p id="timer" style="text-align: right; display: none"></p>
+				<img src="amsler.png" alt="amslerGrid" id="amslerpic" width="700" height="700">
+			</div>
+			<script src="Amsler.js"></script>
+			
+			<div id="nxt" style="text-align: right;">
 				<div style="text-align: center;">
-					<p id="timer" style="text-align: right;"></p>
-					<img src="amsler.png" alt="amslerGrid" id="amslerpic" width="650" height="650">
-				
+					<button id="nxt" type="button" class="btn btn-sm btn-outline-secondary test-buttons"
+							onClick="location.href='questions.html'">
+						Continue to Questions
+					</button>
 				</div>
-				<div id="nxt" style="text-align: right;">
-					<div>
-						<button style="background-color: white;" id="nxt" type="button" onClick="location.href='questions.html'"
-								class="btn btn-sm btn-outline-secondary">Next
-						</button>
-					</div>
-				</div>
-				<script src="Amsler.js"></script>
-			
-			
-			</main>
+			</div>
 			
 			<footer class="mastfoot mt-auto">
 				<div class="inner">

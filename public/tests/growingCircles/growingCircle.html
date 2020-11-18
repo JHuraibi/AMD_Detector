@@ -16,9 +16,15 @@
 	
     <style>
         canvas {
-            border: 1px solid black;
-            background-color: #fff;
+            border: 5px solid black;
+            background-color: #f0f0f0;
         }
+		
+		.canvas-container{
+			text-align: center;
+			padding-top: 1em;
+			padding-bottom: 1em;
+		}
 		
         .instruct {
             width: 400px;
@@ -44,7 +50,6 @@
                 </nav>
             </div>
         </header>
-        <br>
         <div class="row">
             <div class="column" id="leftEyeResults">
                 <b>Left Eye Results</b>
@@ -53,7 +58,8 @@
                 <b>Right Eye Results</b>
             </div>
         </div>
-        <div style="text-align: center;">
+		
+        <div class="canvas-container">
             <canvas></canvas>
             <canvas id="canvas2"></canvas>
         </div>
@@ -66,7 +72,6 @@
             <button id="nexttestbtn" class="btn btn-sm btn-outline-secondary"
                 style="color: #282828; border-color: #282828;">Start next eye</button>
         </div>
-
         <div style="text-align: center;">
             <button id="start" class="btn btn-sm btn-outline-secondary test-buttons">
                 Start Test

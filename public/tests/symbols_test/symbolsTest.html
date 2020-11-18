@@ -4,8 +4,8 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta name="description" content="">
-		<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32" />
-		<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16" />
+		<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32"/>
+		<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16"/>
 		
 		<title>Symbols · Test</title>
 		
@@ -16,7 +16,14 @@
 		
 		<style>
 			canvas {
-				border: 1px solid black;
+				border: 5px solid black;
+				background-color: #f0f0f0;
+			}
+			
+			.canvas-container{
+				text-align: center;
+				padding-top: 1em;
+				padding-bottom: 1em;
 			}
 			
 			.instruct {
@@ -32,7 +39,7 @@
 		</style>
 	</head>
 	<body class="text-center">
-		<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+		<div class="d-flex w-auto h-auto p-3 mx-auto flex-column" style="height: 900px;">
 			<header class="masthead mb-auto">
 				<div class="inner">
 					<h3 class="masthead-brand">Vision Monitor</h3>
@@ -42,31 +49,29 @@
 					</nav>
 				</div>
 			</header>
+			<div class="canvas-container">
+				<canvas id="canvas1"></canvas>
+				<canvas id="canvas2"></canvas>
+			</div>
 			
-			<main role="main" class="inner cover">
-				<div style="text-align: center;">
-					<canvas id="canvas1"></canvas>
-					<canvas id="canvas2"></canvas>
-				</div>
+			<div class="instruct" id="nextEye">
+				<p>
+					Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
+					Follow same directions as previous test.
+				</p>
+				<button onclick="leftEyeTest()" id="nexttestbtn" class="btn btn-sm btn-outline-secondary"
+						style="color: #282828; border-color: #282828;">Start next eye
+				</button>
+			</div>
+			
+			<div>
 				<div style="text-align: center;" id="start_test1">
-					<button onclick="rightEyeTest()">Start Test</button>
+					<button onclick="rightEyeTest()" class="btn btn-sm btn-outline-secondary test-buttons">
+						Start Test</button>
 				</div>
 				<div style="text-align: center; display: none" id="start_test2">
 					<button onclick="leftEyeTest()">Next Eye</button>
 				</div>
-				<div class="instruct" id="nextEye">
-					<p>
-						Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
-						Follow same directions as previous test.
-					</p>
-					<button onclick="leftEyeTest()" id="nexttestbtn" class="btn btn-sm btn-outline-secondary"
-							style="color: #282828; border-color: #282828;">Start next eye</button>
-				</div>
-			
-			
-			</main>
-			
-			<div>
 				<!-- These buttons will only become visible once the user has finished the test -->
 				<div class="btn-group" id="exitTestBtns" style="display: none">
 					<button type="button" onClick="sendToFirestore();showStatusIndicator();"

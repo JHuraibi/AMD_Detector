@@ -15,7 +15,7 @@
 		
 		<style>
 			main {
-				padding-top: 4em;
+				padding-top: 1em;
 				padding-bottom: 1em;
 			}
 			
@@ -57,12 +57,6 @@
 				<!--						Start Left Eye-->
 				<!--					</button>-->
 				<!--				</div>-->
-				<div>
-					<button class="btn btn-sm btn-outline-secondary" style="text-align: center;"
-							onclick="startTest()">
-						Start Test
-					</button>
-				</div>
 				<div class="instruct" id="rightEyeInstruct" style="display: none">
 					<p>
 						Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
@@ -87,23 +81,27 @@
 					}
 				</script>
 				
-				<!-- These buttons will only become visible once the user has finished the test -->
-				<div class="btn-group" id="exitTestBtns" style="display: none">
-					<button type="button" id="startTest" onClick="sendToFirestore();showStatusIndicator();updateButtons()"
-							class="btn btn-sm btn-outline-secondary">
+				<div class="btn-group" id="startTestBtn">
+					<button type="button" id="startTest" onClick="startTest()"
+							class="btn btn-sm btn-outline-secondary test-buttons">
 						Start Test
 					</button>
+				</div>
+				
+				<!-- These buttons will only become visible once the user has finished the test -->
+				<div class="btn-group" id="exitTestBtns" style="display: none">
+
 					<button type="button" id="uploadBtn" onClick="sendToFirestore();showStatusIndicator();updateButtons()"
-							class="btn btn-sm btn-outline-secondary">
+							class="btn btn-sm btn-outline-secondary test-buttons">
 						Upload Results
 					</button>
 					
 					<button type="button" id="exitBtn" onClick="window.location.replace('../../home.html')"
-							class="btn btn-sm btn-outline-secondary">
+							class="btn btn-sm btn-outline-secondary test-buttons">
 						Exit without Upload
 					</button>
 					<button type="button" onClick="window.location.replace('./full_bars_questions.html')"
-							class="btn btn-sm btn-outline-secondary">
+							class="btn btn-sm btn-outline-secondary test-buttons">
 						Continue to Questions
 					</button>
 					<!-- TODO: Change to popup button (like leftEyeInstruct) -->
