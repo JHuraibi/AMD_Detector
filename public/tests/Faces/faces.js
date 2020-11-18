@@ -381,7 +381,7 @@ function rightEyeTest() {
 	if (rightEyeInProgress) {
 		console.log("Right eye test");
 		blackDot();
-		if (i < 5) {
+		if (i < 8) {
 			clearCanvas();
 			blackDot();
 			randomSymbol();
@@ -398,7 +398,7 @@ function rightEyeTest() {
 	if (bothREyeinProgress) {
 		console.log("both eye test");
 		blackDot();
-		if (i < 5) {
+		if (i < 8) {
 			clearCanvas();
 			blackDot();
 			randomSymbol();
@@ -439,7 +439,7 @@ function leftEyeTest() {
 
 	// console.log("Test2");
 	if (leftEyeInProgress) {
-		if (a < 5) {
+		if (a < 8) {
 			// console.log("In test 2 loop");
 			clearCanvas();
 			blackDot();
@@ -460,7 +460,7 @@ function leftEyeTest() {
 		nextEye.style.display = "none";
 		nexteyebtn.style.display = "none";
 		exitBtns.style.display = "none";
-		if (a < 5) {
+		if (a < 8) {
 			// console.log("In test 2 loop");
 			clearCanvas();
 			blackDot();
