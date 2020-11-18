@@ -98,7 +98,7 @@ function retrieveURLLink(target_test) {
 		case "free_draw":
 			return "./free_draw/free_draw.html";
 		case "smiley":
-			return "#";
+			return "./Faces/faces.html";
 		case "fractal":
 			return "./fractal/fractal.html";
 	}

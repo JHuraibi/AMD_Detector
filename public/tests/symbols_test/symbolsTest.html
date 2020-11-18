@@ -4,11 +4,10 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta name="description" content="">
-		<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32"/>
-		<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16"/>
 		
 		<title>Symbols · Test</title>
-		
+		<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32" />
+		<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16" />
 		<!-- Bootstrap core CSS -->
 		<link href="../../scss/custom.css" rel="stylesheet">
 		<!-- Custom styles for this template (Later move to custom.scss) -->
@@ -49,6 +48,7 @@
 					</nav>
 				</div>
 			</header>
+			
 			<div class="canvas-container">
 				<canvas id="canvas1"></canvas>
 				<canvas id="canvas2"></canvas>
@@ -60,34 +60,42 @@
 					Follow same directions as previous test.
 				</p>
 				<button onclick="leftEyeTest()" id="nexttestbtn" class="btn btn-sm btn-outline-secondary"
-						style="color: #282828; border-color: #282828;">Start next eye
-				</button>
+						style="color: #282828; border-color: #282828;">Start next eye</button>
 			</div>
 			
 			<div>
-				<div style="text-align: center;" id="start_test1">
-					<button onclick="rightEyeTest()" class="btn btn-sm btn-outline-secondary test-buttons">
-						Start Test</button>
-				</div>
-				<div style="text-align: center; display: none" id="start_test2">
-					<button onclick="leftEyeTest()">Next Eye</button>
-				</div>
-				<!-- These buttons will only become visible once the user has finished the test -->
-				<div class="btn-group" id="exitTestBtns" style="display: none">
-					<button type="button" onClick="sendToFirestore();showStatusIndicator();"
-							class="btn btn-sm btn-outline-secondary">
-						Upload Results
+				<div class="instuct btn-group" id="btns">
+					<button onclick ="rightOption();" id="rightBtn"
+							class="btn btn-sm btn-outline-secondary test-buttons">
+						Right Eye
 					</button>
-					<button type="button" onClick="location.href='../../home.html'"
-							class="btn btn-sm btn-outline-secondary">
-						Exit without Upload
+					<button id="leftBtn" onclick="leftOption();"
+							class="btn btn-sm btn-outline-secondary test-buttons">
+						Left Eye
 					</button>
-					<p id="uploadStatus" style="display: none">
-						<br>Uploading Your Results...
-					</p>
+					<button id="bothBtn" onclick="bothOption();"
+							class="btn btn-sm btn-outline-secondary test-buttons">
+						Both Eyes
+					</button>
+				</div>
+				
+				<div>
+					<!-- These buttons will only become visible once the user has finished the test -->
+					<div class="btn btn-sm btn-outline-secondary test-buttons" style="display: none">
+						<button type="button" onClick="sendToFirestore();showStatusIndicator();"
+								class="btn btn-sm btn-outline-secondary test-buttons">
+							Upload Results
+						</button>
+						<button type="button" onClick="location.href='../../home.html'"
+								class="btn btn-sm btn-outline-secondary test-buttons">
+							Exit without Upload
+						</button>
+						<p id="uploadStatus" style="display: none">
+							<br>Uploading Your Results...
+						</p>
+					</div>
 				</div>
 			</div>
-			
 			<footer class="mastfoot mt-auto">
 				<div class="inner">
 				</div>
@@ -181,7 +189,3 @@
 		</script>
 	</body>
 </html>
-
-
-
-
