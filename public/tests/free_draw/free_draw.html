@@ -84,8 +84,11 @@
 							class="btn btn-sm btn-outline-secondary test-buttons">
 						Exit
 					</button>
-					<p id="uploadStatus" style="display: none">
-						<br> Uploading Your Results...
+				</div>
+				<br>
+				<div>
+					<p id="uploadStatus" style="visibility: hidden">
+						Uploading Your Results...
 					</p>
 				</div>
 			
@@ -163,7 +166,7 @@
 			
 			function uploadSuccess() {
 				let uploadStatusIndicator = document.getElementById('uploadStatus');
-				uploadStatusIndicator.textContent = "Results Saved!";
+				uploadStatusIndicator.textContent = "Results Saved!";	// Prototype 3
 			}
 			
 			function userLookupFailed() {
@@ -179,14 +182,16 @@
 				let exitBtn = document.getElementById("exitBtn");
 				
 				uploadBtn.style.display = "none";
-				exitBtn.innerText = "Skip Questions";
+				// exitBtn.innerText = "Skip Questions";
+				exitBtn.innerText = "Exit"; // Prototype 3
 			}
 		</script>
 		
 		<script>
 			function showStatusIndicator() {
 				let uploadStatusIndicator = document.getElementById('uploadStatus');
-				uploadStatusIndicator.style.display = "inherit";
+				// uploadStatusIndicator.style.display = "inherit";
+				uploadStatusIndicator.style.visibility = "visible";	// Prototype 3
 			}
 		</script>
 	</body>
