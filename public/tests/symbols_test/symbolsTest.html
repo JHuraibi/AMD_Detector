@@ -4,11 +4,10 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta name="description" content="">
-		<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32" />
-		<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16" />
 		
 		<title>Symbols · Test</title>
-		
+		<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32" />
+		<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16" />
 		<!-- Bootstrap core CSS -->
 		<link href="../../scss/custom.css" rel="stylesheet">
 		<!-- Custom styles for this template (Later move to custom.scss) -->
@@ -48,12 +47,6 @@
 					<canvas id="canvas1"></canvas>
 					<canvas id="canvas2"></canvas>
 				</div>
-				<div style="text-align: center;" id="start_test1">
-					<button onclick="rightEyeTest()">Begin</button>
-				</div>
-				<div style="text-align: center; display: none" id="start_test2">
-					<button onclick="leftEyeTest()">Next Eye</button>
-				</div>
 				<div class="instruct" id="nextEye">
 					<p>
 						Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
@@ -62,7 +55,18 @@
 					<button onclick="leftEyeTest()" id="nexttestbtn" class="btn btn-sm btn-outline-secondary"
 						style="color: #282828; border-color: #282828;">Start next eye</button>
 				</div>
-		
+		 
+		 <div class="instuct" id="btns">
+			 <button onclick ="rightOption();" id="rightBtn">
+				Right Eye 
+			 </button>
+			 <button id="leftBtn" onclick="leftOption();" >
+				 Left Eye
+			 </button>
+			 <button id="bothBtn" onclick="bothOption();">
+				 Both Eyes
+			 </button>
+		 </div>
 
 			</main>
 			
@@ -176,7 +180,3 @@
 		</script>
 	</body>
 </html>
-
-
-
-
