@@ -18,8 +18,16 @@
 
 	<style>
 		canvas {
-			border: 1px solid black;
+			border: 5px solid black;
+				background-color: #f0f0f0;
 		}
+
+		.canvas-container {
+			text-align: center;
+			padding-top: 1em;
+			padding-bottom: 1em;
+		}
+
 
 		.instruct {
 			width: 400px;
@@ -35,7 +43,7 @@
 </head>
 
 <body class="text-center">
-	<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+	<div class="d-flex w-auto h-auto p-3 mx-auto flex-column" style="height: 900px;">
 		<header class="masthead mb-auto">
 			<div class="inner">
 				<h3 class="masthead-brand">Vision Monitor</h3>
@@ -47,8 +55,8 @@
 		</header>
 
 
-		<main role="main" class="inner cover">
-			<div style="text-align: center;">
+		<main class="canvas-container">
+			<div>
 				<canvas id="canvas1"></canvas>
 				<canvas id="canvas2"></canvas>
 			</div>
@@ -61,18 +69,22 @@
 					style="color: #282828; border-color: #282828;">Start next eye</button>
 			</div>
 
-			<div class="instuct" id="btns">
-				<button onclick="rightOption();" id="rightBtn">
-					Right Eye
-				</button>
-				<button id="leftBtn" onclick="leftOption();">
-					Left Eye
-				</button>
-				<button id="bothBtn" onclick="bothOption();">
-					Both Eyes
-				</button>
-			</div>
-
+			<div>
+				<div class="instuct btn-group" id="btns">
+					<button onclick ="rightOption();" id="rightBtn"
+							class="btn btn-sm btn-outline-secondary test-buttons">
+						Right Eye
+					</button>
+					<button id="leftBtn" onclick="leftOption();"
+							class="btn btn-sm btn-outline-secondary test-buttons">
+						Left Eye
+					</button>
+					<button id="bothBtn" onclick="bothOption();"
+							class="btn btn-sm btn-outline-secondary test-buttons">
+						Both Eyes
+					</button>
+				</div>
+				
 		</main>
 
 		<div>
