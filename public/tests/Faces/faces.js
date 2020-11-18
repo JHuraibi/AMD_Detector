@@ -90,16 +90,20 @@ window.addEventListener('keydown', function (e) {
 
 // initalizing canvas
 c.fillStyle = "White";
-c.fillRect(0, 0, 600, 600);
+c.fillRect(0, 0, size, size);
 blackDot();
 
 // Variable
 //Characters for symbols
 //frown code 9785
 //smile code 9786
-var frown = String.fromCharCode(9785);
-var smile = String.fromCharCode(9786);
-var x, y, y2, x2;
+// var frown = String.fromCharCode(9785);
+// var smile = String.fromCharCode(9786);
+var frown = String.fromCodePoint(9785);
+var smile = String.fromCodePoint(9786);
+
+
+
 var symbols = [frown, smile];
 var rightResultX = [];
 var rightResultY = [];
@@ -144,7 +148,7 @@ function fKey() {
 		}
 
 	}
-	else if(bothLEyeInProgress)
+	else if(bothLEyeInProgress) 
 	{
 		if (symbols[r2] != frown) {
 			leftResultsSymbols[t2] = symbols[r2];
@@ -219,14 +223,14 @@ function hideBtns() {
 
 //function to clear canvas
 function clearCanvas() {
-	c.clearRect(0, 0, 600, 600);
+	c.clearRect(0, 0, size, size);
 	c.fillStyle = "White";
-	c.fillRect(0, 0, 600, 600);
+	c.fillRect(0, 0, size, size);
 
 	// Canvas 2
-	c2.clearRect(0, 0, 600, 600);
+	c2.clearRect(0, 0, size, size);
 	c2.fillStyle = "White";
-	c2.fillRect(0, 0, 600, 600);
+	c2.fillRect(0, 0, size, size)
 }
 
 //Function have black dot in the center
@@ -247,8 +251,8 @@ var r2;
 
 // Function to randomly place random symbol in the canvas
 function randomSymbol() {
-	r = Math.floor(Math.random() * 4);
-	r2 = Math.floor(Math.random() * 4);
+	r = Math.floor(Math.random() * 2);
+	r2 = Math.floor(Math.random() * 2);
 	// TODO: Suppose to be 580? Or canvasSize?
 	// x = Math.floor(Math.random() * 580);
 	// y = Math.floor(Math.random() * 580);
@@ -271,7 +275,7 @@ function randomSymbol() {
 	}
 	
 	}
-	else {
+	if(leftEyeInProgress) {
 		console.log("In the else c2 random symbols")
         // Canvas 2
         if (symbols[r2] != smile)
@@ -287,7 +291,42 @@ function randomSymbol() {
 		c2.font = "60px Arial";
         c2.fillText(symbols[r2], x, y);
 		}
-    }
+	}
+	if(bothREyeinProgress)
+	{
+		if(symbols[r] != smile){
+			c.beginPath();
+			c.fillStyle = "black";
+			c.font = "40px Arial";
+			c.fillText(symbols[r], x, y);
+			}
+			if(symbols[r] != frown)
+			{
+			c.beginPath();
+			c.fillStyle = "black";
+			c.font = "60px Arial";
+			c.fillText(symbols[r], x, y);
+		}
+
+	}
+	else if(bothLEyeInProgress)
+	{
+		if(symbols[r] != smile){
+			c2.beginPath();
+			c2.fillStyle = "black";
+			c2.font = "40px Arial";
+			c2.fillText(symbols[r2], x, y);
+			}
+			if(symbols[r] != frown)
+			{
+			c2.beginPath();
+			c2.fillStyle = "black";
+			c2.font = "60px Arial";
+			c2.fillText(symbols[r2], x, y);
+		}
+
+
+	}
 
 }
 
@@ -367,7 +406,8 @@ function rightEyeTest() {
 			setTimeout(rightEyeTest, speed);
 			// setTimeout(test1, 1000);	// !! FOR TESTING
 		}
-		else {
+		else 
+		{
 
 			nexttest();
 		}
@@ -385,13 +425,13 @@ function nexttest() {
 	nexteyebtn.style.display = "inline-block";
 	bothREyeinProgress = false;
 	bothLEyeInProgress= true;
+	
 
 
 	
 }
 
 var a = 0;
-
 function leftEyeTest() {
 
 	canvas.style.display = "none";
@@ -415,6 +455,8 @@ function leftEyeTest() {
 	}
 
 	if (bothLEyeInProgress) {
+		console.log("In Left both if statement")
+		console.log(a);
 		nextEye.style.display = "none";
 		nexteyebtn.style.display = "none";
 		exitBtns.style.display = "none";
@@ -426,6 +468,7 @@ function leftEyeTest() {
 			a++;
 			setTimeout(leftEyeTest, speed);
 			// setTimeout(test2, 1000);	// !! FOR TESTING
+			console.log("End of the if statement for both left")
 		}
 		else
 		{
