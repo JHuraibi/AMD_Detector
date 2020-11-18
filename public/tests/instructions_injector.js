@@ -51,7 +51,8 @@ function retrieveInstructions(target_test) {
 		
 		// SYMBOLS
 		case "symbols":
-			return "You will need to start by covering your right eye with your hand." +
+			return "You will need to start by covering the eye you are not testing." +
+					" If plan to test both eyes, your right eye will be tested first. "+
 				" Focus on the black dot in the center " +
 				"You will see random objects appearing on the screen " +
 				"if you see \"+\" press \"A\", \"-\" press \"S\", \"x\" press \"X\", and \"÷\" press \"D\"";
@@ -74,7 +75,8 @@ function retrieveInstructions(target_test) {
 			
 		// SMILEY
 		case "smiley":
-			return "You will need to start by covering your right eye with your hand." +
+			return "You will need to start by covering the eye you are not testing."  +
+			" If plan to test both eyes, your right eye will be tested first. "+
 			" Focus on the black dot in the center " +
 			"You will see random faces appearing on the screen " +
 			"if you see a \"smiley face\" press \"S\" and if you a \"frowny face\"  press \"F\".";
