@@ -1,4 +1,4 @@
-// // The program is meant to randomly display symbols on the canvas 
+// // The program is meant to randomly display symbols on the canvas
 // // If the user sees "+" press "a"
 // // If the user sees "-" press "s"
 // // If the user sees "x" press "x"
@@ -57,23 +57,23 @@ async function getUid() {
 			db.collection("users").doc(user.uid)
 				.get()
 				.then(doc => {
-
+					
 					let newgrowingspeed = (doc.data().testSpeeds);
 					speed = newgrowingspeed * 1000;
-
+					
 				});
 		}
 	});
 }
 
 window.addEventListener('keydown', function (e) {
-
+	
 	// var key = e.keyCode;
-
+	
 	// key variable
 	var key = e.key;
 	key = key.toLowerCase();
-
+	
 	if (key === 's') {
 		//if key pressed is s
 		console.log("KeyPress: S");
@@ -97,7 +97,7 @@ window.addEventListener('keydown', function (e) {
 	else {
 		console.log("KeyPress: Other");
 	}
-
+	
 });
 
 // initalizing canvas
@@ -125,99 +125,99 @@ var t2 = 0;
 
 // if the key pressed is not a capture the result for the next 4 functions
 function aKey() {
-if (rightEyeInProgress) {
-if (symbols[r] != "+") {
-rightResultsSymbols[t] = symbols[r];
-rightResultX[t] = x;
-rightResultY[t] = y;
-t++;
-
-		}
-	}
-if (leftEyeInProgress) {
-if (symbols[r2] != "+") {
-leftResultsSymbols[t2] = symbols[r2];
-leftResultX[t2] = x;
-leftResultY[t2] = y;
-t2++;
-console.log("")
-		}
-	}
-if (bothREyeinProgress) {
-if (symbols[r] != "+") {
-rightResultsSymbols[t] = symbols[r];
-rightResultX[t] = x;
-rightResultY[t] = y;
-t++;
-
-		}
-
-	}
-else if (bothLEyeInProgress) {
-if (symbols[r2] != "+") {
-leftResultsSymbols[t2] = symbols[r2];
-leftResultX[t2] = x;
-leftResultY[t2] = y;
-t2++;
-console.log("")
-		}
-
-
-	}
-
-}
-
-function sKey() {
-if (rightEyeInProgress) {
-if (symbols[r] != "-") {
-rightResultsSymbols[t] = symbols[r];
-rightResultX[t] = x;
-rightResultY[t] = y;
-t++;
-
-		}
-	}
-if (leftEyeInProgress) {
-if (symbols[r2] != "-") {
-leftResultsSymbols[t2] = symbols[r2];
-leftResultX[t2] = x;
-leftResultY[t2] = y;
-t2++;
-console.log("")
-		}
-	}
-if (bothREyeinProgress) {
-if (symbols[r] != "-") {
-rightResultsSymbols[t] = symbols[r];
-rightResultX[t] = x;
-rightResultY[t] = y;
-t++;
-
-		}
-
-	}
-else if (bothLEyeInProgress) {
-if (symbols[r2] != "-") {
-leftResultsSymbols[t2] = symbols[r2];
-leftResultX[t2] = x;
-leftResultY[t2] = y;
-t2++;
-console.log("")
-		}
-
-
-	}
-
-}
-
-function xKey() {
-if (rightEyeInProgress) {
-if (symbols[r] != "x") {
+	if (rightEyeInProgress) {
+		if (symbols[r] != "+") {
 			rightResultsSymbols[t] = symbols[r];
 			rightResultX[t] = x;
 			rightResultY[t] = y;
 			t++;
+			
+		}
+	}
+	if (leftEyeInProgress) {
+		if (symbols[r2] != "+") {
+			leftResultsSymbols[t2] = symbols[r2];
+			leftResultX[t2] = x;
+			leftResultY[t2] = y;
+			t2++;
+			console.log("")
+		}
+	}
+	if (bothREyeinProgress) {
+		if (symbols[r] != "+") {
+			rightResultsSymbols[t] = symbols[r];
+			rightResultX[t] = x;
+			rightResultY[t] = y;
+			t++;
+			
+		}
+		
+	}
+	else if (bothLEyeInProgress) {
+		if (symbols[r2] != "+") {
+			leftResultsSymbols[t2] = symbols[r2];
+			leftResultX[t2] = x;
+			leftResultY[t2] = y;
+			t2++;
+			console.log("")
+		}
+		
+		
+	}
+	
+}
 
+function sKey() {
+	if (rightEyeInProgress) {
+		if (symbols[r] != "-") {
+			rightResultsSymbols[t] = symbols[r];
+			rightResultX[t] = x;
+			rightResultY[t] = y;
+			t++;
+			
+		}
+	}
+	if (leftEyeInProgress) {
+		if (symbols[r2] != "-") {
+			leftResultsSymbols[t2] = symbols[r2];
+			leftResultX[t2] = x;
+			leftResultY[t2] = y;
+			t2++;
+			console.log("")
+		}
+	}
+	if (bothREyeinProgress) {
+		if (symbols[r] != "-") {
+			rightResultsSymbols[t] = symbols[r];
+			rightResultX[t] = x;
+			rightResultY[t] = y;
+			t++;
+			
+		}
+		
+	}
+	else if (bothLEyeInProgress) {
+		if (symbols[r2] != "-") {
+			leftResultsSymbols[t2] = symbols[r2];
+			leftResultX[t2] = x;
+			leftResultY[t2] = y;
+			t2++;
+			console.log("")
+		}
+		
+		
+	}
+	
+}
+
+function xKey() {
+	if (rightEyeInProgress) {
+		if (symbols[r] != "x") {
+			rightResultsSymbols[t] = symbols[r];
+			rightResultX[t] = x;
+			rightResultY[t] = y;
+			t++;
+			
 		}
 	}
 	if (leftEyeInProgress) {
@@ -235,9 +235,9 @@ if (symbols[r] != "x") {
 			rightResultX[t] = x;
 			rightResultY[t] = y;
 			t++;
-
+			
 		}
-
+		
 	}
 	else if (bothLEyeInProgress) {
 		if (symbols[r2] != "x") {
@@ -247,89 +247,89 @@ if (symbols[r] != "x") {
 			t2++;
 			console.log("")
 		}
-
-
+		
+		
 	}
-
-
+	
+	
 }
 
 function dKey() {
 	if (rightEyeInProgress) {
 		if (symbols[r] != "÷") {
-rightResultsSymbols[t] = symbols[r];
-rightResultX[t] = x;
-rightResultY[t] = y;
-t++;
-
+			rightResultsSymbols[t] = symbols[r];
+			rightResultX[t] = x;
+			rightResultY[t] = y;
+			t++;
+			
 		}
 	}
-if (leftEyeInProgress) {
-if (symbols[r2] != "÷") {
-leftResultsSymbols[t2] = symbols[r2];
-leftResultX[t2] = x;
-leftResultY[t2] = y;
-t2++;
-console.log("")
+	if (leftEyeInProgress) {
+		if (symbols[r2] != "÷") {
+			leftResultsSymbols[t2] = symbols[r2];
+			leftResultX[t2] = x;
+			leftResultY[t2] = y;
+			t2++;
+			console.log("")
 		}
 	}
-if (bothREyeinProgress) {
-if (symbols[r] != "÷") {
-rightResultsSymbols[t] = symbols[r];
-rightResultX[t] = x;
-rightResultY[t] = y;
-t++;
-
+	if (bothREyeinProgress) {
+		if (symbols[r] != "÷") {
+			rightResultsSymbols[t] = symbols[r];
+			rightResultX[t] = x;
+			rightResultY[t] = y;
+			t++;
+			
 		}
-
+		
 	}
-else if (bothLEyeInProgress) {
-if (symbols[r2] != "÷") {
-leftResultsSymbols[t2] = symbols[r2];
-leftResultX[t2] = x;
-leftResultY[t2] = y;
-t2++;
-console.log("")
+	else if (bothLEyeInProgress) {
+		if (symbols[r2] != "÷") {
+			leftResultsSymbols[t2] = symbols[r2];
+			leftResultX[t2] = x;
+			leftResultY[t2] = y;
+			t2++;
+			console.log("")
 		}
-
-
+		
+		
 	}
-
+	
 }
 
 // function to hide display buttons
 nexteyebtn.style.display = "none";
 nextEye.style.display = "none";
 function hideBtns() {
-rightBtn.style.display = "none";
-leftBtn.style.display = "none";
-bothBtn.style.display = "none";
+	rightBtn.style.display = "none";
+	leftBtn.style.display = "none";
+	bothBtn.style.display = "none";
 }
 
 
 //function to clear canvas
 function clearCanvas() {
-c.clearRect(0, 0, size, size);
-c.fillStyle = "White";
-c.fillRect(0, 0, size, size);
+	c.clearRect(0, 0, size, size);
+	c.fillStyle = "White";
+	c.fillRect(0, 0, size, size);
 
 // Canvas 2
-c2.clearRect(0, 0, size, size);
-c2.fillStyle = "White";
-c2.fillRect(0, 0, size, size);
+	c2.clearRect(0, 0, size, size);
+	c2.fillStyle = "White";
+	c2.fillRect(0, 0, size, size);
 }
 
 //Function have black dot in the center
 function blackDot() {
-c.fillStyle = "black";
-c.beginPath();
-c.arc(size / 2, size / 2, 6.5, 0, Math.PI * 2);
-c.fill();
+	c.fillStyle = "black";
+	c.beginPath();
+	c.arc(size / 2, size / 2, 6.5, 0, Math.PI * 2);
+	c.fill();
 // Canvas 2
-c2.fillStyle = "black";
-c2.beginPath();
-c2.arc(size / 2, size / 2, 6.5, 0, Math.PI * 2);
-c2.fill();
+	c2.fillStyle = "black";
+	c2.beginPath();
+	c2.arc(size / 2, size / 2, 6.5, 0, Math.PI * 2);
+	c2.fill();
 }
 
 // indexing random symbols
@@ -338,43 +338,43 @@ var r2;
 
 // Function to randomly place random symbol in the canvas
 function randomSymbol() {
-r = Math.floor(Math.random() * 4);
-r2 = Math.floor(Math.random() * 4);
+	r = Math.floor(Math.random() * 4);
+	r2 = Math.floor(Math.random() * 4);
 // TODO: Suppose to be 580? Or canvasSize?
-x = Math.floor(Math.random() * 580);
-y = Math.floor(Math.random() * 580);
+	x = Math.floor(Math.random() * 580);
+	y = Math.floor(Math.random() * 580);
 // x = Math.floor(Math.random() * size);
 // y = Math.floor(Math.random() * size);
-
-if (rightEyeInProgress) {
-	c.beginPath();
-	c.fillStyle = "red";
-	c.font = "40px Arial";
-	c.fillText(symbols[r], x, y);
-}
-if (leftEyeInProgress) {
-	console.log("In the else c2 random symbols")
-	// Canvas 2
-	c2.beginPath();
-	c2.fillStyle = "red";
-	c2.font = "40px Arial";
-	c2.fillText(symbols[r2], x, y);
-}
-if (bothREyeinProgress) {
-	c.beginPath();
-	c.fillStyle = "red";
-	c.font = "40px Arial";
-	c.fillText(symbols[r], x, y);
 	
-}
-else if (bothLEyeInProgress) {
-	c2.beginPath();
-	c2.fillStyle = "red";
-	c2.font = "40px Arial";
-	c2.fillText(symbols[r2], x, y);
+	if (rightEyeInProgress) {
+		c.beginPath();
+		c.fillStyle = "red";
+		c.font = "40px Arial";
+		c.fillText(symbols[r], x, y);
+	}
+	if (leftEyeInProgress) {
+		console.log("In the else c2 random symbols")
+		// Canvas 2
+		c2.beginPath();
+		c2.fillStyle = "red";
+		c2.font = "40px Arial";
+		c2.fillText(symbols[r2], x, y);
+	}
+	if (bothREyeinProgress) {
+		c.beginPath();
+		c.fillStyle = "red";
+		c.font = "40px Arial";
+		c.fillText(symbols[r], x, y);
+		
+	}
+	else if (bothLEyeInProgress) {
+		c2.beginPath();
+		c2.fillStyle = "red";
+		c2.font = "40px Arial";
+		c2.fillText(symbols[r2], x, y);
+		
+	}
 	
-}
-
 }
 
 //Right eye option
