@@ -33,16 +33,16 @@ function insertData(data) {
     document.getElementById('areds').value = data.areds;
 
     //if undefined, leave empty
-    if(data.meds == undefined){
+    if (data.meds == undefined) {
         document.getElementById('meds').value = "";
     }
-    if(data.disease == undefined){
+    if (data.disease == undefined) {
         document.getElementById('disease').value = "";
     }
-    if(data.eyewear == undefined){
-        document.getElementById('eyewear').value ="";
+    if (data.eyewear == undefined) {
+        document.getElementById('eyewear').value = "";
     }
-    
+
 }
 
 
@@ -147,3 +147,39 @@ medicalForm.addEventListener('submit', (e) => {
     });
 
 });
+
+/*
+document.getElementById('deactivate').addEventListener("click", deactivate);
+
+//TODO: delete them from the physicians account
+async function deactivate() {
+
+    let r = confirm("WARNING: You are about to deactivate your account. This will delete all of your information from our website. This cannot be undone.");
+
+    if (r == true) {
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                db.collection("users").doc(user.uid).delete().then(function () {
+                    console.log("Document successfully deleted!");
+
+                    firebase.auth().deleteUser(user.uid)
+                        .then(function () {
+                            console.log('Successfully deleted user');
+                            window.location = '../index.html';
+                        })
+                        .catch(function (error) {
+                            console.log('Error deleting user:', error);
+                        });
+
+                }).catch(function (error) {
+                    console.error("Error removing document: ", error);
+                });
+
+            }
+        }); 
+
+    }
+
+        }
+
+        */

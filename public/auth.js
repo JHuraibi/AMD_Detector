@@ -14,8 +14,6 @@ authSwitchLinks.forEach(link => {
 registerForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-
-
   // get user info
   const email = registerForm.email.value;
   const password = registerForm.password.value;
@@ -29,25 +27,25 @@ registerForm.addEventListener('submit', (e) => {
       birthday: registerForm['birthdate'].value,
       gender: registerForm['gender'].value,
       testSpeeds: 1,
-      type: user
+      type: "user"
     });
   }).then(() => {
     /* var user = firebase.auth().currentUser;
     user.sendEmailVerification() */;
-    email();
-    console.log(user.uid);
-    db.collection("TestResults")
-      .doc(user.uid).set({
-        exists: true
-      });
-    alert("verification email sent");
-    console.log('Email verification sent', user);
-    window.location = 'index.html';
+    //console.log(user.uid);
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        id = user.uid;
+        console.log(id);
+        db.collection("TestResults").doc(id).set({
+          exists: true
+        }).then(() => { sendemail(); });
+      }
+    });
+    //window.location = 'index.html';
   }).catch(error => {
     registerForm.querySelector('.error').textContent = error.message;
   });
-
-
 
 });
 
@@ -100,9 +98,10 @@ async function getType() {
   });
 }
 
-async function email(){
-    var user = firebase.auth().currentUser;
-    await user.sendEmailVerification();
+async function sendemail() {
+  var user = firebase.auth().currentUser;
+  await user.sendEmailVerification();
+  alert("verification email sent");
+  console.log('Email verification sent', user);
 }
-
 
