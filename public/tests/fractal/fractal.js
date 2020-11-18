@@ -4,7 +4,7 @@
 
 
 let timestamp;						// Will record the time the test was started (in milliseconds since Epoch)
-let backgroundColor = 220;			// Greyscale color for canvas background (0:Black, 255:White)
+let backgroundColor = 240;			// Greyscale color for canvas background (0:Black, 255:White)
 let barFillAlpha = 0;				// Will control the bars' alpha
 let opacityIncrease = 15;			// How much to incrementally increase bar opacity
 let keyPressFillAlpha = 0;			// Will control the click indicator's alpha
@@ -34,7 +34,7 @@ let inputUsedThisRound = false;		// Disables key presses if one was already rece
 let iterations = 7;					// Maximum numbers of times to halve the sections
 
 let canvasRef;						// Reference object to the DOM canvas element
-let canvasSize;						// Size of width and height of the canvas (in pixels)
+let canvasSize = 700;				// Size of width and height of the canvas (in pixels)
 
 let cX;								// Current X position of the GROUP of halves
 let cY;								// Current Y position of the GROUP of halves
@@ -63,7 +63,6 @@ function startTest() {
  */
 function setup() {
 	noLoop();
-	canvasSize = 800;
 	canvasRef = createCanvas(canvasSize, canvasSize);
 	canvasRef.id('canvasRef');
 	
@@ -73,7 +72,11 @@ function setup() {
 	cW = canvasSize / 2;
 	cH = canvasSize;
 	
-	canvasRef.hide();
+	// canvasRef.hide();
+	canvasRef.show();
+	background(backgroundColor);
+	drawCenterDot();
+	drawStaticBorder();
 }
 
 /**
@@ -220,6 +223,8 @@ function drawBar() {
 		return;
 	}
 	
+	// !! CRITICAL: Staring at these colors produced visual artifacts
+	//					when they move. Look into grayscale or other.
 	// Orange: 			"rgb(240, 90, 40)"
 	// Light Orange:	"rgb(238, 149, 120)"
 	
@@ -321,9 +326,8 @@ function drawKeyPressIndicator() {
 	// Blue: "#2846BE"
 	fill(40, 70, 190, keyPressFillAlpha);
 	
-	strokeWeight(2);
-	stroke(backgroundColor);
-	ellipse(width / 2, height / 2, 20);
+	noStroke();
+	ellipse(width / 2, height / 2, 13);
 	
 	fill(0, 255);
 }
@@ -381,13 +385,12 @@ function transitionToNextEye() {
 
 
 /**
- * Draws a black dot with grey outline (that matches canvas color) at the center of canvas.
+ * Draws a black dot at the center of canvas.
  */
 function drawCenterDot() {
 	fill(0);
-	strokeWeight(2);
-	stroke(backgroundColor);
-	ellipse(width / 2, height / 2, 20);
+	noStroke();
+	ellipse(canvasSize / 2, canvasSize / 2, 13);
 }
 
 /**
