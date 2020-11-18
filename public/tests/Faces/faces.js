@@ -26,8 +26,8 @@ var c = canvas.getContext('2d');
 var c2 = canvas2.getContext('2d');
 let exitBtns = document.getElementById('exitTestBtns');
 
-
-var size = 600;
+//Canvas sizing
+var size = 700;
 canvas.style.width = size + "px";
 canvas.style.height = size + "px";
 canvas2.style.width = size + "px";
@@ -41,6 +41,7 @@ canvas2.height = size * scale;
 
 c.scale(scale, scale);
 c2.scale(scale, scale);
+
 var speed = 3000;
 var id;
 var db = firebase.firestore();
@@ -232,12 +233,12 @@ function clearCanvas() {
 function blackDot() {
 	c.fillStyle = "black";
 	c.beginPath();
-	c.arc(300, 300, 4, 0, Math.PI * 2);
+	c.arc(size / 2, size / 2, 6.5, 0, Math.PI * 2);
 	c.fill();
-	// Canvas 2
+// Canvas 2
 	c2.fillStyle = "black";
 	c2.beginPath();
-	c2.arc(300, 300, 4, 0, Math.PI * 2);
+	c2.arc(size / 2, size / 2, 6.5, 0, Math.PI * 2);
 	c2.fill();
 }
 
@@ -246,11 +247,13 @@ var r2;
 
 // Function to randomly place random symbol in the canvas
 function randomSymbol() {
-	r = Math.floor(Math.random() * 2);
-	r2 = Math.floor(Math.random() * 2);
-	x = Math.floor(Math.random() * 580);
-	y = Math.floor(Math.random() * 580);
-
+	r = Math.floor(Math.random() * 4);
+	r2 = Math.floor(Math.random() * 4);
+	// TODO: Suppose to be 580? Or canvasSize?
+	// x = Math.floor(Math.random() * 580);
+	// y = Math.floor(Math.random() * 580);
+	x = Math.floor(Math.random() * size);
+	y = Math.floor(Math.random() * size);
 	if (rightEyeInProgress) {
 		
         if(symbols[r] != smile){
