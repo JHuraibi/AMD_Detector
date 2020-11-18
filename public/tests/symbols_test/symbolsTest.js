@@ -57,23 +57,23 @@ async function getUid() {
 			db.collection("users").doc(user.uid)
 				.get()
 				.then(doc => {
-					
+
 					let newgrowingspeed = (doc.data().testSpeeds);
 					speed = newgrowingspeed * 1000;
-					
+
 				});
 		}
 	});
 }
 
 window.addEventListener('keydown', function (e) {
-	
+
 	// var key = e.keyCode;
-	
+
 	// key variable
 	var key = e.key;
 	key = key.toLowerCase();
-	
+
 	if (key === 's') {
 		//if key pressed is s
 		console.log("KeyPress: S");
@@ -97,7 +97,7 @@ window.addEventListener('keydown', function (e) {
 	else {
 		console.log("KeyPress: Other");
 	}
-	
+
 });
 
 // initalizing canvas
@@ -131,7 +131,7 @@ function aKey() {
 			rightResultX[t] = x;
 			rightResultY[t] = y;
 			t++;
-			
+
 		}
 	}
 	if (leftEyeInProgress) {
@@ -149,9 +149,9 @@ function aKey() {
 			rightResultX[t] = x;
 			rightResultY[t] = y;
 			t++;
-			
+
 		}
-		
+
 	}
 	else if (bothLEyeInProgress) {
 		if (symbols[r2] != "+") {
@@ -161,10 +161,10 @@ function aKey() {
 			t2++;
 			console.log("")
 		}
-		
-		
+
+
 	}
-	
+
 }
 
 function sKey() {
@@ -174,7 +174,7 @@ function sKey() {
 			rightResultX[t] = x;
 			rightResultY[t] = y;
 			t++;
-			
+
 		}
 	}
 	if (leftEyeInProgress) {
@@ -192,9 +192,9 @@ function sKey() {
 			rightResultX[t] = x;
 			rightResultY[t] = y;
 			t++;
-			
+
 		}
-		
+
 	}
 	else if (bothLEyeInProgress) {
 		if (symbols[r2] != "-") {
@@ -204,10 +204,10 @@ function sKey() {
 			t2++;
 			console.log("")
 		}
-		
-		
+
+
 	}
-	
+
 }
 
 function xKey() {
@@ -217,7 +217,7 @@ function xKey() {
 			rightResultX[t] = x;
 			rightResultY[t] = y;
 			t++;
-			
+
 		}
 	}
 	if (leftEyeInProgress) {
@@ -235,9 +235,9 @@ function xKey() {
 			rightResultX[t] = x;
 			rightResultY[t] = y;
 			t++;
-			
+
 		}
-		
+
 	}
 	else if (bothLEyeInProgress) {
 		if (symbols[r2] != "x") {
@@ -247,11 +247,11 @@ function xKey() {
 			t2++;
 			console.log("")
 		}
-		
-		
+
+
 	}
-	
-	
+
+
 }
 
 function dKey() {
@@ -261,7 +261,7 @@ function dKey() {
 			rightResultX[t] = x;
 			rightResultY[t] = y;
 			t++;
-			
+
 		}
 	}
 	if (leftEyeInProgress) {
@@ -279,9 +279,9 @@ function dKey() {
 			rightResultX[t] = x;
 			rightResultY[t] = y;
 			t++;
-			
+
 		}
-		
+
 	}
 	else if (bothLEyeInProgress) {
 		if (symbols[r2] != "÷") {
@@ -291,10 +291,10 @@ function dKey() {
 			t2++;
 			console.log("")
 		}
-		
-		
+
+
 	}
-	
+
 }
 
 // function to hide display buttons
@@ -313,7 +313,7 @@ function clearCanvas() {
 	c.fillStyle = "White";
 	c.fillRect(0, 0, size, size);
 
-// Canvas 2
+	// Canvas 2
 	c2.clearRect(0, 0, size, size);
 	c2.fillStyle = "White";
 	c2.fillRect(0, 0, size, size);
@@ -325,7 +325,7 @@ function blackDot() {
 	c.beginPath();
 	c.arc(size / 2, size / 2, 6.5, 0, Math.PI * 2);
 	c.fill();
-// Canvas 2
+	// Canvas 2
 	c2.fillStyle = "black";
 	c2.beginPath();
 	c2.arc(size / 2, size / 2, 6.5, 0, Math.PI * 2);
@@ -340,12 +340,12 @@ var r2;
 function randomSymbol() {
 	r = Math.floor(Math.random() * 4);
 	r2 = Math.floor(Math.random() * 4);
-// TODO: Suppose to be 580? Or canvasSize?
-	x = Math.floor(Math.random() * 580);
-	y = Math.floor(Math.random() * 580);
-// x = Math.floor(Math.random() * size);
-// y = Math.floor(Math.random() * size);
-	
+	// TODO: Suppose to be 580? Or canvasSize?
+	// x = Math.floor(Math.random() * 580);
+	// y = Math.floor(Math.random() * 580);
+	x = Math.floor(Math.random() * size);
+	y = Math.floor(Math.random() * size);
+
 	if (rightEyeInProgress) {
 		c.beginPath();
 		c.fillStyle = "red";
@@ -365,16 +365,16 @@ function randomSymbol() {
 		c.fillStyle = "red";
 		c.font = "40px Arial";
 		c.fillText(symbols[r], x, y);
-		
+
 	}
 	else if (bothLEyeInProgress) {
 		c2.beginPath();
 		c2.fillStyle = "red";
 		c2.font = "40px Arial";
 		c2.fillText(symbols[r2], x, y);
-		
+
 	}
-	
+
 }
 
 //Right eye option
@@ -385,13 +385,13 @@ function rightOption() {
 	leftEyeInProgress = false;
 	if (rightEyeInProgress) {
 		rightEyeTest();
-		
+
 	}
-	
+
 }
 
 function leftOption() {
-	
+
 	hideBtns();
 	leftEyeInProgress = true;
 	rightEyeInProgress = false;
@@ -399,12 +399,12 @@ function leftOption() {
 	if (leftEyeInProgress) {
 		leftEyeTest();
 	}
-	
-	
-	
+
+
+
 }
 function bothOption() {
-	
+
 	hideBtns();
 	bothREyeinProgress = true;
 	rightEyeInProgress = false;
@@ -412,18 +412,18 @@ function bothOption() {
 	if (bothREyeinProgress) {
 		rightEyeTest();
 	}
-	
-	
-	
+
+
+
 }
 
 // Vaariable representing iterations
 var i = 0;
 
 function rightEyeTest() {
-	
-	
-	
+
+
+
 	if (rightEyeInProgress) {
 		console.log("Right eye test");
 		blackDot();
@@ -434,10 +434,10 @@ function rightEyeTest() {
 			i++;
 			setTimeout(rightEyeTest, speed);
 			// setTimeout(test1, 1000);	// !! FOR TESTING
-			
+
 		}
 		else {
-			
+
 			rightResults();
 		}
 	}
@@ -453,25 +453,25 @@ function rightEyeTest() {
 			// setTimeout(test1, 1000);	// !! FOR TESTING
 		}
 		else {
-			
+
 			nexttest();
 		}
-		
+
 	}
-	
+
 }
 
 function nexttest() {
 	// TODO: canvas2 is shifting to left between switching (might be display attr)
 	canvas.style.display = "none";
 	canvas2.style.display = "none";
-	
-	
+
+
 	nextEye.style.display = "inline-block";
 	nexteyebtn.style.display = "inline-block";
 	bothREyeinProgress = false;
-	bothLEyeInProgress= true;
-	
+	bothLEyeInProgress = true;
+
 }
 
 
@@ -479,10 +479,10 @@ function nexttest() {
 var a = 0;
 
 function leftEyeTest() {
-	
+
 	canvas.style.display = "none";
 	canvas2.style.display = "inline-block";
-	
+
 	// console.log("Test2");
 	if (leftEyeInProgress) {
 		if (a < 5) {
@@ -492,14 +492,14 @@ function leftEyeTest() {
 			randomSymbol();
 			a++;
 			setTimeout(leftEyeTest, speed);
-			
+
 			// setTimeout(test2, 1000);	// !! FOR TESTING
 		}
-		else{
+		else {
 			leftResults();
 		}
 	}
-	
+
 	if (bothLEyeInProgress) {
 		nextEye.style.display = "none";
 		nexteyebtn.style.display = "none";
@@ -513,13 +513,12 @@ function leftEyeTest() {
 			setTimeout(leftEyeTest, speed);
 			// setTimeout(test2, 1000);	// !! FOR TESTING
 		}
-		else
-		{
+		else {
 			console.log("I'm in the both results else")
 			bothResults();
 		}
-		
-		
+
+
 	}
 }
 
@@ -531,28 +530,28 @@ var j2;
 // orange represents left eye
 // function to show the erros after test is conducted
 function bothResults() {
-	
+
 	// console.log("Result Symbols: " + resultsSymbols);
-	
+
 	// TODO: The two canvases are being stacked on top of each other
 	canvas.style.display = "inline-block";
 	canvas2.style.display = "inline-block";
 	clearCanvas();
 	blackDot();
-	
+
 	for (j = 0; j < rightResultsSymbols.length; j++) {
 		c.fillStyle = "blue";
 		c.font = "35 px Arial";
 		c.fillText(rightResultsSymbols[j], rightResultX[j], rightResultY[j]);
-		
+
 	}
-	
+
 	for (j2 = 0; j2 < leftResultsSymbols.length; j2++) {
 		console.log("In loop of c2 results ");
 		c2.fillStyle = "orange";
 		c2.font = "35 px Arial";
 		c2.fillText(leftResultsSymbols[j2], leftResultX[j2], leftResultY[j2]);
-		
+
 	}
 	showExitButton();
 }
@@ -564,16 +563,16 @@ function rightResults() {
 	canvas2.style.display = "none";
 	clearCanvas();
 	blackDot();
-	
+
 	for (j = 0; j < rightResultsSymbols.length; j++) {
 		c.fillStyle = "blue";
 		c.font = "35 px Arial";
 		c.fillText(rightResultsSymbols[j], rightResultX[j], rightResultY[j]);
-		
+
 	}
 	showExitButton();
-	
-	
+
+
 }
 
 function leftResults() {
@@ -586,25 +585,25 @@ function leftResults() {
 		c2.fillStyle = "orange";
 		c2.font = "35 px Arial";
 		c2.fillText(leftResultsSymbols[j2], leftResultX[j2], leftResultY[j2]);
-		
+
 	}
 	showExitButton();
-	
-	
+
+
 }
 
 
 function showExitButton() {
-	
+
 	exitBtns.style.display = "inline-block";
 	let fadeInSpeed = 1;
-	
+
 	exitBtns.style.display = "inherit";
 	exitBtns.style.opacity = 0.0;
-	
+
 	let fadeIn = setInterval(function () {
 		if (exitBtns.style.opacity < 1.0) {
-			
+
 			// Needs the plus sign before "exitBtns"
 			exitBtns.style.opacity = +exitBtns.style.opacity + 0.01;
 		}
