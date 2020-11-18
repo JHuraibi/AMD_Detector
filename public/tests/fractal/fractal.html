@@ -14,7 +14,7 @@
 		
 		<style>
 			main {
-				padding-top: 4em;
+				padding-top: 1em;
 				padding-bottom: 1em;
 			}
 			
@@ -45,16 +45,17 @@
 			<main role="main">
 				<script src="../p5.js"></script>
 				<script src="fractal.js"></script>
-				<div class="instruct" id="leftEyeInstruct">
-					<p>
-						Cover your right eye, and with your left eye focus on the black dot in the center.
-						Click to Start Left Eye Test
-					</p>
-					<button class="btn btn-sm btn-outline-secondary"
-							onclick="hideLeftEyeBtn(); startTest();">
-						Start Left Eye
-					</button>
-				</div>
+				<!-- TODO: Section temporarily disabled to match other tests -->
+				<!--				<div class="instruct" id="leftEyeInstruct">-->
+				<!--					<p>-->
+				<!--						Cover your right eye, and with your left eye focus on the black dot in the center.-->
+				<!--						Click to Start Left Eye Test-->
+				<!--					</p>-->
+				<!--					<button class="btn btn-sm btn-outline-secondary"-->
+				<!--							onclick="hideLeftEyeBtn(); startTest();">-->
+				<!--						Start Left Eye-->
+				<!--					</button>-->
+				<!--				</div>-->
 				<div class="instruct" id="rightEyeInstruct" style="display: none">
 					<p>
 						Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
@@ -79,18 +80,25 @@
 					}
 				</script>
 				
+				<div class="btn-group" id="startTestBtn">
+					<button type="button" id="startTest" onClick="startTest()"
+							class="btn btn-sm btn-outline-secondary test-buttons">
+						Start Test
+					</button>
+				</div>
+				
 				<!-- These buttons will only become visible once the user has finished the test -->
 				<div class="btn-group" id="exitTestBtns" style="display: none">
 					<button type="button" id="uploadBtn" onClick="sendToFirestore();showStatusIndicator();updateButtons()"
-							class="btn btn-sm btn-outline-secondary">
+							class="btn btn-sm btn-outline-secondary test-buttons">
 						Upload Results
 					</button>
 					<button type="button" id="exitBtn" onClick="window.location.replace('../../home.html')"
-							class="btn btn-sm btn-outline-secondary">
+							class="btn btn-sm btn-outline-secondary test-buttons">
 						Exit without Upload
 					</button>
 					<button type="button" onClick="window.location.replace('./fractal_questions.html')"
-							class="btn btn-sm btn-outline-secondary">
+							class="btn btn-sm btn-outline-secondary test-buttons">
 						Continue to Questions
 					</button>
 					<!-- TODO: Change to popup button (like leftEyeInstruct) -->
@@ -98,7 +106,7 @@
 						<br> Uploading Your Results...
 					</p>
 				</div>
-				
+			
 			</div>
 			
 			<footer class="mastfoot mt-auto">

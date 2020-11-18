@@ -58,7 +58,7 @@ results[2] = [];
 var index = 0;
 c.fillStyle = "black";
 c.beginPath();
-c.arc(350, 350, 4, 0, Math.PI * 2, false);
+c.arc(350, 350, 6, 0, Math.PI * 2, false);
 c.fill();
 c.stroke();
 
@@ -94,7 +94,7 @@ function test() {
                 c.clearRect(0, 0, 700, 700)
                 c.fillStyle = "black";
                 c.beginPath();
-                c.arc(350, 350, 4, 0, Math.PI * 2, false);
+                c.arc(350, 350, 6, 0, Math.PI * 2, false);
                 c.fill();
                 c.stroke();
                 if (j < 5) {
@@ -107,7 +107,7 @@ function test() {
                 c.clearRect(0, 0, 700, 700)
                 c.fillStyle = "black";
                 c.beginPath();
-                c.arc(350, 350, 4, 0, Math.PI * 2, false);
+                c.arc(350, 350, 6, 0, Math.PI * 2, false);
                 c.fill();
                 c.stroke();
                 if (j < 5) {
@@ -188,7 +188,7 @@ results2[2] = [];
 var index2 = 0;
 c2.fillStyle = "black";
 c2.beginPath();
-c2.arc(350, 350, 4, 0, Math.PI * 2, false);
+c2.arc(350, 350, 6, 0, Math.PI * 2, false);
 c2.fill();
 c2.stroke();
 
@@ -226,7 +226,7 @@ function test2() {
                 // Black Dot
                 c2.fillStyle = "black";
                 c2.beginPath();
-                c2.arc(350, 350, 4, 0, Math.PI * 2, false);
+                c2.arc(350, 350, 6, 0, Math.PI * 2, false);
                 c2.fill();
                 c2.stroke();
                 if (j2 < 5) {
@@ -240,7 +240,7 @@ function test2() {
                 // Black Dot
                 c2.fillStyle = "black";
                 c2.beginPath();
-                c2.arc(350, 350, 4, 0, Math.PI * 2, false);
+                c2.arc(350, 350, 6, 0, Math.PI * 2, false);
                 c2.fill();
                 c2.stroke();
                 if (j2 < 5) {
@@ -316,7 +316,7 @@ function showResults(r, r2) {
     // Black Dot
     c.fillStyle = "black";
     c.beginPath();
-    c.arc(250, 250, 4, 0, Math.PI * 2, false);
+    c.arc(250, 250, 6, 0, Math.PI * 2, false);
     c.fill();
     c.stroke();
 
@@ -325,7 +325,7 @@ function showResults(r, r2) {
     // Black Dot
     c2.fillStyle = "black";
     c2.beginPath();
-    c2.arc(250, 250, 4, 0, Math.PI * 2, false);
+    c2.arc(250, 250, 6, 0, Math.PI * 2, false);
     c2.fill();
     c2.stroke();
 

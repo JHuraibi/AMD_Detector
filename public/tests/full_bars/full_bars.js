@@ -5,7 +5,7 @@
 // 			drawn to the canvas. So all new objects will be drawn in the same color until another fill() call is made.
 
 let timestamp;						// Will record the time the test was started (in milliseconds since Epoch)
-let backgroundColor = 220;			// Greyscale color for canvas background (0:Black, 255:White)
+let backgroundColor = 240;			// Greyscale color for canvas background (0:Black, 255:White)
 let barFillAlpha = 0;				// Will control the bars' alpha
 let opacityIncrease = 15;			// How much to incrementally increase bar opacity
 let clickFillAlpha = 0;				// Will control the click indicator's alpha
@@ -26,7 +26,7 @@ let yLocationRight = [];			// RIGHT EYE: Y locations at the time of a click even
 
 let numBars = 40;					// How many bars to draw
 let barW;							// How thick each bar will be (is a function of numbers of bars vs canvas size)
-let canvasSize = 800;				// Size of width and height of the canvas (in pixels)
+let canvasSize = 700;				// Size of width and height of the canvas (in pixels)
 
 let clickUsedThisRound = false;		// Disables click if one was already received for current bar being shown
 let verticalInProgress = true;		// Indicates whether bars are currently being drawn vertically or horizontally
@@ -62,7 +62,7 @@ function startTest() {
 function setup() {
 	// canvasRef = createCanvas(canvasSize, canvasSize);
 	noLoop();
-	canvasRef = createCanvas(800, 800);
+	canvasRef = createCanvas(canvasSize, canvasSize);
 	canvasRef.id('canvasRef');
 	
 	barW = canvasSize / numBars;
@@ -75,7 +75,10 @@ function setup() {
 	
 	fillPositionQueue();
 	
-	canvasRef.hide();
+	canvasRef.show();
+	background(backgroundColor);
+	drawCenterDot();
+	drawStaticBorder();
 }
 
 /**
@@ -341,10 +344,10 @@ function transitionToNextEye() {
  */
 function drawCenterDot() {
 	fill(0);
-
+	
 	strokeWeight(2);
 	stroke(backgroundColor);
-	ellipse(width / 2, height / 2, 20);
+	ellipse(width / 2, height / 2, 15);
 }
 
 /**
@@ -358,7 +361,7 @@ function drawClickIndicator() {
 	
 	strokeWeight(2);
 	stroke(backgroundColor);
-	ellipse(width / 2, height / 2, 20);
+	ellipse(width / 2, height / 2, 15);
 	
 	fill(0, 255);	// Sets canvas coloring back to black
 }
@@ -374,7 +377,7 @@ function fadeOutIndicator() {
 	if (timer - indicatorStartTime > indicatorDuration) {
 		clickFillAlpha -= opacityIncrease;
 	}
-
+	
 	if (clickFillAlpha < 0) {
 		clickFillAlpha = 0;
 	}
