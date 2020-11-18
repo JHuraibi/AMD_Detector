@@ -12,3 +12,8 @@ exports.newUserSignUp = functions.auth.user().onCreate(user => {
     })
 });
 */
+
+/*
+exports.deleteUser = 
+
+*/ 
