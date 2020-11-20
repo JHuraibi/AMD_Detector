@@ -90,6 +90,7 @@
 						<!--        <strong>Your Results</strong>-->
 					</a>
 					
+					<!-- TODO: This button does two different things -->
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
 							aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
 						<a class="sign-out">Sign Out</a>
@@ -109,7 +110,7 @@
 						</span>
 					</p>
 					<p>
-						<button class="btn btn-primary my-2"
+						<button class="btn btn-primary my-2" id="mainButton"
 								onClick="location.href='./tests/instructions_page.html?amsler_grid'">
 							Take Your First Test
 						</button>
@@ -330,6 +331,45 @@
 		<script src="/__/firebase/init.js"></script>
 		
 		<script src="./home.js"></script>
+		
+		<script>
+			let dbRef = firebase.firestore();
+			let userRef = null;
+			
+			firebase.auth().onAuthStateChanged(user => {
+				console.log("[home.html] - USER LOCATED");
+				console.log(user);
+				userRef = user;
+			});
+		</script>
+		
+		<script>
+			(function attemptUserLookup() {
+				console.log("attemptLookup");
+				if (!userRef && maxWaitTime > 0) {
+					maxWaitTime -= waitTime;
+					console.log("No User. Reattempting Lookup.");
+					setTimeout(attemptUserLookup, waitTime);
+				}
+				else if (maxWaitTime < 0) {
+					console.log("User Lookup Timed Out");
+				}
+				else if (userRef) {
+					console.log("CHECKING");
+					checkIfNew();
+				}
+			})();
+			
+			function checkIfNew() {
+				dbRef.collection("TestResults")
+					.get()
+					.then((querySnapshot) => {
+						querySnapshot.forEach((doc) => {
+							console.log("DOC");
+						});
+					});
+			}
+		</script>
 	</body>
 
 </html>
