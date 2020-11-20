@@ -100,8 +100,13 @@ async function getType() {
 
 async function sendemail() {
   var user = firebase.auth().currentUser;
-  await user.sendEmailVerification();
-  alert("verification email sent");
-  console.log('Email verification sent', user);
+  await user.sendEmailVerification().then(
+  	function() {
+		alert("verification email sent");
+		window.location.replace("./index.html");
+  }).catch(function(error) {
+	  alert("verification email sent");
+	  console.log("Error sending verification email: " + error);
+  });
 }
 
