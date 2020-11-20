@@ -416,10 +416,7 @@ function sendToFirestore() {
         .add(dataToWrite)
         .then(() => {
             uploadSuccess();
-            setTimeout(() => {
-                // Use replace() to disallow back button to come back to this page
-                window.location.replace("../../home.html");
-            }, 1000);
+			updateFirstTest();
         });
 
 }
@@ -427,4 +424,18 @@ function sendToFirestore() {
 function uploadSuccess() {
     let uploadStatusIndicator = document.getElementById('uploadStatus');
     uploadStatusIndicator.textContent = "Results Saved!";
+}
+
+function updateFirstTest() {
+	dbRef.collection("TestResults")
+		.doc(userRef.uid)
+		.set({
+			firstTest: false
+		}).then(() => {
+		console.log("First Test Status Updated.");
+		setTimeout(() => {
+			// Use replace() to disallow back button to come back to this page
+			window.location.replace("../../home.html");
+		}, 1000);
+	});
 }
