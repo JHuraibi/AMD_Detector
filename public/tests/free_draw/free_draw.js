@@ -6,17 +6,16 @@ let strokeColor = 100;
 
 let canvasEmpty = true;
 let brushActive = false;
+let leftClicked = false;
+let clickDelay = 0;
 
 let slider;
 let sliderSizeIndicator;
 let currentSliderValue;
 
-let uploadBtn;
-let exitBtn;
-
 let drawing = [];
 let redoRecord = [];
-// let redo = {};
+
 let actions = [];
 let actionCounter;
 
@@ -35,8 +34,6 @@ function setup() {
 	sliderSizeIndicator.innerText = "Brush Size: " + slider.value;
 	currentSliderValue = slider.value;
 	
-	uploadBtn = document.getElementById("uploadBtn");
-	exitBtn = document.getElementById("exitBtn");
 	noCursor();
 }
 
@@ -53,9 +50,9 @@ function draw() {
 	clear();
 	background(backgroundColor);
 	
-	if (brushActive) {
+	if (brushActive && leftClicked && clickDelay > 2) {
 		saveLine(mouseX, mouseY, pmouseX, pmouseY, slider.value);
-		// checkCursorBounds();		// See note
+		checkCursorBounds();
 	}
 	
 	if (drawing.length) {
@@ -68,6 +65,7 @@ function draw() {
 		}
 	}
 	
+	clickDelay++;
 	updateSliderIndicator();
 	drawBrushIndicator();
 	drawStaticAxes();
@@ -78,11 +76,12 @@ function draw() {
  * Saves the attributes of the most-recently drawn line. The two coordinate
  * 	points ((x, y) and (pX, pY)) are the start and end points of a line
  * 	segment. W is simply the thickness of the line segment (value is set
- * 	by the slider).
- * @param x		X-coordinate of the most-recently drawn line
- * @param y     Y-coordinate of the most-recently drawn line
- * @param pX	X-coordinate of the PREVIOUSLY drawn line
- * @param pY	Y-coordinate of the PREVIOUSLY drawn line
+ * 	by the slider). The end point of the previously drawn line becomes
+ * 	the start point for the current line.
+ * @param x		X-coordinate of the end point line
+ * @param y     Y-coordinate of the end point line
+ * @param pX	X-coordinate of the PREVIOUSLY drawn line end point, start point for new line
+ * @param pY	Y-coordinate of the PREVIOUSLY drawn line end point, start point for new line
  * @param w		Width (stroke weight) of the line
  */
 function saveLine(x, y, pX, pY, w) {
@@ -104,18 +103,28 @@ function saveLine(x, y, pX, pY, w) {
  * 	enableUpload().
  */
 function mousePressed() {
+	if (mouseButton !== LEFT) {
+		leftClicked = false;
+		brushActive = false;
+		return;
+	}
+	
 	let clickedInCanvas =
 		mouseX > 0 && mouseX < width
 		&& mouseY > 0 && mouseY < height;
 	
 	if (clickedInCanvas && canvasEmpty) {
+		leftClicked = true;
 		brushActive = true;
 		canvasEmpty = false;
+		clickDelay = 0;
 		actionCounter = drawing.length;
-		enableUpload();
+		enableUploadButtons();
 	}
 	else if (clickedInCanvas) {
+		leftClicked = true;
 		brushActive = true;
+		clickDelay = 0;
 		actionCounter = drawing.length;
 	}
 }
@@ -124,26 +133,35 @@ function mousePressed() {
  * Handles mouse up release events. Disables the brush.
  */
 function mouseReleased() {
-	brushActive = false;
-	actions.push(drawing.length - actionCounter);
+	if (leftClicked) {
+		leftClicked = false;
+		brushActive = false;
+		actions.push(drawing.length - actionCounter);
+	}
 }
-
 
 /**
  * Disables the brush if the cursor goes out of the bounds of the canvas
- * 	while the user is drawing a line.
+ * 	while the user is drawing a line. Similar mechanics as mouseReleased().
+ * 	No action is needed if the brush is not active.
  */
 function checkCursorBounds() {
-	// NOTE: Enable this by commenting out the return statement.
-	return;
+	if (!brushActive) {
+		return;
+	}
+	
 	if (mouseX < 0 || mouseX > width
 		|| mouseY < 0 || mouseY > height) {
+		leftClicked = false;
 		brushActive = false;
+		actions.push(drawing.length - actionCounter);
 	}
 }
 
 function keyPressed() {
-	// 90 === 'z'
+	// 89  === 'y'
+	// 121 === 'Y'
+	// 90  === 'z'
 	// 122 === 'Z'
 	if (keyIsDown(CONTROL) && (keyIsDown(90) || keyIsDown(122))) {
 		let removalIndex = drawing.length - actions.pop();
@@ -156,7 +174,6 @@ function keyPressed() {
 	}
 	else if (keyIsDown(CONTROL) && (keyIsDown(89) || keyIsDown(121))) {
 		redo();
-		console.log("REDO RECORD LENGTH: " + redoRecord.length);
 	}
 	
 	return false; // prevent any default behaviour (P5.js reference recommendation)
@@ -185,6 +202,7 @@ function recordLast(index) {
 }
 
 function redo() {
+	// TODO: Needs a prelim check before pushing to drawing[]
 	for (let i = 0; i < redoRecord.length; i++) {
 		drawing.push(redoRecord[i]);
 	}
@@ -248,7 +266,7 @@ function clearCanvas() {
 	drawing.splice(0, drawing.length);
 	clear();
 	background(backgroundColor);
-	disableUpload();
+	disableUploadButtons();
 	
 	canvasEmpty = true;
 }
@@ -266,32 +284,11 @@ function invertColors() {
 	background(backgroundColor);
 }
 
-/**
- * Does the opposite complimentary actions of disableUpload().
- * Shows the button to upload to FireStore. Updates the exit button text
- *	to say "Exit without Upload" to reflect that the canvas is no longer blank.
- * This function is called whenever the canvas is blank and the user draws their
- * 	first line or their first line after clearing the canvas.
- */
-function enableUpload() {
-	uploadBtn.style.display = "block";
-	exitBtn.innerText = "Exit without Upload";
-}
-
-/**
- * Does the opposite complimentary actions of enableUpload().
- * Hides the button to upload to FireStore. Updates the exit button
- *  to say "Exit" to reflect that the canvas is empty.
- */
-function disableUpload() {
-	uploadBtn.style.display = "none";
-	exitBtn.innerText = "Exit";
-}
 
 /**
  * Exports the results of the test as a JSON object. Used to send the results
  * 	to FireStore.
- * @returns {{TestName: string, TestCanvasSize: *, ImageData: *, TimeStampMS: *}}
+ * @returns {{TestName: string, TestCanvasSize: float, ImageData: float Array, TimeStampMS: int}}
  */
 function getFreeDrawResults() {
 	return {
