@@ -105,6 +105,14 @@ function addRow(data, targetTableID, id, type) {
 async function search() {
 	if (query.value.length < 3) {
 		console.log("Less than 3");
+		searchWarning.innerText = "Searches must be three (3) or more characters.";
+		searchWarning.style.visibility = "visible";
+		return;
+	}
+	
+	if (query.value.length > 256) {
+		console.log("Less than 3");
+		searchWarning.innerText = "Search too long. Must be 256 or less characters.";
 		searchWarning.style.visibility = "visible";
 		return;
 	}
@@ -118,12 +126,6 @@ async function search() {
 	for (var i = tableHeaderRowCount; i < rowCount; i++) {
 		tableBodySearch.deleteRow(tableHeaderRowCount);
 	}
-	
-	// TODO: Handle items that would make ALL physicians a match and are not helpful to user
-	//			Things possibly like: ".com" "hospital" "dr"
-	//			But not things like: "Ophthalmologist"
-	// NOTE: Try ordering the matching from most likely to least likely (minimize computation time)
-	//			e.g. title(speciality)->lastname->firstname->location
 	// NOTE: JSON Structure
 	// 			id: docID
 	// 			email: doc.email
