@@ -333,8 +333,9 @@ function transitionToNextEye() {
 	
 	indicatorStartTime = 0;
 	// timer = 0;
-	noLoop();
 	canvasRef.hide();
+	noLoop();
+	document.getElementById("startTest").style.display = "none";
 	document.getElementById("rightEyeInstruct").style.display = "block";
 }
 
