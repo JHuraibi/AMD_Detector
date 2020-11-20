@@ -433,9 +433,5 @@ function updateFirstTest() {
 			firstTest: false
 		}).then(() => {
 		console.log("First Test Status Updated.");
-		setTimeout(() => {
-			// Use replace() to disallow back button to come back to this page
-			window.location.replace("../../home.html");
-		}, 1000);
 	});
 }
