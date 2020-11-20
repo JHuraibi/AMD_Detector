@@ -305,15 +305,12 @@
 		}
 
 		function setDateSubtitle(milliseconds) {
-			// if (!docRef) {
-			// 	console.log("The earlier document lookup was unsuccessful.")
-			// 	return;
-			// }
 			let subtitleElement = document.getElementById("dateSubtitle");
 			let date = new Date(milliseconds);
-
+			let timezoneOffset = 5;	// UTC -5:00
+			
 			let dateString = date.toDateString();
-			let hoursString = date.getUTCHours();
+			let hoursString = +date.getUTCHours() - timezoneOffset;
 			let minutesString = date.getUTCMinutes();
 			let postfix = hoursString > 11 ? "PM" : "AM";
 
@@ -323,10 +320,10 @@
 
 			minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
 			hoursString = hoursString % 12;
-
+			
 			subtitleElement.innerText =
-				subtitleElement.innerText +
-				dateString + " at " + hoursString + ":" + minutesString + postfix;
+				subtitleElement.innerText + dateString + " at " +
+				hoursString + ":" + minutesString + postfix;
 		}
 	</script>
 
