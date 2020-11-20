@@ -35,13 +35,11 @@ registerForm.addEventListener('submit', (e) => {
     //console.log(user.uid);
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-		// I disabled the creation of TestResults (Nov 19 -J)
-      	sendemail();
-        // id = user.uid;
-        // console.log(id);
-        // db.collection("TestResults").doc(id).set({
-        //   exists: true
-        // }).then(() => { sendemail(); });
+        id = user.uid;
+        console.log(id);
+        db.collection("TestResults").doc(id).set({
+          exists: true
+        }).then(() => { sendemail(); });
       }
     });
     //window.location = 'index.html';
