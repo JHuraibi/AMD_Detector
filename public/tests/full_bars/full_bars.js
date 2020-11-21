@@ -132,6 +132,9 @@ function draw() {
  * 	the test is waiting to start, OR the test is done:
  *  - Take no action.
  *
+ * If the click was a mouse click other than a left click:
+ * 	- Take no action.
+ *
  * If leftEyeTestInProgress is TRUE:
  *  - Record the location of the currently-shown bar.
  *
@@ -145,6 +148,10 @@ function draw() {
  */
 function mousePressed() {
 	if (clickUsedThisRound || waitingToStart || testFinished) {
+		return;
+	}
+	
+	if (mouseButton !== LEFT){
 		return;
 	}
 	
