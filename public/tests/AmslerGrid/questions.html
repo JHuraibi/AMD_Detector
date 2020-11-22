@@ -26,6 +26,12 @@
 				text-align: center;
 				color: #282828;
 			}
+			
+			.section-container {
+				border: solid black 2px;
+				padding: 5%;
+			}
+			
 		</style>
 	</head>
 	<body class="text-center">
@@ -42,186 +48,205 @@
 			
 			<main role="main" class="inner cover">
 				<header style="text-align: center; font-size: 40px;">Amsler Grid Test Questions</header>
-				<form action="../../home.html">
+<!--				<form action="../../home.html">-->
+				<form class="AmslerQuestions">
 					
-					<div id="q1" style="border: solid black 2px;">
-						<label for="questions">Question 1</label>
+					<div id="q1" class="section-container">
 						<p>Which eye did you test?</p>
 						
-						<input type="radio" id="right" name="q1" value="right">
-						<label for="right">Right</label><br>
-						<input type="radio" id="left" name="q1" value="left">
-						<label for="left">Left</label><br>
-					
+						<input type="radio" id="left" name="q1" value="left" required>
+						<label for="left">Left</label>
+						&nbsp;
+						<input type="radio" id="right" name="q1" value="right" required>
+						<label for="right">Right</label>
 					</div>
+					
 					<br>
 					
 					<!-- Section 1 part -->
-					<div id="s2" style="border: solid black 2px;">
-						<label for="questions"></label>
+					<div id="s1" class="section-container">
 						<p>Did you have trouble seeing this section?</p>
+						
 						<div>
-							<img src="amslerS1.png" width="105" height="105">
+							<!--TODO: Use relative sizing if possible, not hard coded-->
+							<img src="amslerS1.png" width="105" height="105" alt="AmslerGrid Section 1">
 						</div>
-						<input type="checkbox" id="sp1" name="q2" value="secion1">
-						<label for="secion1"> Section 1</label>
+						
+						<input type="checkbox" id="sp1" name="section1">
+						<label for="sp1">Section 1</label>
 						<div id="qSec1">
+							
 							<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
+							<input type="radio" id="S1_Q1_Yes" name="S1_Q1" value="yes">
+							<label for="S1_Q1_Yes">Yes</label>
+							<input type="radio" id="S1_Q1_No" name="S1_Q1" value="no">
+							<label for="S1_Q1_No">No</label>
 							
-							<input type="radio" id="yes" name="q3" value="yes">
-							<label for="yes">Yes</label><br>
-							<input type="radio" id="no" name="q3" value="no">
-							<label for="no">No</label>
-							<br>
+							<br><br>
+							
 							<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
-							<input type="radio" id="yes" name="q5" value="yes">
-							<label for="yes">Yes</label><br>
-							<input type="radio" id="no" name="q5" value="no">
-							<label for="no">No</label>
-							<br>
-							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
+							<input type="radio" id="S1_Q2_Yes" name="S1_Q2" value="yes">
+							<label for="S1_Q2_Yes">Yes</label>
+							<input type="radio" id="S1_Q2_No" name="S1_Q2" value="no">
+							<label for="S1_Q2_No">No</label>
 							
-							<input type="radio" id="yes" name="q6" value="yes">
-							<label for="yes">Yes</label><br>
-							<input type="radio" id="no" name="q6" value="no">
-							<label for="no">No</label>
-							<br>
-							<label for="concerns">Is there any other details you would like to mention?</label><br>
-							<textarea name="concerns" id="concerns" cols="50" rows="10"></textarea>
+							<br><br>
+							
+							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
+							<input type="radio" id="S1_Q3_Yes" name="S1_Q3" value="yes">
+							<label for="S1_Q3_Yes">Yes</label>
+							<input type="radio" id="S1_Q3_No" name="S1_Q3" value="no">
+							<label for="S1_Q3_No">No</label>
+							
+							<br><br>
+							
+							<label for="S1_Concerns">Is there any other details you would like to mention?</label>
+							<textarea name="S1_Concerns" id="S1_Concerns" cols="50" rows="10"></textarea>
 						
 						</div>
 					</div>
+					
 					<br>
+					
 					<!-- section 2 part  -->
-					<div id="s2" style="border: solid black 2px;">
-						<label for="questions"></label>
+					<div id="s2" class="section-container">
 						<p>Did you have trouble seeing this section?</p>
 						<div>
+							<!--TODO: Use relative sizing if possible, not hard coded-->
 							<img src="amslerS2.png" width="105" height="105">
 						</div>
-						<input type="checkbox" id="sp2" name="q2" value="secion2">
-						<label for="secion2"> Section 2</label>
-						<div id="qSec2">
-							<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
-							
-							<input type="radio" id="yes" name="q3" value="yes">
-							<label for="yes">Yes</label><br>
-							<input type="radio" id="no" name="q3" value="no">
-							<label for="no">No</label>
-							<br>
-							<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
-							<input type="radio" id="yes" name="q5" value="yes">
-							<label for="yes">Yes</label><br>
-							<input type="radio" id="no" name="q5" value="no">
-							<label for="no">No</label>
-							<br>
-							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
-							
-							<input type="radio" id="yes" name="q6" value="yes">
-							<label for="yes">Yes</label><br>
-							<input type="radio" id="no" name="q6" value="no">
-							<label for="no">No</label>
-							<br>
-							<label for="concerns">Is there any other details you would like to mention?</label><br>
-							<textarea name="concerns" id="concerns" cols="50" rows="10"></textarea>
 						
+						<input type="checkbox" id="sp2" name="section2">
+						<label for="sp2">Section 2</label>
+						<div id="qSec2">
+							
+							<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
+							<input type="radio" id="S2_Q1_Yes" name="S2_Q1" value="yes">
+							<label for="S2_Q1_Yes">Yes</label>
+							<input type="radio" id="S2_Q1_No" name="S2_Q1" value="no">
+							<label for="S2_Q1_No">No</label>
+							
+							<br><br>
+							
+							<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
+							<input type="radio" id="S2_Q2_Yes" name="S2_Q2" value="yes">
+							<label for="S2_Q2_Yes">Yes</label>
+							<input type="radio" id="S2_Q2_No" name="S2_Q2" value="no">
+							<label for="S2_Q2_No">No</label>
+							
+							<br><br>
+							
+							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
+							<input type="radio" id="S2_Q3_Yes" name="S2_Q3" value="yes">
+							<label for="S2_Q3_Yes">Yes</label>
+							<input type="radio" id="S2_Q3_No" name="S2_Q3" value="no">
+							<label for="S2_Q3_No">No</label>
+							
+							<br><br>
+							
+							<label for="S2_Concerns">Is there any other details you would like to mention?</label>
+							<textarea name="S2_Concerns" id="S2_Concerns" cols="50" rows="10"></textarea>
 						
 						</div>
 					</div>
+					
 					<br>
 					
 					<!-- Section 3 part  -->
-					<div id="s3" style="border: solid black 2px;">
-						<label for="questions"></label>
+					<div id="s3" class="section-container">
 						<p>Did you have trouble seeing this section?</p>
+						
 						<div>
+							<!--TODO: Use relative sizing if possible, not hard coded-->
 							<img src="amslerS3.png" width="105" height="105">
 						</div>
-						<input type="checkbox" id="sp3" name="q2" value="secion3">
-						<label for="secion3"> Section 3</label>
+						
+						<input type="checkbox" id="sp3" name="section3">
+						<label for="sp3">Section 3</label>
 						<div id="qSec3">
+							
 							<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
+							<input type="radio" id="S3_Q1_Yes" name="S3_Q1" value="yes">
+							<label for="S3_Q1_Yes">Yes</label>
+							<input type="radio" id="S3_Q1_No" name="S3_Q1" value="no">
+							<label for="S3_Q1_No">No</label>
 							
-							<input type="radio" id="yes" name="q3" value="yes">
-							<label for="yes">Yes</label><br>
-							<input type="radio" id="no" name="q3" value="no">
-							<label for="no">No</label>
-							<br>
+							<br><br>
+							
 							<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
-							<input type="radio" id="yes" name="q5" value="yes">
-							<label for="yes">Yes</label><br>
-							<input type="radio" id="no" name="q5" value="no">
-							<label for="no">No</label>
-							<br>
-							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
+							<input type="radio" id="S3_Q2_Yes" name="S3_Q2" value="yes">
+							<label for="S3_Q2_Yes">Yes</label>
+							<input type="radio" id="S3_Q2_No" name="S3_Q2" value="no">
+							<label for="S3_Q2_No">No</label>
 							
-							<input type="radio" id="yes" name="q6" value="yes">
-							<label for="yes">Yes</label><br>
-							<input type="radio" id="no" name="q6" value="no">
-							<label for="no">No</label>
-							<br>
-							<label for="concerns">Is there any other details you would like to mention?</label><br>
-							<textarea name="concerns" id="concerns" cols="50" rows="10"></textarea>
-						
-						
+							<br><br>
+							
+							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
+							<input type="radio" id="S3_Q3_Yes" name="S3_Q3" value="yes">
+							<label for="S3_Q3_Yes">Yes</label>
+							<input type="radio" id="S3_Q3_No" name="S3_Q3" value="no">
+							<label for="S3_Q3_No">No</label>
+							
+							<br><br>
+							
+							<label for="S3_Concerns">Is there any other details you would like to mention?</label>
+							<textarea name="S3_Concerns" id="S3_Concerns" cols="50" rows="10"></textarea>
+							
 						</div>
 					</div>
+					
 					<br>
 					
 					<!-- Section 4 part  -->
-					<div id="s4" style="border: solid black 2px;">
-						<label for="questions"></label>
+					<div id="s4" class="section-container">
 						<p>Did you have trouble seeing this section?</p>
 						<div>
 							<img src="amslerS4.png" width="105" height="105">
 						</div>
-						<input type="checkbox" id="sp4" name="q2" value="secion4">
-						<label for="secion4"> Section 4</label>
+						
+						<input type="checkbox" id="sp4" name="section4">
+						<label for="sp4">Section 4</label>
 						<div id="qSec4">
+
 							<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
+							<input type="radio" id="S4_Q1_Yes" name="S4_Q1" value="yes">
+							<label for="S4_Q1_Yes">Yes</label>
+							<input type="radio" id="S4_Q1_No" name="S4_Q1" value="no">
+							<label for="S4_Q1_No">No</label>
 							
-							<input type="radio" id="yes" name="q3" value="yes">
-							<label for="yes">Yes</label><br>
-							<input type="radio" id="no" name="q3" value="no">
-							<label for="no">No</label>
-							<br>
+							<br><br>
+							
 							<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
-							<input type="radio" id="yes" name="q5" value="yes">
-							<label for="yes">Yes</label><br>
-							<input type="radio" id="no" name="q5" value="no">
-							<label for="no">No</label>
-							<br>
-							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
+							<input type="radio" id="S4_Q2_Yes" name="S4_Q2" value="yes">
+							<label for="S4_Q2_Yes">Yes</label>
+							<input type="radio" id="S4_Q2_No" name="S4_Q2" value="no">
+							<label for="S4_Q2_No">No</label>
 							
-							<input type="radio" id="yes" name="q6" value="yes">
-							<label for="yes">Yes</label><br>
-							<input type="radio" id="no" name="q6" value="no">
-							<label for="no">No</label>
-							<br>
-							<label for="concerns">Is there any other details you would like to mention?</label><br>
-							<textarea name="concerns" id="concerns" cols="50" rows="10"></textarea>
-						
-						
+							<br><br>
+							
+							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
+							<input type="radio" id="S4_Q3_Yes" name="S4_Q3" value="yes">
+							<label for="S4_Q3_Yes">Yes</label>
+							<input type="radio" id="S4_Q3_No" name="S4_Q3" value="no">
+							<label for="S4_Q3_No">No</label>
+							
+							<br><br>
+							
+							<label for="S4_Concerns">Is there any other details you would like to mention?</label><br>
+							<textarea name="S4_Concerns" id="S4_Concerns" cols="50" rows="10"></textarea>
 						</div>
 					</div>
 					<br>
-					
-					
 					<div>
 						<input type="submit" value="Submit">
 					</div>
 				</form>
 			</main>
 			
-			
 			<footer class="mastfoot mt-auto"></footer>
-			<div class="inner">
-			</div>
-			</footer>
 		</div>
 		
 		<!-- The core Firebase JS SDK is always required and must be listed first -->
-		
 		<script src="/__/firebase/7.21.0/firebase-app.js"></script>
 		
 		<script src="/__/firebase/7.7.0/firebase-auth.js"></script>
@@ -230,7 +255,9 @@
 		
 		<!-- Initialize Firebase -->
 		<script src="/__/firebase/init.js"></script>
-		<script src="Amsler.js"></script>
+		<script src="questions.js"></script>
+		<!--		<script src="Amsler.js"></script>-->
+
 	
 	</body>
 
