@@ -77,8 +77,8 @@
 					<!--					<button type="button" id="uploadBtn" onClick="sendToFirestore();showStatusIndicator();"-->
 					<button type="button" id="uploadBtn" style="display: none"
 							class="btn btn-sm btn-outline-secondary test-buttons"
-							onClick="sendToFirestore();showStatusIndicator();updateButtons()">
-						Upload Image
+							onClick="sendToFirestore();showStatusIndicator();disableUploadButtons()">
+						Save Image
 					</button>
 					<button type="button" id="exitBtn" onClick="window.location.replace('../../home.html')"
 							class="btn btn-sm btn-outline-secondary test-buttons">
@@ -88,7 +88,7 @@
 				<br>
 				<div>
 					<p id="uploadStatus" style="visibility: hidden">
-						Uploading Your Results...
+						Saving Your Drawing...
 					</p>
 				</div>
 			
@@ -149,6 +149,7 @@
 						.add(dataToWrite)
 						.then(() => {
 							uploadSuccess();
+							updateFirstTest();
 						});
 				}
 			}
@@ -166,32 +167,52 @@
 			
 			function uploadSuccess() {
 				let uploadStatusIndicator = document.getElementById('uploadStatus');
-				uploadStatusIndicator.textContent = "Results Saved!";	// Prototype 3
+				uploadStatusIndicator.textContent = "Drawing Saved!";
+			}
+			
+			function updateFirstTest() {
+				dbRef.collection("TestResults")
+					.doc(userRef.uid)
+					.set({
+						firstTest: false
+					}).then(() => {
+					console.log("First Test Status Updated.");
+					setTimeout(() => {
+						// Use replace() to disallow back button to come back to this page
+						window.location.replace("../../home.html");
+					}, 1000);
+				});
 			}
 			
 			function userLookupFailed() {
 				// TODO: Better error message and format
 				let uploadStatusIndicator = document.getElementById('uploadStatus');
-				uploadStatusIndicator.textContent = "Upload failed. Please Try Again Later.";
+				uploadStatusIndicator.textContent = "Saving Drawing failed. Please Try Again Later.";
 			}
 		</script>
 		
 		<script>
-			function updateButtons() {
+			function disableUploadButtons() {
 				let uploadBtn = document.getElementById("uploadBtn");
 				let exitBtn = document.getElementById("exitBtn");
 				
 				uploadBtn.style.display = "none";
-				// exitBtn.innerText = "Skip Questions";
-				exitBtn.innerText = "Exit"; // Prototype 3
+				exitBtn.innerText = "Exit";
+			}
+			
+			function enableUploadButtons() {
+				let uploadBtn = document.getElementById("uploadBtn");
+				let exitBtn = document.getElementById("exitBtn");
+				
+				uploadBtn.style.display = "block";
+				exitBtn.innerText = "Exit without Saving";
 			}
 		</script>
 		
 		<script>
 			function showStatusIndicator() {
 				let uploadStatusIndicator = document.getElementById('uploadStatus');
-				// uploadStatusIndicator.style.display = "inherit";
-				uploadStatusIndicator.style.visibility = "visible";	// Prototype 3
+				uploadStatusIndicator.style.visibility = "visible";
 			}
 		</script>
 	</body>

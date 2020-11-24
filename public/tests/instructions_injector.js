@@ -37,7 +37,7 @@ function retrieveInstructions(target_test) {
 		// AMSLER GRID
 		case "amsler_grid":
 			return "You are about to take the Amsler Grid test. You will need to start by cupping the eye that isn't being tested.\n" +
-			 "Focus on the black dot in the center. Press next after timer is zero.";
+			 "Focus on the black dot in the center.";
 		
 		// GROWING CIRCLES
 		case "growing_circles":

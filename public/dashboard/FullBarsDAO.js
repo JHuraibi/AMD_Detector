@@ -277,9 +277,10 @@ class FullBarsDAO {
 	
 	formatDate(milliseconds) {
 		let date = new Date(milliseconds);
+		let timezoneOffset = 5;	// UTC -5:00
 		
 		let dateString = date.toDateString();
-		let hoursString = date.getUTCHours();
+		let hoursString = +date.getUTCHours() - timezoneOffset;
 		let minutesString = date.getUTCMinutes();
 		let postfix = hoursString > 11 ? "PM" : "AM";
 		

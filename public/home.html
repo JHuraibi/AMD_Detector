@@ -109,7 +109,7 @@
 						</span>
 					</p>
 					<p>
-						<button class="btn btn-primary my-2"
+						<button class="btn btn-primary my-2" id="mainTestButton"
 								onClick="location.href='./tests/instructions_page.html?amsler_grid'">
 							Take Your First Test
 						</button>
@@ -232,7 +232,8 @@
 									 alt="Free Draw">
 								<div class="card-body">
 									<p class="card-text"><span style="font-weight: bold">Free Draw</span></p>
-									<p class="card-text"><br>Draw areas of concern in your visual field.</p>
+									<p class="card-text">Try recreating areas of issue in your visual field
+										by drawing.</p>
 									<div class="d-flex justify-content-between align-items-center">
 										<div class="btn-group">
 											<button type="button" class="btn btn-sm btn-outline-secondary"
@@ -254,7 +255,7 @@
 									 alt="Fractal">
 								<div class="card-body">
 									<p class="card-text"><span style="font-weight: bold">Smiley</span></p>
-									<p class="card-text"><br>Click the correct button any time a face appears.</p>
+									<p class="card-text">Click the correct button any time a face appears.</p>
 									<div class="d-flex justify-content-between align-items-center">
 										<div class="btn-group">
 											<button type="button" class="btn btn-sm btn-outline-secondary"
@@ -317,7 +318,7 @@
 				integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
 				crossorigin="anonymous"></script>
 		<script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
-		<script src="./assets/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
 		
 		<!-- Firebase Items-->
 		<script src="/__/firebase/7.21.0/firebase-app.js"></script>
@@ -330,6 +331,50 @@
 		<script src="/__/firebase/init.js"></script>
 		
 		<script src="./home.js"></script>
+		
+		<script>
+			let dbRef = firebase.firestore();
+			let userRef = null;
+			
+			firebase.auth().onAuthStateChanged(user => {
+				console.log("[home.html] - USER LOCATED");
+				console.log(user);
+				userRef = user;
+			});
+		</script>
+		
+		<script>
+			let maxWaitTime = 2000;
+			let waitTime = 200;
+			
+			(function attemptUserLookup() {
+				console.log("attemptLookup");
+				if (!userRef && maxWaitTime > 0) {
+					maxWaitTime -= waitTime;
+					console.log("No User. Reattempting Lookup.");
+					setTimeout(attemptUserLookup, waitTime);
+				}
+				else if (maxWaitTime < 0) {
+					console.log("User Lookup Timed Out");
+				}
+				else if (userRef) {
+					checkIfNoTestsTaken();
+				}
+				// checkIfNoTestsTaken();
+			})();
+			
+			function checkIfNoTestsTaken() {
+				dbRef.collection("TestResults")
+					.doc(userRef.uid)
+					.get()
+					.then((doc) => {
+						if (!doc.data().firstTest) {
+							console.log("NOT FIRST TEST");
+							document.getElementById("mainTestButton").innerText = "Take Daily Amsler Grid";
+						}
+					});
+			}
+		</script>
 	</body>
 
 </html>

@@ -159,6 +159,7 @@
 						.add(dataToWrite)
 						.then(() => {
 							uploadSuccess();
+							updateFirstTest();
 						});
 				}
 			}
@@ -177,6 +178,16 @@
 			function uploadSuccess() {
 				let uploadStatusIndicator = document.getElementById('uploadStatus');
 				uploadStatusIndicator.textContent = "Results Saved!";
+			}
+			
+			function updateFirstTest() {
+				dbRef.collection("TestResults")
+					.doc(userRef.uid)
+					.set({
+						firstTest: false
+					}).then(() => {
+					console.log("First Test Status Updated.");
+				});
 			}
 			
 			function userLookupFailed() {

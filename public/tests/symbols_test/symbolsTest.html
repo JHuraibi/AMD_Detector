@@ -65,10 +65,6 @@
 			
 			<div>
 				<div class="instuct btn-group" id="btns">
-					<button onclick ="rightOption();" id="rightBtn"
-							class="btn btn-sm btn-outline-secondary test-buttons">
-						Right Eye
-					</button>
 					<button id="leftBtn" onclick="leftOption();"
 							class="btn btn-sm btn-outline-secondary test-buttons">
 						Left Eye
@@ -76,6 +72,10 @@
 					<button id="bothBtn" onclick="bothOption();"
 							class="btn btn-sm btn-outline-secondary test-buttons">
 						Both Eyes
+					</button>
+					<button onclick ="rightOption();" id="rightBtn"
+							class="btn btn-sm btn-outline-secondary test-buttons">
+						Right Eye
 					</button>
 				</div>
 				
@@ -150,10 +150,7 @@
 						.add(dataToWrite)
 						.then(() => {
 							uploadSuccess();
-							setTimeout(() => {
-								// Use replace() to disallow back button to come back to this page
-								window.location.replace("../../home.html");
-							}, 1000);
+							updateFirstTest();
 						});
 				}
 			}
@@ -172,6 +169,16 @@
 			function uploadSuccess() {
 				let uploadStatusIndicator = document.getElementById('uploadStatus');
 				uploadStatusIndicator.textContent = "Results Saved!";
+			}
+			
+			function updateFirstTest() {
+				dbRef.collection("TestResults")
+					.doc(userRef.uid)
+					.set({
+						firstTest: false
+					}).then(() => {
+					console.log("First Test Status Updated.");
+				});
 			}
 			
 			function userLookupFailed() {
