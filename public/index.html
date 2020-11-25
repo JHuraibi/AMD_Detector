@@ -23,6 +23,22 @@
     width: 100%;
     overflow: scroll;
 }
+	.disclaimer-container{
+		padding-bottom: 1%;
+		margin-top: 0.5em;
+		margin-bottom: 1em;
+	}
+	
+	.manualLabel{
+		color: #555;
+		display: inline;
+	}
+
+	.check{
+		width: auto;
+		display: inline;
+		float: none;
+	}
   </style>
 </head>
 
@@ -62,13 +78,20 @@
           <label for="female">Female</label>
           <input type="radio" id="female" name="gender" value="female">
         </div>
-        <div>
-          <p>Disclaimer: Be advised this web application is for educational purposes only. 
-            No test should replace any facility based test or professional diasnosis for it has
+        <div class="disclaimer-container">
+          <p style="color:red; margin-bottom: 0.5em">
+			Disclaimer: Be advised this web application is for educational purposes only.
+            No test should replace any facility-based test or professional diagnosis for it has
             not be professionally or academically vetted. </p>
+		  	<input type="checkbox" class="check" name="acceptDisclaimer" required>
+			<!-- !! Dont use a for label unless you're ready to do a lot of CSS editing -->
+			<!--<label for="check" id="checkLabel">I understand</label>-->
+			<p class="manualLabel">I Understand the Disclaimer</p>
         </div>
-        <button id="reg">Register</button>
-        <p class="error"></p>
+		  <div  style="display: block">
+		   <button id="reg">Register</button>
+        	<p class="error"></p>
+		  </div>
       </form>
       <div>Got an account? <a class="switch">Login instead</a></div>
       <div>New physician account? <a href="./physicians/physicians.html">Physician Registration</a></div>
@@ -109,7 +132,6 @@
         document.getElementById('reg').disabled = true;
       }
     }
-
   </script>
 </body>
 
