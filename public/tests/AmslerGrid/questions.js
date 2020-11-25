@@ -84,7 +84,6 @@ function s4() {
 
 
 function resultsJSON() {
-	// !! CRITICAL: Typo in "distoration"
 	let timestamp = Date.now();
 	let sec1Answers = templateJSON();
 	let sec2Answers = templateJSON();
@@ -94,7 +93,7 @@ function resultsJSON() {
 	if (sec1Checkbox.checked === true) {
 		sec1Answers = {
 			checked: true,
-			distoration: extractBool(AmslerQuestions.S1_Q1.value),
+			distortion: extractBool(AmslerQuestions.S1_Q1.value),
 			holes: extractBool(AmslerQuestions.S1_Q2.value),
 			corners: extractBool(AmslerQuestions.S1_Q3.value),
 			concerns: AmslerQuestions.S1_Concerns.value,
@@ -104,7 +103,7 @@ function resultsJSON() {
 	if (sec2Checkbox.checked === true) {
 		sec2Answers = {
 			checked: true,
-			distoration: extractBool(AmslerQuestions.S2_Q1.value),
+			distortion: extractBool(AmslerQuestions.S2_Q1.value),
 			holes: extractBool(AmslerQuestions.S2_Q2.value),
 			corners: extractBool(AmslerQuestions.S2_Q3.value),
 			concerns: AmslerQuestions.S2_Concerns.value,
@@ -114,7 +113,7 @@ function resultsJSON() {
 	if (sec3Checkbox.checked === true) {
 		sec3Answers = {
 			checked: true,
-			distoration: extractBool(AmslerQuestions.S3_Q1.value),
+			distortion: extractBool(AmslerQuestions.S3_Q1.value),
 			holes: extractBool(AmslerQuestions.S3_Q2.value),
 			corners: extractBool(AmslerQuestions.S3_Q3.value),
 			concerns: AmslerQuestions.S3_Concerns.value,
@@ -124,7 +123,7 @@ function resultsJSON() {
 	if (sec4Checkbox.checked === true) {
 		sec4Answers = {
 			checked: true,
-			distoration: extractBool(AmslerQuestions.S4_Q1.value),
+			distortion: extractBool(AmslerQuestions.S4_Q1.value),
 			holes: extractBool(AmslerQuestions.S4_Q2.value),
 			corners: extractBool(AmslerQuestions.S4_Q3.value),
 			concerns: AmslerQuestions.S4_Concerns.value,
@@ -150,13 +149,12 @@ async function getUid() {
 	});
 }
 
-// NOTE: Returns a filled-in generic JSON. FireStore needs the data fields presented.
-//  But does not necessarily need those fields to have values or filled in with generic values.
-function templateJSON(json){
-	// !! CRITICAL: Typo in "distoration"
+// NOTE: Returns a filled-in generic JSON. FireStore needs the data fields present,
+//  but does not necessarily need those fields to have any values.
+function templateJSON() {
 	return {
 		checked: false,
-		distoration: false,
+		distortion: false,
 		holes: false,
 		corners: false,
 		concerns: "",
