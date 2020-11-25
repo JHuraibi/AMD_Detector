@@ -1,15 +1,19 @@
 // TODO: This file vs Amsler.js ?
 
 const AmslerQuestions = document.querySelector('.AmslerQuestions');
-document.getElementById("sp1").addEventListener("click", s1);
-document.getElementById("sp2").addEventListener("click", s2);
-document.getElementById("sp3").addEventListener("click", s3);
-document.getElementById("sp4").addEventListener("click", s4);
+var sec1Checkbox = document.getElementById("sec1Checkbox");
+var sec2Checkbox = document.getElementById("sec2Checkbox");
+var sec3Checkbox = document.getElementById("sec3Checkbox");
+var sec4Checkbox = document.getElementById("sec4Checkbox");
 var sec1Questions = document.getElementById("qSec1");
 var sec2Questions = document.getElementById("qSec2");
 var sec3Questions = document.getElementById("qSec3");
 var sec4Questions = document.getElementById("qSec4");
 
+sec1Checkbox.addEventListener("click", s1);
+sec2Checkbox.addEventListener("click", s2);
+sec3Checkbox.addEventListener("click", s3);
+sec4Checkbox.addEventListener("click", s4);
 sec1Questions.style.display = "none";
 sec2Questions.style.display = "none";
 sec3Questions.style.display = "none";
@@ -24,7 +28,7 @@ AmslerQuestions.addEventListener('submit', (e) => {
 	console.log("saving to database");
 	
 	var db = firebase.firestore();
-	var dataToWrite = jsonresults();
+	var dataToWrite = resultsJSON();
 	// var id = firebase.auth().currentUser.uid;	// CHECK: getUID() ?
 	
 	// TODO: Needs error handling
@@ -43,7 +47,7 @@ AmslerQuestions.addEventListener('submit', (e) => {
 });
 
 function s1() {
-	if (sec1Questions.style.display === "none") {
+	if (sec1Checkbox.checked === true) {
 		sec1Questions.style.display = "inline-block";
 	}
 	else {
@@ -52,7 +56,7 @@ function s1() {
 }
 
 function s2() {
-	if (sec2Questions.style.display === "none") {
+	if (sec2Checkbox.checked === true) {
 		sec2Questions.style.display = "inline-block";
 	}
 	else {
@@ -61,8 +65,7 @@ function s2() {
 }
 
 function s3() {
-	
-	if (sec3Questions.style.display === "none") {
+	if (sec3Checkbox.checked === true) {
 		sec3Questions.style.display = "inline-block";
 	}
 	else {
@@ -71,7 +74,7 @@ function s3() {
 }
 
 function s4() {
-	if (sec4Questions.style.display === "none") {
+	if (sec4Checkbox.checked === true) {
 		sec4Questions.style.display = "inline-block";
 	}
 	else {
@@ -80,46 +83,16 @@ function s4() {
 }
 
 
-// START ORIGINAL
-// function jsonresults() {
-// 	let timestamp = Date.now();
-// 	let sections = [];
-// 	if (AmslerQuestions.section1.checked == true) {
-// 		sections.push("Section1");
-// 	}
-// 	if (AmslerQuestions.section2.checked == true) {
-// 		sections.push("Section2");
-// 	}
-// 	if (AmslerQuestions.section3.checked == true) {
-// 		sections.push("Section3");
-// 	}
-// 	if (AmslerQuestions.section4.checked == true) {
-// 		sections.push("Section4");
-// 	}
-//
-// 	return {
-// 		"TestName": "AmslerGrid",
-// 		"TimeStampMS": timestamp,
-// 		"Eye": AmslerQuestions.q1.value,
-// 		"Sections": sections,
-// 		"Distortion": AmslerQuestions.q3.value,
-// 		"Holes": AmslerQuestions.q4.value,
-// 		"Corners": AmslerQuestions.q5.value,
-// 		"Comments": AmslerQuestions.concerns.value,
-// 	}
-// }
-// END ORIGINAL
-
-// START J's Proposal
-function jsonresults() {
+function resultsJSON() {
+	// !! CRITICAL: Typo in "distoration"
 	let timestamp = Date.now();
-	let sectionOne = templateJSON();
-	let sectionTwo = templateJSON();
-	let sectionThree = templateJSON();
-	let sectionFour = templateJSON();
+	let sec1Answers = templateJSON();
+	let sec2Answers = templateJSON();
+	let sec3Answers = templateJSON();
+	let sec4Answers = templateJSON();
 	
-	if (AmslerQuestions.section1.checked == true) {
-		sectionOne = {
+	if (sec1Checkbox.checked === true) {
+		sec1Answers = {
 			checked: true,
 			distoration: extractBool(AmslerQuestions.S1_Q1.value),
 			holes: extractBool(AmslerQuestions.S1_Q2.value),
@@ -128,8 +101,8 @@ function jsonresults() {
 		}
 	}
 	
-	if (AmslerQuestions.section2.checked == true) {
-		sectionTwo = {
+	if (sec2Checkbox.checked === true) {
+		sec2Answers = {
 			checked: true,
 			distoration: extractBool(AmslerQuestions.S2_Q1.value),
 			holes: extractBool(AmslerQuestions.S2_Q2.value),
@@ -138,8 +111,8 @@ function jsonresults() {
 		}
 	}
 	
-	if (AmslerQuestions.section3.checked == true) {
-		sectionThree = {
+	if (sec3Checkbox.checked === true) {
+		sec3Answers = {
 			checked: true,
 			distoration: extractBool(AmslerQuestions.S3_Q1.value),
 			holes: extractBool(AmslerQuestions.S3_Q2.value),
@@ -148,8 +121,8 @@ function jsonresults() {
 		}
 	}
 	
-	if (AmslerQuestions.section4.checked == true) {
-		sectionFour = {
+	if (sec4Checkbox.checked === true) {
+		sec4Answers = {
 			checked: true,
 			distoration: extractBool(AmslerQuestions.S4_Q1.value),
 			holes: extractBool(AmslerQuestions.S4_Q2.value),
@@ -162,13 +135,12 @@ function jsonresults() {
 		"TestName": "AmslerGrid",
 		"TimeStampMS": timestamp,
 		"Eye": AmslerQuestions.q1.value,
-		"Section1": sectionOne,
-		"Section2": sectionTwo,
-		"Section3": sectionThree,
-		"Section4": sectionFour,
+		"Section1": sec1Answers,
+		"Section2": sec2Answers,
+		"Section3": sec3Answers,
+		"Section4": sec4Answers,
 	}
 }
-// END J's Proposal
 
 async function getUid() {
 	await firebase.auth().onAuthStateChanged(user => {
@@ -179,8 +151,9 @@ async function getUid() {
 }
 
 // NOTE: Returns a filled-in generic JSON. FireStore needs the data fields presented.
-//  But does not necessarily need those fields to have values or flled in with generic values.
+//  But does not necessarily need those fields to have values or filled in with generic values.
 function templateJSON(json){
+	// !! CRITICAL: Typo in "distoration"
 	return {
 		checked: false,
 		distoration: false,
@@ -190,7 +163,6 @@ function templateJSON(json){
 	}
 }
 
-// CHECK: Can probably be replaced by using true/false as HTML value attributes
 function extractBool(value) {
 	value = value.toLowerCase();	// Redundant
 	
