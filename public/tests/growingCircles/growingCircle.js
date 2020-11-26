@@ -431,7 +431,5 @@ function updateFirstTest() {
 		.doc(userRef.uid)
 		.set({
 			firstTest: false
-		}).then(() => {
-		console.log("First Test Status Updated.");
-	});
+		});
 }

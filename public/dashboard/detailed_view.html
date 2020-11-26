@@ -164,7 +164,6 @@
 		let userRef = null;
 
 		firebase.auth().onAuthStateChanged(user => {
-			console.log("[detailed_view.html] - USER LOCATED");
 			console.log(user);
 			userRef = user;
 		});
@@ -188,7 +187,6 @@
 		(function attemptUserLookup() {
 			if (!userRef && maxWaitTime > 0) {
 				maxWaitTime -= waitTime;
-				console.log("No User. Reattempting Lookup.");
 				setTimeout(attemptUserLookup, waitTime);
 			}
 			else if (maxWaitTime < 0) {
@@ -256,7 +254,6 @@
 				.get()
 				.then(function (doc) {
 					if (doc.exists) {
-						console.log("DOC FOUND");
 						setDateSubtitle(doc.data().TimeStampMS);
 
 						if (testName === "GrowingCircles") {
@@ -278,7 +275,7 @@
 							freeDrawDAO.drawToCanvas(doc);
 						}
 						else if (testName === "Fractal") {
-							console.log("FRACTAL DAO NEEDED");
+							console.log("[FRACTAL DAO NEEDED]");
 						}
 					}
 				})

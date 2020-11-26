@@ -337,7 +337,6 @@
 			let userRef = null;
 			
 			firebase.auth().onAuthStateChanged(user => {
-				console.log("[home.html] - USER LOCATED");
 				console.log(user);
 				userRef = user;
 			});
@@ -348,10 +347,8 @@
 			let waitTime = 200;
 			
 			(function attemptUserLookup() {
-				console.log("attemptLookup");
 				if (!userRef && maxWaitTime > 0) {
 					maxWaitTime -= waitTime;
-					console.log("No User. Reattempting Lookup.");
 					setTimeout(attemptUserLookup, waitTime);
 				}
 				else if (maxWaitTime < 0) {
@@ -369,7 +366,6 @@
 					.get()
 					.then((doc) => {
 						if (!doc.data().firstTest) {
-							console.log("NOT FIRST TEST");
 							document.getElementById("mainTestButton").innerText = "Take Daily Amsler Grid";
 						}
 					});

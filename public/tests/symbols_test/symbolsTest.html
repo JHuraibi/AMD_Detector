@@ -125,7 +125,6 @@
 			let userRef = null;
 			
 			firebase.auth().onAuthStateChanged(user => {
-				console.log("[symbolsTest.html] - USER LOCATED");
 				console.log(user);
 				userRef = user;
 			});
@@ -158,7 +157,6 @@
 			function attemptUserLookup() {
 				if (!userRef && maxWaitTime > 0) {
 					maxWaitTime -= waitTime;
-					console.log("No User. Reattempting Lookup.");
 					setTimeout(attemptUserLookup, waitTime);
 				}
 				else if (maxWaitTime < 0) {
@@ -177,7 +175,6 @@
 					.set({
 						firstTest: false
 					}).then(() => {
-					console.log("First Test Status Updated.");
 				});
 			}
 			
