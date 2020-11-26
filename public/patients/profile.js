@@ -1,6 +1,7 @@
+var table = document.getElementById('historyTable');
 var db = firebase.firestore();
-loadInfo();
 var userData;
+loadInfo();
 
 async function loadInfo() {
     await firebase.auth().onAuthStateChanged(user => {
@@ -102,6 +103,8 @@ const medicalForm = document.querySelector('.medicalForm');
 
 medicalForm.addEventListener('submit', (e) => {
     e.preventDefault();
+   let timestamp = Date.now();
+    savePast();
 
     //read in form values
     var sleep = medicalForm['sleep'].value;
@@ -137,7 +140,8 @@ medicalForm.addEventListener('submit', (e) => {
                     areds: areds,
                     eyewear: eyewear,
                     disease: disease,
-                    meds: meds
+                    meds: meds,
+                    TimeStampMS: timestamp
                 })
                 .then(doc => {
                     document.getElementById('saveMedical').value = "Saved!"
@@ -147,6 +151,84 @@ medicalForm.addEventListener('submit', (e) => {
     });
 
 });
+
+async function savePast(){
+    datatowrite = jsonresults();
+
+    //Check values
+    if(datatowrite.disease == undefined){
+        datatowrite.disease = "";
+    }
+    if(datatowrite.sleep == undefined){
+        datatowrite.sleep = "";
+    }
+    if(datatowrite.areds == undefined){
+        datatowrite.areds = "";
+    }
+    if(datatowrite.eyewear == undefined){
+        datatowrite.eyewear = "";
+    }
+    if(datatowrite.meds == undefined){
+        datatowrite.meds = "";
+    }
+    
+
+    await firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            id = user.uid;
+            db.collection("users").doc(user.uid).collection("medicalHistory")
+                .add(datatowrite)
+                .then(console.log("Past history saved"));
+        }
+    });
+}
+
+function jsonresults() {
+    return {
+        "areds": userData.areds,
+        "TimeStampMS": userData.TimeStampMS,
+        "disease": userData.disease,
+        "eyewear": userData.eyewear,
+        "meds": userData.meds,
+        "sleep": userData.sleep,
+    }
+}
+
+function addRow(data) {
+    let name = data.firstname + " " + data.lastname;
+    let speciality = data.title;
+    let work = data.location;
+
+    // Table Row
+    let row = document.createElement("tr");
+
+    // Table Columns
+    let columnName = document.createElement("td");
+    let columnSpeciality = document.createElement("td");
+    let columnUWork = document.createElement("td");
+    let columnAction = document.createElement("td");
+
+
+    // Text to be put in the Columns
+    let textName = document.createTextNode(name);
+    let textSpeciality = document.createTextNode(speciality);
+    let textWork = document.createTextNode(work);
+
+    // Put the Text into their respective Columns
+    columnName.appendChild(textName);
+    columnSpeciality.appendChild(textSpeciality);
+    columnUWork.appendChild(textWork);
+    columnAction.appendChild(button);
+
+    // Add each the Columns to the Row
+    row.appendChild(columnName);
+    row.appendChild(columnSpeciality);
+    row.appendChild(columnUWork);
+    row.appendChild(columnAction);
+
+    // Add the Row to the Table
+    table.appendChild(row);
+}
 
 /*
 document.getElementById('deactivate').addEventListener("click", deactivate);
@@ -176,7 +258,7 @@ async function deactivate() {
                 });
 
             }
-        }); 
+        });
 
     }
 
