@@ -22,6 +22,7 @@ async function pageRouter() {
 	console.log("OUT, DONE LOADALL");
 	
 	testDAO.populateHistoryTable("historyTable");
+	testDAO.populateAggregate("canvasLeft", "canvasRight");
 }
 
 // TODO: Better method with async
