@@ -152,21 +152,35 @@
 					</tr>
 					<tr>
 						<td class="options">
-							<input type="radio" id="mostRecentToggle" name="viewToggle"
-								   value="mostRecent" onchange="enableBtn()" checked>
-							<label for="mostRecentToggle">By Most Recent</label>
+							<input type="radio" id="mostRecentRadio" name="viewToggle"
+								   value="mostRecent" onchange="enableBtns()" checked>
+							<label for="mostRecentRadio">By Most Recent</label>
 						</td>
 					</tr>
 					<tr>
 						<td class="options">
-							<input type="radio" id="aggregateToggle" name="viewToggle"
-								   value="aggregate" onchange="enableBtn()">
-							<label for="aggregateToggle">By Month</label>
+							<!-- TODO: Date picker -->
+							<input type="radio" id="monthRadio" name="viewToggle"
+								   value="byMonth" onchange="enableBtns()">
+							<label for="monthRadio">By Month</label>
+						</td>
+					</tr>
+					<tr>
+						<td class="options">
+							<input type="radio" id="customMonthsRadio" name="viewToggle"
+								   value="byCustomMonths" onchange="enableBtns()">
+							<label for="customMonthsRadio">
+								Last
+								<input type="number" id="customMonthsInput" name="customMonthsInput" min="1" max="4"
+									   style="width: 3em;" disabled>
+								Month(s)
+							</label>
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<button id="applyBtn" onclick="updateCanvases()" disabled>Apply</button>
+							<button id="resetBtn" onclick="resetOptions()" disabled>Reset</button>
 						</td>
 					</tr>
 				</table>
@@ -187,7 +201,7 @@
 				</table>
 			</div>
 		</main>
-	<br><br><br><br><br>
+		<br><br><br><br><br>
 	</div>
 	
 	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
@@ -214,15 +228,62 @@
 	<script src="./dashboard/dashboard.js"></script>
 	
 	<script>
-		function enableBtn() {
+		function enableBtns() {
 			let applyBtn = document.getElementById("applyBtn");
+			let resetBtn = document.getElementById("resetBtn");
+			let customMonthsInput = document.getElementById("customMonthsInput");
+			let customMonthsRadio = document.getElementById("customMonthsRadio");
 			
-			if (applyBtn && applyBtn.disabled) {
-				applyBtn.style.backgroundColor = "#33CEFF";
-				applyBtn.style.color = "#000";
-				applyBtn.style.cursor = "pointer";
-				applyBtn.disabled = false;
+			enabler(applyBtn);
+			enabler(resetBtn);
+			enabler(customMonthsInput);
+			
+			if (!customMonthsRadio.checked) {
+				console.log("THIRD NOT CHECKED");
+				disabler(customMonthsInput);
 			}
+		}
+		
+		function resetOptions() {
+			let applyBtn = document.getElementById("applyBtn");
+			let resetBtn = document.getElementById("resetBtn");
+			let customMonthsInput = document.getElementById("customMonthsInput");
+			let mostRecentRadio = document.getElementById("mostRecentRadio");
+			
+			disabler(applyBtn);
+			disabler(resetBtn);
+			disabler(customMonthsInput);
+			customMonthsInput.style.backgroundColor = "";	// Additional style edit on top of disabler()
+			
+			customMonthsInput.value = "";
+			mostRecentRadio.checked = true;
+			
+			// TODO: Redraw
+		}
+		
+		function enabler(element) {
+			if (element && element.disabled) {
+				element.style.backgroundColor = "#33CEFF";
+				element.style.color = "#000";
+				element.style.cursor = "pointer";
+				element.disabled = false;
+			}
+		}
+		
+		function disabler(element) {
+			if (element && !element.disabled) {
+				element.style.backgroundColor = "#999999";
+				element.style.color = "#000";
+				element.style.cursor = "default";
+				element.disabled = true;
+			}
+		}
+	</script>
+	
+	<script>
+		function checkIfMax() {
+			// TODO: Change to make the max match the number of results the user has
+			
 		}
 	</script>
 	
