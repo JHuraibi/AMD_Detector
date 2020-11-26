@@ -168,7 +168,6 @@
 			let userRef = null;
 			
 			firebase.auth().onAuthStateChanged(user => {
-				console.log("[dashboard.html] - USER LOCATED");
 				console.log(user);
 				userRef = user;
 			});

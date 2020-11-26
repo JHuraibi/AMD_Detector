@@ -32,8 +32,6 @@ class FreeDrawDAO {
 		// let ratio = 2;
 		
 		if (drawingData) {
-			console.log("CHECKPOINT3");
-			
 			for (let i = 0; i < drawingData.length - 1; i++) {
 				let line = drawingData[i];
 				
@@ -77,7 +75,7 @@ class FreeDrawDAO {
 	// CHECK: How can I make this more modular for different tables?
 	populateHistoryTable(targetTableID) {
 		if (!userRef) {
-			console.log("[FreeDrawDAO: populateFullBarsTable] - User is null");
+			console.log("User is null");
 			return;
 		}
 		

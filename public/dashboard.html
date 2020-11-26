@@ -165,7 +165,6 @@
 		let userRef = null;
 
 		firebase.auth().onAuthStateChanged(user => {
-			console.log("[dashboard.html] - USER LOCATED");
 			console.log(user);
 			userRef = user;
 		});
@@ -184,10 +183,8 @@
 
 		// NOTE: Takes about 400-600ms to recognize a user
 		(function attemptUserLookup() {
-			console.log("attemptLookup");
 			if (!userRef && maxWaitTime > 0) {
 				maxWaitTime -= waitTime;
-				console.log("No User. Reattempting Lookup.");
 				setTimeout(attemptUserLookup, waitTime);
 			}
 			else if (maxWaitTime < 0) {

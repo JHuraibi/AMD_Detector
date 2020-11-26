@@ -197,8 +197,6 @@ function recordLast(index) {
 	for (let i = index; i < drawing.length; i++) {
 		redoRecord.push(drawing[i]);
 	}
-	
-	console.log("RECORD LENGTH: " + redoRecord.length);
 }
 
 function redo() {
