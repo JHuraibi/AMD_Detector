@@ -105,10 +105,23 @@
 					<!-- VIEW OPTION: Month Selector ------------------------->
 					<tr>
 						<td class="options">
-							<!-- TODO: Date picker -->
-							<input type="radio" id="monthRadio" name="viewOptions"
-								   value="byMonth" onchange="enableBtns()">
-							<label for="monthRadio">Select Month: </label>
+							<input type="radio" id="monthSelectorRadio" name="viewOptions"
+								   value="monthSelector" onchange="enableBtns()">
+							<label for="monthSelectorRadio">Select Month: </label>
+							<select name="monthSelector" id="monthSelector" disabled>
+								<option value="january">January</option>
+								<option value="february">February</option>
+								<option value="march">March</option>
+								<option value="april">April</option>
+								<option value="may">May</option>
+								<option value="june">June</option>
+								<option value="july">July</option>
+								<option value="august">August</option>
+								<option value="september">September</option>
+								<option value="october">October</option>
+								<option value="november">November</option>
+								<option value="december">December</option>
+							</select>
 						</td>
 					</tr>
 					<!-- VIEW OPTION: Number of Months ----------------------->
@@ -183,6 +196,7 @@
 	<script src="./dashboard/FreeDrawDAO.js"></script>
 	
 	<script src="./dashboard/testDAO.js"></script>
+	
 	<script src="./dashboard/dashboard_actions.js"></script>
 	<script src="./dashboard/dashboard.js"></script>
 	
