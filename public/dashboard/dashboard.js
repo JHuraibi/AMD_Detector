@@ -47,10 +47,12 @@ function defineDAOs() {
 
 // Draws SINGLE most recent result of each test to the canvases
 function mostRecent() {
+	// CURRENT: most recent
 	// setCanvasGradient();
 	// growingCirclesDAO.populateMostRecent();
 	// symbolsDAO.populateMostRecent();
 	// fullBarsDAO.populateMostRecent();
+	testDAO.populateMostRecent("canvasLeft", "canvasRight");
 }
 
 function byMonth() {

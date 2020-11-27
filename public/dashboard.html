@@ -84,8 +84,16 @@
 					</tr>
 					<tr>
 						<td class="options">
+							<!-- TODO: Better name than aggregate? -->
+							<input type="radio" id="defaultRadio" name="viewOptions"
+								   value="aggregateDefault" onchange="enableBtns()" checked>
+							<label for="defaultRadio">Aggregate (Default)</label>
+						</td>
+					</tr>
+					<tr>
+						<td class="options">
 							<input type="radio" id="mostRecentRadio" name="viewOptions"
-								   value="mostRecent" onchange="enableBtns()" checked>
+								   value="mostRecent" onchange="enableBtns()">
 							<label for="mostRecentRadio">By Most Recent</label>
 						</td>
 					</tr>
@@ -109,7 +117,7 @@
 							</label>
 						</td>
 					</tr>
-					<!-- Will need to be dynamically loaded using JS -->
+					<!-- Include an "All" option -->
 					<!--<tr>-->
 					<!--	<td class="options">-->
 					<!--		By Test-->
@@ -183,6 +191,9 @@
 			let value = chosenOption.value;
 			// Defaults to Most Recent
 			switch (value) {
+				case 'aggregateDefault':
+					resetOptions();
+					break;
 				case "mostRecent":
 					mostRecent();
 					break;
@@ -219,15 +230,15 @@
 			let applyBtn = document.getElementById("applyBtn");
 			let resetBtn = document.getElementById("resetBtn");
 			let customMonthsInput = document.getElementById("customMonthsInput");
-			let mostRecentRadio = document.getElementById("mostRecentRadio");
+			let defaultRadio = document.getElementById("defaultRadio");
 			
 			disabler(applyBtn);
 			disabler(resetBtn);
 			disabler(customMonthsInput);
-			customMonthsInput.style.backgroundColor = "";	// Additional style edit on top of disabler()
+			customMonthsInput.style.backgroundColor = "";	// Additional style edit on top of disabler()'s
 			
 			customMonthsInput.value = "";
-			mostRecentRadio.checked = true;
+			defaultRadio.checked = true;
 			
 			clearCanvases();
 			
@@ -236,12 +247,12 @@
 		}
 		
 		function clearCanvases(){
-			let cLeft = document.getElementById("canvasLeft");
-			let cRight = document.getElementById("canvasRight");
-			let ctxLeft = cLeft.getContext('2d');
-			let ctxRight = cRight.getContext('2d');
-			ctxLeft.clearRect(0, 0, cLeft.width, cLeft.height);
-			ctxRight.clearRect(0, 0, cRight.width, cRight.height);
+			let canvasLeft = document.getElementById("canvasLeft");
+			let canvasRight = document.getElementById("canvasRight");
+			let ctxLeft = canvasLeft.getContext('2d');
+			let ctxRight = canvasRight.getContext('2d');
+			ctxLeft.clearRect(0, 0, canvasLeft.width, canvasLeft.height);
+			ctxRight.clearRect(0, 0, canvasRight.width, canvasRight.height);
 		}
 		
 		function enabler(element) {
