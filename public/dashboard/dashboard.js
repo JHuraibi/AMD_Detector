@@ -1,3 +1,5 @@
+// TODO: Swap names with "dashboard_actions.js" ?
+
 let dbRef = firebase.firestore();
 let userRef = null;
 let testDAO;
@@ -60,11 +62,12 @@ function byMonth() {
 	testDAO.populateByMonth();
 }
 
-function customNumMonths() {
+function numberOfMonths() {
 	let monthInput = document.getElementById("customMonthsInput");
 	
+	// TODO: Needs a try/catch
 	if (!monthInput) {
-		console.log("Unable to retreive number of months value.")
+		console.log("Unable to retrieve number of months value.")
 	}
 	
 	testDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");

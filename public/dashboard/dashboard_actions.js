@@ -7,8 +7,14 @@ function applyBtnRouter() {
 	}
 	
 	let value = chosenOption.value;
-	// Defaults to Most Recent
+	
+	// Defaults to Aggregate View
 	switch (value) {
+		default:
+			console.log("Default");
+			console.log("VALUE: " + chosenOption);
+			resetOptions();
+			break;
 		case 'aggregateDefault':
 			resetOptions();
 			break;
@@ -16,18 +22,13 @@ function applyBtnRouter() {
 			clearCanvases();
 			mostRecent();
 			break;
-		case "byMonth":
+		case "monthSelector":
 			clearCanvases();
 			byMonth();
 			break;
-		case "byCustomMonths":
-			// Retrieving of the months value done in function
+		case "numberMonths":
 			clearCanvases();
-			customNumMonths();
-			break;
-		default:
-			console.log("Default");
-			console.log("VALUE: " + chosenOption);
+			numberOfMonths();
 			break;
 	}
 }
@@ -35,30 +36,41 @@ function applyBtnRouter() {
 function enableBtns() {
 	let applyBtn = document.getElementById("applyBtn");
 	let resetBtn = document.getElementById("resetBtn");
-	let customMonthsInput = document.getElementById("customMonthsInput");
-	let customMonthsRadio = document.getElementById("customMonthsRadio");
+	let monthSelectorRadio = document.getElementById("monthSelectorRadio");
+	let numberMonthsRadio = document.getElementById("numberMonthsRadio");
+	
+	let monthSelector = document.getElementById("monthSelector");
+	let numberMonthsInput = document.getElementById("numberMonthsInput");
 	
 	enabler(applyBtn);
 	enabler(resetBtn);
-	enabler(customMonthsInput);
+	enabler(monthSelector);
+	enabler(numberMonthsInput);
 	
-	if (!customMonthsRadio.checked) {
-		disabler(customMonthsInput);
+	if (!monthSelectorRadio.checked) {
+		disabler(monthSelector);
+	}
+	if (!numberMonthsRadio.checked) {
+		disabler(numberMonthsInput);
 	}
 }
 
 function resetOptions() {
 	let applyBtn = document.getElementById("applyBtn");
 	let resetBtn = document.getElementById("resetBtn");
-	let customMonthsInput = document.getElementById("customMonthsInput");
 	let defaultRadio = document.getElementById("defaultRadio");
+	
+	let monthSelector = document.getElementById("monthSelector");
+	let numberMonthsInput = document.getElementById("numberMonthsInput");
 	
 	disabler(applyBtn);
 	disabler(resetBtn);
-	disabler(customMonthsInput);
-	customMonthsInput.style.backgroundColor = "";	// Additional style edit on top of disabler()'s
+	disabler(numberMonthsInput);
+	monthSelector.style.backgroundColor = "";		// Additional style edit on top of disabler()'s
+	numberMonthsInput.style.backgroundColor = "";	// Additional style edit on top of disabler()'s
 	
-	customMonthsInput.value = "";
+	monthSelector.value = "";
+	numberMonthsInput.value = "";
 	defaultRadio.checked = true;
 	
 	clearCanvases();
@@ -67,7 +79,7 @@ function resetOptions() {
 	testDAO.populateAggregate("canvasLeft", "canvasRight");
 }
 
-function clearCanvases(){
+function clearCanvases() {
 	let canvasLeft = document.getElementById("canvasLeft");
 	let canvasRight = document.getElementById("canvasRight");
 	let ctxLeft = canvasLeft.getContext('2d');
