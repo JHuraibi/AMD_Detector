@@ -65,6 +65,7 @@ function resetOptions() {
 	
 	disabler(applyBtn);
 	disabler(resetBtn);
+	disabler(monthSelector);
 	disabler(numberMonthsInput);
 	monthSelector.style.backgroundColor = "";		// Additional style edit on top of disabler()'s
 	numberMonthsInput.style.backgroundColor = "";	// Additional style edit on top of disabler()'s
