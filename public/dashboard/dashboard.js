@@ -19,8 +19,6 @@ async function pageRouter() {
 	defineDAOs();
 	await testDAO.loadAll();
 	
-	console.log("OUT, DONE LOADALL");
-	
 	testDAO.populateHistoryTable("historyTable");
 	testDAO.populateAggregate("canvasLeft", "canvasRight");
 }
@@ -45,19 +43,6 @@ function checkUserStatus() {
 
 function defineDAOs() {
 	testDAO = new TestDAO(dbRef, userRef.uid);
-	console.log("DEFINED DAO");
-}
-
-// function updateCanvases() {
-// 	testDAO.populateHistoryTable("historyTable");
-// }
-
-// Draws the last THREE results of each test to the canvases
-function aggregate() {
-	// TODO: Show a legend for the different opacities/colors and their meanings
-	// growingCirclesDAO.populateAggregate();
-	// symbolsDAO.populateAggregate();
-	// fullBarsDAO.populateAggregate();
 }
 
 // Draws SINGLE most recent result of each test to the canvases
@@ -66,6 +51,14 @@ function mostRecent() {
 	// growingCirclesDAO.populateMostRecent();
 	// symbolsDAO.populateMostRecent();
 	// fullBarsDAO.populateMostRecent();
+}
+
+function byMonth() {
+	testDAO.populateByMonth();
+}
+
+function customNumMonths() {
+	testDAO.populateByNumberMonths();
 }
 
 function setCanvasGradient() {

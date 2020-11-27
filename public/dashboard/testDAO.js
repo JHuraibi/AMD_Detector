@@ -19,7 +19,6 @@ class TestDAO {
 	}
 	
 	async loadAll() {
-		console.log("START LOAD ALL");
 		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
@@ -52,7 +51,7 @@ class TestDAO {
 			console.log("User ID is null");
 			return;
 		}
-		console.log("Length: " + this.docList.length);
+		
 		for (let i = 0; i < this.docList.length; i++) {
 			let doc = this.docList[i];
 			let timeStamp = doc.TimeStampMS;
@@ -140,7 +139,6 @@ class TestDAO {
 		
 		let max = this.docList.length;
 		for (let i = 0; i < 3 && i < max; i++) {
-			console.log("LOOP " + i);
 			let doc = this.docList[i];
 			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
 			ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
@@ -156,25 +154,35 @@ class TestDAO {
 		}
 	}
 	
+	populateByMonth(monthName) {
+		let dateString = monthName + " 1, 2020";
+		// let index = this.setIndex();
+		console.log("Milliseconds: " + Date.parse(dateString));
+	}
+	
 	populateByNumberMonths(months, leftCanvasID, rightCanvasID) {
 		if (!userRef) {
 			console.log("User is null");
 			return;
 		}
-		
-		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
-		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
-		let alphaIndex = 0;
-		
-		let max = this.docList.length;
-		for (let i = 0; i < 3 && i < max; i++) {
-			let doc = this.docList[i];
-			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
-			ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
-			
-			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
-			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
-		}
+		// CURRENT: Drawing last X number of months to canvses
+		let earliestDay = monthName + " 1, 2020";
+		console.log("Milliseconds: " + Date.parse(dateString));
+		// setIndex(Date.parse(dateString));
+		//
+		// let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
+		// let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
+		// let alphaIndex = 0;
+		//
+		// let max = this.docList.length;
+		// for (let i = 0; i < 3 && i < max; i++) {
+		// 	let doc = this.docList[i];
+		// 	ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
+		// 	ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
+		//
+		// 	this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
+		// 	this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+		// }
 	}
 	
 	drawToCanvas(ctx, xPositions, yPositions) {
@@ -237,12 +245,22 @@ class TestDAO {
 		return "./dashboard/detailed_view.html?" + uri.toString();
 	}
 	
-	// CURRENT: Add code for new selection options
+	setIndex(ms) {
+		let index = 0;
+		let i = 0;
+		
+		while (this.docList[i].TimeStampMS < ms) {
+			i++;
+		}
+		
+		return i;
+	}
+	
 	checkBeforeDate() {
 	
 	}
 	
-	alphaCreator(num){
+	alphaCreator(num) {
 		let n = 255 / num;
 	}
 	

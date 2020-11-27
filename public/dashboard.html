@@ -14,10 +14,7 @@
 	<link href="./scss/custom.css" rel="stylesheet">
 	<!-- Custom styles for this template -->
 	<link href="./css/dashboard.css" rel="stylesheet">
-	
-	<style>
-	
-	</style>
+
 </head>
 
 <body>
@@ -61,8 +58,7 @@
 		</div>
 		
 		<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-			<div
-					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+			<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 				<h1 class="h2">My Progress</h1>
 			</div>
 			
@@ -88,7 +84,7 @@
 					</tr>
 					<tr>
 						<td class="options">
-							<input type="radio" id="mostRecentRadio" name="viewToggle"
+							<input type="radio" id="mostRecentRadio" name="viewOptions"
 								   value="mostRecent" onchange="enableBtns()" checked>
 							<label for="mostRecentRadio">By Most Recent</label>
 						</td>
@@ -96,14 +92,14 @@
 					<tr>
 						<td class="options">
 							<!-- TODO: Date picker -->
-							<input type="radio" id="monthRadio" name="viewToggle"
+							<input type="radio" id="monthRadio" name="viewOptions"
 								   value="byMonth" onchange="enableBtns()">
 							<label for="monthRadio">By Month</label>
 						</td>
 					</tr>
 					<tr>
 						<td class="options">
-							<input type="radio" id="customMonthsRadio" name="viewToggle"
+							<input type="radio" id="customMonthsRadio" name="viewOptions"
 								   value="byCustomMonths" onchange="enableBtns()">
 							<label for="customMonthsRadio">
 								Last
@@ -113,9 +109,18 @@
 							</label>
 						</td>
 					</tr>
+					<!-- Will need to be dynamically loaded using JS -->
+					<!--<tr>-->
+					<!--	<td class="options">-->
+					<!--		By Test-->
+					<!--		<select>-->
+					<!--			<option value=""></option>-->
+					<!--		</select>-->
+					<!--	</td>-->
+					<!--</tr>-->
 					<tr>
 						<td>
-							<button id="applyBtn" onclick="updateCanvases()" disabled>Apply</button>
+							<button id="applyBtn" onclick="applyBtnRouter()" disabled>Apply</button>
 							<button id="resetBtn" onclick="resetOptions()" disabled>Reset</button>
 						</td>
 					</tr>
@@ -137,7 +142,7 @@
 				</table>
 				<!-- <p>View More...</p> -->
 			</div>
-			
+		
 		</main>
 		<br><br><br><br><br>
 	</div>
@@ -166,6 +171,33 @@
 	<script src="./dashboard/dashboard.js"></script>
 	
 	<script>
+		function applyBtnRouter() {
+			// From online example
+			let chosenOption = document.querySelector('input[name="viewOptions"]:checked');
+			
+			if (!chosenOption) {
+				console.log("Checked Radio Missing");
+			}
+			
+			let value = chosenOption.value;
+			// Defaults to Most Recent
+			switch (value) {
+				case "mostRecent":
+					mostRecent();
+					break;
+				case "byMonth":
+					byMonth();
+					break;
+				case "byCustomMonths":
+					customNumMonths();
+					break;
+				default:
+					console.log("Default");
+					console.log("VALUE: " + chosenOption);
+					break;
+			}
+		}
+		
 		function enableBtns() {
 			let applyBtn = document.getElementById("applyBtn");
 			let resetBtn = document.getElementById("resetBtn");
@@ -177,7 +209,6 @@
 			enabler(customMonthsInput);
 			
 			if (!customMonthsRadio.checked) {
-				console.log("THIRD NOT CHECKED");
 				disabler(customMonthsInput);
 			}
 		}
