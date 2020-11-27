@@ -285,7 +285,7 @@ class TestDAO {
 		let i = 0;
 		
 		// console.log("MS: " + ms);
-		while (this.docList[i].TimeStampMS > ms && i < length) {
+		while (this.docList[i].TimeStampMS > ms && i < length - 1) {
 			// console.log("DOC MS: " + this.docList[i].TimeStampMS);
 			i++;
 		}
