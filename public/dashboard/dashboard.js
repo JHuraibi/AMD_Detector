@@ -54,15 +54,22 @@ function mostRecent() {
 }
 
 function byMonth() {
+	// TODO: MONTH NAME PARAMETER
 	testDAO.populateByMonth();
 }
 
 function customNumMonths() {
-	testDAO.populateByNumberMonths();
+	let monthInput = document.getElementById("customMonthsInput");
+	
+	if (!monthInput) {
+		console.log("Unable to retreive number of months value.")
+	}
+	
+	testDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
 }
 
+// TODO: DELETE!
 function setCanvasGradient() {
-	// TODO: Get proper color fading working
 	let canvasLeft = document.getElementById("canvasLeft");
 	let canvasRight = document.getElementById("canvasRight");
 	let ctxLeft = canvasLeft.getContext("2d");

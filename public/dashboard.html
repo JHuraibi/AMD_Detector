@@ -172,7 +172,7 @@
 	
 	<script>
 		function applyBtnRouter() {
-			// From online example
+			// jQuery to determine which radio option is selected by user (adapted from online example)
 			let chosenOption = document.querySelector('input[name="viewOptions"]:checked');
 			
 			if (!chosenOption) {
@@ -189,6 +189,7 @@
 					byMonth();
 					break;
 				case "byCustomMonths":
+					// Retrieving of the months value done in function
 					customNumMonths();
 					break;
 				default:

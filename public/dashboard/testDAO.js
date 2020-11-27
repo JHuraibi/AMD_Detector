@@ -31,6 +31,19 @@ class TestDAO {
 					this.docList.push(extractedDoc);
 				});
 			});
+		
+		// this.manualAdd();
+	}
+	
+	// !! TESTING ONLY - Creates new FireStore doc from existing
+	manualAdd() {
+		this.dbRef.collection("TestResults")
+			.doc(userRef.uid)
+			.collection("FullBars")
+			.add(this.docList[0])
+			.then(() => {
+				console.log("Manual document added.");
+			});
 	}
 	
 	// NOTE: The JSON returned needs to match the FireStore document structure for FullBars
@@ -160,29 +173,32 @@ class TestDAO {
 		console.log("Milliseconds: " + Date.parse(dateString));
 	}
 	
-	populateByNumberMonths(months, leftCanvasID, rightCanvasID) {
+	populateByNumberMonths(monthsBack, leftCanvasID, rightCanvasID) {
 		if (!userRef) {
 			console.log("User is null");
 			return;
 		}
-		// CURRENT: Drawing last X number of months to canvses
-		let earliestDay = monthName + " 1, 2020";
-		console.log("Milliseconds: " + Date.parse(dateString));
-		// setIndex(Date.parse(dateString));
-		//
-		// let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
-		// let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
-		// let alphaIndex = 0;
-		//
-		// let max = this.docList.length;
-		// for (let i = 0; i < 3 && i < max; i++) {
-		// 	let doc = this.docList[i];
-		// 	ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
-		// 	ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
-		//
-		// 	this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
-		// 	this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
-		// }
+		
+		let cLeft = document.getElementById(leftCanvasID);
+		let cRight = document.getElementById(rightCanvasID);
+		let ctxLeft = cLeft.getContext('2d');
+		let ctxRight = cRight.getContext('2d');
+		
+		ctxLeft.clearRect(0, 0, cLeft.width, cLeft.height);
+		ctxRight.clearRect(0, 0, cRight.width, cRight.height);
+		ctxLeft.fillStyle = "#f47171";
+		ctxRight.fillStyle = "#f47171";
+		
+		let current = (new Date).getMonth();
+		let ms = this.monthMSHelper(current, monthsBack);
+		let index = this.setIndex(ms);
+		
+		for (let i = 0; i < index; i++) {
+			let doc = this.docList[i];
+			
+			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
+			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+		}
 	}
 	
 	drawToCanvas(ctx, xPositions, yPositions) {
@@ -246,10 +262,12 @@ class TestDAO {
 	}
 	
 	setIndex(ms) {
-		let index = 0;
+		let length = this.docList.length;
 		let i = 0;
 		
-		while (this.docList[i].TimeStampMS < ms) {
+		// console.log("MS: " + ms);
+		while (this.docList[i].TimeStampMS > ms && i < length) {
+			// console.log("DOC MS: " + this.docList[i].TimeStampMS);
 			i++;
 		}
 		
@@ -283,6 +301,34 @@ class TestDAO {
 		// Uncomment below line to add time of day
 		// return dateString + " at " + hoursString + ":" + minutesString + postfix;
 		return dateString;
+	}
+	
+	// TODO: docstring
+	// TODO: Better year handling (abs, then mod 12 for number of years)
+	monthMSHelper(current, number) {
+		// !! TODO: ERROR HANDLING
+		let year = 2020;
+		if (current - number < 0) {
+			year = year - 1;
+		}
+		
+		let month = (current + (11 - number)) % 12;
+		
+		return Date.UTC(year, month, 1);
+	}
+	
+	// TODO: docstring
+	monthNameHelper(current, number) {
+		let months = [
+			"January", "February", "March",
+			"April", "May", "June",
+			"July", "August", "September",
+			"October", "November", "December"
+		];
+		
+		// !! TODO: ERROR HANDLING
+		let earliest = (current + (11 - number)) % 12;
+		return months[earliest];
 	}
 	
 }// class [ FirebaseDAO ]
