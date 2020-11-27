@@ -94,7 +94,7 @@
 						<td class="options">
 							<input type="radio" id="mostRecentRadio" name="viewOptions"
 								   value="mostRecent" onchange="enableBtns()">
-							<label for="mostRecentRadio">By Most Recent</label>
+							<label for="mostRecentRadio">Most Recent</label>
 						</td>
 					</tr>
 					<tr>
@@ -102,7 +102,7 @@
 							<!-- TODO: Date picker -->
 							<input type="radio" id="monthRadio" name="viewOptions"
 								   value="byMonth" onchange="enableBtns()">
-							<label for="monthRadio">By Month</label>
+							<label for="monthRadio">Select Month: </label>
 						</td>
 					</tr>
 					<tr>
@@ -195,13 +195,16 @@
 					resetOptions();
 					break;
 				case "mostRecent":
+					clearCanvases();
 					mostRecent();
 					break;
 				case "byMonth":
+					clearCanvases();
 					byMonth();
 					break;
 				case "byCustomMonths":
 					// Retrieving of the months value done in function
+					clearCanvases();
 					customNumMonths();
 					break;
 				default:

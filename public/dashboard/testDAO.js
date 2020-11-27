@@ -140,6 +140,7 @@ class TestDAO {
 		})
 	}
 	
+	// TODO: RENAME
 	populateAggregate(leftCanvasID, rightCanvasID) {
 		if (!userRef) {
 			console.log("User is null");
@@ -165,6 +166,28 @@ class TestDAO {
 				console.log("Warning: Alpha Index Exceeded 3 Iterations.");
 			}
 		}
+	}
+	
+	populateMostRecent(leftCanvasID, rightCanvasID) {
+		if (!userRef) {
+			console.log("User is null");
+			return;
+		}
+		
+		if (!this.docList[0]) {
+			console.log("First document (most recent) empty.")
+			return;
+		}
+		
+		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
+		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
+		
+		ctxLeft.fillStyle = "#f47171";
+		ctxRight.fillStyle = "#f47171";
+		
+		let doc = this.docList[0];
+		this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
+		this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
 	}
 	
 	populateByMonth(monthName) {
