@@ -65,6 +65,7 @@
 			<div class="canvas-container">
 				<h4 class="title">Aggregate Data</h4>
 				<table class="canvas-table">
+					<!-- CANVASES -------------------------------------------->
 					<tr>
 						<td>
 							<canvas id="canvasLeft" width="400" height="400"></canvas>
@@ -73,15 +74,18 @@
 							<canvas id="canvasRight" width="400" height="400"></canvas>
 						</td>
 					</tr>
+					<!-- EYE LABELS ------------------------------------------>
 					<tr>
 						<td><strong>Left Eye</strong></td>
 						<td><strong>Right Eye</strong></td>
 					</tr>
+					<!-- VIEW OPTIONS LABEL ---------------------------------->
 					<tr>
 						<td class="view">
 							View Options
 						</td>
 					</tr>
+					<!-- VIEW OPTION: Aggregate/Default ---------------------->
 					<tr>
 						<td class="options">
 							<!-- TODO: Better name than aggregate? -->
@@ -90,6 +94,7 @@
 							<label for="defaultRadio">Aggregate (Default)</label>
 						</td>
 					</tr>
+					<!-- VIEW OPTION: Most Recent ---------------------------->
 					<tr>
 						<td class="options">
 							<input type="radio" id="mostRecentRadio" name="viewOptions"
@@ -97,6 +102,7 @@
 							<label for="mostRecentRadio">Most Recent</label>
 						</td>
 					</tr>
+					<!-- VIEW OPTION: Month Selector ------------------------->
 					<tr>
 						<td class="options">
 							<!-- TODO: Date picker -->
@@ -105,6 +111,7 @@
 							<label for="monthRadio">Select Month: </label>
 						</td>
 					</tr>
+					<!-- VIEW OPTION: Number of Months ----------------------->
 					<tr>
 						<td class="options">
 							<input type="radio" id="numberMonthsRadio" name="viewOptions"

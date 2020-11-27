@@ -35,7 +35,7 @@ class TestDAO {
 		// this.manualAdd();
 	}
 	
-	// !! TESTING ONLY - Creates new FireStore doc from existing
+	// !! TESTING ONLY - Clones FireStore doc from existing
 	manualAdd() {
 		this.dbRef.collection("TestResults")
 			.doc(userRef.uid)
@@ -193,7 +193,7 @@ class TestDAO {
 	populateByMonth(monthName) {
 		let dateString = monthName + " 1, 2020";
 		// let index = this.setIndex();
-		console.log("Milliseconds: " + Date.parse(dateString));
+		// console.log("Milliseconds: " + Date.parse(dateString));
 	}
 	
 	populateByNumberMonths(monthsBack, leftCanvasID, rightCanvasID) {
