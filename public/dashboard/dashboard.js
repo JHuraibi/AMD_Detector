@@ -65,6 +65,7 @@ function customNumMonths() {
 		console.log("Unable to retreive number of months value.")
 	}
 	
+	clearCanvases();
 	testDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
 }
 

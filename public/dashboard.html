@@ -171,6 +171,7 @@
 	<script src="./dashboard/dashboard.js"></script>
 	
 	<script>
+		// TODO: Move to dashboard.js or new JS file
 		function applyBtnRouter() {
 			// jQuery to determine which radio option is selected by user (adapted from online example)
 			let chosenOption = document.querySelector('input[name="viewOptions"]:checked');
@@ -228,7 +229,19 @@
 			customMonthsInput.value = "";
 			mostRecentRadio.checked = true;
 			
-			// TODO: Redraw
+			clearCanvases();
+			
+			// Redraw Default
+			testDAO.populateAggregate("canvasLeft", "canvasRight");
+		}
+		
+		function clearCanvases(){
+			let cLeft = document.getElementById("canvasLeft");
+			let cRight = document.getElementById("canvasRight");
+			let ctxLeft = cLeft.getContext('2d');
+			let ctxRight = cRight.getContext('2d');
+			ctxLeft.clearRect(0, 0, cLeft.width, cLeft.height);
+			ctxRight.clearRect(0, 0, cRight.width, cRight.height);
 		}
 		
 		function enabler(element) {

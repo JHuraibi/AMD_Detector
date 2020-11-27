@@ -179,13 +179,9 @@ class TestDAO {
 			return;
 		}
 		
-		let cLeft = document.getElementById(leftCanvasID);
-		let cRight = document.getElementById(rightCanvasID);
-		let ctxLeft = cLeft.getContext('2d');
-		let ctxRight = cRight.getContext('2d');
+		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
+		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		
-		ctxLeft.clearRect(0, 0, cLeft.width, cLeft.height);
-		ctxRight.clearRect(0, 0, cRight.width, cRight.height);
 		ctxLeft.fillStyle = "#f47171";
 		ctxRight.fillStyle = "#f47171";
 		
