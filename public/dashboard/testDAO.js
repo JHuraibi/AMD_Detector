@@ -190,10 +190,43 @@ class TestDAO {
 		this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
 	}
 	
-	populateByMonth(monthName) {
-		let dateString = monthName + " 1, 2020";
-		// let index = this.setIndex();
-		// console.log("Milliseconds: " + Date.parse(dateString));
+	populateByMonthSelector(month, leftCanvasID, rightCanvasID) {
+		if (!userRef) {
+			console.log("User is null");
+			return;
+		}
+		
+		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
+		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
+		
+		ctxLeft.fillStyle = "#f47171";
+		ctxRight.fillStyle = "#f47171";
+		
+		let dateStringStart = month + " 1 2020";
+		let dateStringEnd;
+		
+		if (month === 12) {
+			dateStringEnd = "1 1 2020";
+		}
+		else {
+			dateStringEnd = (+month + 1) + " 1 2020";
+		}
+		
+		let msStart = (new Date(dateStringStart)).getTime();
+		let msEnd = (new Date(dateStringEnd)).getTime();
+		// console.log("START: " + msStart);
+		// console.log("END: " + msEnd);
+		
+		let startI = this.setStartIndex(msStart);
+		let endI = this.setEndIndex(msEnd);
+		
+		// TODO: Check for off-by-one
+		for (let i = startI; i < endI; i++) {
+			let doc = this.docList[i];
+			
+			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
+			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+		}
 	}
 	
 	populateByNumberMonths(monthsBack, leftCanvasID, rightCanvasID) {
@@ -210,7 +243,7 @@ class TestDAO {
 		
 		let current = (new Date).getMonth();
 		let ms = this.monthMSHelper(current, monthsBack);
-		let index = this.setIndex(ms);
+		let index = this.setStartIndex(ms);
 		
 		for (let i = 0; i < index; i++) {
 			let doc = this.docList[i];
@@ -275,19 +308,28 @@ class TestDAO {
 	// !! NOTE: The TEST_NAME key's value has to match Firestore's document exactly
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
-		uri.append("TEST_NAME", "GrowingCircles");
+		uri.append("TEST_NAME", "FullBars");
 		uri.append("TEST_ID", docID);
 		return "./dashboard/detailed_view.html?" + uri.toString();
 	}
 	
-	setIndex(ms) {
+	setStartIndex(ms) {
 		let length = this.docList.length;
 		let i = 0;
 		
-		// console.log("MS: " + ms);
 		while (this.docList[i].TimeStampMS > ms && i < length - 1) {
-			// console.log("DOC MS: " + this.docList[i].TimeStampMS);
 			i++;
+		}
+		
+		return i;
+	}
+	
+	// !! CRITICAL: MAKE SURE CORRECT
+	setEndIndex(ms) {
+		let i = this.docList.length - 1;
+		
+		while (this.docList[i].TimeStampMS < ms && i > 0) {
+			i--;
 		}
 		
 		return i;
@@ -336,8 +378,12 @@ class TestDAO {
 		return Date.UTC(year, month, 1);
 	}
 	
-	// TODO: docstring
-	monthNameHelper(current, number) {
+	monthName(number) {
+		if (number < 0 || number > 12) {
+			console.log("Month number invalid. Number: " + number);
+			return "January";
+		}
+		
 		let months = [
 			"January", "February", "March",
 			"April", "May", "June",
@@ -345,9 +391,7 @@ class TestDAO {
 			"October", "November", "December"
 		];
 		
-		// !! TODO: ERROR HANDLING
-		let earliest = (current + (11 - number)) % 12;
-		return months[earliest];
+		return months[number];
 	}
 	
 }// class [ FirebaseDAO ]

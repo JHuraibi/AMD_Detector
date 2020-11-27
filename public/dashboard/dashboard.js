@@ -49,7 +49,6 @@ function defineDAOs() {
 
 // Draws SINGLE most recent result of each test to the canvases
 function mostRecent() {
-	// CURRENT: most recent
 	// setCanvasGradient();
 	// growingCirclesDAO.populateMostRecent();
 	// symbolsDAO.populateMostRecent();
@@ -57,9 +56,15 @@ function mostRecent() {
 	testDAO.populateMostRecent("canvasLeft", "canvasRight");
 }
 
-function byMonth() {
-	// TODO: MONTH NAME PARAMETER
-	testDAO.populateByMonth();
+function monthSelect() {
+	let monthSelector = document.getElementById("monthSelector");
+	
+	// TODO: Needs a try/catch
+	if (!monthSelector) {
+		console.log("Unable to retrieve month from selector.")
+	}
+	
+	testDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
 }
 
 function numberOfMonths() {
