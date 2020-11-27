@@ -1,74 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-	
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="description" content="">
-		<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32"/>
-		<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16"/>
-		
-		<title>Amsler Grid · Test</title>
-		
-		<!-- Bootstrap core CSS -->
-		<link href="../../scss/custom.css" rel="stylesheet">
-		<!-- Custom styles for this template (Later move to custom.scss) -->
-		<link href="../../css/cover.css" rel="stylesheet">
-		
-		<style>
-			.image-container {
-				/* Identical to .canvas-container */
-				text-align: center;
-				padding-top: 1em;
-				padding-bottom: 1em;
-			}
-			
-			.instruct {
-				width: 75px;
-				/* padding: 10px; */
-				/* margin: 50px auto; */
-				/* border-radius: 10px; */
-				background: white;
-				/* box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1); */
-				text-align: center;
-				color: #282828;
-			}
-		</style>
-	</head>
-	
-	<body class="text-center">
-		<div class="d-flex w-auto h-auto p-3 mx-auto flex-column" style="height: 900px;">
-			<header class="masthead mb-auto">
-				<div class="inner">
-					<h3 class="masthead-brand">Vision Monitor</h3>
-					<nav class="nav nav-masthead justify-content-center">
-						<a class="nav-link active" href="../../home.html">Home</a>
-						<a class="nav-link" href="../../dashboard.html">My Dashboard</a>
-					</nav>
-				</div>
-			</header>
-			
-			<div class="image-container">
-				<p id="timer" style="text-align: right; display: none"></p>
-				<img src="amsler.png" alt="amslerGrid" id="amslerpic" width="700" height="700">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32" />
+	<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16" />
+
+	<title>Amsler Grid · Test</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="../../scss/custom.css" rel="stylesheet">
+	<!-- Custom styles for this template (Later move to custom.scss) -->
+	<link href="../../css/cover.css" rel="stylesheet">
+
+	<style>
+		.image-container {
+			/* Identical to .canvas-container */
+			text-align: center;
+			padding-top: 1em;
+			padding-bottom: 1em;
+		}
+
+		.instruct {
+			width: 75px;
+			/* padding: 10px; */
+			/* margin: 50px auto; */
+			/* border-radius: 10px; */
+			background: white;
+			/* box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1); */
+			text-align: center;
+			color: #282828;
+		}
+	</style>
+</head>
+
+<body class="text-center">
+	<div class="d-flex w-auto h-auto p-3 mx-auto flex-column" style="height: 900px;">
+		<header class="masthead mb-auto">
+			<div class="inner">
+				<h3 class="masthead-brand">Vision Monitor</h3>
+				<nav class="nav nav-masthead justify-content-center">
+					<a class="nav-link active" href="../../home.html">Home</a>
+					<a class="nav-link" href="../../dashboard.html">My Dashboard</a>
+				</nav>
 			</div>
-			<!--<script src="Amsler.js"></script>-->
-			<script src="questions.js"></script>
-			
-			<div id="nxt" style="text-align: right;">
-				<div style="text-align: center;">
-					<button id="nextButton" type="button" class="btn btn-sm btn-outline-secondary test-buttons"
-							onClick="location.href='questions.html'">
-						Continue to Questions
-					</button>
-				</div>
-			</div>
-			
-			<footer class="mastfoot mt-auto">
-				<div class="inner">
-				</div>
-			</footer>
+		</header>
+
+		<div class="image-container">
+			<p id="timer" style="text-align: right; display: none"></p>
+			<img src="amsler.png" alt="amslerGrid" id="amslerpic" width="700" height="700">
 		</div>
-	</body>
+		<!--<script src="Amsler.js"></script>-->
+		<script src="questions.js"></script>
+
+		<div id="nxt" style="text-align: right;">
+			<div style="text-align: center;">
+				<button id="nextButton" type="button" class="btn btn-sm btn-outline-secondary test-buttons"
+					onClick="location.href='questions.html'">
+					Continue to Questions
+				</button>
+			</div>
+		</div>
+
+		<footer class="mastfoot mt-auto">
+			<div class="inner">
+			</div>
+		</footer>
+	</div>
+
+	<!-- Check if user is signed in -->
+	<script>
+		var db = firebase.firestore();
+		(async function checkUser() {
+			await firebase.auth().onAuthStateChanged(user => {
+				if (user) {
+					id = user.uid;
+					db.collection("users").doc(id)
+						.get()
+						.then(doc => {
+							let type = doc.data().type;
+							if (type != 'user') {
+								console.log("Physician Account. Access Denied.");
+								window.location = '../../404.html';
+							}
+						});
+				} else {
+					console.log("Not logged in");
+					window.location = '../../index.html';
+				}
+			});
+		})();
+	</script>
+</body>
 
 </html>
