@@ -160,7 +160,7 @@
 					<button class="tablinks" onclick="openMedical(event, 'history')">History</button>
 
 					<!-- Tab content -->
-					<div id="medical" class="tabcontent">
+					<div id="medical" class="tabcontent" style="display: block;">
 						<form class="medicalForm">
 							<input style="display:inline-block; float:right;" class="btn btn-secondary my-2"
 								id="saveMedical" type="submit" value="Save">
@@ -203,28 +203,8 @@
 					</div>
 
 					<div id="history" class="tabcontent">
-						<div class="table-responsive">
-							<table class="table table-striped table-sm" id="historyTable">
-								<thead>
-									<tr>
-										<th>Do you suffer from sleep apnea or other sleep disorders?</th>
-									</tr>
-									<tr>
-										<th>Do you take AREDS or AREDS2 vitamins?</th>
-									</tr>
-									<tr>
-										<th>If any, list all eyewear you use (i.e. contacts, prescription glasses,
-											reading
-											glasses) and how often you wear them:</th>
-									</tr>
-									<tr>
-										<th>List any medication you take:</th>
-									</tr>
-								</thead>
-								<tbody id="tbody">
-									<!-- Table is Populated by the DAO objects -->
-								</tbody>
-							</table>
+						<div class="table-responsive" id="tableContainer">
+							
 						</div>
 					</div>
 				</div>
