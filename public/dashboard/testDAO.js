@@ -41,8 +41,8 @@ class TestDAO {
 			TimeStampMS: data.TimeStampMS,
 			LeftXLocations: data.LeftXLocations,
 			LeftYLocations: data.LeftYLocations,
-			RightXLocations: data.LeftXLocations,
-			RightLocations: data.LeftYLocations,
+			RightXLocations: data.RightXLocations,
+			RightYLocations: data.RightYLocations,
 		}
 	}
 	
