@@ -208,7 +208,8 @@ function loadHistory() {
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         let data = doc.data();
-                        addTable(data);
+                        let docID = doc.id;
+                        addTable(data, docID);
                     });
                 });
         }
@@ -216,7 +217,7 @@ function loadHistory() {
 
 }
 
-function addTable(data) {
+function addTable(data, docID) {
     let areds = data.areds;
     let disease = data.disease;
     let eyewear = data.eyewear;
@@ -227,6 +228,31 @@ function addTable(data) {
     //Create a table
     table = document.createElement('table');
     table.className = "table table-striped table-sm";
+
+
+    //Delete row
+    let deleteRow = document.createElement("tr");
+    let deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.style.fontWeight = "bold";
+    deleteButton.innerHTML = 'Delete';
+    let columnDelete = document.createElement("td");
+    let columnEmptyDelete = document.createElement("td");
+    columnDelete.style.float = "right";
+    columnDelete.appendChild(deleteButton);
+    deleteRow.appendChild(columnEmptyDelete);
+    deleteRow.appendChild(columnDelete);
+    table.appendChild(deleteRow);
+
+    deleteButton.onclick = function () {
+
+        let r = confirm("Warning: You are about to delete your medical history from: " + date);
+        if (r == true) {
+            deleteHistory(docID);
+        }
+
+    };
+
 
     //Row for date question
     let rowDate = document.createElement("tr");
@@ -339,14 +365,6 @@ function addTable(data) {
     //Add row to table
     table.appendChild(rowMeds);
 
-    //Empty row
-    // let empty = document.createElement("tr");
-    // let columnempty = document.createElement("td");
-    // let emptytext = document.createTextNode("");
-    // columnempty.appendChild(emptytext);
-    // empty.appendChild(columnempty);
-    // table.appendChild(empty);
-
     //Add table to page
     tableContainer.appendChild(table);
 
@@ -374,6 +392,22 @@ function formatDate(milliseconds) {
     // Uncomment below line to add time of day
     // return dateString + " at " + hoursString + ":" + minutesString + postfix;
     return dateString;
+}
+
+async function deleteHistory(id) {
+    await firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            let uid = user.uid;
+            db.collection("users").doc(uid).collection("medicalHistory").doc(id)
+                .delete().then(function () {
+                    console.log("Document successfully deleted!");
+                    location.reload();
+                }).catch(function (error) {
+                    console.error("Error removing document: ", error);
+                });
+
+        }
+    });
 }
 
 /*
