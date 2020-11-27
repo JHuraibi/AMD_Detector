@@ -183,6 +183,5 @@ function updateFirstTest() {
 		.set({
 			firstTest: false
 		}).then(() => {
-		console.log("First Test Status Updated.");
 	});
 }
