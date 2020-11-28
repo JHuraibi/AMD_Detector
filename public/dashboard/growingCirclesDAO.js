@@ -32,11 +32,15 @@ class GrowingCirclesDAO {
 				});
 			});
 		
-		// this.manualAdd();
+		// this.manualAdd();	// This breaks as of (11/27/2020) due to missing fields in FireStore document
 	}
 	
 	// !! TESTING ONLY - Clones FireStore doc from existing
 	manualAdd() {
+		if (!this.docList[0]) {
+			console.log("MANUAL ADD - Index 0 empty");
+			return;
+		}
 		this.dbRef.collection("TestResults")
 			.doc(userRef.uid)
 			.collection("GrowingCircles")
@@ -55,12 +59,12 @@ class GrowingCirclesDAO {
 			XLocationsLeft: data.LeftXLocations,
 			XLocationsRight: data.XLocationsRight,
 			YLocationsLeft: data.YLocationsLeft,
-			YLocationsRight: data.YLocationsLeft,
+			YLocationsRight: data.YLocationsRight,
 			ZLocationsLeft: data.ZLocationsLeft,
-			ZLocationsRight: data.ZLocationsRight
+			ZLocationsRight: data.ZLocationsRight,
 		}
 	}
-	
+
 	populateHistoryTable(targetTableID) {
 		if (!this.userID) {
 			console.log("User ID is null");
@@ -131,6 +135,7 @@ class GrowingCirclesDAO {
 		this.docList.forEach((doc) => {
 			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
 			ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
+			
 			this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
 			this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 			
@@ -204,30 +209,34 @@ class GrowingCirclesDAO {
 		ctxLeft.fillStyle = "#f47171";
 		ctxRight.fillStyle = "#f47171";
 		
-		let dateStringStart = month + " 1 2020";
-		let dateStringEnd;
+		let dateStringEarliest = month + " 1 2020";
+		let dateStringLatest;
 		
-		if (month === 12) {
-			dateStringEnd = "1 1 2020";
+		if (+month === 12) {
+			// Handle December as chosen start month
+			dateStringLatest = "1 1 2021";
 		}
 		else {
-			dateStringEnd = (+month + 1) + " 1 2020";
+			dateStringLatest = (+month + 1) + " 1 2020";
 		}
 		
-		let msStart = (new Date(dateStringStart)).getTime();
-		let msEnd = (new Date(dateStringEnd)).getTime();
-		// console.log("START: " + msStart);
-		// console.log("END: " + msEnd);
+		let msEarliest = (new Date(dateStringEarliest)).getTime();
+		let msLatest = (new Date(dateStringLatest)).getTime();
 		
-		let startI = this.setStartIndex(msStart);
-		let endI = this.setEndIndex(msEnd);
+		// !! NOTE: docList[] is sorted in descending order by TimeStampMS
+		//       So the earlier date (smallest millisecond) is closer to the end of the array
+		let startIndex = this.setIndex(msLatest);
+		let endIndex = this.setIndex(msEarliest);
+		
+		console.log("START I: " + startIndex);
+		console.log("END I: " + endIndex);
 		
 		// TODO: Check for off-by-one
-		for (let i = startI; i < endI; i++) {
+		for (let i = startIndex; i <= endIndex; i++) {
 			let doc = this.docList[i];
 			
-			this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
-			this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight)
+			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
+			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
 		}
 	}
 	
@@ -245,11 +254,10 @@ class GrowingCirclesDAO {
 		
 		let current = (new Date).getMonth();
 		let ms = this.monthMSHelper(current, monthsBack);
-		let index = this.setStartIndex(ms);
+		let index = this.setIndex(ms);
 		
 		for (let i = 0; i < index; i++) {
 			let doc = this.docList[i];
-			
 			this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
 			this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 		}
@@ -258,6 +266,12 @@ class GrowingCirclesDAO {
 	drawToCanvas(ctx, xPos, yPos, zPos) {
 		if (!ctx) {
 			console.log("Invalid Canvas Context.");
+			return;
+		}
+		
+		if (isNaN(xPos) || isNaN(yPos) || isNaN(zPos)) {
+			// This check here makes the populate(N) functions cleaner by removing checks there
+			// console.log("One of more locations NaN");
 			return;
 		}
 		
@@ -283,28 +297,18 @@ class GrowingCirclesDAO {
 		return "./dashboard/detailed_view.html?" + uri.toString();
 	}
 	
-	setStartIndex(ms) {
+	setIndex(ms) {
 		let length = this.docList.length;
 		let i = 0;
 		
-		while (this.docList[i].TimeStampMS > ms && i < length - 1) {
+		// CHECK: Remove "or equal"?
+		while (this.docList[i].TimeStampMS >= ms && i < length - 1) {
 			i++;
 		}
 		
 		return i;
 	}
 	
-	// !! CRITICAL: MAKE SURE CORRECT
-	setEndIndex(ms) {
-		let i = this.docList.length - 1;
-		
-		while (this.docList[i].TimeStampMS < ms && i > 0) {
-			i--;
-		}
-		
-		return i;
-	}
-
 	formatDate(milliseconds) {
 		let date = new Date(milliseconds);
 		let timezoneOffset = -5;	// UTC -5:00

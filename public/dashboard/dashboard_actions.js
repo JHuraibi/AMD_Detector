@@ -77,7 +77,9 @@ function resetOptions() {
 	clearCanvases();
 	
 	// Redraw Default
-	testDAO.populateAggregate("canvasLeft", "canvasRight");
+	// testDAO.populateAggregate("canvasLeft", "canvasRight");
+	fullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
+	growingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
 }
 
 function clearCanvases() {

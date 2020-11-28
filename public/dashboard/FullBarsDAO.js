@@ -202,26 +202,27 @@ class FullBarsDAO {
 		ctxLeft.fillStyle = "#f47171";
 		ctxRight.fillStyle = "#f47171";
 		
-		let dateStringStart = month + " 1 2020";
-		let dateStringEnd;
+		let dateStringEarliest = month + " 1 2020";
+		let dateStringLatest;
 		
-		if (month === 12) {
-			dateStringEnd = "1 1 2020";
+		if (+month === 12) {
+			// Handle December as chosen start month
+			dateStringLatest = "1 1 2021";
 		}
 		else {
-			dateStringEnd = (+month + 1) + " 1 2020";
+			dateStringLatest = (+month + 1) + " 1 2020";
 		}
-		
-		let msStart = (new Date(dateStringStart)).getTime();
-		let msEnd = (new Date(dateStringEnd)).getTime();
-		// console.log("START: " + msStart);
-		// console.log("END: " + msEnd);
-		
-		let startI = this.setStartIndex(msStart);
-		let endI = this.setEndIndex(msEnd);
-		
+
+		let msEarliest = (new Date(dateStringEarliest)).getTime();
+		let msLatest = (new Date(dateStringLatest)).getTime();
+
+		// !! NOTE: docList[] is sorted in descending order by TimeStampMS
+		//       So the earlier date (smallest millisecond) is closer to the end of the array
+		let startIndex = this.setIndex(msLatest);
+		let endIndex = this.setIndex(msEarliest);
+
 		// TODO: Check for off-by-one
-		for (let i = startI; i < endI; i++) {
+		for (let i = startIndex; i <= endIndex; i++) {
 			let doc = this.docList[i];
 			
 			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
@@ -243,7 +244,7 @@ class FullBarsDAO {
 		
 		let current = (new Date).getMonth();
 		let ms = this.monthMSHelper(current, monthsBack);
-		let index = this.setStartIndex(ms);
+		let index = this.setIndex(ms);
 		
 		for (let i = 0; i < index; i++) {
 			let doc = this.docList[i];
@@ -313,23 +314,13 @@ class FullBarsDAO {
 		return "./dashboard/detailed_view.html?" + uri.toString();
 	}
 	
-	setStartIndex(ms) {
+	setIndex(ms) {
 		let length = this.docList.length;
 		let i = 0;
 		
-		while (this.docList[i].TimeStampMS > ms && i < length - 1) {
+		// CHECK: Remove "or equal"?
+		while (this.docList[i].TimeStampMS >= ms && i < length - 1) {
 			i++;
-		}
-		
-		return i;
-	}
-	
-	// !! CRITICAL: MAKE SURE CORRECT
-	setEndIndex(ms) {
-		let i = this.docList.length - 1;
-		
-		while (this.docList[i].TimeStampMS < ms && i > 0) {
-			i--;
 		}
 		
 		return i;
