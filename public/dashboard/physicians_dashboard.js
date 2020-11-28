@@ -1,11 +1,11 @@
-// TODO: Swap names with "dashboard_actions.js" ?
+// TODO: Move file locaiton to "physicians" directory?
 
 let dbRef = firebase.firestore();
 let patientUID = null;
-let growingCirclesDAO;
-let symbolsDAO;
-let fullBarsDAO;
-let freeDrawDAO;
+let patientGrowingCirclesDAO;
+let patientSymbolsDAO;
+let patientFullBarsDAO;
+let patientFreeDrawDAO;
 
 function setPatientUID(id) {
 	if (!id) {
@@ -36,37 +36,24 @@ function renderDefaultView() {
 	patientFullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
 }
 
-// TODO: Better method with async
-// NOTE: Takes about 400-600ms to recognize a user from auth() above
-function checkUserStatus() {
-	
-	while (!patientUID && maxWaitTime > 0) {
-		maxWaitTime -= waitTime;
-		console.log("Patient UID empty. Retrying...");
-		setTimeout(null, waitTime);
-	}
-	
-	if (maxWaitTime < 0) {
-		console.log("User Lookup Timed Out");
-		return false;
-	}
-	
-	return true;
+function populateHistoryTable() {
+	patientGrowingCirclesDAO.populateHistoryTable("historyTable");
+	patientSymbolsDAO.populateHistoryTable("historyTable");
+	patientFullBarsDAO.populateHistoryTable("historyTable");
+	patientFreeDrawDAO.populateHistoryTable("historyTable");
 }
 
 function defineDAOs() {
-	growingCirclesDAO = new GrowingCirclesDAO(dbRef, patientUID);
-	symbolsDAO = new SymbolsDAO(dbRef, patientUID);
-	fullBarsDAO = new FullBarsDAO(dbRef, patientUID);
-	freeDrawDAO = new FreeDrawDAO(dbRef, patientUID);
+	patientGrowingCirclesDAO = new GrowingCirclesDAO(dbRef, patientUID);
+	patientSymbolsDAO = new SymbolsDAO(dbRef, patientUID);
+	patientFullBarsDAO = new FullBarsDAO(dbRef, patientUID);
+	patientFreeDrawDAO = new FreeDrawDAO(dbRef, patientUID);
 }
 
-// Draws SINGLE most recent result of each test to the canvases
 function mostRecent() {
-	// symbolsDAO.populateMostRecent();
-	growingCirclesDAO.populateMostRecent("canvasLeft", "canvasRight");
-	symbolsDAO.populateMostRecent("canvasLeft", "canvasRight");
-	fullBarsDAO.populateMostRecent("canvasLeft", "canvasRight");
+	patientGrowingCirclesDAO.populateMostRecent("canvasLeft", "canvasRight");
+	patientSymbolsDAO.populateMostRecent("canvasLeft", "canvasRight");
+	patientFullBarsDAO.populateMostRecent("canvasLeft", "canvasRight");
 }
 
 function monthSelect() {
@@ -77,9 +64,9 @@ function monthSelect() {
 		console.log("Unable to retrieve month from selector.")
 	}
 	
-	growingCirclesDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
-	symbolsDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
-	fullBarsDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
+	patientGrowingCirclesDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
+	patientSymbolsDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
+	patientFullBarsDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
 }
 
 function numberOfMonths() {
@@ -90,7 +77,7 @@ function numberOfMonths() {
 		console.log("Unable to retrieve number of months value.")
 	}
 	
-	growingCirclesDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
-	symbolsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
-	fullBarsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
+	patientGrowingCirclesDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
+	patientSymbolsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
+	patientFullBarsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
 }
