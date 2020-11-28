@@ -20,6 +20,11 @@ async function pageRouter() {
 	await symbolsDAO.loadAll();
 	await fullBarsDAO.loadAll();
 	
+	renderDefaultView();
+}
+
+function renderDefaultView(){
+	
 	growingCirclesDAO.populateHistoryTable("historyTable");
 	growingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
 	symbolsDAO.populateHistoryTable("historyTable");
