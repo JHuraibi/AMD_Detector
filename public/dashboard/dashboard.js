@@ -2,6 +2,7 @@
 
 let dbRef = firebase.firestore();
 let userRef = null;
+let growingCirclesDAO;
 let fullBarsDAO;
 
 firebase.auth().onAuthStateChanged(user => {
@@ -19,8 +20,11 @@ firebase.auth().onAuthStateChanged(user => {
 // TODO: Better and more robust error handling
 async function pageRouter() {
 	defineDAOs();
+	await growingCirclesDAO.loadAll();
 	await fullBarsDAO.loadAll();
 	
+	growingCirclesDAO.populateHistoryTable("historyTable");
+	growingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
 	fullBarsDAO.populateHistoryTable("historyTable");
 	fullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
 }
@@ -44,13 +48,14 @@ function checkUserStatus() {
 }
 
 function defineDAOs() {
-	fullBarsDAO = new fullBarsDAO(dbRef, userRef.uid);
+	growingCirclesDAO = new GrowingCirclesDAO(dbRef, userRef.uid);
+	fullBarsDAO = new FullBarsDAO(dbRef, userRef.uid);
 }
 
 // Draws SINGLE most recent result of each test to the canvases
 function mostRecent() {
-	// growingCirclesDAO.populateMostRecent();
 	// symbolsDAO.populateMostRecent();
+	growingCirclesDAO.populateMostRecent("canvasLeft", "canvasRight");
 	fullBarsDAO.populateMostRecent("canvasLeft", "canvasRight");
 }
 
@@ -62,6 +67,7 @@ function monthSelect() {
 		console.log("Unable to retrieve month from selector.")
 	}
 	
+	growingCirclesDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
 	fullBarsDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
 }
 
@@ -73,5 +79,6 @@ function numberOfMonths() {
 		console.log("Unable to retrieve number of months value.")
 	}
 	
+	growingCirclesDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
 	fullBarsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
 }
