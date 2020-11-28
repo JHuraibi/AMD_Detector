@@ -385,4 +385,4 @@ class FullBarsDAO {
 		return months[number];
 	}
 	
-}// class [ FirebaseDAO ]
+}// class [ FullBarsDAO ]

@@ -1,11 +1,11 @@
-class TestDAO {
+class GrowingCirclesDAO {
 	constructor(dbRef, userID) {
 		this.dbRef = dbRef;
 		this.userID = userID;
 		this.docList = [];
 		
 		// !! TODO: This value to be dynamically set
-		this.canvasSize = 800;
+		this.canvasSize = 700;
 		
 		// These values are equal to 20, 45, and 95% opacity levels respectively
 		// Max alpha in hex is FF or 255 in decimal
@@ -22,7 +22,7 @@ class TestDAO {
 		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
-			.collection("FullBars")
+			.collection("GrowingCircles")
 			.orderBy("TimeStampMS", "desc")
 			.get()
 			.then((querySnapshot) => {
@@ -32,33 +32,39 @@ class TestDAO {
 				});
 			});
 		
-		// this.manualAdd();
+		// this.manualAdd();	// This breaks as of (11/27/2020) due to missing fields in FireStore document
 	}
 	
 	// !! TESTING ONLY - Clones FireStore doc from existing
 	manualAdd() {
+		if (!this.docList[0]) {
+			console.log("MANUAL ADD - Index 0 empty");
+			return;
+		}
 		this.dbRef.collection("TestResults")
 			.doc(userRef.uid)
-			.collection("FullBars")
+			.collection("GrowingCircles")
 			.add(this.docList[0])
 			.then(() => {
 				console.log("Manual document added.");
 			});
 	}
 	
-	// NOTE: The JSON returned needs to match the FireStore document structure for FullBars
+	// NOTE: The JSON returned needs to match the FireStore document structure for GrowingCircles
 	extractor(id, data) {
 		return {
 			id: id,
 			TestName: data.TestName,
 			TimeStampMS: data.TimeStampMS,
-			LeftXLocations: data.LeftXLocations,
-			LeftYLocations: data.LeftYLocations,
-			RightXLocations: data.RightXLocations,
-			RightYLocations: data.RightYLocations,
+			XLocationsLeft: data.LeftXLocations,
+			XLocationsRight: data.XLocationsRight,
+			YLocationsLeft: data.YLocationsLeft,
+			YLocationsRight: data.YLocationsRight,
+			ZLocationsLeft: data.ZLocationsLeft,
+			ZLocationsRight: data.ZLocationsRight,
 		}
 	}
-	
+
 	populateHistoryTable(targetTableID) {
 		if (!this.userID) {
 			console.log("User ID is null");
@@ -75,7 +81,7 @@ class TestDAO {
 	// TODO: Update with actual method for detailed view
 	// TODO: Refactor variable names below to be more readable
 	addRowToTableGC(docID, timeStamp, targetTableID) {
-		let testName = "Full Bars [TEST]";
+		let testName = "Growing Circles";
 		let time = this.formatDate(timeStamp);
 		let urlOfDetailedView = this.URIBuilder(docID);
 		
@@ -129,8 +135,9 @@ class TestDAO {
 		this.docList.forEach((doc) => {
 			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
 			ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
-			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
-			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+			
+			this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
+			this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 			
 			alphaIndex++;
 			if (alphaIndex > 3) {
@@ -157,8 +164,8 @@ class TestDAO {
 			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
 			ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
 			
-			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
-			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+			this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
+			this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 			
 			alphaIndex++;
 			if (alphaIndex > 3) {
@@ -186,8 +193,8 @@ class TestDAO {
 		ctxRight.fillStyle = "#f47171";
 		
 		let doc = this.docList[0];
-		this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
-		this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+		this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
+		this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 	}
 	
 	populateByMonthSelector(month, leftCanvasID, rightCanvasID) {
@@ -202,26 +209,27 @@ class TestDAO {
 		ctxLeft.fillStyle = "#f47171";
 		ctxRight.fillStyle = "#f47171";
 		
-		let dateStringStart = month + " 1 2020";
-		let dateStringEnd;
+		let dateStringEarliest = month + " 1 2020";
+		let dateStringLatest;
 		
-		if (month === 12) {
-			dateStringEnd = "1 1 2020";
+		if (+month === 12) {
+			// Handle December as chosen start month
+			dateStringLatest = "1 1 2021";
 		}
 		else {
-			dateStringEnd = (+month + 1) + " 1 2020";
+			dateStringLatest = (+month + 1) + " 1 2020";
 		}
 		
-		let msStart = (new Date(dateStringStart)).getTime();
-		let msEnd = (new Date(dateStringEnd)).getTime();
-		// console.log("START: " + msStart);
-		// console.log("END: " + msEnd);
+		let msEarliest = (new Date(dateStringEarliest)).getTime();
+		let msLatest = (new Date(dateStringLatest)).getTime();
 		
-		let startI = this.setStartIndex(msStart);
-		let endI = this.setEndIndex(msEnd);
+		// !! NOTE: docList[] is sorted in descending order by TimeStampMS
+		//       So the earlier date (smallest millisecond) is closer to the end of the array
+		let startIndex = this.setIndex(msLatest);
+		let endIndex = this.setIndex(msEarliest);
 		
 		// TODO: Check for off-by-one
-		for (let i = startI; i < endI; i++) {
+		for (let i = startIndex; i <= endIndex; i++) {
 			let doc = this.docList[i];
 			
 			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
@@ -243,61 +251,34 @@ class TestDAO {
 		
 		let current = (new Date).getMonth();
 		let ms = this.monthMSHelper(current, monthsBack);
-		let index = this.setStartIndex(ms);
+		let index = this.setIndex(ms);
 		
 		for (let i = 0; i < index; i++) {
 			let doc = this.docList[i];
-			
-			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
-			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+			this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
+			this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 		}
 	}
 	
-	drawToCanvas(ctx, xPositions, yPositions) {
+	drawToCanvas(ctx, xPos, yPos, zPos) {
 		if (!ctx) {
 			console.log("Invalid Canvas Context.");
 			return;
 		}
 		
+		if (isNaN(xPos) || isNaN(yPos) || isNaN(zPos)) {
+			// This check here makes the populate(N) functions cleaner by removing checks there
+			// console.log("One of more locations NaN");
+			return;
+		}
+		
 		let ratio = ctx.canvas.width / this.canvasSize;
-		let barL = ctx.canvas.width;
-		let barW = 10;
-		let r = (barW / 2) / 1.5;		// !! MAXIMUM radius is half the bar's thickness
+		xPos = xPos * ratio;
+		yPos = yPos * ratio;
+		zPos = zPos * ratio;
 		
-		if (xPositions) {
-			xPositions.forEach((xPos) => {
-				let x = xPos * ratio;
-				let y = 0;
-				let w = barW;
-				let h = barL;
-				
-				// Draw shape as rectangle with rounded corners
-				this.roundedRectangle(ctx, x, y, w, h, r);
-			});
-		}
-		
-		if (yPositions) {
-			yPositions.forEach((yPos) => {
-				let x = 0;
-				let y = yPos * ratio;
-				let w = barL;
-				let h = barW;
-				
-				// Draw shape as rectangle with rounded corners
-				this.roundedRectangle(ctx, x, y, w, h, r);
-			});
-		}
-	}
-	
-	roundedRectangle(ctx, x, y, w, h, r) {
 		ctx.beginPath();
-		ctx.moveTo(x + r, y);
-		ctx.arcTo(x + w, y, x + w, y + h, r);
-		ctx.arcTo(x + w, y + h, x, y + h, r);
-		ctx.arcTo(x, y + h, x, y, r);
-		ctx.arcTo(x, y, x + w, y, r);
-		ctx.closePath();
-		
+		ctx.arc(xPos, yPos, zPos, 0, Math.PI * 2);
 		ctx.fill();
 	}
 	
@@ -308,39 +289,21 @@ class TestDAO {
 	// !! NOTE: The TEST_NAME key's value has to match Firestore's document exactly
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
-		uri.append("TEST_NAME", "FullBars");
+		uri.append("TEST_NAME", "GrowingCircles");
 		uri.append("TEST_ID", docID);
 		return "./dashboard/detailed_view.html?" + uri.toString();
 	}
 	
-	setStartIndex(ms) {
+	setIndex(ms) {
 		let length = this.docList.length;
 		let i = 0;
 		
-		while (this.docList[i].TimeStampMS > ms && i < length - 1) {
+		// CHECK: Remove "or equal"?
+		while (this.docList[i].TimeStampMS >= ms && i < length - 1) {
 			i++;
 		}
 		
 		return i;
-	}
-	
-	// !! CRITICAL: MAKE SURE CORRECT
-	setEndIndex(ms) {
-		let i = this.docList.length - 1;
-		
-		while (this.docList[i].TimeStampMS < ms && i > 0) {
-			i--;
-		}
-		
-		return i;
-	}
-	
-	checkBeforeDate() {
-	
-	}
-	
-	alphaCreator(num) {
-		let n = 255 / num;
 	}
 	
 	formatDate(milliseconds) {
@@ -394,4 +357,4 @@ class TestDAO {
 		return months[number];
 	}
 	
-}// class [ FirebaseDAO ]
+}// class [ GrowingCirclesDAO ]

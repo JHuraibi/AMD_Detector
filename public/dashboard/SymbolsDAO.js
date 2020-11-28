@@ -383,4 +383,4 @@ class SymbolsDAO {
 		return months[number];
 	}
 	
-}// class [ FirebaseDAO ]
+}// class [ SymbolsDAO ]

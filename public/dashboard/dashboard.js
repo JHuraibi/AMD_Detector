@@ -13,12 +13,6 @@ firebase.auth().onAuthStateChanged(user => {
 	pageRouter();
 });
 
-// ---------------------- //
-// let growingCirclesDAO = new GrowingCirclesDAO(dbRef, "canvasLeft", "canvasRight");
-// let symbolsDAO = new SymbolsDAO(dbRef, "canvasLeft", "canvasRight");
-// let fullBarsDAO = new FullBarsDAO(dbRef, "canvasLeft", "canvasRight");
-// let freeDrawDAO = new FreeDrawDAO(dbRef, "canvasLeft", "canvasRight");
-
 // TODO: Better and more robust error handling
 async function pageRouter() {
 	defineDAOs();

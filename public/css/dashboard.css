@@ -43,9 +43,9 @@ button {
 	margin: 1em;
 }
 
-tr {
-	border: black solid 2px;
-}
+/*tr {*/
+/*	border: black solid 2px;*/
+/*}*/
 
 .options {
 	float: left;

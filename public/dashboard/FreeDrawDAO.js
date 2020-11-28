@@ -204,4 +204,4 @@ class FreeDrawDAO {
 		return dateString;
 	}
 	
-}// class [ FullBarsDAO ]
+}// class [ FreeDrawDAO ]
