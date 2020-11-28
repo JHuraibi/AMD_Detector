@@ -246,7 +246,7 @@ class SymbolsDAO {
 		
 		let current = (new Date).getMonth();
 		let ms = this.monthMSHelper(current, monthsBack);
-		let index = this.set(ms);
+		let index = this.setIndex(ms);
 		
 		for (let i = 0; i < index; i++) {
 			let doc = this.docList[i];
