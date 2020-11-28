@@ -272,7 +272,7 @@
 							// Free draw has only single canvas (no left/right eye)
 							document.getElementById("detailedCanvasRight").style.display = "none";
 							document.getElementById("canvasCaptions").style.display = "none";
-							freeDrawDAO.drawToCanvas(doc);
+							freeDrawDAO.drawToCanvas(doc, "detailedCanvasLeft");
 						}
 						else if (testName === "Fractal") {
 							console.log("[FRACTAL DAO NEEDED]");

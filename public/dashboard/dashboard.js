@@ -5,6 +5,7 @@ let userRef = null;
 let growingCirclesDAO;
 let symbolsDAO;
 let fullBarsDAO;
+let freeDrawDAO;
 
 firebase.auth().onAuthStateChanged(user => {
 	console.log(user);
@@ -31,6 +32,8 @@ async function pageRouter() {
 	symbolsDAO.populateAggregate("canvasLeft", "canvasRight");
 	fullBarsDAO.populateHistoryTable("historyTable");
 	fullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
+	
+	freeDrawDAO.populateHistoryTable("historyTable");
 }
 
 // TODO: Better method with async
@@ -55,6 +58,7 @@ function defineDAOs() {
 	growingCirclesDAO = new GrowingCirclesDAO(dbRef, userRef.uid);
 	symbolsDAO = new SymbolsDAO(dbRef, userRef.uid);
 	fullBarsDAO = new FullBarsDAO(dbRef, userRef.uid);
+	freeDrawDAO = new FreeDrawDAO(dbRef, userRef.uid);
 }
 
 // Draws SINGLE most recent result of each test to the canvases
