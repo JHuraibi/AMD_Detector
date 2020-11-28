@@ -20,23 +20,20 @@ function setPatientUID(id) {
 // TODO: Better and more robust error handling
 async function pageRouter() {
 	defineDAOs();
-	await growingCirclesDAO.loadAll();
-	await symbolsDAO.loadAll();
-	await fullBarsDAO.loadAll();
+	
+	await patientGrowingCirclesDAO.loadAll();
+	await patientSymbolsDAO.loadAll();
+	await patientFullBarsDAO.loadAll();
+	await patientFreeDrawDAO.loadAll();
 	
 	renderDefaultView();
+	populateHistoryTable();
 }
 
 function renderDefaultView() {
-	
-	growingCirclesDAO.populateHistoryTable("historyTable");
-	growingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
-	symbolsDAO.populateHistoryTable("historyTable");
-	symbolsDAO.populateAggregate("canvasLeft", "canvasRight");
-	fullBarsDAO.populateHistoryTable("historyTable");
-	fullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
-	
-	freeDrawDAO.populateHistoryTable("historyTable");
+	patientGrowingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
+	patientSymbolsDAO.populateAggregate("canvasLeft", "canvasRight");
+	patientFullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
 }
 
 // TODO: Better method with async
