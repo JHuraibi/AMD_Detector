@@ -1,11 +1,11 @@
-class FullBarsDAO {
+class GrowingCirclesDAO {
 	constructor(dbRef, userID) {
 		this.dbRef = dbRef;
 		this.userID = userID;
 		this.docList = [];
 		
 		// !! TODO: This value to be dynamically set
-		this.canvasSize = 800;
+		this.canvasSize = 700;
 		
 		// These values are equal to 20, 45, and 95% opacity levels respectively
 		// Max alpha in hex is FF or 255 in decimal
@@ -22,7 +22,7 @@ class FullBarsDAO {
 		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
-			.collection("FullBars")
+			.collection("GrowingCircles")
 			.orderBy("TimeStampMS", "desc")
 			.get()
 			.then((querySnapshot) => {
@@ -32,33 +32,39 @@ class FullBarsDAO {
 				});
 			});
 		
-		// this.manualAdd();
+		// this.manualAdd();	// This breaks as of (11/27/2020) due to missing fields in FireStore document
 	}
 	
 	// !! TESTING ONLY - Clones FireStore doc from existing
 	manualAdd() {
+		if (!this.docList[0]) {
+			console.log("MANUAL ADD - Index 0 empty");
+			return;
+		}
 		this.dbRef.collection("TestResults")
 			.doc(userRef.uid)
-			.collection("FullBars")
+			.collection("GrowingCircles")
 			.add(this.docList[0])
 			.then(() => {
 				console.log("Manual document added.");
 			});
 	}
 	
-	// NOTE: The JSON returned needs to match the FireStore document structure for FullBars
+	// NOTE: The JSON returned needs to match the FireStore document structure for GrowingCircles
 	extractor(id, data) {
 		return {
 			id: id,
 			TestName: data.TestName,
 			TimeStampMS: data.TimeStampMS,
-			LeftXLocations: data.LeftXLocations,
-			LeftYLocations: data.LeftYLocations,
-			RightXLocations: data.RightXLocations,
-			RightYLocations: data.RightYLocations,
+			XLocationsLeft: data.LeftXLocations,
+			XLocationsRight: data.XLocationsRight,
+			YLocationsLeft: data.YLocationsLeft,
+			YLocationsRight: data.YLocationsRight,
+			ZLocationsLeft: data.ZLocationsLeft,
+			ZLocationsRight: data.ZLocationsRight,
 		}
 	}
-	
+
 	populateHistoryTable(targetTableID) {
 		if (!this.userID) {
 			console.log("User ID is null");
@@ -75,7 +81,7 @@ class FullBarsDAO {
 	// TODO: Update with actual method for detailed view
 	// TODO: Refactor variable names below to be more readable
 	addRowToTableGC(docID, timeStamp, targetTableID) {
-		let testName = "Full Bars";
+		let testName = "Growing Circles";
 		let time = this.formatDate(timeStamp);
 		let urlOfDetailedView = this.URIBuilder(docID);
 		
@@ -129,8 +135,9 @@ class FullBarsDAO {
 		this.docList.forEach((doc) => {
 			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
 			ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
-			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
-			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+			
+			this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
+			this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 			
 			alphaIndex++;
 			if (alphaIndex > 3) {
@@ -157,8 +164,8 @@ class FullBarsDAO {
 			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
 			ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
 			
-			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
-			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+			this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
+			this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 			
 			alphaIndex++;
 			if (alphaIndex > 3) {
@@ -186,8 +193,8 @@ class FullBarsDAO {
 		ctxRight.fillStyle = "#f47171";
 		
 		let doc = this.docList[0];
-		this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
-		this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+		this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
+		this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 	}
 	
 	populateByMonthSelector(month, leftCanvasID, rightCanvasID) {
@@ -212,15 +219,15 @@ class FullBarsDAO {
 		else {
 			dateStringLatest = (+month + 1) + " 1 2020";
 		}
-
+		
 		let msEarliest = (new Date(dateStringEarliest)).getTime();
 		let msLatest = (new Date(dateStringLatest)).getTime();
-
+		
 		// !! NOTE: docList[] is sorted in descending order by TimeStampMS
 		//       So the earlier date (smallest millisecond) is closer to the end of the array
 		let startIndex = this.setIndex(msLatest);
 		let endIndex = this.setIndex(msEarliest);
-
+		
 		// TODO: Check for off-by-one
 		for (let i = startIndex; i <= endIndex; i++) {
 			let doc = this.docList[i];
@@ -248,57 +255,30 @@ class FullBarsDAO {
 		
 		for (let i = 0; i < index; i++) {
 			let doc = this.docList[i];
-			
-			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
-			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+			this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
+			this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 		}
 	}
 	
-	drawToCanvas(ctx, xPositions, yPositions) {
+	drawToCanvas(ctx, xPos, yPos, zPos) {
 		if (!ctx) {
 			console.log("Invalid Canvas Context.");
 			return;
 		}
 		
+		if (isNaN(xPos) || isNaN(yPos) || isNaN(zPos)) {
+			// This check here makes the populate(N) functions cleaner by removing checks there
+			// console.log("One of more locations NaN");
+			return;
+		}
+		
 		let ratio = ctx.canvas.width / this.canvasSize;
-		let barL = ctx.canvas.width;
-		let barW = 10;
-		let r = (barW / 2) / 1.5;		// !! MAXIMUM radius is half the bar's thickness
+		xPos = xPos * ratio;
+		yPos = yPos * ratio;
+		zPos = zPos * ratio;
 		
-		if (xPositions) {
-			xPositions.forEach((xPos) => {
-				let x = xPos * ratio;
-				let y = 0;
-				let w = barW;
-				let h = barL;
-				
-				// Draw shape as rectangle with rounded corners
-				this.roundedRectangle(ctx, x, y, w, h, r);
-			});
-		}
-		
-		if (yPositions) {
-			yPositions.forEach((yPos) => {
-				let x = 0;
-				let y = yPos * ratio;
-				let w = barL;
-				let h = barW;
-				
-				// Draw shape as rectangle with rounded corners
-				this.roundedRectangle(ctx, x, y, w, h, r);
-			});
-		}
-	}
-	
-	roundedRectangle(ctx, x, y, w, h, r) {
 		ctx.beginPath();
-		ctx.moveTo(x + r, y);
-		ctx.arcTo(x + w, y, x + w, y + h, r);
-		ctx.arcTo(x + w, y + h, x, y + h, r);
-		ctx.arcTo(x, y + h, x, y, r);
-		ctx.arcTo(x, y, x + w, y, r);
-		ctx.closePath();
-		
+		ctx.arc(xPos, yPos, zPos, 0, Math.PI * 2);
 		ctx.fill();
 	}
 	
@@ -309,7 +289,7 @@ class FullBarsDAO {
 	// !! NOTE: The TEST_NAME key's value has to match Firestore's document exactly
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
-		uri.append("TEST_NAME", "FullBars");
+		uri.append("TEST_NAME", "GrowingCircles");
 		uri.append("TEST_ID", docID);
 		return "./dashboard/detailed_view.html?" + uri.toString();
 	}
@@ -324,14 +304,6 @@ class FullBarsDAO {
 		}
 		
 		return i;
-	}
-	
-	checkBeforeDate() {
-	
-	}
-	
-	alphaCreator(num) {
-		let n = 255 / num;
 	}
 	
 	formatDate(milliseconds) {
@@ -385,4 +357,4 @@ class FullBarsDAO {
 		return months[number];
 	}
 	
-}// class [ FullBarsDAO ]
+}// class [ GrowingCirclesDAO ]

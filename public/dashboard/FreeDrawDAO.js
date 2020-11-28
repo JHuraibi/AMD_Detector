@@ -1,34 +1,67 @@
 class FreeDrawDAO {
-	constructor(dbRef, leftCanvasID, rightCanvasID) {
+	constructor(dbRef, userID) {
 		this.dbRef = dbRef;
-		this.userRef = null;
-		
-		this.leftCanvas = document.getElementById(leftCanvasID);
-		this.rightCanvas = document.getElementById(rightCanvasID);
+		this.userID = userID;
+		this.docList = [];
 		
 		// !! TODO: This value to be dynamically set
-		this.hardCodedCanvasSize = 600;
+		this.canvasSize = 800;
+		
+		// These values are equal to 20, 45, and 95% opacity levels respectively
+		// Max alpha in hex is FF or 255 in decimal
+		// e.g. [Hex F3 == Dec 243]
+		// 			(243 / 255) -> 95%
+		//			(F3 / FF)   -> 95%
+		this.alphaLevels = ["33", "73", "F3"];
+		this.leftAlphaIndex = 0;
+		this.rightAlphaIndex = 0;
+		this.useAlpha = false;
 	}
 	
-	updateUserReference(userRef) {
-		this.userRef = userRef;
+	async loadAll() {
+		await this.dbRef
+			.collection("TestResults")
+			.doc(this.userID)
+			.collection("FreeDraw")
+			.orderBy("TimeStampMS", "desc")
+			.get()
+			.then((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					let extractedDoc = this.extractor(doc.id, doc.data());
+					this.docList.push(extractedDoc);
+				});
+			});
+		
 	}
 	
-	drawToCanvas(doc) {
+	// NOTE: The JSON returned needs to match the FireStore document structure for FullBars
+	extractor(id, data) {
+		return {
+			id: id,
+			TestName: data.TestName,
+			TimeStampMS: data.TimeStampMS,
+			ImageData: data.ImageData,
+		}
+	}
+	
+	// TODO: Update away from using non-local doc?
+	drawToCanvas(doc, canvasID) {
 		if (!doc) {
 			console.log("FireStore document provided was null.");
 			return;
 		}
 		
-		if (!this.leftCanvas) {
+		let canvas = document.getElementById(canvasID);
+		
+		if (!canvas) {
 			console.log("Left Canvas DOM not found.");
 			return;
 		}
 		
 		let drawingData = doc.data().ImageData;
 		
-		let ctxLeft = this.leftCanvas.getContext('2d');
-		let ratio = this.leftCanvas.width / this.hardCodedCanvasSize;
+		let ctxLeft = canvas.getContext('2d');
+		let ratio = canvas.width / this.canvasSize;
 		// let ratio = 2;
 		
 		if (drawingData) {
@@ -46,7 +79,7 @@ class FreeDrawDAO {
 			}
 		}
 		
-		this.drawStaticAxes(ctxLeft, this.leftCanvas.width, this.leftCanvas.height);
+		this.drawStaticAxes(ctxLeft, canvas.width, canvas.width);
 	}
 	
 	line(ctx, x, y, pX, pY, w) {
@@ -171,32 +204,4 @@ class FreeDrawDAO {
 		return dateString;
 	}
 	
-	// TODO: Can replace this.useAlpha?
-	// TODO: Refactor name
-	getNextLeftAlpha() {
-		let alpha = this.alphaLevels[this.leftAlphaIndex];
-		this.leftAlphaIndex++;
-		
-		if (this.leftAlphaIndex > 3) {
-			this.leftAlphaIndex = 0;
-			console.log("Warning: Left Alpha Index Exceeded 3 Iterations.");
-		}
-		
-		return alpha;
-	}
-	
-	// TODO: Can replace this.useAlpha?
-	// TODO: Refactor name
-	getNextRightAlpha() {
-		let alpha = this.alphaLevels[this.rightAlphaIndex];
-		this.rightAlphaIndex++;
-		
-		if (this.rightAlphaIndex > 3) {
-			this.rightAlphaIndex = 0;
-			console.log("Warning: Right Alpha Index Exceeded 3 Iterations.");
-		}
-		
-		return alpha;
-	}
-	
-}// class [ FullBarsDAO ]
+}// class [ FreeDrawDAO ]

@@ -1,15 +1,15 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="">
-	<link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
-	<link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
-
+	<link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32"/>
+	<link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16"/>
+	
 	<title>Vision Monitor · Dashboard</title>
-
+	
 	<!-- Bootstrap core CSS -->
 	<link href="../scss/custom.css" rel="stylesheet">
 	<!-- Custom styles for this template -->
@@ -19,20 +19,20 @@
 			/*margin: 1.5rem;*/
 			border-radius: 1rem;
 			background: #7171f47E;
-
+			
 			/*margin-top: 1em;*/
 			/*Light Orange: ffecc7*/
 			/*Lavender ffe4ff*/
 			/*Light Green: f7ffe4*/
 		}
-
-		.canvas-container>table {
+		
+		.canvas-container > table {
 			height: 90%;
 			margin-bottom: 5em;
 			text-align: center !important;
 			font-size: large;
 		}
-
+		
 		canvas {
 			width: 90%;
 			/*height: 400px;*/
@@ -49,7 +49,7 @@
 	<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
 		<a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="../home.html">Vision Monitor</a>
 		<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
-			data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+				data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
@@ -89,10 +89,10 @@
 				</div>
 			</nav>
 		</div>
-
+		
 		<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
 			<div
-				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 				<h1 class="h2">My Progress</h1>
 				<!-- Additional Links -->
 				<!-- <div class="btn-toolbar mb-2 mb-md-0">-->
@@ -106,17 +106,17 @@
 				<!-- 	</button>-->
 				<!-- </div>-->
 			</div>
-
+			
 			<h3 id="testTitle" style="margin-top: 2rem">
 				Detailed View
 				<!-- Remainder of title (i.e. test name) is set by DashboardInjector.js -->
 			</h3>
-
+			
 			<h5 id="dateSubtitle">
 				Date Test Taken:&nbsp;
 				<!-- Remainder of subtitle (i.e. Date taken) is set by DashboardInjector.js -->
 			</h5>
-
+			
 			<div class="canvas-container">
 				<!-- <table border="3"> -->
 				<table class="canvas-table">
@@ -134,55 +134,55 @@
 					</tr>
 				</table>
 			</div>
-
+		
 		</main>
-
+	
 	</div>
-
+	
 	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
 	<script src="/__/firebase/7.23.0/firebase-app.js"></script>
-
+	
 	<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
 	<script src="/__/firebase/7.23.0/firebase-analytics.js"></script>
-
+	
 	<!-- Add Firebase products that you want to use -->
 	<script src="/__/firebase/7.23.0/firebase-auth.js"></script>
 	<script src="/__/firebase/7.23.0/firebase-firestore.js"></script>
-
+	
 	<!-- Initialize Firebase -->
 	<script src="/__/firebase/init.js"></script>
 	<script src="../auth.js"></script>
-
+	
 	<!-- DAO JavaScripts -->
-	<script src="growingCirclesDAO.js"></script>
+	<script src="GrowingCirclesDAO.js"></script>
 	<script src="SymbolsDAO.js"></script>
 	<script src="FullBarsDAO.js"></script>
 	<script src="FreeDrawDAO.js"></script>
-
+	
 	<script>
 		let dbRef = firebase.firestore();
 		let userRef = null;
-
+		
 		firebase.auth().onAuthStateChanged(user => {
 			console.log(user);
 			userRef = user;
 		});
 	</script>
-
+	
 	<script>
 		let uriPassedIn = new URLSearchParams(window.location.search);
 		let testName = uriPassedIn.get("TEST_NAME");
 		let testID = uriPassedIn.get("TEST_ID");
-
+		
 		let maxWaitTime = 2000;
 		let waitTime = 200;
 		// let confirmedID = false;
-
+		
 		let growingCirclesDAO = new GrowingCirclesDAO(dbRef, "detailedCanvasLeft", "detailedCanvasRight");
 		let symbolsDAO = new SymbolsDAO(dbRef, "detailedCanvasLeft", "detailedCanvasRight");
 		let fullBarsDAO = new FullBarsDAO(dbRef, "detailedCanvasLeft", "detailedCanvasRight");
 		let freeDrawDAO = new FreeDrawDAO(dbRef, "detailedCanvasLeft", "detailedCanvasRight");
-
+		
 		// NOTE: Takes about 400-600ms to recognize a user
 		(function attemptUserLookup() {
 			if (!userRef && maxWaitTime > 0) {
@@ -198,11 +198,11 @@
 			}
 		})();
 	</script>
-
+	
 	<script>
 		let docRef = null;
 		let jsonData = {};
-
+		
 		/**
 		 * The test name passed into queryingDatabase() needs to match the
 		 * 	collections name in Firestore (TestResults>UID>[TestName]).
@@ -212,40 +212,40 @@
 				console.log("Error with Test Name.")
 				return;
 			}
-
+			
 			console.log("Test Name: " + testName);
 			switch (testName) {
 				default:
 					console.log("[detailed_view] router(): Default Case");
 					break;
-
+				
 				case "GrowingCircles":
 					setTestNameTitle("Growing Circles");
 					queryDatabase("GrowingCircles");
 					break;
-
+				
 				case "Symbols":
 					setTestNameTitle("Symbols");
 					queryDatabase("Symbols");
 					break;
-
+				
 				case "FullBars":
 					setTestNameTitle("Full Bars");
 					queryDatabase("FullBars");
 					break;
-
+				
 				case "FreeDraw":
 					setTestNameTitle("Free Draw");
 					queryDatabase("FreeDraw");
 					break;
-
+				
 				case "Fractal":
 					setTestNameTitle("Fractal");
 					queryDatabase("Fractal");
 					break;
 			}
 		}
-
+		
 		function queryDatabase(testName) {
 			dbRef.collection("TestResults")
 				.doc(userRef.uid)
@@ -255,7 +255,7 @@
 				.then(function (doc) {
 					if (doc.exists) {
 						setDateSubtitle(doc.data().TimeStampMS);
-
+						
 						if (testName === "GrowingCircles") {
 							growingCirclesDAO.drawLeftToCanvas(doc);
 							growingCirclesDAO.drawRightToCanvas(doc);
@@ -272,7 +272,7 @@
 							// Free draw has only single canvas (no left/right eye)
 							document.getElementById("detailedCanvasRight").style.display = "none";
 							document.getElementById("canvasCaptions").style.display = "none";
-							freeDrawDAO.drawToCanvas(doc);
+							freeDrawDAO.drawToCanvas(doc, "detailedCanvasLeft");
 						}
 						else if (testName === "Fractal") {
 							console.log("[FRACTAL DAO NEEDED]");
@@ -283,7 +283,7 @@
 					console.log("Error getting document:", error);
 				});
 		}
-
+		
 		// NOTE: The single dash and space characters are here so that
 		//			if this function fails to return a test name to
 		//			the header, the header then won't look incomplete.
@@ -291,10 +291,10 @@
 		function setTestNameTitle(testName) {
 			let title = document.getElementById('testTitle');
 			let postfix = " - " + testName;
-
+			
 			title.innerText = title.innerText + postfix;
 		}
-
+		
 		function setDateSubtitle(milliseconds) {
 			let subtitleElement = document.getElementById("dateSubtitle");
 			let date = new Date(milliseconds);
@@ -304,11 +304,11 @@
 			let hoursString = +date.getUTCHours() - timezoneOffset;
 			let minutesString = date.getUTCMinutes();
 			let postfix = hoursString > 11 ? "PM" : "AM";
-
+			
 			if (hoursString === 0) {
 				hoursString = 12;
 			}
-
+			
 			minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
 			hoursString = hoursString % 12;
 			
@@ -317,10 +317,10 @@
 				hoursString + ":" + minutesString + postfix;
 		}
 	</script>
-
+	
 	<script>
 		const signOut = document.querySelector('.sign-out');
-
+		
 		// sign out
 		signOut.addEventListener('click', () => {
 			firebase.auth().signOut()
@@ -328,7 +328,8 @@
 			var url = location.href.split("/").slice(-1) + "";
 			if (url.startsWith("instructions_page.html", 0)) {
 				window.location = '../index.html';
-			} else
+			}
+			else
 				window.location = '../index.html';
 		});
 	</script>
