@@ -2,7 +2,7 @@
 
 let dbRef = firebase.firestore();
 let userRef = null;
-let testDAO;
+let fullBarsDAO;
 
 firebase.auth().onAuthStateChanged(user => {
 	console.log(user);
@@ -19,10 +19,10 @@ firebase.auth().onAuthStateChanged(user => {
 // TODO: Better and more robust error handling
 async function pageRouter() {
 	defineDAOs();
-	await testDAO.loadAll();
+	await fullBarsDAO.loadAll();
 	
-	testDAO.populateHistoryTable("historyTable");
-	testDAO.populateAggregate("canvasLeft", "canvasRight");
+	fullBarsDAO.populateHistoryTable("historyTable");
+	fullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
 }
 
 // TODO: Better method with async
@@ -44,16 +44,14 @@ function checkUserStatus() {
 }
 
 function defineDAOs() {
-	testDAO = new TestDAO(dbRef, userRef.uid);
+	fullBarsDAO = new fullBarsDAO(dbRef, userRef.uid);
 }
 
 // Draws SINGLE most recent result of each test to the canvases
 function mostRecent() {
-	// setCanvasGradient();
 	// growingCirclesDAO.populateMostRecent();
 	// symbolsDAO.populateMostRecent();
-	// fullBarsDAO.populateMostRecent();
-	testDAO.populateMostRecent("canvasLeft", "canvasRight");
+	fullBarsDAO.populateMostRecent("canvasLeft", "canvasRight");
 }
 
 function monthSelect() {
@@ -64,7 +62,7 @@ function monthSelect() {
 		console.log("Unable to retrieve month from selector.")
 	}
 	
-	testDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
+	fullBarsDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
 }
 
 function numberOfMonths() {
@@ -75,30 +73,5 @@ function numberOfMonths() {
 		console.log("Unable to retrieve number of months value.")
 	}
 	
-	testDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
-}
-
-// TODO: DELETE!
-function setCanvasGradient() {
-	let canvasLeft = document.getElementById("canvasLeft");
-	let canvasRight = document.getElementById("canvasRight");
-	let ctxLeft = canvasLeft.getContext("2d");
-	let ctxRight = canvasRight.getContext("2d");
-	
-	let centerX = canvasLeft.width / 2;
-	let centerY = canvasLeft.height / 2;
-	let outerRadius = canvasLeft.height
-	// Create gradient
-	let grdLeft = ctxLeft.createRadialGradient(centerX, centerY, 50, centerX, centerY, outerRadius);
-	grdLeft.addColorStop(0, "#7e1111ff");
-	grdLeft.addColorStop(0, "#7e11117e");
-	// grdLeft.addColorStop(1, "#ffffff");
-	
-	let grdRight = ctxRight.createRadialGradient(centerX, centerY, 50, centerX, centerY, outerRadius);
-	grdRight.addColorStop(0, "#7e1111");
-	grdRight.addColorStop(1, "#ffffff");
-	
-	// Fill with gradient
-	ctxLeft.fillStyle = grdLeft;
-	ctxRight.fillStyle = grdLeft;
+	fullBarsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
 }

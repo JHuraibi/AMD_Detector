@@ -1,13 +1,11 @@
 class FullBarsDAO {
-	constructor(dbRef, leftCanvasID, rightCanvasID) {
+	constructor(dbRef, userID) {
 		this.dbRef = dbRef;
-		this.userRef = null;
-		
-		this.leftCanvas = document.getElementById(leftCanvasID);
-		this.rightCanvas = document.getElementById(rightCanvasID);
+		this.userID = userID;
+		this.docList = [];
 		
 		// !! TODO: This value to be dynamically set
-		this.hardCodedCanvasSize = 800;
+		this.canvasSize = 800;
 		
 		// These values are equal to 20, 45, and 95% opacity levels respectively
 		// Max alpha in hex is FF or 255 in decimal
@@ -20,203 +18,66 @@ class FullBarsDAO {
 		this.useAlpha = false;
 	}
 	
-	updateUserReference(userRef) {
-		this.userRef = userRef;
-	}
-	
-	populateAggregate() {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		this.useAlpha = true;
-		
-		this.dbRef
+	async loadAll() {
+		await this.dbRef
 			.collection("TestResults")
-			.doc(userRef.uid)
+			.doc(this.userID)
 			.collection("FullBars")
 			.orderBy("TimeStampMS", "desc")
-			.limit(3)
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					this.drawLeftToCanvas(doc);
-					this.drawRightToCanvas(doc);
+					let extractedDoc = this.extractor(doc.id, doc.data());
+					this.docList.push(extractedDoc);
 				});
-			})
+			});
+		
+		// this.manualAdd();
+	}
+	
+	// !! TESTING ONLY - Clones FireStore doc from existing
+	manualAdd() {
+		this.dbRef.collection("TestResults")
+			.doc(userRef.uid)
+			.collection("FullBars")
+			.add(this.docList[0])
 			.then(() => {
-				// Once DB query and drawing are complete, reset variables specific to populateAggregate()
-				this.useAlpha = false;
-				this.leftAlphaIndex = 0;
-				this.rightAlphaIndex = 0;
+				console.log("Manual document added.");
 			});
 	}
 	
-	populateMostRecent() {
-		if (!userRef) {
-			console.log("[FullBarsDAO: drawFullBars] - User is null");
-			return;
-		}
-		
-		this.dbRef
-			.collection("TestResults")
-			.doc(userRef.uid)
-			.collection("FullBars")
-			.orderBy("TimeStampMS", "desc")
-			.limit(1)
-			.get()
-			.then((querySnapshot) => {
-				querySnapshot.forEach((doc) => {
-					this.drawLeftToCanvas(doc);
-					this.drawRightToCanvas(doc);
-				});
-			});
-	}
-	
-	drawLeftToCanvas(doc) {
-		if (!doc) {
-			console.log("FireStore document provided was null.");
-			return;
-		}
-		
-		if (!this.leftCanvas) {
-			console.log("Left Canvas DOM not found.");
-			return;
-		}
-		
-		let xPositions = doc.data().LeftXLocations;
-		let yPositions = doc.data().LeftYLocations;
-		
-		let ctxLeft = this.leftCanvas.getContext('2d');
-		let ratio = this.leftCanvas.width / this.hardCodedCanvasSize;
-		let barL = ctxLeft.canvas.width;
-		let barW = 10;
-		let r = (barW / 2) / 1.5;		// !! MAXIMUM radius is half the bar's thickness
-		
-		if (this.useAlpha) {
-			let alpha = this.getNextLeftAlpha();
-			ctxLeft.fillStyle = "#f47171" + alpha;
-		}
-		
-		if (xPositions) {
-			// Left Eye - X
-			for (let i = 0; i < xPositions.length; i++) {
-				let x = xPositions[i] * ratio;
-				let y = 0;
-				let w = barW;
-				let h = barL;
-				
-				// Draw shape as rectangle with rounded corners
-				this.roundedRectangle(ctxLeft, x, y, w, h, r);
-			}
-		}
-		
-		if (yPositions) {
-			// Left Eye - Y
-			for (let i = 0; i < yPositions.length; i++) {
-				let x = 0;
-				let y = yPositions[i] * ratio;
-				let w = barL;
-				let h = barW;
-				
-				// Draw shape as rectangle with rounded corners
-				this.roundedRectangle(ctxLeft, x, y, w, h, r);
-			}
+	// NOTE: The JSON returned needs to match the FireStore document structure for FullBars
+	extractor(id, data) {
+		return {
+			id: id,
+			TestName: data.TestName,
+			TimeStampMS: data.TimeStampMS,
+			LeftXLocations: data.LeftXLocations,
+			LeftYLocations: data.LeftYLocations,
+			RightXLocations: data.RightXLocations,
+			RightYLocations: data.RightYLocations,
 		}
 	}
 	
-	drawRightToCanvas(doc) {
-		if (!doc) {
-			console.log("FireStore document provided null.");
-			return;
-		}
-		
-		if (!this.rightCanvas) {
-			console.log("Right Canvas DOM not found.");
-			return;
-		}
-		
-		let xPositions = doc.data().RightXLocations;
-		let yPositions = doc.data().RightYLocations;
-		
-		let ctxRight = this.rightCanvas.getContext('2d');
-		let ratio = this.rightCanvas.width / this.hardCodedCanvasSize;
-		let barL = ctxRight.canvas.width;
-		let barW = 10;
-		let r = (barW / 2) / 1.5;		// !! MAXIMUM radius is half the bar's thickness
-		
-		if (this.useAlpha) {
-			let alpha = this.getNextRightAlpha();
-			ctxRight.fillStyle = "#f47171" + alpha;
-		}
-		
-		if (xPositions) {
-			// Right Eye - X
-			for (let i = 0; i < xPositions.length; i++) {
-				let x = xPositions[i] * ratio;
-				let y = 0;
-				let w = barW;
-				let h = barL;
-				
-				// Draw shape as rectangle with rounded corners
-				this.roundedRectangle(ctxRight, x, y, w, h, r);
-			}
-		}
-		
-		if (yPositions) {
-			// Right Eye - Y
-			for (let i = 0; i < yPositions.length; i++) {
-				let x = 0;
-				let y = yPositions[i] * ratio;
-				let w = barL;
-				let h = barW;
-				
-				// Draw shape as rectangle with rounded corners
-				this.roundedRectangle(ctxRight, x, y, w, h, r);
-			}
-		}
-	}
-	
-	roundedRectangle(ctx, x, y, w, h, r) {
-		ctx.beginPath();
-		ctx.moveTo(x + r, y);
-		ctx.arcTo(x + w, y, x + w, y + h, r);
-		ctx.arcTo(x + w, y + h, x, y + h, r);
-		ctx.arcTo(x, y + h, x, y, r);
-		ctx.arcTo(x, y, x + w, y, r);
-		ctx.closePath();
-		
-		ctx.fill();
-	}
-	
-	// CHECK: How can I make this more modular for different tables?
 	populateHistoryTable(targetTableID) {
-		if (!userRef) {
-			console.log("[FullBarsDAO: populateFullBarsTable] - User is null");
+		if (!this.userID) {
+			console.log("User ID is null");
 			return;
 		}
 		
-		this.dbRef
-			.collection("TestResults")
-			.doc(userRef.uid)
-			.collection("FullBars")
-			.orderBy("TimeStampMS", "desc")
-			.limit(3)
-			.get()
-			.then((querySnapshot) => {
-				querySnapshot.forEach((doc) => {
-					let timeStamp = doc.data().TimeStampMS;
-					this.addRowToTableFullBars(doc.id, timeStamp, targetTableID);
-				});
-			});
+		for (let i = 0; i < this.docList.length; i++) {
+			let doc = this.docList[i];
+			let timeStamp = doc.TimeStampMS;
+			this.addRowToTableGC(doc.id, timeStamp, targetTableID);
+		}
 	}
-
+	
+	// TODO: Update with actual method for detailed view
 	// TODO: Refactor variable names below to be more readable
-	addRowToTableFullBars(docID, timeStamp, targetTableID) {
+	addRowToTableGC(docID, timeStamp, targetTableID) {
 		let testName = "Full Bars";
 		let time = this.formatDate(timeStamp);
 		let urlOfDetailedView = this.URIBuilder(docID);
-		let urlOfTest = "../tests/instructions_page.html?full_bars";
 		
 		// ID of which table to put the data into (HTML Attribute ID)
 		let tableBody = document.getElementById(targetTableID);
@@ -229,16 +90,15 @@ class FullBarsDAO {
 		let columnTime = document.createElement("td");
 		let columnID = document.createElement("td");
 		
-		// Children of columnID and columnURL are hyperlinks
+		// Will be a child of columnURL so we can add hyperlink
 		let linkForDetailedView = document.createElement("a");
 		
 		// Text to be put in the Columns
 		let textTestName = document.createTextNode(testName);
 		let textTime = document.createTextNode(time);
 		let textID = document.createTextNode("Details");
-		let textURL = document.createTextNode("Take This Test");
 		
-		// Set href attribute for links
+		// Set href attribute for link to test
 		linkForDetailedView.appendChild(textID);
 		linkForDetailedView.setAttribute("href", urlOfDetailedView);
 		
@@ -256,11 +116,196 @@ class FullBarsDAO {
 		tableBody.appendChild(row);
 	}
 	
+	populateAll(leftCanvasID, rightCanvasID) {
+		if (!userRef) {
+			console.log("User is null");
+			return;
+		}
+		
+		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
+		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
+		let alphaIndex = 0;
+		
+		this.docList.forEach((doc) => {
+			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
+			ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
+			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
+			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+			
+			alphaIndex++;
+			if (alphaIndex > 3) {
+				alphaIndex = 3;
+				console.log("Warning: Alpha Index Exceeded 3 Iterations.");
+			}
+		})
+	}
+	
+	// TODO: RENAME
+	populateAggregate(leftCanvasID, rightCanvasID) {
+		if (!userRef) {
+			console.log("User is null");
+			return;
+		}
+		
+		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
+		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
+		let alphaIndex = 0;
+		
+		let max = this.docList.length;
+		for (let i = 0; i < 3 && i < max; i++) {
+			let doc = this.docList[i];
+			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
+			ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
+			
+			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
+			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+			
+			alphaIndex++;
+			if (alphaIndex > 3) {
+				alphaIndex = 3;
+				console.log("Warning: Alpha Index Exceeded 3 Iterations.");
+			}
+		}
+	}
+	
+	populateMostRecent(leftCanvasID, rightCanvasID) {
+		if (!userRef) {
+			console.log("User is null");
+			return;
+		}
+		
+		if (!this.docList[0]) {
+			console.log("First document (most recent) empty.")
+			return;
+		}
+		
+		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
+		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
+		
+		ctxLeft.fillStyle = "#f47171";
+		ctxRight.fillStyle = "#f47171";
+		
+		let doc = this.docList[0];
+		this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
+		this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+	}
+	
+	populateByMonthSelector(month, leftCanvasID, rightCanvasID) {
+		if (!userRef) {
+			console.log("User is null");
+			return;
+		}
+		
+		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
+		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
+		
+		ctxLeft.fillStyle = "#f47171";
+		ctxRight.fillStyle = "#f47171";
+		
+		let dateStringStart = month + " 1 2020";
+		let dateStringEnd;
+		
+		if (month === 12) {
+			dateStringEnd = "1 1 2020";
+		}
+		else {
+			dateStringEnd = (+month + 1) + " 1 2020";
+		}
+		
+		let msStart = (new Date(dateStringStart)).getTime();
+		let msEnd = (new Date(dateStringEnd)).getTime();
+		// console.log("START: " + msStart);
+		// console.log("END: " + msEnd);
+		
+		let startI = this.setStartIndex(msStart);
+		let endI = this.setEndIndex(msEnd);
+		
+		// TODO: Check for off-by-one
+		for (let i = startI; i < endI; i++) {
+			let doc = this.docList[i];
+			
+			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
+			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+		}
+	}
+	
+	populateByNumberMonths(monthsBack, leftCanvasID, rightCanvasID) {
+		if (!userRef) {
+			console.log("User is null");
+			return;
+		}
+		
+		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
+		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
+		
+		ctxLeft.fillStyle = "#f47171";
+		ctxRight.fillStyle = "#f47171";
+		
+		let current = (new Date).getMonth();
+		let ms = this.monthMSHelper(current, monthsBack);
+		let index = this.setStartIndex(ms);
+		
+		for (let i = 0; i < index; i++) {
+			let doc = this.docList[i];
+			
+			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
+			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
+		}
+	}
+	
+	drawToCanvas(ctx, xPositions, yPositions) {
+		if (!ctx) {
+			console.log("Invalid Canvas Context.");
+			return;
+		}
+		
+		let ratio = ctx.canvas.width / this.canvasSize;
+		let barL = ctx.canvas.width;
+		let barW = 10;
+		let r = (barW / 2) / 1.5;		// !! MAXIMUM radius is half the bar's thickness
+		
+		if (xPositions) {
+			xPositions.forEach((xPos) => {
+				let x = xPos * ratio;
+				let y = 0;
+				let w = barW;
+				let h = barL;
+				
+				// Draw shape as rectangle with rounded corners
+				this.roundedRectangle(ctx, x, y, w, h, r);
+			});
+		}
+		
+		if (yPositions) {
+			yPositions.forEach((yPos) => {
+				let x = 0;
+				let y = yPos * ratio;
+				let w = barL;
+				let h = barW;
+				
+				// Draw shape as rectangle with rounded corners
+				this.roundedRectangle(ctx, x, y, w, h, r);
+			});
+		}
+	}
+	
+	roundedRectangle(ctx, x, y, w, h, r) {
+		ctx.beginPath();
+		ctx.moveTo(x + r, y);
+		ctx.arcTo(x + w, y, x + w, y + h, r);
+		ctx.arcTo(x + w, y + h, x, y + h, r);
+		ctx.arcTo(x, y + h, x, y, r);
+		ctx.arcTo(x, y, x + w, y, r);
+		ctx.closePath();
+		
+		ctx.fill();
+	}
+	
 	// !! NOTE: URI's are relative to dashboard.html. NOT this DAO file.
+	//		e.g.
+	//		[CORRECT] 	urlOfDetailedView == ./dashboard/detailed_view.html
+	//		[INCORRECT] urlOfDetailedView == ./detailed_view.html
 	// !! NOTE: The TEST_NAME key's value has to match Firestore's document exactly
-	//			e.g.
-	//			[CORRECT] 	urlOfDetailedView == ./dashboard/detailed_view.html
-	//			[INCORRECT] urlOfDetailedView == ./detailed_view.html
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
 		uri.append("TEST_NAME", "FullBars");
@@ -268,19 +313,42 @@ class FullBarsDAO {
 		return "./dashboard/detailed_view.html?" + uri.toString();
 	}
 	
-	// canvasDOMProbe() {
-	// 	let leftCanvas = document.getElementById(this.leftCanvasID);
-	// 	let rightCanvas = document.getElementById(this.rightCanvasID);
-	// 	return document.getElementById(this.leftCanvasID)
-	// 		&& document.getElementById(this.rightCanvasID);
-	// }
+	setStartIndex(ms) {
+		let length = this.docList.length;
+		let i = 0;
+		
+		while (this.docList[i].TimeStampMS > ms && i < length - 1) {
+			i++;
+		}
+		
+		return i;
+	}
+	
+	// !! CRITICAL: MAKE SURE CORRECT
+	setEndIndex(ms) {
+		let i = this.docList.length - 1;
+		
+		while (this.docList[i].TimeStampMS < ms && i > 0) {
+			i--;
+		}
+		
+		return i;
+	}
+	
+	checkBeforeDate() {
+	
+	}
+	
+	alphaCreator(num) {
+		let n = 255 / num;
+	}
 	
 	formatDate(milliseconds) {
 		let date = new Date(milliseconds);
-		let timezoneOffset = 5;	// UTC -5:00
+		let timezoneOffset = -5;	// UTC -5:00
 		
 		let dateString = date.toDateString();
-		let hoursString = +date.getUTCHours() - timezoneOffset;
+		let hoursString = +date.getUTCHours() + timezoneOffset;
 		let minutesString = date.getUTCMinutes();
 		let postfix = hoursString > 11 ? "PM" : "AM";
 		
@@ -296,32 +364,34 @@ class FullBarsDAO {
 		return dateString;
 	}
 	
-	// TODO: Can replace this.useAlpha?
-	// TODO: Refactor name
-	getNextLeftAlpha() {
-		let alpha = this.alphaLevels[this.leftAlphaIndex];
-		this.leftAlphaIndex++;
-		
-		if (this.leftAlphaIndex > 3) {
-			this.leftAlphaIndex = 0;
-			console.log("Warning: Left Alpha Index Exceeded 3 Iterations.");
+	// TODO: docstring
+	// TODO: Better year handling (abs, then mod 12 for number of years)
+	monthMSHelper(current, number) {
+		// !! TODO: ERROR HANDLING
+		let year = 2020;
+		if (current - number < 0) {
+			year = year - 1;
 		}
 		
-		return alpha;
+		let month = (current + (11 - number)) % 12;
+		
+		return Date.UTC(year, month, 1);
 	}
 	
-	// TODO: Can replace this.useAlpha?
-	// TODO: Refactor name
-	getNextRightAlpha() {
-		let alpha = this.alphaLevels[this.rightAlphaIndex];
-		this.rightAlphaIndex++;
-		
-		if (this.rightAlphaIndex > 3) {
-			this.rightAlphaIndex = 0;
-			console.log("Warning: Right Alpha Index Exceeded 3 Iterations.");
+	monthName(number) {
+		if (number < 0 || number > 12) {
+			console.log("Month number invalid. Number: " + number);
+			return "January";
 		}
 		
-		return alpha;
+		let months = [
+			"January", "February", "March",
+			"April", "May", "June",
+			"July", "August", "September",
+			"October", "November", "December"
+		];
+		
+		return months[number];
 	}
 	
-}// class [ FullBarsDAO ]
+}// class [ FirebaseDAO ]
