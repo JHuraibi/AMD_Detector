@@ -68,7 +68,7 @@ function monthSelect() {
 }
 
 function numberOfMonths() {
-	let monthInput = document.getElementById("customMonthsInput");
+	let monthInput = document.getElementById("numberMonthsInput");
 	
 	// TODO: Needs a try/catch
 	if (!monthInput) {
