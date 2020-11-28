@@ -104,6 +104,30 @@
     <script src="growingCircle.js"></script>
 
     <script src="../speed.js"></script>
+
+    <!-- Check if user is signed in -->
+	<script>
+		var db = firebase.firestore();
+		(async function checkUser() {
+			await firebase.auth().onAuthStateChanged(user => {
+				if (user) {
+					id = user.uid;
+					db.collection("users").doc(id)
+						.get()
+						.then(doc => {
+							let type = doc.data().type;
+							if (type != 'user') {
+								console.log("Physician Account. Access Denied.");
+								window.location = '../../404.html';
+							}
+						});
+				} else {
+					console.log("Not logged in");
+					window.location = '../../index.html';
+				}
+			});
+		})();
+	</script>
 </body>
 
 </html>

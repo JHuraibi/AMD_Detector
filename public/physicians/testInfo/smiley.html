@@ -84,25 +84,26 @@
 		<div style="text-align: center;">
 			<div class="rows">
 				<div class="columns">
-					<img src="../../images/thumbnail_smiley.png" alt="Smiley Test"
-						style="height: 200px; width: 200px;">
+					<img src="../../images/thumbnail_smiley.png" alt="Smiley Test" style="height: 200px; width: 200px;">
 				</div>
 				<div class="columns" style="padding: 35px;">
 					<p>
 						This is the Smiley Test. The aim of of it is to detect if the user has
-						any blind spots in their vision, as well as to detect any vision abnormalities. While the user is focusing
+						any blind spots in their vision, as well as to detect any vision abnormalities. While the user
+						is focusing
 						on the black
-						dot in the center of the grid, different facess will start to appear on the canvas. The user must
-						click "S" if  a "smiley face" appears and "F" if a "frowny face" appears.
+						dot in the center of the grid, different facess will start to appear on the canvas. The user
+						must
+						click "S" if a "smiley face" appears and "F" if a "frowny face" appears.
 						If the user does not click the correct key response the location of that error is flagged on the
-						Canvas. 
+						Canvas.
 					</p>
 				</div>
 			</div>
 			<div class="rows">
 				<div class="columns">
 					<img src="images/growingCircles/growing_circles_blank.png" alt="Growing Circles Test Blank"
-					style="height: 200px; width: 200px;">
+						style="height: 200px; width: 200px;">
 				</div>
 				<div class="columns">
 					<p style="padding: 45px;">
@@ -114,30 +115,29 @@
 			</div>
 			<div class="rows">
 				<div class="columns">
-					<img src="../../images/FacesInfo/Smiley.png" alt="Smiley Test"
-						style="height: 180px; width: 180px;">
-					<img src="../../images/FacesInfo/Frowny.png" alt="Smiley Test"
-						style="height: 180px; width: 180px;">
+					<img src="../../images/FacesInfo/Smiley.png" alt="Smiley Test" style="height: 180px; width: 180px;">
+					<img src="../../images/FacesInfo/Frowny.png" alt="Smiley Test" style="height: 180px; width: 180px;">
 
 				</div>
 				<div class="columns">
 					<p style="padding: 20px;">
-						During the test, different faces will randomly be populated around the grid, one by one. 
-						The locations of all the symbols are randomized. The user should click the corresponding button to each face.
+						During the test, different faces will randomly be populated around the grid, one by one.
+						The locations of all the symbols are randomized. The user should click the corresponding button
+						to each face.
 					</p>
 				</div>
 			</div>
 
-			
+
 			<div class="rows">
 				<div class="columns">
 					<img src="../../images/FacesInfo/smileyresult.png" alt="Symbols Test Results"
-					style="height: 200px; width: 200px;">
+						style="height: 200px; width: 200px;">
 				</div>
 				<div class="columns">
 					<p>
 						The results of the Smiley Test is one canvas that displays all the symbols the user
-						missed during the test. 
+						missed during the test.
 					</p>
 				</div>
 			</div>
@@ -173,6 +173,29 @@
 		});
 	</script>
 
+	<!-- Check if user is signed in -->
+	<script>
+		var db = firebase.firestore();
+		(async function checkUser() {
+			await firebase.auth().onAuthStateChanged(user => {
+				if (user) {
+					id = user.uid;
+					db.collection("users").doc(id)
+						.get()
+						.then(doc => {
+							let type = doc.data().type;
+							if (type != 'physician') {
+								console.log("User Account. Access Denied.");
+								window.location = '../../404.html';
+							}
+						});
+				} else {
+					console.log("Not logged in");
+					window.location = '../../index.html';
+				}
+			});
+		})();
+	</script>
 </body>
 
 </html>

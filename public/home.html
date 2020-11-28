@@ -1,376 +1,401 @@
 <!doctype html>
 <html lang="en">
-	
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="description" content="">
-		<link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32"/>
-		<link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16"/>
-		
-		<title>Home · Vision Monitor</title>
-		
-		<!-- Bootstrap core CSS -->
-		<link href="./scss/custom.css" rel="stylesheet">
-		<!-- Custom styles for this template -->
-		<link href="./css/home.css" rel="stylesheet">
-		
-		<style>
-			.bd-placeholder-img {
-				font-size: 1.125rem;
-				text-anchor: middle;
-				-webkit-user-select: none;
-				-moz-user-select: none;
-				-ms-user-select: none;
-				user-select: none;
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
+	<link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
+
+	<title>Home · Vision Monitor</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="./scss/custom.css" rel="stylesheet">
+	<!-- Custom styles for this template -->
+	<link href="./css/home.css" rel="stylesheet">
+
+	<style>
+		.bd-placeholder-img {
+			font-size: 1.125rem;
+			text-anchor: middle;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		@media (min-width: 768px) {
+			.bd-placeholder-img-lg {
+				font-size: 3.5rem;
 			}
-			
-			@media (min-width: 768px) {
-				.bd-placeholder-img-lg {
-					font-size: 3.5rem;
-				}
+		}
+
+		@media (max-width: 768px) {
+			.lead {
+				font-size: 1.25rem;
+				font-weight: 350;
 			}
-			
-			@media (max-width: 768px) {
-				.lead {
-					font-size: 1.25rem;
-					font-weight: 350;
-				}
-			}
-			
-			.logo_background {
-				background-image: url(images/logo_small_offset_left_cropped.png);
-				background-position: center;
-				background-repeat: no-repeat;
-				background-size: cover;
-				position: relative;
-			}
-			
-			/*@media (min-width: 768px) {*/
-			/*	.jumbotron_image {*/
-			/*		padding-top: 6rem;*/
-			/*		padding-bottom: 6rem;*/
-			/*	}*/
-			/*}*/
-		</style>
-	</head>
-	
-	<body>
-		<header>
-			<div class="collapse bg-dark" id="navbarHeader">
-				<div class="container">
-					<div class="row">
-						<div class="col-sm-8 col-md-7 py-4">
-							<h4 class="text-white">About</h4>
-							<p class="text-muted">Add some information about the album below, the author, or any other
-								background context. Make it a few sentences long so folks can
-								pick up some
-								informative tidbits. Then, link them off to some social networking sites or contact
-								information.</p>
-						</div>
-						<div class="col-sm-4 offset-md-1 py-4">
-							<h4 class="text-white">Contact</h4>
-							<ul class="list-unstyled">
-								<li><a href="#" class="text-white">Follow on Twitter</a></li>
-								<li><a href="#" class="text-white">Like on Facebook</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="navbar navbar-dark bg-dark shadow-sm">
-				<div class="container d-flex justify-content-between">
-					<a href="#" class="navbar-brand d-flex align-items-center">
-						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
-							 stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2"
-							 viewBox="0 0 100 100" focusable="false">
-							<path d="M 10,30 A 20,20 0,0,1 50,30 A 20,20 0,0,1 90,30 Q 90,60 50,90 Q 10,60 10,30 z"/>
-							<circle cx="12" cy="13" r="4"/>
-						</svg>
-						<!--        <strong>Your Results</strong>-->
-					</a>
-					
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
-							aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-						<a class="sign-out">Sign Out</a>
-					</button>
-				</div>
-			</div>
-		</header>
-		
-		<main role="main">
-			
-			<section class="jumbotron logo_background text-center">
-				<div class="container">
-					<h1>Age-Related Macular Degeneration</h1>
-					<p class="lead text-muted">
-						<span style="-webkit-text-stroke: 0.2px white">
-						Detect, Test, and Track AMD-related Symptoms
-						</span>
-					</p>
-					<p>
-						<button class="btn btn-primary my-2" id="mainTestButton"
-								onClick="location.href='./tests/instructions_page.html?amsler_grid'">
-							Take Your First Test
-						</button>
-						<button class="btn btn-secondary my-2" onClick="location.href='dashboard.html'">
-							See Your Past Results
-						</button>
-					</p>
-				</div>
-			</section>
-			
-			<div class="album py-5 bg-light">
-				<div class="container">
-					
-					<!--------------------------------------------------| ROW 1 |-------------------------------------------------->
-					<div class="row">
-						
-						<!-- AMSLER GRID -->
-						<div class="col-md-4">
-							<div class="card mb-4 shadow-sm">
-								<img class="bd-placeholder-img card-img-top" src="images/thumbnail_amsler_grid.png"
-									 alt="Standard Amsler Grid">
-								<div class="card-body">
-									<p class="card-text"><span style="font-weight: bold">Amsler Grid</span></p>
-									<p class="card-text"><br>The standard Amsler Grid test.</p>
-									<div class="d-flex justify-content-between align-items-center">
-										<div class="btn-group">
-											
-											<button type="button" class="btn btn-sm btn-outline-secondary"
-													onClick="location.href='./tests/instructions_page.html?amsler_grid'">
-												Start Test
-											</button>
-										</div>
-										<small class="text-muted">Est Duration: 1 mins</small>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- END AMSLER GRID -->
-						
-						<!-- GROWING CIRCLES -->
-						<div class="col-md-4">
-							<div class="card mb-4 shadow-sm">
-								<img class="bd-placeholder-img card-img-top" src="images/thumbnail_growing_circles.png"
-									 alt="Growing Circles">
-								<div class="card-body">
-									<p class="card-text"><span style="font-weight: bold">Growing Circles</span></p>
-									<p class="card-text">Click your mouse any time a new red circle pops
-										up on the screen.</p>
-									<div class="d-flex justify-content-between align-items-center">
-										<div class="btn-group">
-											<button type="button" class="btn btn-sm btn-outline-secondary"
-													onClick="location.href='./tests/instructions_page.html?growing_circles'">Start
-												Test
-											</button>
-										</div>
-										<small class="text-muted">Est Duration: 4 mins</small>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- END GROWING CIRCLES -->
-						
-						<!-- SYMBOLS -->
-						<div class="col-md-4">
-							<div class="card mb-4 shadow-sm">
-								<img class="bd-placeholder-img card-img-top" src="images/thumbnail_symbols.png"
-									 alt="Symbols">
-								<div class="card-body">
-									<p class="card-text"><span style="font-weight: bold">Symbols</span></p>
-									<p class="card-text"> Click the correct button any time a symbol appears.
-										<br>
-									</p>
-									<div class="d-flex justify-content-between align-items-center">
-										<div class="btn-group">
-											<button type="button" class="btn btn-sm btn-outline-secondary"
-													onClick="location.href='./tests/instructions_page.html?symbols'">
-												Start Test
-											</button>
-										</div>
-										<small class="text-muted">Est Duration: 3 mins</small>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- END SYMBOLS -->
-					
-					<!------------------------------------------------| END ROW 1 |------------------------------------------------>
-					
-					
-					<!--------------------------------------------------| ROW 2 |-------------------------------------------------->
-					<div class="row">
-						
-						<!-- FULL BARS -->
-						<div class="col-md-4">
-							<div class="card mb-4 shadow-sm">
-								<img class="bd-placeholder-img card-img-top" src="images/thumbnail_full_bars.png"
-									 alt="Full Bars">
-								<div class="card-body">
-									<p class="card-text"><span style="font-weight: bold">Full Bars</span></p>
-									<p class="card-text">Click your mouse any time you see a bar bend.</p>
-									<div class="d-flex justify-content-between align-items-center">
-										<div class="btn-group">
-											<button type="button" class="btn btn-sm btn-outline-secondary"
-													onClick="location.href='./tests/instructions_page.html?full_bars'">
-												Start Test
-											</button>
-										</div>
-										<small class="text-muted">Est Duration: 5 mins</small>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- END FULL BARS -->
-						
-						<!-- FREE DRAW -->
-						<div class="col-md-4">
-							<div class="card mb-4 shadow-sm">
-								<img class="bd-placeholder-img card-img-top" src="images/thumbnail_free_draw.png"
-									 alt="Free Draw">
-								<div class="card-body">
-									<p class="card-text"><span style="font-weight: bold">Free Draw</span></p>
-									<p class="card-text">Try recreating areas of issue in your visual field
-										by drawing.</p>
-									<div class="d-flex justify-content-between align-items-center">
-										<div class="btn-group">
-											<button type="button" class="btn btn-sm btn-outline-secondary"
-													onClick="location.href='./tests/instructions_page.html?free_draw'">
-												Start Test
-											</button>
-										</div>
-										<small class="text-muted"><!-- No Time Duration Estimate --></small>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- END FREE DRAW -->
-						
-						<!-- SMILEY -->
-						<div class="col-md-4">
-							<div class="card mb-4 shadow-sm">
-								<img class="bd-placeholder-img card-img-top" src="images/thumbnail_smiley.png"
-									 alt="Fractal">
-								<div class="card-body">
-									<p class="card-text"><span style="font-weight: bold">Smiley</span></p>
-									<p class="card-text">Click the correct button any time a face appears.</p>
-									<div class="d-flex justify-content-between align-items-center">
-										<div class="btn-group">
-											<button type="button" class="btn btn-sm btn-outline-secondary"
-													onClick="location.href='./tests/instructions_page.html?smiley'">
-												Start Test
-											</button>
-										</div>
-										<small class="text-muted">Est Duration: 3 mins</small>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- END SMILEY -->
-					
-					</div>
-					<!------------------------------------------------| END ROW 2 |------------------------------------------------>
-					
-					<!--------------------------------------------------| ROW 3 |-------------------------------------------------->
-					<div class="row">
-						
-						<!-- FRACTAL -->
-						<div class="col-md-4">
-							<div class="card mb-4 shadow-sm">
-								<img class="bd-placeholder-img card-img-top" src="images/thumbnail_fractal.png"
-									 alt="Fractal">
-								<div class="card-body">
-									<p class="card-text"><span style="font-weight: bold">Fractal</span></p>
-									<p class="card-text">Press the corresponding button to indicate an area of issue.</p>
-									<div class="d-flex justify-content-between align-items-center">
-										<div class="btn-group">
-											<button type="button" class="btn btn-sm btn-outline-secondary"
-													onClick="location.href='./tests/instructions_page.html?fractal'">
-												Start Test
-											</button>
-										</div>
-										<small class="text-muted">Est Duration: 3 mins</small>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- END FRACTAL -->
-					
-					</div>
-					<!------------------------------------------------| END ROW 3 |------------------------------------------------>
-				
-				
-				</div>
-			</div>
-		
-		</main>
-		
-		<footer class="text-muted">
+		}
+
+		.logo_background {
+			background-image: url(images/logo_small_offset_left_cropped.png);
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			position: relative;
+		}
+
+		/*@media (min-width: 768px) {*/
+		/*	.jumbotron_image {*/
+		/*		padding-top: 6rem;*/
+		/*		padding-bottom: 6rem;*/
+		/*	}*/
+		/*}*/
+	</style>
+</head>
+
+<body>
+	<header>
+		<div class="collapse bg-dark" id="navbarHeader">
 			<div class="container">
-				<p class="float-right">
-					<a href="#">Back to top</a>
+				<div class="row">
+					<div class="col-sm-8 col-md-7 py-4">
+						<h4 class="text-white">About</h4>
+						<p class="text-muted">Add some information about the album below, the author, or any other
+							background context. Make it a few sentences long so folks can
+							pick up some
+							informative tidbits. Then, link them off to some social networking sites or contact
+							information.</p>
+					</div>
+					<div class="col-sm-4 offset-md-1 py-4">
+						<h4 class="text-white">Contact</h4>
+						<ul class="list-unstyled">
+							<li><a href="#" class="text-white">Follow on Twitter</a></li>
+							<li><a href="#" class="text-white">Like on Facebook</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="navbar navbar-dark bg-dark shadow-sm">
+			<div class="container d-flex justify-content-between">
+				<a href="#" class="navbar-brand d-flex align-items-center">
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+						stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2"
+						viewBox="0 0 100 100" focusable="false">
+						<path d="M 10,30 A 20,20 0,0,1 50,30 A 20,20 0,0,1 90,30 Q 90,60 50,90 Q 10,60 10,30 z" />
+						<circle cx="12" cy="13" r="4" />
+					</svg>
+					<!--        <strong>Your Results</strong>-->
+				</a>
+
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
+					aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+					<a class="sign-out">Sign Out</a>
+				</button>
+			</div>
+		</div>
+	</header>
+
+	<main role="main">
+
+		<section class="jumbotron logo_background text-center">
+			<div class="container">
+				<h1>Age-Related Macular Degeneration</h1>
+				<p class="lead text-muted">
+					<span style="-webkit-text-stroke: 0.2px white">
+						Detect, Test, and Track AMD-related Symptoms
+					</span>
+				</p>
+				<p>
+					<button class="btn btn-primary my-2" id="mainTestButton"
+						onClick="location.href='./tests/instructions_page.html?amsler_grid'">
+						Take Your First Test
+					</button>
+					<button class="btn btn-secondary my-2" onClick="location.href='dashboard.html'">
+						See Your Past Results
+					</button>
 				</p>
 			</div>
-		</footer>
-		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-				integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-				crossorigin="anonymous"></script>
-		<script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
-		<script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
-		
-		<!-- Firebase Items-->
-		<script src="/__/firebase/7.21.0/firebase-app.js"></script>
-		
-		<script src="/__/firebase/7.7.0/firebase-auth.js"></script>
-		<script src="/__/firebase/7.7.0/firebase-firestore.js"></script>
-		<script src="/__/firebase/7.7.0/firebase-functions.js"></script>
-		
-		<!-- Initialize Firebase -->
-		<script src="/__/firebase/init.js"></script>
-		
-		<script src="./home.js"></script>
-		
-		<script>
-			let dbRef = firebase.firestore();
-			let userRef = null;
-			
-			firebase.auth().onAuthStateChanged(user => {
-				console.log(user);
-				userRef = user;
-			});
-		</script>
-		
-		<script>
-			let maxWaitTime = 2000;
-			let waitTime = 200;
-			
-			(function attemptUserLookup() {
-				if (!userRef && maxWaitTime > 0) {
-					maxWaitTime -= waitTime;
-					setTimeout(attemptUserLookup, waitTime);
-				}
-				else if (maxWaitTime < 0) {
-					console.log("User Lookup Timed Out");
-				}
-				else if (userRef) {
-					checkIfNoTestsTaken();
-				}
-				// checkIfNoTestsTaken();
-			})();
-			
-			function checkIfNoTestsTaken() {
-				dbRef.collection("TestResults")
-					.doc(userRef.uid)
-					.get()
-					.then((doc) => {
-						if (!doc.data().firstTest) {
-							document.getElementById("mainTestButton").innerText = "Take Daily Amsler Grid";
-						}
-					});
+		</section>
+
+		<div class="album py-5 bg-light">
+			<div class="container">
+
+				<!--------------------------------------------------| ROW 1 |-------------------------------------------------->
+				<div class="row">
+
+					<!-- AMSLER GRID -->
+					<div class="col-md-4">
+						<div class="card mb-4 shadow-sm">
+							<img class="bd-placeholder-img card-img-top" src="images/thumbnail_amsler_grid.png"
+								alt="Standard Amsler Grid">
+							<div class="card-body">
+								<p class="card-text"><span style="font-weight: bold">Amsler Grid</span></p>
+								<p class="card-text"><br>The standard Amsler Grid test.</p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+
+										<button type="button" class="btn btn-sm btn-outline-secondary"
+											onClick="location.href='./tests/instructions_page.html?amsler_grid'">
+											Start Test
+										</button>
+									</div>
+									<small class="text-muted">Est Duration: 1 mins</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- END AMSLER GRID -->
+
+					<!-- GROWING CIRCLES -->
+					<div class="col-md-4">
+						<div class="card mb-4 shadow-sm">
+							<img class="bd-placeholder-img card-img-top" src="images/thumbnail_growing_circles.png"
+								alt="Growing Circles">
+							<div class="card-body">
+								<p class="card-text"><span style="font-weight: bold">Growing Circles</span></p>
+								<p class="card-text">Click your mouse any time a new red circle pops
+									up on the screen.</p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+										<button type="button" class="btn btn-sm btn-outline-secondary"
+											onClick="location.href='./tests/instructions_page.html?growing_circles'">Start
+											Test
+										</button>
+									</div>
+									<small class="text-muted">Est Duration: 4 mins</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- END GROWING CIRCLES -->
+
+					<!-- SYMBOLS -->
+					<div class="col-md-4">
+						<div class="card mb-4 shadow-sm">
+							<img class="bd-placeholder-img card-img-top" src="images/thumbnail_symbols.png"
+								alt="Symbols">
+							<div class="card-body">
+								<p class="card-text"><span style="font-weight: bold">Symbols</span></p>
+								<p class="card-text"> Click the correct button any time a symbol appears.
+									<br>
+								</p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+										<button type="button" class="btn btn-sm btn-outline-secondary"
+											onClick="location.href='./tests/instructions_page.html?symbols'">
+											Start Test
+										</button>
+									</div>
+									<small class="text-muted">Est Duration: 3 mins</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- END SYMBOLS -->
+
+				<!------------------------------------------------| END ROW 1 |------------------------------------------------>
+
+
+				<!--------------------------------------------------| ROW 2 |-------------------------------------------------->
+				<div class="row">
+
+					<!-- FULL BARS -->
+					<div class="col-md-4">
+						<div class="card mb-4 shadow-sm">
+							<img class="bd-placeholder-img card-img-top" src="images/thumbnail_full_bars.png"
+								alt="Full Bars">
+							<div class="card-body">
+								<p class="card-text"><span style="font-weight: bold">Full Bars</span></p>
+								<p class="card-text">Click your mouse any time you see a bar bend.</p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+										<button type="button" class="btn btn-sm btn-outline-secondary"
+											onClick="location.href='./tests/instructions_page.html?full_bars'">
+											Start Test
+										</button>
+									</div>
+									<small class="text-muted">Est Duration: 5 mins</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- END FULL BARS -->
+
+					<!-- FREE DRAW -->
+					<div class="col-md-4">
+						<div class="card mb-4 shadow-sm">
+							<img class="bd-placeholder-img card-img-top" src="images/thumbnail_free_draw.png"
+								alt="Free Draw">
+							<div class="card-body">
+								<p class="card-text"><span style="font-weight: bold">Free Draw</span></p>
+								<p class="card-text">Try recreating areas of issue in your visual field
+									by drawing.</p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+										<button type="button" class="btn btn-sm btn-outline-secondary"
+											onClick="location.href='./tests/instructions_page.html?free_draw'">
+											Start Test
+										</button>
+									</div>
+									<small class="text-muted">
+										<!-- No Time Duration Estimate --></small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- END FREE DRAW -->
+
+					<!-- SMILEY -->
+					<div class="col-md-4">
+						<div class="card mb-4 shadow-sm">
+							<img class="bd-placeholder-img card-img-top" src="images/thumbnail_smiley.png"
+								alt="Fractal">
+							<div class="card-body">
+								<p class="card-text"><span style="font-weight: bold">Smiley</span></p>
+								<p class="card-text">Click the correct button any time a face appears.</p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+										<button type="button" class="btn btn-sm btn-outline-secondary"
+											onClick="location.href='./tests/instructions_page.html?smiley'">
+											Start Test
+										</button>
+									</div>
+									<small class="text-muted">Est Duration: 3 mins</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- END SMILEY -->
+
+				</div>
+				<!------------------------------------------------| END ROW 2 |------------------------------------------------>
+
+				<!--------------------------------------------------| ROW 3 |-------------------------------------------------->
+				<div class="row">
+
+					<!-- FRACTAL -->
+					<div class="col-md-4">
+						<div class="card mb-4 shadow-sm">
+							<img class="bd-placeholder-img card-img-top" src="images/thumbnail_fractal.png"
+								alt="Fractal">
+							<div class="card-body">
+								<p class="card-text"><span style="font-weight: bold">Fractal</span></p>
+								<p class="card-text">Press the corresponding button to indicate an area of issue.</p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+										<button type="button" class="btn btn-sm btn-outline-secondary"
+											onClick="location.href='./tests/instructions_page.html?fractal'">
+											Start Test
+										</button>
+									</div>
+									<small class="text-muted">Est Duration: 3 mins</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- END FRACTAL -->
+
+				</div>
+				<!------------------------------------------------| END ROW 3 |------------------------------------------------>
+
+
+			</div>
+		</div>
+
+	</main>
+
+	<footer class="text-muted">
+		<div class="container">
+			<p class="float-right">
+				<a href="#">Back to top</a>
+			</p>
+		</div>
+	</footer>
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+		crossorigin="anonymous"></script>
+	<script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
+	<script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Firebase Items-->
+	<script src="/__/firebase/7.21.0/firebase-app.js"></script>
+
+	<script src="/__/firebase/7.7.0/firebase-auth.js"></script>
+	<script src="/__/firebase/7.7.0/firebase-firestore.js"></script>
+	<script src="/__/firebase/7.7.0/firebase-functions.js"></script>
+
+	<!-- Initialize Firebase -->
+	<script src="/__/firebase/init.js"></script>
+
+	<script src="./home.js"></script>
+
+	<script>
+		let dbRef = firebase.firestore();
+		let userRef = null;
+
+		firebase.auth().onAuthStateChanged(user => {
+			console.log(user);
+			userRef = user;
+		});
+	</script>
+
+	<script>
+		let maxWaitTime = 2000;
+		let waitTime = 200;
+
+		(function attemptUserLookup() {
+			if (!userRef && maxWaitTime > 0) {
+				maxWaitTime -= waitTime;
+				setTimeout(attemptUserLookup, waitTime);
 			}
-		</script>
-	</body>
+			else if (maxWaitTime < 0) {
+				console.log("User Lookup Timed Out");
+			}
+			else if (userRef) {
+				checkIfNoTestsTaken();
+			}
+			// checkIfNoTestsTaken();
+		})();
+
+		function checkIfNoTestsTaken() {
+			dbRef.collection("TestResults")
+				.doc(userRef.uid)
+				.get()
+				.then((doc) => {
+					if (!doc.data().firstTest) {
+						document.getElementById("mainTestButton").innerText = "Take Daily Amsler Grid";
+					}
+				});
+		}
+	</script>
+
+	<!-- Check if user is signed in -->
+	<script>
+		var db = firebase.firestore();
+		(async function checkUser() {
+			await firebase.auth().onAuthStateChanged(user => {
+				if (user) {
+					id = user.uid;
+					db.collection("users").doc(id)
+						.get()
+						.then(doc => {
+							let type = doc.data().type;
+							if (type != 'user') {
+								console.log("Physician Account. Access Denied.");
+								window.location = '404.html';
+							}
+						});
+				}else{
+					console.log("Not logged in");
+					window.location = 'index.html';
+				}
+			});
+		})();
+	</script>
+</body>
 
 </html>
