@@ -228,9 +228,6 @@ class GrowingCirclesDAO {
 		let startIndex = this.setIndex(msLatest);
 		let endIndex = this.setIndex(msEarliest);
 		
-		console.log("START I: " + startIndex);
-		console.log("END I: " + endIndex);
-		
 		// TODO: Check for off-by-one
 		for (let i = startIndex; i <= endIndex; i++) {
 			let doc = this.docList[i];

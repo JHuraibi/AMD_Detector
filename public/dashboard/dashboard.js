@@ -3,6 +3,7 @@
 let dbRef = firebase.firestore();
 let userRef = null;
 let growingCirclesDAO;
+let symbolsDAO;
 let fullBarsDAO;
 
 firebase.auth().onAuthStateChanged(user => {
@@ -21,10 +22,13 @@ firebase.auth().onAuthStateChanged(user => {
 async function pageRouter() {
 	defineDAOs();
 	await growingCirclesDAO.loadAll();
+	await symbolsDAO.loadAll();
 	await fullBarsDAO.loadAll();
 	
 	growingCirclesDAO.populateHistoryTable("historyTable");
 	growingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
+	symbolsDAO.populateHistoryTable("historyTable");
+	symbolsDAO.populateAggregate("canvasLeft", "canvasRight");
 	fullBarsDAO.populateHistoryTable("historyTable");
 	fullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
 }
@@ -49,6 +53,7 @@ function checkUserStatus() {
 
 function defineDAOs() {
 	growingCirclesDAO = new GrowingCirclesDAO(dbRef, userRef.uid);
+	symbolsDAO = new SymbolsDAO(dbRef, userRef.uid);
 	fullBarsDAO = new FullBarsDAO(dbRef, userRef.uid);
 }
 
@@ -56,6 +61,7 @@ function defineDAOs() {
 function mostRecent() {
 	// symbolsDAO.populateMostRecent();
 	growingCirclesDAO.populateMostRecent("canvasLeft", "canvasRight");
+	symbolsDAO.populateMostRecent("canvasLeft", "canvasRight");
 	fullBarsDAO.populateMostRecent("canvasLeft", "canvasRight");
 }
 
@@ -68,6 +74,7 @@ function monthSelect() {
 	}
 	
 	growingCirclesDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
+	symbolsDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
 	fullBarsDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
 }
 
@@ -80,5 +87,6 @@ function numberOfMonths() {
 	}
 	
 	growingCirclesDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
+	symbolsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
 	fullBarsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
 }
