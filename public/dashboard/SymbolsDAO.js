@@ -31,14 +31,14 @@ class SymbolsDAO {
 					this.docList.push(extractedDoc);
 				});
 			});
-		
+
 		// this.manualAdd();
 	}
 	
 	// !! TESTING ONLY - Clones FireStore doc from existing
 	manualAdd() {
 		this.dbRef.collection("TestResults")
-			.doc(userRef.uid)
+			.doc(this.userID)
 			.collection("Symbols")
 			.add(this.docList[0])
 			.then(() => {
@@ -70,13 +70,13 @@ class SymbolsDAO {
 		for (let i = 0; i < this.docList.length; i++) {
 			let doc = this.docList[i];
 			let timeStamp = doc.TimeStampMS;
-			this.addRowToTableGC(doc.id, timeStamp, targetTableID);
+			this.addRowToTable(doc.id, timeStamp, targetTableID);
 		}
 	}
 	
 	// TODO: Update with actual method for detailed view
 	// TODO: Refactor variable names below to be more readable
-	addRowToTableGC(docID, timeStamp, targetTableID) {
+	addRowToTable(docID, timeStamp, targetTableID) {
 		let testName = "Symbols";
 		let time = this.formatDate(timeStamp);
 		let urlOfDetailedView = this.URIBuilder(docID);
@@ -119,11 +119,6 @@ class SymbolsDAO {
 	}
 	
 	populateAll(leftCanvasID, rightCanvasID) {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
@@ -144,11 +139,6 @@ class SymbolsDAO {
 	
 	// TODO: RENAME
 	populateAggregate(leftCanvasID, rightCanvasID) {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
@@ -171,11 +161,6 @@ class SymbolsDAO {
 	}
 	
 	populateMostRecent(leftCanvasID, rightCanvasID) {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		
 		if (!this.docList[0]) {
 			console.log("First document (most recent) empty.")
 			return;
@@ -193,11 +178,6 @@ class SymbolsDAO {
 	}
 	
 	populateByMonthSelector(month, leftCanvasID, rightCanvasID) {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		
@@ -233,11 +213,6 @@ class SymbolsDAO {
 	}
 	
 	populateByNumberMonths(monthsBack, leftCanvasID, rightCanvasID) {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		

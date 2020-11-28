@@ -19,6 +19,7 @@ async function pageRouter() {
 	await growingCirclesDAO.loadAll();
 	await symbolsDAO.loadAll();
 	await fullBarsDAO.loadAll();
+	await freeDrawDAO.loadAll();
 	
 	renderDefaultView();
 }

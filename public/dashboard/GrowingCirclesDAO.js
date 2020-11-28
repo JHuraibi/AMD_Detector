@@ -42,7 +42,7 @@ class GrowingCirclesDAO {
 			return;
 		}
 		this.dbRef.collection("TestResults")
-			.doc(userRef.uid)
+			.doc(this.userID)
 			.collection("GrowingCircles")
 			.add(this.docList[0])
 			.then(() => {
@@ -74,13 +74,13 @@ class GrowingCirclesDAO {
 		for (let i = 0; i < this.docList.length; i++) {
 			let doc = this.docList[i];
 			let timeStamp = doc.TimeStampMS;
-			this.addRowToTableGC(doc.id, timeStamp, targetTableID);
+			this.addRowToTable(doc.id, timeStamp, targetTableID);
 		}
 	}
 	
 	// TODO: Update with actual method for detailed view
 	// TODO: Refactor variable names below to be more readable
-	addRowToTableGC(docID, timeStamp, targetTableID) {
+	addRowToTable(docID, timeStamp, targetTableID) {
 		let testName = "Growing Circles";
 		let time = this.formatDate(timeStamp);
 		let urlOfDetailedView = this.URIBuilder(docID);
@@ -123,11 +123,6 @@ class GrowingCirclesDAO {
 	}
 	
 	populateAll(leftCanvasID, rightCanvasID) {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
@@ -149,11 +144,6 @@ class GrowingCirclesDAO {
 	
 	// TODO: RENAME
 	populateAggregate(leftCanvasID, rightCanvasID) {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
@@ -176,11 +166,6 @@ class GrowingCirclesDAO {
 	}
 	
 	populateMostRecent(leftCanvasID, rightCanvasID) {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		
 		if (!this.docList[0]) {
 			console.log("First document (most recent) empty.")
 			return;
@@ -198,11 +183,6 @@ class GrowingCirclesDAO {
 	}
 	
 	populateByMonthSelector(month, leftCanvasID, rightCanvasID) {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		
@@ -238,11 +218,6 @@ class GrowingCirclesDAO {
 	}
 	
 	populateByNumberMonths(monthsBack, leftCanvasID, rightCanvasID) {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		

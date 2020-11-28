@@ -38,7 +38,7 @@ class FullBarsDAO {
 	// !! TESTING ONLY - Clones FireStore doc from existing
 	manualAdd() {
 		this.dbRef.collection("TestResults")
-			.doc(userRef.uid)
+			.doc(this.userID)
 			.collection("FullBars")
 			.add(this.docList[0])
 			.then(() => {
@@ -68,13 +68,13 @@ class FullBarsDAO {
 		for (let i = 0; i < this.docList.length; i++) {
 			let doc = this.docList[i];
 			let timeStamp = doc.TimeStampMS;
-			this.addRowToTableGC(doc.id, timeStamp, targetTableID);
+			this.addRowToTable(doc.id, timeStamp, targetTableID);
 		}
 	}
 	
 	// TODO: Update with actual method for detailed view
 	// TODO: Refactor variable names below to be more readable
-	addRowToTableGC(docID, timeStamp, targetTableID) {
+	addRowToTable(docID, timeStamp, targetTableID) {
 		let testName = "Full Bars";
 		let time = this.formatDate(timeStamp);
 		let urlOfDetailedView = this.URIBuilder(docID);
@@ -117,11 +117,6 @@ class FullBarsDAO {
 	}
 	
 	populateAll(leftCanvasID, rightCanvasID) {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
@@ -142,11 +137,6 @@ class FullBarsDAO {
 	
 	// TODO: RENAME
 	populateAggregate(leftCanvasID, rightCanvasID) {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
@@ -169,11 +159,6 @@ class FullBarsDAO {
 	}
 	
 	populateMostRecent(leftCanvasID, rightCanvasID) {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		
 		if (!this.docList[0]) {
 			console.log("First document (most recent) empty.")
 			return;
@@ -191,11 +176,6 @@ class FullBarsDAO {
 	}
 	
 	populateByMonthSelector(month, leftCanvasID, rightCanvasID) {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		
@@ -231,11 +211,6 @@ class FullBarsDAO {
 	}
 	
 	populateByNumberMonths(monthsBack, leftCanvasID, rightCanvasID) {
-		if (!userRef) {
-			console.log("User is null");
-			return;
-		}
-		
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		

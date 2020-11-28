@@ -31,7 +31,6 @@ class FreeDrawDAO {
 					this.docList.push(extractedDoc);
 				});
 			});
-		
 	}
 	
 	// NOTE: The JSON returned needs to match the FireStore document structure for FullBars
@@ -105,26 +104,17 @@ class FreeDrawDAO {
 		ctx.stroke();
 	}
 	
-	// CHECK: How can I make this more modular for different tables?
 	populateHistoryTable(targetTableID) {
-		if (!userRef) {
-			console.log("User is null");
+		if (!this.userID) {
+			console.log("User ID is null");
 			return;
 		}
 		
-		this.dbRef
-			.collection("TestResults")
-			.doc(userRef.uid)
-			.collection("FreeDraw")
-			.orderBy("TimeStampMS", "desc")
-			.limit(3)
-			.get()
-			.then((querySnapshot) => {
-				querySnapshot.forEach((doc) => {
-					let timeStamp = doc.data().TimeStampMS;
-					this.addRowToTable(doc.id, timeStamp, targetTableID);
-				});
-			});
+		for (let i = 0; i < this.docList.length; i++) {
+			let doc = this.docList[i];
+			let timeStamp = doc.TimeStampMS;
+			this.addRowToTable(doc.id, timeStamp, targetTableID);
+		}
 	}
 	
 	// TODO: Refactor textID name
