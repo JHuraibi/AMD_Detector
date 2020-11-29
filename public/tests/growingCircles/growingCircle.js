@@ -6,12 +6,21 @@ var nexteye = document.getElementById('nextEye');
 var retakebtn = document.getElementById('retakebtn');
 var c = canvas.getContext('2d');
 var c2 = canvas2.getContext('2d');
+
+//Test Type
+document.getElementById("lefteye").addEventListener("click", lefteye);
+document.getElementById("righteye").addEventListener("click", righteye);
+document.getElementById("botheyes").addEventListener("click", botheyes);
+
+
 document.getElementById("button").addEventListener("click", myFunction);
-document.getElementById("start").addEventListener("click", startTest);
+document.getElementById("startOne").addEventListener("click", test);
+document.getElementById("startTwo").addEventListener("click", twoEyes);
 document.getElementById("nexttestbtn").addEventListener("click", startTest2);
 document.getElementById("savebtn").addEventListener("click", sendToFirestore);
-//const signOut = document.querySelector('.sign-out');
-var startbtn = document.getElementById('start');
+var testing;
+var startbtn = document.getElementById('startOne');
+var startbtnTwo = document.getElementById('startTwo');
 var seenbtn = document.getElementById('button');
 var growingspeed = 1000;
 let timestamp;
@@ -36,13 +45,17 @@ canvas2.height = size * scale;
 c.scale(scale, scale);
 c2.scale(scale, scale);
 
-//hide canvas 2 for now
+//hide canvases for now
+canvas.style.display = "none";
 canvas2.style.display = "none";
 nexteye.style.display = "none";
 //hide results text
 LER.style.display = "none";
 RER.style.display = "none";
-//hide end buttons
+//hide buttons
+startbtn.style.display = "none";
+startbtnTwo.style.display = "none";
+seenbtn.style.display = "none";
 retakebtn.style.display = "none";
 savebtn.style.display = "none";
 
@@ -64,7 +77,10 @@ c.stroke();
 
 
 function test() {
+    seenbtn.style.display = "inline-block";
+    startbtn.style.display = "none";
 
+    //Changne 5 after final
     if (j < 5) {
         // New red dot location
         x = Math.random() * 700;
@@ -81,7 +97,6 @@ function test() {
             c.stroke();
             if (seen == false) {                          //user hasnt seen the red dot yet, keep growing
                 z++;
-                //1000 = 1 second. Default is 1. this changes when the user prefernce changes. 
                 setTimeout(grow, 1000);
             } else if (seen == true && z > 5) {                //user seen red dot and it has grown in size- add it to array
                 console.log("create array of the coorinates and size of dot")
@@ -116,8 +131,8 @@ function test() {
             }
         }
     } else {
-        console.log("Test is over. Start next eye test")
-        nextTest();
+        console.log("Test is over.")
+        showResults(results, "null");
     }
 
 }
@@ -125,6 +140,8 @@ function test() {
 function myFunction() {
     seen = true;
 }
+
+var id;
 
 async function getUid() {
     //let user = await firebase.auth().currentUser;
@@ -145,7 +162,7 @@ async function getUid() {
     });
 }
 
-function startTest() {                               //start test and create an array for this test
+/* function startTest() {                               //start test and create an array for this test
 
     getUid();
     timestamp = Date.now();
@@ -162,7 +179,7 @@ function startTest() {                               //start test and create an 
     } else {
         startTest2();
     }
-}
+} */
 
 function nextTest() {
     //Clear the page and tell the user to start the next test
@@ -262,9 +279,9 @@ function myFunction() {
 function startTest2() {                               //start test and create an array for this test
     nexteye.style.display = "none";
     canvas2.style.display = "inline-block";
-   // startbtn.style.display = "inline-block";
+    // startbtn.style.display = "inline-block";
     seenbtn.style.display = "inline-block";
-   // startbtn.innerText = "Restart";
+    // startbtn.innerText = "Restart";
     results2 = [];
     results2[0] = [];
     results2[1] = [];
@@ -275,6 +292,7 @@ function startTest2() {                               //start test and create an
     test2();
 }
 
+// showResults clear for testing
 //Clear the canvas and create a new one with the data collected. Need to also save the data to the database here
 
 function showResults(r, r2) {
@@ -282,27 +300,25 @@ function showResults(r, r2) {
     size = 500;
     canvas.style.width = size + "px";
     canvas.style.height = size + "px";
-    canvas2.style.width = size + "px";
-    canvas2.style.height = size + "px";
-
 
     // Set actual size in memory (scaled to account for extra pixel density).
     var scale = window.devicePixelRatio; // <--- Change to 1 on retina screens to see blurry canvas.
     canvas.width = size * scale;
     canvas.height = size * scale;
-    canvas2.width = size * scale;
-    canvas2.height = size * scale;
 
     // Normalize coordinate system to use css pixels.
     c.scale(scale, scale);
-    c2.scale(scale, scale);
+    if (testing == "righteye") {
+        LER.style.display = "inline-block";
+        LER.innerHTML = "Right Eye Results";
+    } else if (testing == "lefteye") {
+        LER.style.display = "inline-block";
+        LER.innerHTML = "Left Eye Results";
+    }
 
     //displaying and hiding elements 
     console.log("displaying results from both tests");
-    canvas2.style.display = "inline-block";
     canvas.style.display = "inline-block";
-    LER.style.display = "inline-block";
-    RER.style.display = "inline-block";
     startbtn.style.display = "none";
     seenbtn.style.display = "none";
 
@@ -320,22 +336,13 @@ function showResults(r, r2) {
     c.fill();
     c.stroke();
 
-    c2.clearRect(0, 0, 500, 500)
-
-    // Black Dot
-    c2.fillStyle = "black";
-    c2.beginPath();
-    c2.arc(250, 250, 6, 0, Math.PI * 2, false);
-    c2.fill();
-    c2.stroke();
-
     //plot all the circles the user missed if any
     var limit = r[0].length;
     if (limit > 0) {
         for (var i = 0; i < limit; i++) {
-            x = (500*r[0][i])/700;
-            y = (500*r[1][i])/700;
-            z = (500*r[2][i])/700;
+            x = (500 * r[0][i]) / 700;
+            y = (500 * r[1][i]) / 700;
+            z = (500 * r[2][i]) / 700;
             c.fillStyle = "red";
             c.beginPath();
             c.arc(x, y, z, 0, Math.PI * 2, false);
@@ -344,17 +351,38 @@ function showResults(r, r2) {
         }
     }
 
-    var limit2 = r2[0].length;
-    if (limit2 > 0) {
-        for (var i = 0; i < limit; i++) {
-            x2 = (500*r2[0][i])/700;
-            y2 = (500*r2[1][i])/700;
-            z2 = (500*r2[2][i])/700;
-            c2.fillStyle = "red";
-            c2.beginPath();
-            c2.arc(x2, y2, z2, 0, Math.PI * 2, false);
-            c2.fill();
-            c2.stroke();
+    //If two tests were taken
+    if (r2 != "null") {
+        c2.scale(scale, scale);
+        canvas2.style.width = size + "px";
+        canvas2.style.height = size + "px";
+
+        canvas2.width = size * scale;
+        canvas2.height = size * scale;
+        LER.style.display = "inline-block";
+        RER.style.display = "inline-block";
+        canvas2.style.display = "inline-block";
+        c2.clearRect(0, 0, 500, 500)
+
+        // Black Dot
+        c2.fillStyle = "black";
+        c2.beginPath();
+        c2.arc(250, 250, 6, 0, Math.PI * 2, false);
+        c2.fill();
+        c2.stroke();
+
+        var limit2 = r2[0].length;
+        if (limit2 > 0) {
+            for (var i = 0; i < limit; i++) {
+                x2 = (500 * r2[0][i]) / 700;
+                y2 = (500 * r2[1][i]) / 700;
+                z2 = (500 * r2[2][i]) / 700;
+                c2.fillStyle = "red";
+                c2.beginPath();
+                c2.arc(x2, y2, z2, 0, Math.PI * 2, false);
+                c2.fill();
+                c2.stroke();
+            }
         }
     }
 
@@ -368,6 +396,8 @@ var rightEyeX = [];
 var rightEyeY = [];
 var rightEyeZ = [];
 
+
+//clear for testing
 function getGrowingCirclesResults(r, r2) {
 
     //break the two nested arrays into six arrays
@@ -381,26 +411,61 @@ function getGrowingCirclesResults(r, r2) {
         }
     }
 
-    limit = r2[0].length;
-    if (limit > 0) {
-        for (var i = 0; i < limit; i++) {
-            rightEyeX[i] = r2[0][i];
-            rightEyeY[i] = r2[1][i];
-            rightEyeZ[i] = r2[2][i];
+    if (r2 != "null") {
+        limit = r2[0].length;
+        if (limit > 0) {
+            for (var i = 0; i < limit; i++) {
+                rightEyeX[i] = r2[0][i];
+                rightEyeY[i] = r2[1][i];
+                rightEyeZ[i] = r2[2][i];
+            }
         }
     }
 
 }
+
+//**************************** */
+//Edit this depending on which tests were taken
+//**************************** */
+
 function jsonresults() {
-    return {
-        "TestName": "growingCircles",
-        "TimeStampMS": timestamp,
-        "XLocationsRight": rightEyeX,
-        "YLocationsRight": rightEyeY,
-        "ZLocationsRight": rightEyeZ,
-        "XLocationsLeft": lefteyeX,
-        "YLocationsLeft": lefteyeY,
-        "ZLocationsLeft": lefteyeZ,
+    if (testing == "botheyes") {
+        console.log("Saving both eyes test results.");
+        return {
+            "TestName": "growingCircles",
+            "TimeStampMS": timestamp,
+            "XLocationsRight": rightEyeX,
+            "YLocationsRight": rightEyeY,
+            "ZLocationsRight": rightEyeZ,
+            "XLocationsLeft": lefteyeX,
+            "YLocationsLeft": lefteyeY,
+            "ZLocationsLeft": lefteyeZ,
+            "TestSpeed": growingspeed/1000,
+            "Tested": "both",
+        }
+    } else if (testing == "lefteye") {
+        console.log("Saving left eye test results.");
+        return {
+            "TestName": "growingCircles",
+            "TimeStampMS": timestamp,
+            "XLocationsLeft": lefteyeX,
+            "YLocationsLeft": lefteyeY,
+            "ZLocationsLeft": lefteyeZ,
+            "TestSpeed": growingspeed/1000,
+            "Tested": "left",
+        }
+    }
+    else {
+        console.log("Saving right eye test results.");
+        return {
+            "TestName": "growingCircles",
+            "TimeStampMS": timestamp,
+            "XLocationsRight": rightEyeX,
+            "YLocationsRight": rightEyeY,
+            "ZLocationsRight": rightEyeZ,
+            "TestSpeed": growingspeed/1000,
+            "Tested": "right",
+        }
     }
 }
 
@@ -415,21 +480,68 @@ function sendToFirestore() {
         .collection("GrowingCircles")
         .add(dataToWrite)
         .then(() => {
+            console.log("In then statement");
             uploadSuccess();
-			updateFirstTest();
+            updateFirstTest();
         });
 
 }
 
 function uploadSuccess() {
     let uploadStatusIndicator = document.getElementById('uploadStatus');
+    uploadStatusIndicator.style.display = "block";
     uploadStatusIndicator.textContent = "Results Saved!";
 }
 
 function updateFirstTest() {
-	dbRef.collection("TestResults")
-		.doc(userRef.uid)
-		.set({
-			firstTest: false
-		});
+
+    let dbRef = firebase.firestore();
+    dbRef.collection("TestResults")
+        .doc(id)
+        .set({
+            firstTest: false
+        });
+}
+
+function lefteye() {
+    testing = "lefteye";
+    document.getElementById('whichEye').style.display = "none";
+    oneEye();
+}
+
+function righteye() {
+    testing = "righteye";
+    document.getElementById('whichEye').style.display = "none";
+    oneEye();
+}
+
+function botheyes() {
+    testing = "botheyes";
+    document.getElementById('whichEye').style.display = "none";
+    twoEyes();
+}
+
+function oneEye() {
+    canvas.style.display = "inline-block";
+    startbtn.style.display = "inline-block";
+
+    //check speed
+    getUid();
+
+    //save date
+    timestamp = Date.now();
+    results = [];
+    results[0] = [];
+    results[1] = [];
+    results[2] = [];
+    index = 0;
+    j = 0;
+    seen = false;
+    startbtn.style.display = "inline-block";
+
+}
+
+function twoEyes() {
+
+
 }

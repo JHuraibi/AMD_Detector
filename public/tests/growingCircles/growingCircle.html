@@ -56,7 +56,6 @@
             width: 50%;
             text-align: center;
         }
-        
     </style>
 </head>
 
@@ -71,6 +70,26 @@
                 </nav>
             </div>
         </header>
+
+        <!-- Which eyes to test -->
+        <!-- Next Eye -->
+        <div class="instruct" id="whichEye">
+            <p>
+                Choose which eye to test. Choosing the left eye requires you to cover your right eye. Choosing the right
+                eye
+                requires you to cover your left eye. Choosing both eyes will do both processes, starting with the left
+                eye.
+            </p>
+            <button id="lefteye" class="btn btn-sm btn-outline-secondary"
+                style="color: #282828; border-color: #282828;">Test Left Eye</button>
+            <button id="botheyes" class="btn btn-sm btn-outline-secondary"
+                style="color: #282828; border-color: #282828;">Test Both Eyes</button>
+            <button id="righteye" class="btn btn-sm btn-outline-secondary"
+                style="color: #282828; border-color: #282828;">Test Right Eye</button>
+        </div>
+
+
+        <!-- Result Titles -->
         <div class="row">
             <div class="column" id="leftEyeResults">
                 <b>Left Eye Results</b>
@@ -80,11 +99,15 @@
             </div>
         </div>
 
+
+        <!-- Canvases -->
         <div class="canvas-container">
-            <canvas></canvas>
+            <canvas style="z-index:1"></canvas>
             <canvas id="canvas2"></canvas>
         </div>
 
+
+        <!-- Next Eye -->
         <div class="instruct" id="nextEye">
             <p>
                 Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
@@ -93,8 +116,14 @@
             <button id="nexttestbtn" class="btn btn-sm btn-outline-secondary"
                 style="color: #282828; border-color: #282828;">Start next eye</button>
         </div>
+
+
+        <!-- Buttons -->
         <div style="text-align: center;">
-            <button id="start" class="bigbtn btn btn-sm btn-outline-secondary test-buttons">
+            <button id="startOne" class="bigbtn btn btn-sm btn-outline-secondary test-buttons">
+                Start Test
+            </button>
+            <button id="startTwo" class="bigbtn btn btn-sm btn-outline-secondary test-buttons">
                 Start Test
             </button>
             <button id="button" class="bigbtn btn btn-sm btn-outline-secondary test-buttons">
