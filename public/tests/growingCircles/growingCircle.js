@@ -157,7 +157,7 @@ function startTest() {                               //start test and create an 
         index = 0;
         j = 0;
         seen = false;
-        startbtn.innerText = "Restart";
+        startbtn.style.display = "none";
         test();
     } else {
         startTest2();
@@ -262,9 +262,9 @@ function myFunction() {
 function startTest2() {                               //start test and create an array for this test
     nexteye.style.display = "none";
     canvas2.style.display = "inline-block";
-    startbtn.style.display = "inline-block";
+   // startbtn.style.display = "inline-block";
     seenbtn.style.display = "inline-block";
-    startbtn.innerText = "Restart";
+   // startbtn.innerText = "Restart";
     results2 = [];
     results2[0] = [];
     results2[1] = [];
