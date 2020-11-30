@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+	
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32"/>
+		<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16"/>
+		
+		<title>Amsler Grid · Test</title>
+		
+		<!-- Bootstrap core CSS -->
+		<link href="../../scss/custom.css" rel="stylesheet">
+		<!-- Custom styles for this template (Later move to custom.scss) -->
+		<link href="../../css/cover.css" rel="stylesheet">
+		
+		<style>
+			.instruct {
+				width: 75px;
+				/* padding: 10px; */
+				/* margin: 50px auto; */
+				/* border-radius: 10px; */
+				background: white;
+				/* box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1); */
+				text-align: center;
+				color: #282828;
+			}
+			
+			.section-container {
+				border: solid black 2px;
+				padding: 5%;
+			}
+			
+		</style>
+	</head>
+	<body class="text-center">
+		<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+			<header class="masthead mb-auto">
+				<div class="inner">
+					<h3 class="masthead-brand">Vision Monitor</h3>
+					<nav class="nav nav-masthead justify-content-center">
+						<a class="nav-link active" href="../../home.html">Home</a>
+						<a class="nav-link" href="../../dashboard.html">My Dashboard</a>
+					</nav>
+				</div>
+			</header>
+			
+			<main role="main" class="inner cover">
+				<header style="text-align: center; font-size: 40px;">Amsler Grid Test Questions</header>
+<!--				<form action="../../home.html">-->
+				<form class="AmslerQuestions">
+					
+					<div id="q1" class="section-container">
+						<p>Which eye did you test?</p>
+						
+						<input type="radio" id="left" name="q1" value="left" required>
+						<label for="left">Left</label>
+						&nbsp;
+						<input type="radio" id="right" name="q1" value="right" required>
+						<label for="right">Right</label>
+					</div>
+					
+					<br>
+					
+					<!-- Section 1 part -->
+					<div id="s1" class="section-container">
+						<p>Did you have trouble seeing this section?</p>
+						
+					
+						<input type="checkbox" id="sec1Checkbox" name="section1">
+						<label for="sec1Checkbox">Section 1</label>
+						<div id="qSec1">
+							
+							<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
+							<input type="radio" id="S1_Q1_Yes" name="S1_Q1" value="yes">
+							<label for="S1_Q1_Yes">Yes</label>
+							<input type="radio" id="S1_Q1_No" name="S1_Q1" value="no">
+							<label for="S1_Q1_No">No</label>
+							
+							<br><br>
+							
+							<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
+							<input type="radio" id="S1_Q2_Yes" name="S1_Q2" value="yes">
+							<label for="S1_Q2_Yes">Yes</label>
+							<input type="radio" id="S1_Q2_No" name="S1_Q2" value="no">
+							<label for="S1_Q2_No">No</label>
+							
+							<br><br>
+							
+							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
+							<input type="radio" id="S1_Q3_Yes" name="S1_Q3" value="yes">
+							<label for="S1_Q3_Yes">Yes</label>
+							<input type="radio" id="S1_Q3_No" name="S1_Q3" value="no">
+							<label for="S1_Q3_No">No</label>
+							
+							<br><br>
+							
+							<label for="S1_Concerns">Is there any other details you would like to mention?</label>
+							<textarea name="S1_Concerns" id="S1_Concerns" cols="50" rows="10"></textarea>
+						
+						</div>
+					</div>
+					
+					<br>
+					
+					<!-- section 2 part  -->
+					<div id="s2" class="section-container">
+						<p>Did you have trouble seeing this section?</p>
+					
+						<input type="checkbox" id="sec2Checkbox" name="section2">
+						<label for="sec2Checkbox">Section 2</label>
+						<div id="qSec2">
+							
+							<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
+							<input type="radio" id="S2_Q1_Yes" name="S2_Q1" value="yes">
+							<label for="S2_Q1_Yes">Yes</label>
+							<input type="radio" id="S2_Q1_No" name="S2_Q1" value="no">
+							<label for="S2_Q1_No">No</label>
+							
+							<br><br>
+							
+							<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
+							<input type="radio" id="S2_Q2_Yes" name="S2_Q2" value="yes">
+							<label for="S2_Q2_Yes">Yes</label>
+							<input type="radio" id="S2_Q2_No" name="S2_Q2" value="no">
+							<label for="S2_Q2_No">No</label>
+							
+							<br><br>
+							
+							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
+							<input type="radio" id="S2_Q3_Yes" name="S2_Q3" value="yes">
+							<label for="S2_Q3_Yes">Yes</label>
+							<input type="radio" id="S2_Q3_No" name="S2_Q3" value="no">
+							<label for="S2_Q3_No">No</label>
+							
+							<br><br>
+							
+							<label for="S2_Concerns">Is there any other details you would like to mention?</label>
+							<textarea name="S2_Concerns" id="S2_Concerns" cols="50" rows="10"></textarea>
+						
+						</div>
+					</div>
+					
+					<br>
+					
+					<!-- Section 3 part  -->
+					<div id="s3" class="section-container">
+						<p>Did you have trouble seeing this section?</p>
+						
+						<div>
+							<!--TODO: Use relative sizing if possible, not hard coded-->
+							<img src="amslerS3.png" width="105" height="105">
+						</div>
+						
+						<input type="checkbox" id="sec3Checkbox" name="section3">
+						<label for="sec3Checkbox">Section 3</label>
+						<div id="qSec3">
+							
+							<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
+							<input type="radio" id="S3_Q1_Yes" name="S3_Q1" value="yes">
+							<label for="S3_Q1_Yes">Yes</label>
+							<input type="radio" id="S3_Q1_No" name="S3_Q1" value="no">
+							<label for="S3_Q1_No">No</label>
+							
+							<br><br>
+							
+							<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
+							<input type="radio" id="S3_Q2_Yes" name="S3_Q2" value="yes">
+							<label for="S3_Q2_Yes">Yes</label>
+							<input type="radio" id="S3_Q2_No" name="S3_Q2" value="no">
+							<label for="S3_Q2_No">No</label>
+							
+							<br><br>
+							
+							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
+							<input type="radio" id="S3_Q3_Yes" name="S3_Q3" value="yes">
+							<label for="S3_Q3_Yes">Yes</label>
+							<input type="radio" id="S3_Q3_No" name="S3_Q3" value="no">
+							<label for="S3_Q3_No">No</label>
+							
+							<br><br>
+							
+							<label for="S3_Concerns">Is there any other details you would like to mention?</label>
+							<textarea name="S3_Concerns" id="S3_Concerns" cols="50" rows="10"></textarea>
+							
+						</div>
+					</div>
+					
+					<br>
+					
+					<!-- Section 4 part  -->
+					<div id="s4" class="section-container">
+						<p>Did you have trouble seeing this section?</p>
+						<div>
+							<img src="amslerS4.png" width="105" height="105">
+						</div>
+						
+						<input type="checkbox" id="sec4Checkbox" name="section4">
+						<label for="sec4Checkbox">Section 4</label>
+						<div id="qSec4">
+
+							<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
+							<input type="radio" id="S4_Q1_Yes" name="S4_Q1" value="yes">
+							<label for="S4_Q1_Yes">Yes</label>
+							<input type="radio" id="S4_Q1_No" name="S4_Q1" value="no">
+							<label for="S4_Q1_No">No</label>
+							
+							<br><br>
+							
+							<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
+							<input type="radio" id="S4_Q2_Yes" name="S4_Q2" value="yes">
+							<label for="S4_Q2_Yes">Yes</label>
+							<input type="radio" id="S4_Q2_No" name="S4_Q2" value="no">
+							<label for="S4_Q2_No">No</label>
+							
+							<br><br>
+							
+							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
+							<input type="radio" id="S4_Q3_Yes" name="S4_Q3" value="yes">
+							<label for="S4_Q3_Yes">Yes</label>
+							<input type="radio" id="S4_Q3_No" name="S4_Q3" value="no">
+							<label for="S4_Q3_No">No</label>
+							
+							<br><br>
+							
+							<label for="S4_Concerns">Is there any other details you would like to mention?</label><br>
+							<textarea name="S4_Concerns" id="S4_Concerns" cols="50" rows="10"></textarea>
+						</div>
+					</div>
+					<br>
+					<div>
+						<input type="submit" value="Submit">
+					</div>
+				</form>
+			</main>
+			
+			<footer class="mastfoot mt-auto"></footer>
+		</div>
+</body>
+</html>
