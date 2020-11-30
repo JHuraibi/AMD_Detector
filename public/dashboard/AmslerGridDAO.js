@@ -58,6 +58,15 @@ class AmslerGridDAO {
             Section3: data.sec3Answers,
             Section4: data.sec4Answers,
         }
+
+    }
+
+    insert(data)
+    {
+        document.getElementById('sq1').placeholer = data.sec1Answers;
+        document.getElementById('sq2').placeholer = data.sec2Answers;
+
+
     }
 
     populateHistoryTable(targetTableID) {
