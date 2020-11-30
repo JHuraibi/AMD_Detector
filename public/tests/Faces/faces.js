@@ -371,9 +371,10 @@ function bothOption() {
 
 
 
-// Vaariable representing iterations
+// Vaariable representing iterations for right eye
 var i = 0;
 
+//Function to test right eye for Right eye only test or right eye test portion of both tests
 function rightEyeTest() {
 
 	if (rightEyeInProgress) {
@@ -412,7 +413,9 @@ function rightEyeTest() {
 	}
 
 }
+//End of funtion
 
+//Function to Transition for both eye test
 function nexttest() {
 	// TODO: canvas2 is shifting to left between switching (might be display attr)
 	canvas.style.display = "none";
@@ -427,8 +430,12 @@ function nexttest() {
 
 
 }
+//End of function
 
+//Variable iteration for left eye test
 var a = 0;
+
+//Function for left eye only test or left eye portion of both eye test
 function leftEyeTest() {
 
 	canvas.style.display = "none";
@@ -475,14 +482,16 @@ function leftEyeTest() {
 
 	}
 }
+//En of function
 
+//Iterations for results
 var j;
 var j2;
 
-// Results for tests shows 1 canvas'
+
 // blue represents right eye
 // orange represents left eye
-// function to show the erros after test is conducted
+// function to show the errors after test is conducted for both eyes
 function bothResults() {
 
 	// console.log("Result Symbols: " + resultsSymbols);
@@ -509,8 +518,9 @@ function bothResults() {
 	}
 	showExitButton();
 }
+//End of function
 
-//Right Eye Results
+//Right Eye test Results
 function rightResults() {
 	console.log("Reading from right results");
 	canvas.style.display = "inline-block";
@@ -528,7 +538,9 @@ function rightResults() {
 
 
 }
+//End of Function
 
+//left eye test results
 function leftResults() {
 	canvas.style.display = "none";
 	canvas2.style.display = "inline-block";
@@ -545,7 +557,9 @@ function leftResults() {
 
 
 }
+//End of function
 
+//Function for user to exit or save results
 function showExitButton() {
 
 	let fadeInSpeed = 1;
@@ -565,8 +579,10 @@ function showExitButton() {
 		}
 	}, fadeInSpeed);
 }
+//End of Function
 
-// Update value names
+
+// Function to save results to db
 function getFacesResults() {
 	return {
 		"TestName": "symbols",
