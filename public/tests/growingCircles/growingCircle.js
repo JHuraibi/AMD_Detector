@@ -12,15 +12,14 @@ document.getElementById("lefteye").addEventListener("click", lefteye);
 document.getElementById("righteye").addEventListener("click", righteye);
 document.getElementById("botheyes").addEventListener("click", botheyes);
 
-
+document.getElementById('startSecond').addEventListener("click", test2);
 document.getElementById("button").addEventListener("click", myFunction);
 document.getElementById("startOne").addEventListener("click", test);
-document.getElementById("startTwo").addEventListener("click", twoEyes);
 document.getElementById("nexttestbtn").addEventListener("click", startTest2);
 document.getElementById("savebtn").addEventListener("click", sendToFirestore);
 var testing;
+var startSecond = document.getElementById('startSecond');
 var startbtn = document.getElementById('startOne');
-var startbtnTwo = document.getElementById('startTwo');
 var seenbtn = document.getElementById('button');
 var growingspeed = 1000;
 let timestamp;
@@ -54,7 +53,7 @@ LER.style.display = "none";
 RER.style.display = "none";
 //hide buttons
 startbtn.style.display = "none";
-startbtnTwo.style.display = "none";
+startSecond.style.display = "none";
 seenbtn.style.display = "none";
 retakebtn.style.display = "none";
 savebtn.style.display = "none";
@@ -65,10 +64,7 @@ var y;
 var z = 0;
 var j = 0;
 var results = [];
-results[0] = [];
-results[1] = [];
-results[2] = [];
-var index = 0;
+var index;
 c.fillStyle = "black";
 c.beginPath();
 c.arc(350, 350, 6, 0, Math.PI * 2, false);
@@ -80,7 +76,7 @@ function test() {
     seenbtn.style.display = "inline-block";
     startbtn.style.display = "none";
 
-    //Changne 5 after final
+    //TODO: Change 5 before final
     if (j < 5) {
         // New red dot location
         x = Math.random() * 700;
@@ -131,8 +127,13 @@ function test() {
             }
         }
     } else {
-        console.log("Test is over.")
-        showResults(results, "null");
+        if (testing !== "botheyes") {
+            console.log("Test is over.")
+            showResults(results, "null");
+        }else{
+            console.log("Starting next eye.");
+            nextTest();
+        }
     }
 
 }
@@ -162,34 +163,14 @@ async function getUid() {
     });
 }
 
-/* function startTest() {                               //start test and create an array for this test
-
-    getUid();
-    timestamp = Date.now();
-    if (canvas2.style.display == "none") {
-        results = [];
-        results[0] = [];
-        results[1] = [];
-        results[2] = [];
-        index = 0;
-        j = 0;
-        seen = false;
-        startbtn.style.display = "none";
-        test();
-    } else {
-        startTest2();
-    }
-} */
 
 function nextTest() {
     //Clear the page and tell the user to start the next test
     canvas.style.display = "none";
     //start the next test
     nexteye.style.display = "block";
-    //Hide start test and seen button
-    startbtn.style.display = "none";
+    //Hide seen button
     seenbtn.style.display = "none";
-
 }
 
 //test2
@@ -211,6 +192,8 @@ c2.stroke();
 
 
 function test2() {
+    seenbtn.style.display = "inline-block";
+    startSecond.style.display = "none";
 
     if (j2 < 5) {
         // New red dot location
@@ -279,9 +262,7 @@ function myFunction() {
 function startTest2() {                               //start test and create an array for this test
     nexteye.style.display = "none";
     canvas2.style.display = "inline-block";
-    // startbtn.style.display = "inline-block";
-    seenbtn.style.display = "inline-block";
-    // startbtn.innerText = "Restart";
+    startSecond.style.display = "inline-block";
     results2 = [];
     results2[0] = [];
     results2[1] = [];
@@ -289,10 +270,9 @@ function startTest2() {                               //start test and create an
     index2 = 0;
     j2 = 0;
     seen = false;
-    test2();
 }
 
-// showResults clear for testing
+
 //Clear the canvas and create a new one with the data collected. Need to also save the data to the database here
 
 function showResults(r, r2) {
@@ -397,21 +377,39 @@ var rightEyeY = [];
 var rightEyeZ = [];
 
 
-//clear for testing
+
 function getGrowingCirclesResults(r, r2) {
 
     //break the two nested arrays into six arrays
 
     var limit = r[0].length;
-    if (limit > 0) {
-        for (var i = 0; i < limit; i++) {
-            lefteyeX[i] = r[0][i];
-            lefteyeY[i] = r[1][i];
-            lefteyeZ[i] = r[2][i];
+
+    if (testing == "lefteye") {
+        if (limit > 0) {
+            for (var i = 0; i < limit; i++) {
+                lefteyeX[i] = r[0][i];
+                lefteyeY[i] = r[1][i];
+                lefteyeZ[i] = r[2][i];
+            }
+        }
+    } else if (testing == "righteye") {
+        if (limit > 0) {
+            for (var i = 0; i < limit; i++) {
+                rightEyeX[i] = r[0][i];
+                rightEyeY[i] = r[1][i];
+                rightEyeZ[i] = r[2][i];
+            }
         }
     }
+    else if (r2 != "null") {
+        if (limit > 0) {
+            for (var i = 0; i < limit; i++) {
+                lefteyeX[i] = r[0][i];
+                lefteyeY[i] = r[1][i];
+                lefteyeZ[i] = r[2][i];
+            }
+        }
 
-    if (r2 != "null") {
         limit = r2[0].length;
         if (limit > 0) {
             for (var i = 0; i < limit; i++) {
@@ -424,9 +422,6 @@ function getGrowingCirclesResults(r, r2) {
 
 }
 
-//**************************** */
-//Edit this depending on which tests were taken
-//**************************** */
 
 function jsonresults() {
     if (testing == "botheyes") {
@@ -440,7 +435,7 @@ function jsonresults() {
             "XLocationsLeft": lefteyeX,
             "YLocationsLeft": lefteyeY,
             "ZLocationsLeft": lefteyeZ,
-            "TestSpeed": growingspeed/1000,
+            "TestSpeed": growingspeed / 1000,
             "Tested": "both",
         }
     } else if (testing == "lefteye") {
@@ -451,7 +446,7 @@ function jsonresults() {
             "XLocationsLeft": lefteyeX,
             "YLocationsLeft": lefteyeY,
             "ZLocationsLeft": lefteyeZ,
-            "TestSpeed": growingspeed/1000,
+            "TestSpeed": growingspeed / 1000,
             "Tested": "left",
         }
     }
@@ -463,7 +458,7 @@ function jsonresults() {
             "XLocationsRight": rightEyeX,
             "YLocationsRight": rightEyeY,
             "ZLocationsRight": rightEyeZ,
-            "TestSpeed": growingspeed/1000,
+            "TestSpeed": growingspeed / 1000,
             "Tested": "right",
         }
     }
@@ -542,6 +537,20 @@ function oneEye() {
 }
 
 function twoEyes() {
+    //check speed
+    getUid();
 
+    //save date
+    timestamp = Date.now();
+    results = [];
+    results[0] = [];
+    results[1] = [];
+    results[2] = [];
+    index = 0;
+    j = 0;
+    seen = false;
+
+    canvas.style.display = "inline-block";
+    startbtn.style.display = "inline-block";
 
 }
