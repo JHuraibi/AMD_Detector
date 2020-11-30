@@ -38,7 +38,6 @@ let testFinished = false;			// Status indicator: Waiting for user to click "Star
 let canvasRef;						// Reference object to the DOM canvas element
 
 
-
 /**
  * Unhides the test canvas. Enables canvas to update via setting
  * 	waitingToStart to false. Records the current time and starts automatic looping of draw()
@@ -107,10 +106,13 @@ function draw() {
 	background(backgroundColor);
 	
 	if (testFinished) {
+		canvasRef.hide();
+		noLoop();
+		
+		showExitButton();
+		
 		showLeftResults();
 		showRightResults();
-		showExitButton();
-		noLoop();
 	}
 	
 	if (timer % (60 * sec) === 0) {
@@ -151,7 +153,7 @@ function mousePressed() {
 		return;
 	}
 	
-	if (mouseButton !== LEFT){
+	if (mouseButton !== LEFT) {
 		return;
 	}
 	
@@ -405,48 +407,123 @@ function drawStaticBorder() {
  * Test finished: Draws the bars that were clicked during the Left eye test.
  */
 function showLeftResults() {
+	let canvas = document.getElementById("leftResultsCanvas");
+	let ctx = canvas.getContext('2d');
+	
+	if (!ctx) {
+		console.log("Invalid Left Canvas Context.");
+		return;
+	}
+	
+	let ratio = 0.5;
+	let resultCanvasSize = canvasSize * ratio;
+	canvas.style.display = "inline-block";
+	
+	ctx.canvas.width = resultCanvasSize;
+	ctx.canvas.height = resultCanvasSize;
+	ctx.fillStyle = "rgba(255, 194, 114, 0.5)";		// Light Yellow, 50% opacity
+
 	let numClickedX = xLocationLeft.length;
 	let numClickedY = yLocationLeft.length;
 	
-	let barW = width / 20;
+	let barL = resultCanvasSize;
+	let barW = resultCanvasSize / numBars;
+	let r = (barW / 2) / 10;		// !! MAXIMUM radius is half the bar's thickness. r is arbitrary
 	
 	for (let i = 0; i < numClickedX; i++) {
-		let x = xLocationLeft[i];
-		noStroke();
-		fill(255, 194, 114, 50);
-		rect(x, 0, barW, height);
+		let xPos = xLocationLeft[i];
+		let x = xPos * ratio;
+		let y = 0;
+		let w = barW;
+		let h = barL;
+		
+		// Draw shape as rectangle with rounded corners
+		this.roundedRectangle(ctx, x, y, w, h, r);
 	}
 	
 	for (let i = 0; i < numClickedY; i++) {
-		let y = yLocationLeft[i];
-		noStroke();
-		fill(255, 194, 114, 50);
-		rect(0, y, width, barW);
+		let yPos = yLocationLeft[i];
+		let x = 0;
+		let y = yPos * ratio;
+		let w = barL;
+		let h = barW;
+		
+		// Draw shape as rectangle with rounded corners
+		this.roundedRectangle(ctx, x, y, w, h, r);
 	}
+	
+	ctx.beginPath();
+	ctx.fillStyle = "black";
+	ctx.arc(resultCanvasSize / 2, resultCanvasSize / 2, (15 / 2) * ratio, 0, Math.PI * 2);
+	ctx.fill();
 }
 
 /**
- * Test finished: Draws the bars that were clicked during the Right eye test.
+ * Test finished: Draws the bars that were clicked during the Left eye test.
  */
 function showRightResults() {
-	let numClickedX = xLocationRight.length;
-	let numClickedY = yLocationRight.length;
+	let canvas = document.getElementById("rightResultsCanvas");
+	let ctx = canvas.getContext('2d');
 	
-	let barW = width / 20;
+	if (!ctx) {
+		console.log("Invalid Right Canvas Context.");
+		return;
+	}
+	
+	let ratio = 0.5;
+	let resultCanvasSize = canvasSize * ratio;
+	canvas.style.display = "inline-block";
+	
+	ctx.canvas.width = resultCanvasSize;
+	ctx.canvas.height = resultCanvasSize;
+	ctx.fillStyle = "rgba(133,114,255,0.5)";		// Light Purple, 50% opacity
+
+	let numClickedX = xLocationLeft.length;
+	let numClickedY = yLocationLeft.length;
+	
+	let barL = resultCanvasSize;
+	let barW = resultCanvasSize / numBars;
+	let r = (barW / 2) / 10;		// !! MAXIMUM radius is half the bar's thickness. r is arbitrary
 	
 	for (let i = 0; i < numClickedX; i++) {
-		let x = xLocationRight[i];
-		noStroke();
-		fill(133, 114, 255, 50);
-		rect(x, 0, barW, height);
+		let xPos = xLocationRight[i];
+		let x = xPos * ratio;
+		let y = 0;
+		let w = barW;
+		let h = barL;
+		
+		// Draw shape as rectangle with rounded corners
+		this.roundedRectangle(ctx, x, y, w, h, r);
 	}
 	
 	for (let i = 0; i < numClickedY; i++) {
-		let y = yLocationRight[i];
-		noStroke();
-		fill(133, 114, 255, 50);
-		rect(0, y, width, barW);
+		let yPos = yLocationRight[i];
+		let x = 0;
+		let y = yPos * ratio;
+		let w = barL;
+		let h = barW;
+		
+		// Draw shape as rectangle with rounded corners
+		this.roundedRectangle(ctx, x, y, w, h, r);
 	}
+	
+	ctx.beginPath();
+	ctx.fillStyle = "black";
+	ctx.arc(resultCanvasSize / 2, resultCanvasSize / 2, (15 / 2) * ratio, 0, Math.PI * 2);
+	ctx.fill();
+}
+
+// Similar to FullBarsDAO
+function roundedRectangle(ctx, x, y, w, h, r) {
+	ctx.beginPath();
+	ctx.moveTo(x + r, y);
+	ctx.arcTo(x + w, y, x + w, y + h, r);
+	ctx.arcTo(x + w, y + h, x, y + h, r);
+	ctx.arcTo(x, y + h, x, y, r);
+	ctx.arcTo(x, y, x + w, y, r);
+	ctx.closePath();
+	
+	ctx.fill();
 }
 
 /**
