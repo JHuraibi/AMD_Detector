@@ -16,7 +16,8 @@ var leftEyeInProgress;
 var bothREyeinProgress;
 var bothLEyeInProgress;
 
-//Html elements
+//Html elements: Using 2 Canvases
+// Three Buttons Both eye, Right, and Left. Exit buttons as well
 var canvas = document.getElementById('canvas1');
 var canvas2 = document.getElementById("canvas2");
 var rightBtn = document.getElementById("rightBtn");
@@ -28,6 +29,7 @@ var c = canvas.getContext('2d');
 var c2 = canvas2.getContext('2d');
 let exitBtns = document.getElementById('exitTestBtns');
 
+// Canvas Sizing
 var size = 700;
 canvas.style.width = size + "px";
 canvas.style.height = size + "px";
@@ -42,6 +44,8 @@ canvas2.height = size * scale;
 
 c.scale(scale, scale);
 c2.scale(scale, scale);
+// End of Canvas Sizing
+
 
 //Speed of test
 var speed = 3000;
@@ -66,9 +70,8 @@ async function getUid() {
 	});
 }
 
+// Function to see if User pressed the wrong key 
 window.addEventListener('keydown', function (e) {
-
-	// var key = e.keyCode;
 
 	// key variable
 	var key = e.key;
@@ -99,13 +102,15 @@ window.addEventListener('keydown', function (e) {
 	}
 
 });
+//End of Function
 
-// initalizing canvas
-// c.fillStyle = "White";
-// c.fillRect(0, 0, size, size);
+//Placing black dot in the center before the test so user can focus on center dot
 blackDot();
 
-// Variable
+// Variables:
+// X, Y for random placement of symbols
+//Variables labeled with a "result" show user the mistakes when pressing wrong key
+// Symbols is array for random symbols
 var x, y;
 var symbols = ["+", "-", "x", "÷"];
 var rightResultX = [];
@@ -115,6 +120,7 @@ var leftResultY = [];
 var rightResultsSymbols = [];
 var leftResultsSymbols = [];
 
+
 // Not displaying second canvas
 canvas2.style.display = "none";
 
@@ -123,7 +129,9 @@ canvas2.style.display = "none";
 var t = 0;
 var t2 = 0;
 
-// if the key pressed is not a capture the result for the next 4 functions
+
+// Next 4 functions capture any mistake the user made at iteration t and display at the end of the test
+// Four functions for each key pressed
 function aKey() {
 	if (rightEyeInProgress) {
 		if (symbols[r] != "+") {
@@ -296,6 +304,8 @@ function dKey() {
 	}
 
 }
+// End of functions that capture mistakes
+
 
 // function to hide display buttons
 nexteyebtn.style.display = "none";
@@ -305,9 +315,10 @@ function hideBtns() {
 	leftBtn.style.display = "none";
 	bothBtn.style.display = "none";
 }
+// End of Function
 
 
-//function to clear canvas
+//function to clear canvas after each iteration
 function clearCanvas() {
 	c.clearRect(0, 0, size, size);
 	c.fillStyle = "White";
@@ -318,8 +329,10 @@ function clearCanvas() {
 	c2.fillStyle = "White";
 	c2.fillRect(0, 0, size, size);
 }
+// End of Function
 
-//Function have black dot in the center
+
+//Function have black dot in the center after each iteration
 function blackDot() {
 	c.fillStyle = "black";
 	c.beginPath();
@@ -331,6 +344,7 @@ function blackDot() {
 	c2.arc(size / 2, size / 2, 6.5, 0, Math.PI * 2);
 	c2.fill();
 }
+//End of function
 
 // indexing random symbols
 var r;
