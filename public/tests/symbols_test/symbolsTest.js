@@ -346,7 +346,7 @@ function blackDot() {
 }
 //End of function
 
-// indexing random symbols
+// Variables for indexing random symbols for Test not results
 var r;
 var r2;
 
@@ -354,9 +354,6 @@ var r2;
 function randomSymbol() {
 	r = Math.floor(Math.random() * 4);
 	r2 = Math.floor(Math.random() * 4);
-	// TODO: Suppose to be 580? Or canvasSize?
-	// x = Math.floor(Math.random() * 580);
-	// y = Math.floor(Math.random() * 580);
 	x = Math.floor(Math.random() * size);
 	y = Math.floor(Math.random() * size);
 
@@ -390,8 +387,10 @@ function randomSymbol() {
 	}
 
 }
+//End of Function
 
-//Right eye option
+
+//Function for right eye test only
 function rightOption() {
 	hideBtns();
 	rightEyeInProgress = true;
@@ -403,7 +402,9 @@ function rightOption() {
 	}
 
 }
+// End of Function
 
+//Function of left eye test only
 function leftOption() {
 
 	hideBtns();
@@ -417,6 +418,9 @@ function leftOption() {
 
 
 }
+//End of function
+
+//Function to test both eyes
 function bothOption() {
 
 	hideBtns();
@@ -430,10 +434,13 @@ function bothOption() {
 
 
 }
+//End of Function
 
-// Vaariable representing iterations
+
+// Vaariable representing iterations for right eye test(s)
 var i = 0;
 
+//Function to test right eye for Right eye only test and Right eye portion of both eye test
 function rightEyeTest() {
 
 
@@ -474,9 +481,11 @@ function rightEyeTest() {
 	}
 
 }
+//End of Function
 
+//Function for Both eye test to transition to next eye
 function nexttest() {
-	// TODO: canvas2 is shifting to left between switching (might be display attr)
+	
 	canvas.style.display = "none";
 	canvas2.style.display = "none";
 
@@ -487,11 +496,14 @@ function nexttest() {
 	bothLEyeInProgress = true;
 
 }
+//End of Function
 
 
-// Representing left eye iterations
+
+// Representing iterations for Left eye test(s)
 var a = 0;
 
+// Function to test left eye for Left eye only test and left portion of both eye test
 function leftEyeTest() {
 
 	canvas.style.display = "none";
@@ -535,14 +547,15 @@ function leftEyeTest() {
 
 	}
 }
+//End of Function
+
 
 var j;
 var j2;
-
 // Results for tests shows 1 canvas'
 // blue represents right eye
 // orange represents left eye
-// function to show the erros after test is conducted
+// function to show the erros after test is conducted for both eyes
 function bothResults() {
 
 	// console.log("Result Symbols: " + resultsSymbols);
@@ -569,8 +582,9 @@ function bothResults() {
 	}
 	showExitButton();
 }
+//End of function
 
-//Right Eye Results
+//Function to display right eye results
 function rightResults() {
 	console.log("Reading from right results");
 	canvas.style.display = "inline-block";
@@ -588,7 +602,9 @@ function rightResults() {
 
 
 }
+//End of function
 
+//Function to display left eye results
 function leftResults() {
 	canvas.style.display = "none";
 	canvas2.style.display = "inline-block";
@@ -605,8 +621,9 @@ function leftResults() {
 
 
 }
+//End of function
 
-
+//Function to let user exit and save results
 function showExitButton() {
 
 	exitBtns.style.display = "inline-block";
@@ -627,8 +644,10 @@ function showExitButton() {
 		}
 	}, fadeInSpeed);
 }
+//End of Function
 
-// Update value names
+
+// Function to save results to db
 function getSymbolsResults() {
 	return {
 		"TestName": "symbols",
@@ -641,3 +660,4 @@ function getSymbolsResults() {
 		"RightResultsSymbols": rightResultsSymbols
 	}
 }
+//End of function
