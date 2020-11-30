@@ -63,7 +63,7 @@ function setupForBothEyes() {
 	rightEyeInProgress = false;
 	canvasRef.show();
 }
-
+// CURRENT: Check that both eye results working
 /**
  * Unhides the test canvas. Enables canvas to update via setting
  * 	waitingToStart to false. Records the current time and fills the position queue.
