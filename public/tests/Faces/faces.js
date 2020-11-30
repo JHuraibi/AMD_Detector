@@ -13,6 +13,9 @@ var leftEyeInProgress;
 var bothREyeinProgress;
 var bothLEyeInProgress;
 
+//HTML variables:
+// Two canvases for left and right eyey
+// Buttons for right, left, both eye test(s) and exit button
 var canvas = document.getElementById('canvas1');
 var canvas2 = document.getElementById("canvas2");
 var rightBtn = document.getElementById("rightBtn");
@@ -24,7 +27,7 @@ var c = canvas.getContext('2d');
 var c2 = canvas2.getContext('2d');
 let exitBtns = document.getElementById('exitTestBtns');
 
-//Canvas sizing
+//Sizing Canvas
 var size = 700;
 canvas.style.width = size + "px";
 canvas.style.height = size + "px";
@@ -39,7 +42,9 @@ canvas2.height = size * scale;
 
 c.scale(scale, scale);
 c2.scale(scale, scale);
+//End of Sizing Canvas
 
+//Function to set speed of test and get user id
 var speed = 3000;
 var id;
 var db = firebase.firestore();
@@ -61,12 +66,12 @@ async function getUid() {
 		}
 	});
 }
+//End of Function
 
+//Function to flag if user isnt pressing correct key
 window.addEventListener('keydown', function (e) {
 	
-	// var key = e.keyCode;
 
-	// key variable
 	var key = e.key;
 	key = key.toLowerCase();
 
@@ -85,23 +90,23 @@ window.addEventListener('keydown', function (e) {
 	}
 
 });
+//End of Function
+
+
 
 // initalizing canvas
 c.fillStyle = "White";
 c.fillRect(0, 0, size, size);
 blackDot();
 
-// Variable
-//Characters for symbols
-//frown code 9785
-//smile code 9786
-// var frown = String.fromCharCode(9785);
-// var smile = String.fromCharCode(9786);
+
+//Getting Smiley and Frowny face emoji using its unicode
 var frown = String.fromCodePoint(9785);
 var smile = String.fromCodePoint(9786);
 
 
-
+//Variables: symbols contains frown and smile to be displayed randomly
+//Variables labeled with "result" means it is flagging the x,y coordinated to display after test
 var symbols = [frown, smile];
 var rightResultX = [];
 var rightResultY = [];
@@ -113,11 +118,11 @@ var leftResultsSymbols = [];
 // Not displaying second canvas
 canvas2.style.display = "none";
 
-// index to capture result
+// index to capture results using "t" index
 var t = 0;
 var t2 = 0;
 
-// if the key pressed is not a capture the result for the next 4 functions
+//Function to flag incorrect key is pressed for the next 2 functions
 function fKey() {
 	if (rightEyeInProgress) {
 		if (symbols[r] != frown) {
@@ -209,6 +214,8 @@ function sKey() {
 
 
 }
+//End of function (Past 2 functions)
+
 
 // function to hide display buttons
 nexteyebtn.style.display = "none";
@@ -218,8 +225,9 @@ function hideBtns() {
 	leftBtn.style.display = "none";
 	bothBtn.style.display = "none";
 }
+//End of function
 
-//function to clear canvas
+//function to clear canvas after each iteration
 function clearCanvas() {
 	c.clearRect(0, 0, size, size);
 	c.fillStyle = "White";
@@ -230,6 +238,7 @@ function clearCanvas() {
 	c2.fillStyle = "White";
 	c2.fillRect(0, 0, size, size)
 }
+//End function
 
 //Function have black dot in the center
 function blackDot() {
