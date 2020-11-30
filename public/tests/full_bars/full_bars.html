@@ -4,8 +4,8 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta name="description" content="">
-		<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32" />
-		<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16" />
+		<link rel="icon" type="image/png" href="../../images/favicon-32x32.png" sizes="32x32"/>
+		<link rel="icon" type="image/png" href="../../images/favicon-16x16.png" sizes="16x16"/>
 		
 		<title>Full Bars · Test</title>
 		<!-- Bootstrap core CSS -->
@@ -14,9 +14,11 @@
 		<link href="../../css/cover.css" rel="stylesheet">
 		
 		<style>
-			main {
-				padding-top: 1em;
-				padding-bottom: 1em;
+			canvas {
+				border: 5px solid black;
+				background-color: #f0f0f0;
+				margin-top: 1em;
+				margin-bottom: 1em;
 			}
 			
 			.instruct {
@@ -30,8 +32,24 @@
 				color: #282828;
 			}
 			
-			.result-canvases > canvas{
-				background: #f0f0f0;
+			.bigbtn {
+				height: auto;
+				width: auto;
+				font-size: 1.3em;
+				padding-bottom: 5px;
+				margin: 5px;
+			}
+			
+			.row:after {
+				content: "";
+				display: table;
+				clear: both;
+			}
+			
+			.column {
+				float: left;
+				width: 50%;
+				text-align: center;
 			}
 		</style>
 	</head>
@@ -47,60 +65,69 @@
 				</div>
 			</header>
 			
+			<!-- Which eyes to test -->
+			<div class="instruct" id="whichEye">
+				<p>
+					Choose which eye to test. Choosing the left eye requires you to cover your right eye. Choosing the right
+					eye
+					requires you to cover your left eye. Choosing both eyes will do both processes, starting with the left
+					eye.
+				</p>
+				<button id="lefteye" class="btn btn-sm btn-outline-secondary" onclick="setupForLeftEyeOnly(); updateButtons()"
+						style="color: #282828; border-color: #282828;">Test Left Eye
+				</button>
+				<button id="botheyes" class="btn btn-sm btn-outline-secondary" onclick="setupForBothEyes(); updateButtons()"
+						style="color: #282828; border-color: #282828;">Test Both Eyes
+				</button>
+				<button id="righteye" class="btn btn-sm btn-outline-secondary" onclick="setupForRightEyeOnly(); updateButtons()"
+						style="color: #282828; border-color: #282828;">Test Right Eye
+				</button>
+			</div>
+			
+			<!-- Main div with testing canvas -->
 			<main role="main">
 				<script src="../p5.js"></script>
 				<script src="full_bars.js"></script>
-				<!-- TODO: Section temporarily disabled to match other tests -->
-				<!--				<div class="instruct" id="leftEyeInstruct">-->
-				<!--					<p>-->
-				<!--						Cover your right eye, and with your left eye focus on the black dot in the center.-->
-				<!--						Click to Start Left Eye Test-->
-				<!--					</p>-->
-				<!--					<button class="btn btn-sm btn-outline-secondary"-->
-				<!--							onclick="hideLeftEyeBtn(); startTest();">-->
-				<!--						Start Left Eye-->
-				<!--					</button>-->
-				<!--				</div>-->
-				<div class="instruct" id="rightEyeInstruct" style="display: none">
-					<p>
-						Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
-						Click to Start Right Eye Test.
-					</p>
-					<button class="btn btn-sm btn-outline-secondary"
-							onclick="hideRightEyeBtn(); startTest();">
-						Start Right Eye
-					</button>
-				</div>
 			</main>
-			
-			<div class="result-canvases">
-				<canvas id="leftResultsCanvas" style="display: none"></canvas>
-				<canvas id="rightResultsCanvas" style="display: none"></canvas>
-			</div>
 			
 			<div>
 				
-				<script>
-					function hideLeftEyeBtn() {
-						document.getElementById("leftEyeInstruct").style.display = "none";
-					}
-					
-					function hideRightEyeBtn() {
-						document.getElementById("rightEyeInstruct").style.display = "none";
-					}
-				</script>
+				<!--				<script>-->
+				<!--					function hideLeftEyeBtn() {-->
+				<!--						document.getElementById("leftEyeInstruct").style.display = "none";-->
+				<!--					}-->
+				<!--					-->
+				<!--					function hideRightEyeBtn() {-->
+				<!--						document.getElementById("rightEyeInstruct").style.display = "none";-->
+				<!--					}-->
+				<!--				</script>-->
 				
-				<div class="btn-group" id="startTestBtn">
+				<div class="btn-group" id="startTestBtn" style="display: none">
 					<button type="button" id="startTest" onClick="startTest()"
-							class="btn btn-sm btn-outline-secondary test-buttons">
+							class="bigbtn btn btn-sm btn-outline-secondary test-buttons">
 						Start Test
 					</button>
 				</div>
 				
+				<!-- Result Canvases Labels -->
+				<div class="row" id="resultsLabels" style="display: none">
+					<div class="column" id="leftEyeResults">
+						<b>Left Eye Results</b>
+					</div>
+					<div class="column" id="rightEyeResults">
+						<b>Right Eye Results</b>
+					</div>
+				</div>
+				
+				<div class="result-canvases">
+					<canvas id="leftResultsCanvas" style="display: none"></canvas>
+					<canvas id="rightResultsCanvas" style="display: none"></canvas>
+				</div>
+				
 				<!-- These buttons will only become visible once the user has finished the test -->
 				<div class="btn-group" id="exitTestBtns" style="display: none">
-
-					<button type="button" id="uploadBtn" onClick="sendToFirestore();showStatusIndicator();updateButtons()"
+					
+					<button type="button" id="uploadBtn" onClick="sendToFirestore();showStatusIndicator();updateFirebaseButtons()"
 							class="btn btn-sm btn-outline-secondary test-buttons">
 						Upload Results
 					</button>
@@ -113,7 +140,6 @@
 							class="btn btn-sm btn-outline-secondary test-buttons">
 						Continue to Questions
 					</button>
-					<!-- TODO: Change to popup button (like leftEyeInstruct) -->
 					<p id="uploadStatus" style="display: none">
 						<br> Uploading Your Results...
 					</p>
@@ -207,6 +233,14 @@
 		
 		<script>
 			function updateButtons() {
+				let whichEye = document.getElementById("whichEye");
+				let startTestBtn = document.getElementById("startTestBtn");
+				
+				whichEye.style.display = "none";
+				startTestBtn.style.display = "inherit";
+			}
+			
+			function updateFirebaseButtons() {
 				let uploadBtn = document.getElementById("uploadBtn");
 				let exitBtn = document.getElementById("exitBtn");
 				
@@ -221,29 +255,30 @@
 				uploadStatusIndicator.style.display = "inherit";
 			}
 		</script>
-
+		
 		<!-- Check if user is signed in -->
-	<script>
-		var db = firebase.firestore();
-		(async function checkUser() {
-			await firebase.auth().onAuthStateChanged(user => {
-				if (user) {
-					id = user.uid;
-					db.collection("users").doc(id)
-						.get()
-						.then(doc => {
-							let type = doc.data().type;
-							if (type != 'user') {
-								console.log("Physician Account. Access Denied.");
-								window.location = '../../404.html';
-							}
-						});
-				} else {
-					console.log("Not logged in");
-					window.location = '../../index.html';
-				}
-			});
-		})();
-	</script>
+		<script>
+			var db = firebase.firestore();
+			(async function checkUser() {
+				await firebase.auth().onAuthStateChanged(user => {
+					if (user) {
+						id = user.uid;
+						db.collection("users").doc(id)
+							.get()
+							.then(doc => {
+								let type = doc.data().type;
+								if (type != 'user') {
+									console.log("Physician Account. Access Denied.");
+									window.location = '../../404.html';
+								}
+							});
+					}
+					else {
+						console.log("Not logged in");
+						window.location = '../../index.html';
+					}
+				});
+			})();
+		</script>
 	</body>
 </html>

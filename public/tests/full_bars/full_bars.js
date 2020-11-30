@@ -3,7 +3,10 @@
 
 // NOTE: fill() can be called at any point and sets the color (and optionally opacity) for EVERYTHING
 // 			drawn to the canvas. So all new objects will be drawn in the same color until another fill() call is made.
+//			This applies to only P5 related function calls and drawing,
+//					i.e. does NOT apply for showLeftResults() and showRightResults()
 
+let canvasRef;						// Reference object to the DOM canvas element
 let timestamp;						// Will record the time the test was started (in milliseconds since Epoch)
 let backgroundColor = 240;			// Greyscale color for canvas background (0:Black, 255:White)
 let barFillAlpha = 0;				// Will control the bars' alpha
@@ -11,7 +14,8 @@ let opacityIncrease = 15;			// How much to incrementally increase bar opacity
 let clickFillAlpha = 0;				// Will control the click indicator's alpha
 
 let timer = 0;						// Frame counter
-let sec = 2;						// Seconds between showing each bar
+// let sec = 2;						// Seconds between showing each bar
+let sec = 0.2;		// !! FOR TESTING
 let indicatorStartTime = 0;			// Will track the current timer value when a click is registered
 let indicatorDuration = 65;			// How many frames to show the indicator (60 frames is 1 second)
 
@@ -24,30 +28,54 @@ let yLocationLeft = [];				// LEFT EYE: Y locations at the time of a click event
 let xLocationRight = [];			// RIGHT EYE: X locations at the time of a click event
 let yLocationRight = [];			// RIGHT EYE: Y locations at the time of a click event
 
-let numBars = 40;					// How many bars to draw
+// let numBars = 40;					// How many bars to draw
+let numBars = 2;		// !! FOR TESTING
 let barW;							// How thick each bar will be (is a function of numbers of bars vs canvas size)
 let canvasSize = 700;				// Size of width and height of the canvas (in pixels)
 
 let clickUsedThisRound = false;		// Disables click if one was already received for current bar being shown
 let verticalInProgress = true;		// Indicates whether bars are currently being drawn vertically or horizontally
 let leftEyeTestInProgress = true;	// Indicates if bars are currently being drawn vertically or horizontally
+let rightEyeInProgress = false;
+// let doNotTestLeft = false'	// CHECK: This variable is not necessary. Keep for readability? (1 of 3)
+let doNotTestRight = false;
 
 let waitingToStart = true;			// Status indicator: Waiting for user to click "Start (X) Eye" button
-let testFinished = false;			// Status indicator: Waiting for user to click "Start (X) Eye" button
+let testFinished = false;			// Status indicator: Testing complete
 
-let canvasRef;						// Reference object to the DOM canvas element
+function setupForLeftEyeOnly() {
+	leftEyeInProgress = true;
+	// doNotTestLeft = false; 		// CHECK: This variable is not necessary. Keep for readability? (2 of 3)
+	doNotTestRight = true;
+	canvasRef.show();
+}
 
+function setupForRightEyeOnly() {
+	leftEyeInProgress = false;
+	rightEyeInProgress = true;
+	// doNotTestLeft = true; 		// CHECK: This variable is not necessary. Keep for readability? (3 of 3)
+	doNotTestRight = false;
+	canvasRef.show();
+}
+
+function setupForBothEyes() {
+	leftEyeInProgress = true;
+	rightEyeInProgress = false;
+	canvasRef.show();
+}
 
 /**
  * Unhides the test canvas. Enables canvas to update via setting
- * 	waitingToStart to false. Records the current time and starts automatic looping of draw()
+ * 	waitingToStart to false. Records the current time and fills the position queue.
+ * 	Starts automatic looping of draw().
  * This function runs after user clicks button on instructions page.
  * 	Upon page loading, setup() and draw() both run once.
  */
 function startTest() {
 	canvasRef.show();
 	waitingToStart = false;
-	timestamp = Date.now();	// TODO: Moved timestamp here from setup()
+	timestamp = Date.now();
+	fillPositionQueue();
 	loop();
 }
 
@@ -60,11 +88,11 @@ function startTest() {
  */
 function setup() {
 	// canvasRef = createCanvas(canvasSize, canvasSize);
-	noLoop();
 	canvasRef = createCanvas(canvasSize, canvasSize);
 	canvasRef.id('canvasRef');
 	
-	barW = canvasSize / numBars;
+	// barW = canvasSize / numBars;
+	barW = 20;	// !! FOR TESTING
 	currentAxis = 'x';
 	
 	// numBars needs to be a multiple of 2
@@ -72,12 +100,12 @@ function setup() {
 		numBars--;
 	}
 	
-	fillPositionQueue();
-	
-	canvasRef.show();
 	background(backgroundColor);
 	drawCenterDot();
 	drawStaticBorder();
+	canvasRef.hide();
+	
+	noLoop();
 }
 
 /**
@@ -281,40 +309,55 @@ function loadNextBarPos() {
 
 // TODO: Refactor function name
 /**
- * Handles events to run when the position queue becomes empty.
+ * Handles events to run when the position queue is/becomes empty. Flow control
+ * 	is determined by which eye is currently being tested and also by
+ * 	which eye(s) the user opted to test.
  * [1] Left Eye
  * 		- [A] Vertical Bars are done. Move on to horizontal bars.
- * 		- [B] Horizontal bars are done. Move to right eye.
+ * 		- [B] Horizontal bars are done. Move to right eye (if user opted to test right eye).
+ * 		- [C] Horizontal bars are done and user opted not to test right eye. Test is done.
  * [2] Right Eye
  * 		- [A] Vertical Bars are done. Move on to horizontal bars.
  * 		- [B] Horizontal bars are done. Test is done.
  */
 function updateBarStatus() {
 	// [1]
-	if (leftEyeTestInProgress) {
+	if (leftEyeInProgress) {
 		// [1A]
 		if (verticalInProgress) {
+			console.log("LEFT: SWITCHING TO HORIZONTAL");
 			fillPositionQueue();
 			switchAxis();
 		}
 		// [1B]
-		else {
+		else if (!verticalInProgress && !doNotTestRight) {
+			console.log("LEFT: SWITCHING TO RIGHT EYE");
 			fillPositionQueue();
 			switchAxis();
 			transitionToNextEye();
 		}
+		// [1C]
+		else {
+			console.log("LEFT: DONE LEFT EYE. NO RIGHT EYE");
+			testFinished = true;
+		}
 	}
 	// [2]
-	else {
+	else if (rightEyeInProgress && !doNotTestRight) {
 		// [2A]
 		if (verticalInProgress) {
+			console.log("RIGHT: SWITCHING TO HORIZONTAL");
 			fillPositionQueue();
 			switchAxis();
 		}
 		// [2B]
 		else {
+			console.log("RIGHT: DONE");
 			testFinished = true;
 		}
+	}
+	else {
+		// !! CHECK: Does reaching this final else statement indicate a syntax error?
 	}
 }
 
@@ -398,7 +441,7 @@ function fadeOutIndicator() {
  */
 function drawStaticBorder() {
 	noFill();
-	strokeWeight(10);
+	strokeWeight(4);
 	stroke(0);
 	rect(0, 0, width, height);
 }
