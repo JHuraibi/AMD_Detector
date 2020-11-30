@@ -1,8 +1,6 @@
-// // The program is meant to randomly display symbols on the canvas 
-// // If the user sees "+" press "a"
-// // If the user sees "-" press "s"
-// // If the user sees "x" press "x"
-// // If the user sees "÷" press "d"
+// // The program is meant to randomly display emoji faces on the canvas 
+// // If the user sees Smiley face press "s"
+// // If the user sees Frowny face press "f"
 // // Any error in pressing the wrong key should be flagged and displayed after the test is conducted
 // // JS code
 // //
