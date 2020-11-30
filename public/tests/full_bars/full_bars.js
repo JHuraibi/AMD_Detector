@@ -37,7 +37,7 @@ let clickUsedThisRound = false;		// Disables click if one was already received f
 let verticalInProgress = true;		// Indicates whether bars are currently being drawn vertically or horizontally
 let leftEyeTestInProgress = true;	// Indicates if bars are currently being drawn vertically or horizontally
 let rightEyeInProgress = false;
-// let doNotTestLeft = false'	// CHECK: This variable is not necessary. Keep for readability? (1 of 3)
+let doNotTestLeft = false;
 let doNotTestRight = false;
 
 let waitingToStart = true;			// Status indicator: Waiting for user to click "Start (X) Eye" button
@@ -45,7 +45,7 @@ let testFinished = false;			// Status indicator: Testing complete
 
 function setupForLeftEyeOnly() {
 	leftEyeInProgress = true;
-	// doNotTestLeft = false; 		// CHECK: This variable is not necessary. Keep for readability? (2 of 3)
+	doNotTestLeft = false;
 	doNotTestRight = true;
 	canvasRef.show();
 }
@@ -53,7 +53,7 @@ function setupForLeftEyeOnly() {
 function setupForRightEyeOnly() {
 	leftEyeInProgress = false;
 	rightEyeInProgress = true;
-	// doNotTestLeft = true; 		// CHECK: This variable is not necessary. Keep for readability? (3 of 3)
+	doNotTestLeft = true;
 	doNotTestRight = false;
 	canvasRef.show();
 }
@@ -61,6 +61,8 @@ function setupForRightEyeOnly() {
 function setupForBothEyes() {
 	leftEyeInProgress = true;
 	rightEyeInProgress = false;
+	doNotTestLeft = false;
+	doNotTestRight = false;
 	canvasRef.show();
 }
 // CURRENT: Check that both eye results working
@@ -128,25 +130,16 @@ function setup() {
  */
 function draw() {
 	if (waitingToStart) {
-		// Force draw not to execute
+		// Force draw() not to put anything onto the canvas
 		return;
 	}
-	background(backgroundColor);
 	
-	if (testFinished) {
-		canvasRef.hide();
-		noLoop();
-		
-		showExitButton();
-		
-		showLeftResults();
-		showRightResults();
-	}
 	
 	if (timer % (60 * sec) === 0) {
 		updateAll();
 	}
 	
+	background(backgroundColor);
 	drawBar();
 	drawCenterDot();
 	drawClickIndicator();
@@ -339,7 +332,7 @@ function updateBarStatus() {
 		// [1C]
 		else {
 			console.log("LEFT: DONE LEFT EYE. NO RIGHT EYE");
-			testFinished = true;
+			endOfTestHandler();
 		}
 	}
 	// [2]
@@ -353,7 +346,7 @@ function updateBarStatus() {
 		// [2B]
 		else {
 			console.log("RIGHT: DONE");
-			testFinished = true;
+			endOfTestHandler();
 		}
 	}
 	else {
@@ -384,9 +377,9 @@ function transitionToNextEye() {
 	waitingToStart = true;
 	
 	indicatorStartTime = 0;
-	// timer = 0;
 	canvasRef.hide();
 	noLoop();
+	
 	document.getElementById("startTest").style.display = "none";
 	document.getElementById("rightEyeInstruct").style.display = "block";
 }
@@ -444,6 +437,25 @@ function drawStaticBorder() {
 	strokeWeight(4);
 	stroke(0);
 	rect(0, 0, width, height);
+}
+
+function endOfTestHandler(){
+	canvasRef.hide();
+	
+	document.getElementById("resultsLabels").style.display = "inherit";
+	
+	noLoop();
+	
+	showExitButton();
+	
+	showLeftResults();
+	showRightResults();
+	
+	if (!doNotTestLeft)
+	
+	if (!doNotTestRight){
+		showRightResults();
+	}
 }
 
 /**
