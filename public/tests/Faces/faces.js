@@ -70,7 +70,7 @@ async function getUid() {
 
 //Function to flag if user isnt pressing correct key
 window.addEventListener('keydown', function (e) {
-	
+
 
 	var key = e.key;
 	key = key.toLowerCase();
@@ -132,8 +132,7 @@ function fKey() {
 			t++;
 		}
 	}
-	if(leftEyeInProgress)
-	{
+	if (leftEyeInProgress) {
 		if (symbols[r2] != frown) {
 			leftResultsSymbols[t2] = symbols[r2];
 			leftResultX[t2] = x;
@@ -141,8 +140,7 @@ function fKey() {
 			t2++;
 		}
 	}
-	if(bothREyeinProgress)
-	{
+	if (bothREyeinProgress) {
 		if (symbols[r] != frown) {
 			rightResultsSymbols[t] = symbols[r];
 			rightResultX[t] = x;
@@ -151,8 +149,7 @@ function fKey() {
 		}
 
 	}
-	else if(bothLEyeInProgress) 
-	{
+	else if (bothLEyeInProgress) {
 		if (symbols[r2] != frown) {
 			leftResultsSymbols[t2] = symbols[r2];
 			leftResultX[t2] = x;
@@ -177,8 +174,7 @@ function sKey() {
 
 		}
 	}
-	if(leftEyeInProgress) 
-	{
+	if (leftEyeInProgress) {
 		if (symbols[r2] != smile) {
 			leftResultsSymbols[t2] = symbols[r2];
 			leftResultX[t2] = x;
@@ -188,8 +184,7 @@ function sKey() {
 		}
 
 	}
-	if(bothREyeinProgress)
-	{
+	if (bothREyeinProgress) {
 		if (symbols[r] != smile) {
 			rightResultsSymbols[t] = symbols[r];
 			rightResultX[t] = x;
@@ -198,8 +193,7 @@ function sKey() {
 		}
 
 	}
-	else if(bothLEyeInProgress)
-	{
+	else if (bothLEyeInProgress) {
 		if (symbols[r2] != smile) {
 			leftResultsSymbols[t2] = symbols[r2];
 			leftResultX[t2] = x;
@@ -240,19 +234,21 @@ function clearCanvas() {
 }
 //End function
 
-//Function have black dot in the center
+//Function have black dot in the center after each iteration
 function blackDot() {
 	c.fillStyle = "black";
 	c.beginPath();
 	c.arc(size / 2, size / 2, 6.5, 0, Math.PI * 2);
 	c.fill();
-// Canvas 2
+	// Canvas 2
 	c2.fillStyle = "black";
 	c2.beginPath();
 	c2.arc(size / 2, size / 2, 6.5, 0, Math.PI * 2);
 	c2.fill();
 }
+//End of function
 
+//Var for randomly selecting a symbol
 var r;
 var r2;
 
@@ -260,55 +256,17 @@ var r2;
 function randomSymbol() {
 	r = Math.floor(Math.random() * 2);
 	r2 = Math.floor(Math.random() * 2);
-	// TODO: Suppose to be 580? Or canvasSize?
-	// x = Math.floor(Math.random() * 580);
-	// y = Math.floor(Math.random() * 580);
 	x = Math.floor(Math.random() * size);
 	y = Math.floor(Math.random() * size);
 	if (rightEyeInProgress) {
-		
-        if(symbols[r] != smile){
-		c.beginPath();
-		c.fillStyle = "black";
-		c.font = "40px Arial";
-        c.fillText(symbols[r], x, y);
-        }
-		if(symbols[r] != frown)
-		{
-        c.beginPath();
-		c.fillStyle = "black";
-		c.font = "60px Arial";
-		c.fillText(symbols[r], x, y);
-	}
-	
-	}
-	if(leftEyeInProgress) {
-		console.log("In the else c2 random symbols")
-        // Canvas 2
-        if (symbols[r2] != smile)
-		{c2.beginPath();
-		c2.fillStyle = "black";
-		c2.font = "40px Arial";
-        c2.fillText(symbols[r2], x, y);
-        }
-		if(symbols[r2] != frown)
-		{
-        c2.beginPath();
-		c2.fillStyle = "black";
-		c2.font = "60px Arial";
-        c2.fillText(symbols[r2], x, y);
-		}
-	}
-	if(bothREyeinProgress)
-	{
-		if(symbols[r] != smile){
+
+		if (symbols[r] != smile) {
 			c.beginPath();
 			c.fillStyle = "black";
 			c.font = "40px Arial";
 			c.fillText(symbols[r], x, y);
-			}
-			if(symbols[r] != frown)
-			{
+		}
+		if (symbols[r] != frown) {
 			c.beginPath();
 			c.fillStyle = "black";
 			c.font = "60px Arial";
@@ -316,16 +274,45 @@ function randomSymbol() {
 		}
 
 	}
-	else if(bothLEyeInProgress)
-	{
-		if(symbols[r] != smile){
+	if (leftEyeInProgress) {
+		console.log("In the else c2 random symbols")
+		// Canvas 2
+		if (symbols[r2] != smile) {
 			c2.beginPath();
 			c2.fillStyle = "black";
 			c2.font = "40px Arial";
 			c2.fillText(symbols[r2], x, y);
-			}
-			if(symbols[r] != frown)
-			{
+		}
+		if (symbols[r2] != frown) {
+			c2.beginPath();
+			c2.fillStyle = "black";
+			c2.font = "60px Arial";
+			c2.fillText(symbols[r2], x, y);
+		}
+	}
+	if (bothREyeinProgress) {
+		if (symbols[r] != smile) {
+			c.beginPath();
+			c.fillStyle = "black";
+			c.font = "40px Arial";
+			c.fillText(symbols[r], x, y);
+		}
+		if (symbols[r] != frown) {
+			c.beginPath();
+			c.fillStyle = "black";
+			c.font = "60px Arial";
+			c.fillText(symbols[r], x, y);
+		}
+
+	}
+	else if (bothLEyeInProgress) {
+		if (symbols[r] != smile) {
+			c2.beginPath();
+			c2.fillStyle = "black";
+			c2.font = "40px Arial";
+			c2.fillText(symbols[r2], x, y);
+		}
+		if (symbols[r] != frown) {
 			c2.beginPath();
 			c2.fillStyle = "black";
 			c2.font = "60px Arial";
@@ -336,9 +323,10 @@ function randomSymbol() {
 	}
 
 }
+//End of Function
 
-function rightOption()
-{
+//Function to test right eye only
+function rightOption() {
 	hideBtns();
 	rightEyeInProgress = true;
 	bothREyeinProgress = false;
@@ -346,11 +334,12 @@ function rightOption()
 	if (rightEyeInProgress) {
 		rightEyeTest();
 
+	}
 }
-}
+//End of function
 
-function leftOption()
-{
+//Function to test left eye only
+function leftOption() {
 
 	hideBtns();
 	leftEyeInProgress = true;
@@ -362,7 +351,9 @@ function leftOption()
 
 
 }
+//End of function
 
+//Function to test both eyes
 function bothOption() {
 
 	hideBtns();
@@ -376,7 +367,7 @@ function bothOption() {
 
 
 }
-
+//End of function
 
 
 
@@ -395,7 +386,7 @@ function rightEyeTest() {
 			i++;
 			setTimeout(rightEyeTest, speed);
 			// setTimeout(test1, 1000);	// !! FOR TESTING
-			
+
 		}
 		else {
 
@@ -413,8 +404,7 @@ function rightEyeTest() {
 			setTimeout(rightEyeTest, speed);
 			// setTimeout(test1, 1000);	// !! FOR TESTING
 		}
-		else 
-		{
+		else {
 
 			nexttest();
 		}
@@ -427,15 +417,15 @@ function nexttest() {
 	// TODO: canvas2 is shifting to left between switching (might be display attr)
 	canvas.style.display = "none";
 	canvas2.style.display = "none";
-	
+
 	nextEye.style.display = "inline-block";
 	nexteyebtn.style.display = "inline-block";
 	bothREyeinProgress = false;
-	bothLEyeInProgress= true;
-	
+	bothLEyeInProgress = true;
 
 
-	
+
+
 }
 
 var a = 0;
@@ -453,11 +443,11 @@ function leftEyeTest() {
 			randomSymbol();
 			a++;
 			setTimeout(leftEyeTest, speed);
-			
+
 			// setTimeout(test2, 1000);	// !! FOR TESTING
 		}
-		else{
-		leftResults();
+		else {
+			leftResults();
 		}
 	}
 
@@ -477,8 +467,7 @@ function leftEyeTest() {
 			// setTimeout(test2, 1000);	// !! FOR TESTING
 			console.log("End of the if statement for both left")
 		}
-		else
-		{
+		else {
 			console.log("I'm in the both results else")
 			bothResults();
 		}
@@ -558,7 +547,7 @@ function leftResults() {
 }
 
 function showExitButton() {
-	
+
 	let fadeInSpeed = 1;
 
 	exitBtns.style.display = "inherit";
