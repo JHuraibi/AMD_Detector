@@ -104,6 +104,51 @@ blackDot();
 var frown = String.fromCodePoint(9785);
 var smile = String.fromCodePoint(9786);
 
+//Function to size Symbols to make sure they are correct
+function sizingSymbols() {
+	if (symbols[r] == smile) {
+
+		c.fillStyle = "black";
+		c.font = "60px Arial";
+	}
+	if (symbols[r] == frown) {
+
+		c.fillStyle = "black";
+		c.font = "40px Arial";
+	}
+	if (symbols[r2] == smile) {
+
+		c.fillStyle = "black";
+		c.font = "60px Arial";
+	}
+	if (symbols[r2] == frown) {
+
+		c.fillStyle = "black";
+		c.font = "40px Arial";
+	}
+	if (symbols[j] == smile) {
+
+		c.fillStyle = "red";
+		c.font = "60px Arial";
+	}
+	if (symbols[j] == frown) {
+
+		c.fillStyle = "red";
+		c.font = "40px Arial";
+	}
+	if (symbols[j2] == smile) {
+		c.fillStyle = "red";
+		c.font = "60px Arial";
+	}
+	if (symbols[j2] == frown) {
+
+		c.fillStyle = "red";
+		c.font = "40px Arial";
+	}
+
+}
+//End of function
+
 
 //Variables: symbols contains frown and smile to be displayed randomly
 //Variables labeled with "result" means it is flagging the x,y coordinated to display after test
@@ -258,67 +303,30 @@ function randomSymbol() {
 	r2 = Math.floor(Math.random() * 2);
 	x = Math.floor(Math.random() * size);
 	y = Math.floor(Math.random() * size);
+	
 	if (rightEyeInProgress) {
-
-		if (symbols[r] != smile) {
-			c.beginPath();
-			c.fillStyle = "black";
-			c.font = "40px Arial";
-			c.fillText(symbols[r], x, y);
-		}
-		if (symbols[r] != frown) {
-			c.beginPath();
-			c.fillStyle = "black";
-			c.font = "60px Arial";
-			c.fillText(symbols[r], x, y);
-		}
+		sizingSymbols();
+		c.beginPath();
+		c.fillText(symbols[r], x, y);
 
 	}
 	if (leftEyeInProgress) {
 		console.log("In the else c2 random symbols")
 		// Canvas 2
-		if (symbols[r2] != smile) {
-			c2.beginPath();
-			c2.fillStyle = "black";
-			c2.font = "40px Arial";
-			c2.fillText(symbols[r2], x, y);
-		}
-		if (symbols[r2] != frown) {
-			c2.beginPath();
-			c2.fillStyle = "black";
-			c2.font = "60px Arial";
-			c2.fillText(symbols[r2], x, y);
-		}
+		sizingSymbols();
+		c2.beginPath();
+		c2.fillText(symbols[r2], x, y);
 	}
 	if (bothREyeinProgress) {
-		if (symbols[r] != smile) {
-			c.beginPath();
-			c.fillStyle = "black";
-			c.font = "40px Arial";
-			c.fillText(symbols[r], x, y);
-		}
-		if (symbols[r] != frown) {
-			c.beginPath();
-			c.fillStyle = "black";
-			c.font = "60px Arial";
-			c.fillText(symbols[r], x, y);
-		}
+		sizingSymbols();
+		c.beginPath();
+		c.fillText(symbols[r], x, y);
 
 	}
 	else if (bothLEyeInProgress) {
-		if (symbols[r] != smile) {
-			c2.beginPath();
-			c2.fillStyle = "black";
-			c2.font = "40px Arial";
-			c2.fillText(symbols[r2], x, y);
-		}
-		if (symbols[r] != frown) {
-			c2.beginPath();
-			c2.fillStyle = "black";
-			c2.font = "60px Arial";
-			c2.fillText(symbols[r2], x, y);
-		}
-
+		sizingSymbols();
+		c2.beginPath();
+		c2.fillText(symbols[r2], x, y);
 
 	}
 
@@ -503,16 +511,14 @@ function bothResults() {
 	blackDot();
 
 	for (j = 0; j < rightResultsSymbols.length; j++) {
-		c.fillStyle = "blue";
-		c.font = "35 px Arial";
+		sizingSymbols();
 		c.fillText(rightResultsSymbols[j], rightResultX[j], rightResultY[j]);
 
 	}
 
 	for (j2 = 0; j2 < leftResultsSymbols.length; j2++) {
 		console.log("In loop of c2 results ");
-		c2.fillStyle = "orange";
-		c2.font = "35 px Arial";
+		sizingSymbols();
 		c2.fillText(leftResultsSymbols[j2], leftResultX[j2], leftResultY[j2]);
 
 	}
