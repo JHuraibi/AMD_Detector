@@ -14,13 +14,6 @@
 		<link href="../../css/cover.css" rel="stylesheet">
 		
 		<style>
-			canvas {
-				border: 5px solid black;
-				background-color: #f0f0f0;
-				margin-top: 1em;
-				margin-bottom: 1em;
-			}
-			
 			.instruct {
 				width: 400px;
 				padding: 30px;
@@ -30,6 +23,17 @@
 				box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
 				text-align: center;
 				color: #282828;
+			}
+			
+			canvas {
+				border: 5px solid black;
+				background-color: #f0f0f0;
+				margin-top: 0.5em;
+				margin-bottom: 1em;
+			}
+			
+			#resultsLabels{
+				margin-top: 2em;
 			}
 			
 			.bigbtn {
@@ -102,6 +106,7 @@
 				<!--					}-->
 				<!--				</script>-->
 				
+				<!-- Button to start the left eye test -->
 				<div class="btn-group" id="startTestBtn" style="display: none">
 					<button type="button" id="startTest" onClick="startTest()"
 							class="bigbtn btn btn-sm btn-outline-secondary test-buttons">
@@ -109,14 +114,14 @@
 					</button>
 				</div>
 				
-				<!-- Next Eye -->
+				<!-- Next Eye (Includes button to start right eye test) -->
 				<div class="instruct" id="nextEye" style="display: none">
 					<p>
 						Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
 						Click the "seen" button whenever you notice a red dot appear.
 					</p>
-					<button id="nexttestbtn" class="btn btn-sm btn-outline-secondary"
-							style="color: #282828; border-color: #282828;">Start next eye</button>
+					<button id="nexttestbtn" class="btn btn-sm btn-outline-secondary" onclick="startRightTest();"
+							style="color: #282828; border-color: #282828;">Start Next Eye</button>
 				</div>
 				
 				<!-- Result Canvases Labels -->
@@ -198,7 +203,7 @@
 			function sendToFirestore() {
 				attemptUserLookup();
 				
-				var dataToWrite = getFullBarsResults();
+				let dataToWrite = getFullBarsResults();
 				
 				if (userRef) {
 					dbRef.collection("TestResults")

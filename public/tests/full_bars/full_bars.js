@@ -14,8 +14,7 @@ let opacityIncrease = 15;			// How much to incrementally increase bar opacity
 let clickFillAlpha = 0;				// Will control the click indicator's alpha
 
 let timer = 0;						// Frame counter
-// let sec = 2;						// Seconds between showing each bar
-let sec = 0.2;		// !! FOR TESTING
+let sec = 2;						// Seconds between showing each bar
 let indicatorStartTime = 0;			// Will track the current timer value when a click is registered
 let indicatorDuration = 65;			// How many frames to show the indicator (60 frames is 1 second)
 
@@ -29,13 +28,14 @@ let xLocationRight = [];			// RIGHT EYE: X locations at the time of a click even
 let yLocationRight = [];			// RIGHT EYE: Y locations at the time of a click event
 
 // let numBars = 40;					// How many bars to draw
-let numBars = 2;		// !! FOR TESTING
-let barW;							// How thick each bar will be (is a function of numbers of bars vs canvas size)
+let numBars = 8;			// !! FOR TESTING
+// let barW;							// How thick each bar will be (is a function of numbers of bars vs canvas size)
+let barW = 20;				// !! FOR TESTING
 let canvasSize = 700;				// Size of width and height of the canvas (in pixels)
 
 let clickUsedThisRound = false;		// Disables click if one was already received for current bar being shown
 let verticalInProgress = true;		// Indicates whether bars are currently being drawn vertically or horizontally
-let leftEyeTestInProgress = true;	// Indicates if bars are currently being drawn vertically or horizontally
+let leftEyeInProgress = true;		// Indicates if bars are currently being drawn vertically or horizontally
 let rightEyeInProgress = false;
 let doNotTestLeft = false;
 let doNotTestRight = false;
@@ -65,18 +65,36 @@ function setupForBothEyes() {
 	doNotTestRight = false;
 	canvasRef.show();
 }
-// CURRENT: Check that both eye results working
+
 /**
  * Unhides the test canvas. Enables canvas to update via setting
  * 	waitingToStart to false. Records the current time and fills the position queue.
- * 	Starts automatic looping of draw().
+ * 	Starts automatic looping of draw(). Hides the "Start Test" button.
  * This function runs after user clicks button on instructions page.
  * 	Upon page loading, setup() and draw() both run once.
  */
 function startTest() {
+	document.getElementById("startTestBtn").style.display = "none";
+	
 	canvasRef.show();
 	waitingToStart = false;
 	timestamp = Date.now();
+	fillPositionQueue();
+	loop();
+}
+
+/**
+ * Similar to startTest().
+ * Hides the right eye prompt div (id="nextEye").
+ * 	Unhides the test canvas. Enables canvas to update via
+ * 	setting waitingToStart to false. Fills the position queue.
+ * 	And finally, starts automatic looping of draw().
+ */
+function startRightTest() {
+	document.getElementById("nextEye").style.display = "none";
+	
+	canvasRef.show();
+	waitingToStart = false;
 	fillPositionQueue();
 	loop();
 }
@@ -94,7 +112,6 @@ function setup() {
 	canvasRef.id('canvasRef');
 	
 	// barW = canvasSize / numBars;
-	barW = 20;	// !! FOR TESTING
 	currentAxis = 'x';
 	
 	// numBars needs to be a multiple of 2
@@ -115,10 +132,6 @@ function setup() {
  * If waitingToStart is true:
  * 	- Prematurely returns so that nothing is attempted to be drawn to the canvas.
  *
- * If the test is done:
- *  - Show the results.
- *  - Unhide the exit button
- *
  * Every n-seconds (n set by the "sec" variable)
  *  - Updates relevant items (See updateAll() docstring)
  *
@@ -133,7 +146,6 @@ function draw() {
 		// Force draw() not to put anything onto the canvas
 		return;
 	}
-	
 	
 	if (timer % (60 * sec) === 0) {
 		updateAll();
@@ -158,10 +170,10 @@ function draw() {
  * If the click was a mouse click other than a left click:
  * 	- Take no action.
  *
- * If leftEyeTestInProgress is TRUE:
+ * If leftEyeInProgress is TRUE:
  *  - Record the location of the currently-shown bar.
  *
- * If leftEyeTestInProgress is FALSE:
+ * If leftEyeInProgress is FALSE:
  *  - Record the location of the currently-shown bar.
  *
  * Always:
@@ -178,24 +190,24 @@ function mousePressed() {
 		return;
 	}
 	
-	if (leftEyeTestInProgress) {
+	if (leftEyeInProgress) {
 		if (currentAxis === 'x') {
 			xLocationLeft.push(currentPos);
-			console.log("CLICK: Left X");
+			console.log("CLICK: Left X [[ VALUE: " + currentPos + " ]]");
 		}
 		else {
 			yLocationLeft.push(currentPos);
-			console.log("CLICK: Left Y");
+			console.log("CLICK: Left Y [[ VALUE: " + currentPos + " ]]");
 		}
 	}
 	else {
 		if (currentAxis === 'x') {
 			xLocationRight.push(currentPos);
-			console.log("CLICK: Right X");
+			console.log("CLICK: Right X [[ VALUE: " + currentPos + " ]]");
 		}
 		else {
 			yLocationRight.push(currentPos);
-			console.log("CLICK: Right Y");
+			console.log("CLICK: Right Y [[ VALUE: " + currentPos + " ]]");
 		}
 	}
 	
@@ -205,7 +217,29 @@ function mousePressed() {
 	clickFillAlpha = 255;
 }
 
+// // !! TODO: Update docstring for the two different methods
+// /**
+//  * Fill Method #1
+//  * Fills posQueue[] with the locations to draw the lines.
+//  * To keep two bars from being drawn in the same place:
+//  *    The width of the canvas is divided by number of bars. Each bar
+//  *    is drawn at increments of this interval.
+//  * posQueue is given values sequentially (1, 2, 3, ... numBars),
+//  *    so it needs to be shuffled randomly to make the locations
+//  *    of the bars random
+//  */
+// function fillPositionQueue() {
+// 	let interval = (canvasSize / numBars);
+//
+// 	for (let i = 0; i < numBars; i++) {
+// 		posQueue[i] = interval * i;
+// 	}
+//
+// 	posQueue = shuffle(posQueue);
+// }
+
 /**
+ * Fill Method #2
  * Fills posQueue[] with the locations to draw the lines.
  * To keep two bars from being drawn in the same place:
  *    The width of the canvas is divided by number of bars. Each bar
@@ -215,13 +249,15 @@ function mousePressed() {
  *    of the bars random
  */
 function fillPositionQueue() {
-	// TODO: Don't draw bars at edges of canvas?
-	let interval = (canvasSize / numBars);
-	
+	let interval = canvasSize / (numBars + 1);
+	// console.log("[[ FILLING POS QUEUE ]]");
 	for (let i = 0; i < numBars; i++) {
-		posQueue[i] = interval * i;
+		posQueue[i] = interval * (i + 1);
+		// console.log("[[ i: " + (i + 1) + " ]]");
 	}
-	
+
+	console.log("[[ DONE ]]");
+	console.log("[[ " + posQueue + " ]]");
 	posQueue = shuffle(posQueue);
 }
 
@@ -325,7 +361,6 @@ function updateBarStatus() {
 		// [1B]
 		else if (!verticalInProgress && !doNotTestRight) {
 			console.log("LEFT: SWITCHING TO RIGHT EYE");
-			fillPositionQueue();
 			switchAxis();
 			transitionToNextEye();
 		}
@@ -373,7 +408,8 @@ function switchAxis() {
  *
  */
 function transitionToNextEye() {
-	leftEyeTestInProgress = false;
+	leftEyeInProgress = false;
+	rightEyeInProgress = true;
 	waitingToStart = true;
 	
 	indicatorStartTime = 0;
@@ -381,7 +417,7 @@ function transitionToNextEye() {
 	noLoop();
 	
 	document.getElementById("startTest").style.display = "none";
-	document.getElementById("rightEyeInstruct").style.display = "block";
+	document.getElementById("nextEye").style.display = "block";
 }
 
 /**
@@ -439,51 +475,66 @@ function drawStaticBorder() {
 	rect(0, 0, width, height);
 }
 
-function endOfTestHandler(){
-	canvasRef.hide();
-	
+function endOfTestHandler() {
 	document.getElementById("resultsLabels").style.display = "inherit";
-	
+	testFinished = true;
+	showExitButton();
+	canvasRef.hide();
 	noLoop();
 	
-	showExitButton();
+	let ratioToTestCanvas = 0.5;
+	let canvasLeft = document.getElementById("leftResultsCanvas");
+	let canvasRight = document.getElementById("rightResultsCanvas");
 	
-	showLeftResults();
-	showRightResults();
+	let ctxLeft = setupResultCanvas(canvasLeft, ratioToTestCanvas);
+	let ctxRight = setupResultCanvas(canvasRight, ratioToTestCanvas);
 	
-	if (!doNotTestLeft)
-	
-	if (!doNotTestRight){
-		showRightResults();
+	if (!doNotTestLeft) {
+		showLeftResults(ctxLeft, ratioToTestCanvas);
 	}
+	
+	if (!doNotTestRight) {
+		showRightResults(ctxRight, ratioToTestCanvas);
+	}
+	
+	drawResultCenterDot(ctxLeft, ratioToTestCanvas);
+	drawResultCenterDot(ctxRight, ratioToTestCanvas);
+}
+
+function setupResultCanvas(canvas, ratio) {
+	canvas.style.display = "inline-block";
+	
+	let resultCanvasSize = canvasSize * ratio;
+	let ctx = canvas.getContext('2d');
+	
+	ctx.canvas.width = resultCanvasSize;
+	ctx.canvas.height = resultCanvasSize;
+	
+	return ctx;
+}
+
+function drawResultCenterDot(ctx, ratio) {
+	ctx.beginPath();
+	ctx.fillStyle = "black";
+	ctx.arc(ctx.canvas.width / 2, ctx.canvas.width / 2, (15 / 2) * ratio, 0, Math.PI * 2);
+	ctx.fill();
 }
 
 /**
  * Test finished: Draws the bars that were clicked during the Left eye test.
  */
-function showLeftResults() {
-	let canvas = document.getElementById("leftResultsCanvas");
-	let ctx = canvas.getContext('2d');
-	
+function showLeftResults(ctx, ratio) {
 	if (!ctx) {
 		console.log("Invalid Left Canvas Context.");
 		return;
 	}
 	
-	let ratio = 0.5;
-	let resultCanvasSize = canvasSize * ratio;
-	canvas.style.display = "inline-block";
-	
-	ctx.canvas.width = resultCanvasSize;
-	ctx.canvas.height = resultCanvasSize;
-	ctx.fillStyle = "rgba(255, 194, 114, 0.5)";		// Light Yellow, 50% opacity
-
 	let numClickedX = xLocationLeft.length;
 	let numClickedY = yLocationLeft.length;
 	
-	let barL = resultCanvasSize;
-	let barW = resultCanvasSize / numBars;
+	let barL = ctx.canvas.width;
 	let r = (barW / 2) / 10;		// !! MAXIMUM radius is half the bar's thickness. r is arbitrary
+	ctx.fillStyle = "rgba(255, 194, 114, 0.5)";		// Light Yellow, 50% opacity
 	
 	for (let i = 0; i < numClickedX; i++) {
 		let xPos = xLocationLeft[i];
@@ -493,7 +544,7 @@ function showLeftResults() {
 		let h = barL;
 		
 		// Draw shape as rectangle with rounded corners
-		this.roundedRectangle(ctx, x, y, w, h, r);
+		roundedRectangle(ctx, x, y, w, h, r);
 	}
 	
 	for (let i = 0; i < numClickedY; i++) {
@@ -504,41 +555,25 @@ function showLeftResults() {
 		let h = barW;
 		
 		// Draw shape as rectangle with rounded corners
-		this.roundedRectangle(ctx, x, y, w, h, r);
+		roundedRectangle(ctx, x, y, w, h, r);
 	}
-	
-	ctx.beginPath();
-	ctx.fillStyle = "black";
-	ctx.arc(resultCanvasSize / 2, resultCanvasSize / 2, (15 / 2) * ratio, 0, Math.PI * 2);
-	ctx.fill();
 }
 
 /**
- * Test finished: Draws the bars that were clicked during the Left eye test.
+ * Test finished: Draws the bars that were clicked during the Right eye test.
  */
-function showRightResults() {
-	let canvas = document.getElementById("rightResultsCanvas");
-	let ctx = canvas.getContext('2d');
-	
+function showRightResults(ctx, ratio) {
 	if (!ctx) {
 		console.log("Invalid Right Canvas Context.");
 		return;
 	}
 	
-	let ratio = 0.5;
-	let resultCanvasSize = canvasSize * ratio;
-	canvas.style.display = "inline-block";
+	let numClickedX = xLocationRight.length;
+	let numClickedY = yLocationRight.length;
 	
-	ctx.canvas.width = resultCanvasSize;
-	ctx.canvas.height = resultCanvasSize;
-	ctx.fillStyle = "rgba(133,114,255,0.5)";		// Light Purple, 50% opacity
-
-	let numClickedX = xLocationLeft.length;
-	let numClickedY = yLocationLeft.length;
-	
-	let barL = resultCanvasSize;
-	let barW = resultCanvasSize / numBars;
+	let barL = ctx.canvas.width;
 	let r = (barW / 2) / 10;		// !! MAXIMUM radius is half the bar's thickness. r is arbitrary
+	ctx.fillStyle = "rgba(133,114,255,0.5)";		// Light Purple, 50% opacity
 	
 	for (let i = 0; i < numClickedX; i++) {
 		let xPos = xLocationRight[i];
@@ -548,7 +583,7 @@ function showRightResults() {
 		let h = barL;
 		
 		// Draw shape as rectangle with rounded corners
-		this.roundedRectangle(ctx, x, y, w, h, r);
+		roundedRectangle(ctx, x, y, w, h, r);
 	}
 	
 	for (let i = 0; i < numClickedY; i++) {
@@ -559,13 +594,8 @@ function showRightResults() {
 		let h = barW;
 		
 		// Draw shape as rectangle with rounded corners
-		this.roundedRectangle(ctx, x, y, w, h, r);
+		roundedRectangle(ctx, x, y, w, h, r);
 	}
-	
-	ctx.beginPath();
-	ctx.fillStyle = "black";
-	ctx.arc(resultCanvasSize / 2, resultCanvasSize / 2, (15 / 2) * ratio, 0, Math.PI * 2);
-	ctx.fill();
 }
 
 // Similar to FullBarsDAO
@@ -621,6 +651,6 @@ function getFullBarsResults() {
 		"LeftXLocations": xLocationLeft,
 		"LeftYLocations": yLocationLeft,
 		"RightXLocations": xLocationRight,
-		"RightYLocations": yLocationRight
+		"RightYLocations": yLocationRight,
 	}
 }
