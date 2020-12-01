@@ -16,6 +16,8 @@ class SymbolsDAO {
 		this.leftAlphaIndex = 0;
 		this.rightAlphaIndex = 0;
 		this.useAlpha = false;
+		
+		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
 	}
 	
 	async loadAll() {
@@ -33,6 +35,31 @@ class SymbolsDAO {
 			});
 
 		// this.manualAdd();
+	}
+	
+	async loadForDetailedView(testID, canvasLeft, canvasRight) {
+		let _this = this;
+		
+		await this.dbRef
+			.collection("TestResults")
+			.doc(this.userID)
+			.collection("Symbols")
+			.doc(testID)
+			.get()
+			.then(function(doc) {
+				if (!doc) {
+					console.log("Document not found. ID: " + testID);
+					return;
+				}
+				
+				_this.detailedViewTimeStamp = doc.data().TimeStampMS;	// Used for subtitle on detailed_view.html
+				
+				let ctxLeft = canvasLeft.getContext('2d');
+				let ctxRight = canvasRight.getContext('2d');
+				_this.drawToCanvas(ctxLeft, doc.data().LeftXLocations, doc.data().LeftYLocations);
+				_this.drawToCanvas(ctxRight, doc.data().RightXLocations, doc.data().RightYLocations);
+			});
+		
 	}
 	
 	// !! TESTING ONLY - Clones FireStore doc from existing

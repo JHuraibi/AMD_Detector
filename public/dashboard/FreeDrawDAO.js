@@ -16,6 +16,8 @@ class FreeDrawDAO {
 		this.leftAlphaIndex = 0;
 		this.rightAlphaIndex = 0;
 		this.useAlpha = false;
+		
+		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
 	}
 	
 	async loadAll() {
@@ -33,6 +35,31 @@ class FreeDrawDAO {
 			});
 	}
 	
+	async loadForDetailedView(testID, canvasLeft, canvasRight) {
+		canvasRight.getContext('2d').style.display = "none";	// Free Draw always has only 1 canvas
+		
+		let _this = this;
+		
+		await this.dbRef
+			.collection("TestResults")
+			.doc(this.userID)
+			.collection("Symbols")
+			.doc(testID)
+			.get()
+			.then(function(doc) {
+				if (!doc) {
+					console.log("Document not found. ID: " + testID);
+					return;
+				}
+				
+				_this.detailedViewTimeStamp = doc.data().TimeStampMS;	// Used for subtitle on detailed_view.html
+				
+				let ctxLeft = canvasLeft.getContext('2d');
+				_this.drawToCanvas(ctxLeft, doc.data().ImageData);
+			});
+		
+	}
+	
 	// NOTE: The JSON returned needs to match the FireStore document structure for FullBars
 	extractor(id, data) {
 		return {
@@ -43,24 +70,13 @@ class FreeDrawDAO {
 		}
 	}
 	
-	// TODO: Update away from using non-local doc?
-	drawToCanvas(doc, canvasID) {
-		if (!doc) {
-			console.log("FireStore document provided was null.");
-			return;
-		}
-		
-		let canvas = document.getElementById(canvasID);
-		
+	drawToCanvas(ctx, drawingData) {
 		if (!canvas) {
 			console.log("Left Canvas DOM not found.");
 			return;
 		}
 		
-		let drawingData = doc.data().ImageData;
-		
-		let ctxLeft = canvas.getContext('2d');
-		let ratio = canvas.width / this.canvasSize;
+		let ratio = ctx.canvas.width / this.canvasSize;
 		// let ratio = 2;
 		
 		if (drawingData) {
@@ -74,11 +90,11 @@ class FreeDrawDAO {
 				let w = line.w * ratio;
 				
 				// Draw shape as a line with stroke thickness 'w' and rounded end caps
-				this.line(ctxLeft, x, y, pX, pY, w);
+				this.line(ctx, x, y, pX, pY, w);
 			}
 		}
 		
-		this.drawStaticAxes(ctxLeft, canvas.width, canvas.width);
+		this.drawStaticAxes(ctx, ctx.canvas.width, ctx.canvas.width);
 	}
 	
 	line(ctx, x, y, pX, pY, w) {
@@ -173,6 +189,7 @@ class FreeDrawDAO {
 		return "./dashboard/detailed_view.html?" + uri.toString();
 	}
 	
+	// !! TODO: Bug when hoursString < timezoneOffset
 	formatDate(milliseconds) {
 		let date = new Date(milliseconds);
 		let timezoneOffset = 5;	// UTC -5:00
