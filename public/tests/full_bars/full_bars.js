@@ -256,8 +256,6 @@ function fillPositionQueue() {
 		// console.log("[[ i: " + (i + 1) + " ]]");
 	}
 
-	console.log("[[ DONE ]]");
-	console.log("[[ " + posQueue + " ]]");
 	posQueue = shuffle(posQueue);
 }
 

@@ -458,7 +458,7 @@ function showExitButton() {
  */
 function getFractalResults() {
 	return {
-		"TestName": "full_bars",
+		"TestName": "fractal",
 		"TimeStampMS": timestamp,
 		"TestCanvasSize": canvasSize,
 		"LeftXCoordinate": xCoordinateLeft,
