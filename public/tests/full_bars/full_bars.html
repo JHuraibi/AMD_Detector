@@ -56,6 +56,7 @@
 				text-align: center;
 			}
 		</style>
+		<script src="../phrase_injector.js"></script>
 	</head>
 	<body class="text-center">
 		<div class="d-flex w-auto h-auto p-3 mx-auto flex-column">
@@ -117,7 +118,8 @@
 				<!-- Next Eye (Includes button to start right eye test) -->
 				<div class="instruct" id="nextEye" style="display: none">
 					<p>
-						Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
+						<script>document.write(writePhrase())</script>
+						Now cover your left eye, and with your right eye focus on the black dot in the center.
 						Click the "seen" button whenever you notice a red dot appear.
 					</p>
 					<button id="nexttestbtn" class="btn btn-sm btn-outline-secondary" onclick="startRightTest();"

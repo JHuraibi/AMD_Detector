@@ -57,6 +57,7 @@
             text-align: center;
         }
     </style>
+	<script src="../phrase_injector.js"></script>
 </head>
 
 <body>
@@ -108,7 +109,8 @@
         <!-- Next Eye -->
         <div class="instruct" id="nextEye">
             <p>
-                Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
+				<script>document.write(writePhrase())</script>
+                Now cover your left eye, and with your right eye focus on the black dot in the center.
                 Click the "seen" button whenever you notice a red dot appear.
             </p>
             <button id="nexttestbtn" class="btn btn-sm btn-outline-secondary"

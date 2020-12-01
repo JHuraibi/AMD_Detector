@@ -29,6 +29,7 @@
 				color: #282828;
 			}
 		</style>
+		<script src="../phrase_injector.js"></script>
 	</head>
 	<body class="text-center">
 		<div class="d-flex w-auto h-auto p-3 mx-auto flex-column">
@@ -58,7 +59,8 @@
 				<!--				</div>-->
 				<div class="instruct" id="rightEyeInstruct" style="display: none">
 					<p>
-						Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
+						<script>document.write(writePhrase())</script>
+						Now cover your left eye, and with your right eye focus on the black dot in the center.
 						Click to Start Right Eye Test.
 					</p>
 					<button class="btn btn-sm btn-outline-secondary"
