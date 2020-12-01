@@ -47,7 +47,7 @@ function retrieveInstructions(target_test) {
 				"and click the \"Start Test\" button. Keep your eye on the black dot in the center of the grid. Everytime\n" +
 				"you\n" +
 				"notice a\n" +
-				"small red circle appear on the screen, click the \"seen\" button.";
+				"small red circle appear on the screen, click the \"seen\" button or your space bar.";
 		
 		// SYMBOLS
 		case "symbols":

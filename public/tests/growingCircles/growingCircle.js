@@ -11,7 +11,6 @@ var c2 = canvas2.getContext('2d');
 document.getElementById("lefteye").addEventListener("click", lefteye);
 document.getElementById("righteye").addEventListener("click", righteye);
 document.getElementById("botheyes").addEventListener("click", botheyes);
-
 document.getElementById('startSecond').addEventListener("click", test2);
 document.getElementById("button").addEventListener("click", myFunction);
 document.getElementById("startOne").addEventListener("click", test);
@@ -23,6 +22,13 @@ var startbtn = document.getElementById('startOne');
 var seenbtn = document.getElementById('button');
 var growingspeed = 1000;
 let timestamp;
+
+window.onkeydown = function(event){
+    if(event.keyCode === 32) {
+        event.preventDefault();
+        myFunction();
+    }
+};
 
 var seen = false;
 
