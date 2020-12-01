@@ -118,13 +118,13 @@ function sizingSymbols() {
 	}
 	if (symbols[r2] == smile) {
 
-		c.fillStyle = "black";
-		c.font = "60px Arial";
+		c2.fillStyle = "black";
+		c2.font = "60px Arial";
 	}
 	if (symbols[r2] == frown) {
 
-		c.fillStyle = "black";
-		c.font = "40px Arial";
+		c2.fillStyle = "black";
+		c2.font = "40px Arial";
 	}
 	if (symbols[j] == smile) {
 
@@ -137,13 +137,13 @@ function sizingSymbols() {
 		c.font = "40px Arial";
 	}
 	if (symbols[j2] == smile) {
-		c.fillStyle = "red";
-		c.font = "60px Arial";
+		c2.fillStyle = "red";
+		c2.font = "60px Arial";
 	}
 	if (symbols[j2] == frown) {
 
-		c.fillStyle = "red";
-		c.font = "40px Arial";
+		c2.fillStyle = "red";
+		c2.font = "40px Arial";
 	}
 
 }
@@ -535,8 +535,7 @@ function rightResults() {
 	blackDot();
 
 	for (j = 0; j < rightResultsSymbols.length; j++) {
-		c.fillStyle = "blue";
-		c.font = "35 px Arial";
+		sizingSymbols();
 		c.fillText(rightResultsSymbols[j], rightResultX[j], rightResultY[j]);
 
 	}
@@ -554,8 +553,7 @@ function leftResults() {
 	blackDot();
 	for (j2 = 0; j2 < leftResultsSymbols.length; j2++) {
 		console.log("In loop of c2 results ");
-		c2.fillStyle = "orange";
-		c2.font = "35 px Arial";
+		sizingSymbols();
 		c2.fillText(leftResultsSymbols[j2], leftResultX[j2], leftResultY[j2]);
 
 	}
