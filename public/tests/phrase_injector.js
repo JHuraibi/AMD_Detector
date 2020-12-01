@@ -4,8 +4,14 @@ function writePhrase() {
 		"Great! ",
 		"Nicely Done! ",
 		"Well Done! ",
-		"That went great! ",
+		"That Went Great! ",
 		"Perfect! ",
+		"Awesome! ",
+		"Fine Work! ",
+		"Super! ",
+		"Marvelous! ",
+		"Fantastic! ",
+		"Fabulous! ",
 	]
 	
 	let phrase = phrases[Math.floor(Math.random() * phrases.length)];
