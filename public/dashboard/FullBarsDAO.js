@@ -16,6 +16,8 @@ class FullBarsDAO {
 		this.leftAlphaIndex = 0;
 		this.rightAlphaIndex = 0;
 		this.useAlpha = false;
+		
+		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
 	}
 	
 	async loadAll() {
@@ -35,6 +37,32 @@ class FullBarsDAO {
 		// this.manualAdd();
 	}
 	
+	// !! NOTE: This function requires that a reference to the outer object be used
+	async loadForDetailedView(testID, canvasLeft, canvasRight) {
+		let _this = this;
+		
+		this.dbRef
+			.collection("TestResults")
+			.doc(this.userID)
+			.collection("FullBars")
+			.doc(testID)
+			.get()
+			.then(function (doc) {
+				if (!doc) {
+					console.log("Document not found. ID: " + testID);
+					return;
+				}
+				
+				_this.detailedViewTimeStamp = doc.data().TimeStampMS; 	// Used for subtitle on detailed_view.html
+				
+				let ctxLeft = canvasLeft.getContext('2d');
+				let ctxRight = canvasRight.getContext('2d');
+				_this.drawToCanvas(ctxLeft, doc.data().LeftXLocations, doc.data().LeftYLocations);
+				_this.drawToCanvas(ctxRight, doc.data().RightXLocations, doc.data().RightYLocations);
+			});
+		
+	}
+	
 	// !! TESTING ONLY - Clones FireStore doc from existing
 	manualAdd() {
 		this.dbRef.collection("TestResults")
@@ -44,6 +72,10 @@ class FullBarsDAO {
 			.then(() => {
 				console.log("Manual document added.");
 			});
+	}
+	
+	setTimeStamp(timeStamp) {
+		this.detailedViewTimeStamp = timeStamp;
 	}
 	
 	// NOTE: The JSON returned needs to match the FireStore document structure for FullBars
@@ -192,15 +224,15 @@ class FullBarsDAO {
 		else {
 			dateStringLatest = (+month + 1) + " 1 2020";
 		}
-
+		
 		let msEarliest = (new Date(dateStringEarliest)).getTime();
 		let msLatest = (new Date(dateStringLatest)).getTime();
-
+		
 		// !! NOTE: docList[] is sorted in descending order by TimeStampMS
 		//       So the earlier date (smallest millisecond) is closer to the end of the array
 		let startIndex = this.setIndex(msLatest);
 		let endIndex = this.setIndex(msEarliest);
-
+		
 		// TODO: Check for off-by-one
 		for (let i = startIndex; i <= endIndex; i++) {
 			let doc = this.docList[i];

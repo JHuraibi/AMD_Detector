@@ -16,6 +16,8 @@ class GrowingCirclesDAO {
 		this.leftAlphaIndex = 0;
 		this.rightAlphaIndex = 0;
 		this.useAlpha = false;
+		
+		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
 	}
 
 	async loadAll() {
@@ -34,6 +36,43 @@ class GrowingCirclesDAO {
 
 		// this.manualAdd();	// This breaks as of (11/27/2020) due to missing fields in FireStore document
 	}
+	
+	// !! NOTE: This function requires that a reference to the outer object be used
+	async loadForDetailedView(testID, canvasLeft, canvasRight) {
+		let _this = this;
+		
+		await this.dbRef
+			.collection("TestResults")
+			.doc(this.userID)
+			.collection("GrowingCircles")
+			.doc(testID)
+			.get()
+			.then(function(doc) {
+				if (!doc){
+					console.log("Document not found. ID: " + testID);
+					return;
+				}
+				
+				_this.detailedViewTimeStamp = doc.data().TimeStampMS;	// Used for subtitle on detailed_view.html
+				
+				if (doc.Tested == "left") {
+					let ctxLeft = canvasLeft.getContext('2d');
+					_this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
+				} else if (doc.Tested == "right") {
+					let ctxRight = canvasLeft.getContext('2d');
+					_this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
+				} else {
+					// Else case uses document structures that predate commit 8f2d548
+					let ctxLeft = canvasLeft.getContext('2d');
+					let ctxRight = canvasLeft.getContext('2d');
+					_this.drawToCanvas(ctxLeft, doc.data().XLocationsLeft,
+						doc.data().YLocationsLeft, doc.data().ZLocationsLeft);
+					_this.drawToCanvas(ctxRight, doc.data().XLocationsRight,
+						doc.data().YLocationsRight, doc.data().ZLocationsRight);
+				}
+			});
+	}
+	
 
 	// !! TESTING ONLY - Clones FireStore doc from existing
 	manualAdd() {

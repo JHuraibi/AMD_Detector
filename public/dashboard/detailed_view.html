@@ -159,164 +159,8 @@
 	<script src="FullBarsDAO.js"></script>
 	<script src="FreeDrawDAO.js"></script>
 	
-	<script>
-		let dbRef = firebase.firestore();
-		let userRef = null;
-		
-		firebase.auth().onAuthStateChanged(user => {
-			console.log(user);
-			userRef = user;
-		});
-	</script>
-	
-	<script>
-		let uriPassedIn = new URLSearchParams(window.location.search);
-		let testName = uriPassedIn.get("TEST_NAME");
-		let testID = uriPassedIn.get("TEST_ID");
-		
-		let maxWaitTime = 2000;
-		let waitTime = 200;
-		// let confirmedID = false;
-		
-		let growingCirclesDAO = new GrowingCirclesDAO(dbRef, "detailedCanvasLeft", "detailedCanvasRight");
-		let symbolsDAO = new SymbolsDAO(dbRef, "detailedCanvasLeft", "detailedCanvasRight");
-		let fullBarsDAO = new FullBarsDAO(dbRef, "detailedCanvasLeft", "detailedCanvasRight");
-		let freeDrawDAO = new FreeDrawDAO(dbRef, "detailedCanvasLeft", "detailedCanvasRight");
-		
-		// NOTE: Takes about 400-600ms to recognize a user
-		(function attemptUserLookup() {
-			if (!userRef && maxWaitTime > 0) {
-				maxWaitTime -= waitTime;
-				setTimeout(attemptUserLookup, waitTime);
-			}
-			else if (maxWaitTime < 0) {
-				console.log("User Lookup Timed Out");
-			}
-			else if (userRef) {
-				console.log("User found.");
-				router();
-			}
-		})();
-	</script>
-	
-	<script>
-		let docRef = null;
-		let jsonData = {};
-		
-		/**
-		 * The test name passed into queryingDatabase() needs to match the
-		 * 	collections name in Firestore (TestResults>UID>[TestName]).
-		 */
-		function router() {
-			if (!testName) {
-				console.log("Error with Test Name.")
-				return;
-			}
-			
-			console.log("Test Name: " + testName);
-			switch (testName) {
-				default:
-					console.log("[detailed_view] router(): Default Case");
-					break;
-				
-				case "GrowingCircles":
-					setTestNameTitle("Growing Circles");
-					queryDatabase("GrowingCircles");
-					break;
-				
-				case "Symbols":
-					setTestNameTitle("Symbols");
-					queryDatabase("Symbols");
-					break;
-				
-				case "FullBars":
-					setTestNameTitle("Full Bars");
-					queryDatabase("FullBars");
-					break;
-				
-				case "FreeDraw":
-					setTestNameTitle("Free Draw");
-					queryDatabase("FreeDraw");
-					break;
-				
-				case "Fractal":
-					setTestNameTitle("Fractal");
-					queryDatabase("Fractal");
-					break;
-			}
-		}
-		
-		function queryDatabase(testName) {
-			dbRef.collection("TestResults")
-				.doc(userRef.uid)
-				.collection(testName)
-				.doc(testID)
-				.get()
-				.then(function (doc) {
-					if (doc.exists) {
-						setDateSubtitle(doc.data().TimeStampMS);
-						
-						if (testName === "GrowingCircles") {
-							growingCirclesDAO.drawLeftToCanvas(doc);
-							growingCirclesDAO.drawRightToCanvas(doc);
-						}
-						else if (testName === "Symbols") {
-							symbolsDAO.drawLeftToCanvas(doc);
-							symbolsDAO.drawRightToCanvas(doc);
-						}
-						else if (testName === "FullBars") {
-							fullBarsDAO.drawLeftToCanvas(doc);
-							fullBarsDAO.drawRightToCanvas(doc);
-						}
-						else if (testName === "FreeDraw") {
-							// Free draw has only single canvas (no left/right eye)
-							document.getElementById("detailedCanvasRight").style.display = "none";
-							document.getElementById("canvasCaptions").style.display = "none";
-							freeDrawDAO.drawToCanvas(doc, "detailedCanvasLeft");
-						}
-						else if (testName === "Fractal") {
-							console.log("[FRACTAL DAO NEEDED]");
-						}
-					}
-				})
-				.catch(function (error) {
-					console.log("Error getting document:", error);
-				});
-		}
-		
-		// NOTE: The single dash and space characters are here so that
-		//			if this function fails to return a test name to
-		//			the header, the header then won't look incomplete.
-		//			(See the testTitle <h3> in detailed_view.html).
-		function setTestNameTitle(testName) {
-			let title = document.getElementById('testTitle');
-			let postfix = " - " + testName;
-			
-			title.innerText = title.innerText + postfix;
-		}
-		
-		function setDateSubtitle(milliseconds) {
-			let subtitleElement = document.getElementById("dateSubtitle");
-			let date = new Date(milliseconds);
-			let timezoneOffset = 5;	// UTC -5:00
-			
-			let dateString = date.toDateString();
-			let hoursString = +date.getUTCHours() - timezoneOffset;
-			let minutesString = date.getUTCMinutes();
-			let postfix = hoursString > 11 ? "PM" : "AM";
-			
-			if (hoursString === 0) {
-				hoursString = 12;
-			}
-			
-			minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
-			hoursString = hoursString % 12;
-			
-			subtitleElement.innerText =
-				subtitleElement.innerText + dateString + " at " +
-				hoursString + ":" + minutesString + postfix;
-		}
-	</script>
+	<!-- Detailed Dashboard Functions -->
+	<script src="detailed_dashboard.js"></script>
 	
 	<script>
 		const signOut = document.querySelector('.sign-out');
@@ -332,6 +176,30 @@
 			else
 				window.location = '../index.html';
 		});
+	</script>
+	
+	<!-- Check if user is signed in -->
+	<script>
+		var db = firebase.firestore();
+		(async function checkUser() {
+			await firebase.auth().onAuthStateChanged(user => {
+				if (user) {
+					id = user.uid;
+					db.collection("users").doc(id)
+						.get()
+						.then(doc => {
+							let type = doc.data().type;
+							if (type != 'user') {
+								console.log("Physician Account. Access Denied.");
+								window.location = '404.html';
+							}
+						});
+				} else {
+					console.log("Not logged in");
+					window.location = 'index.html';
+				}
+			});
+		})();
 	</script>
 </body>
 
