@@ -20,7 +20,7 @@ class SymbolsDAO {
 		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
 	}
 	
-	async loadAll() {
+	async loadForDashboard() {
 		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
@@ -145,7 +145,7 @@ class SymbolsDAO {
 		tableBody.appendChild(row);
 	}
 	
-	populateAll(leftCanvasID, rightCanvasID) {
+	renderAll(leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
@@ -165,7 +165,7 @@ class SymbolsDAO {
 	}
 	
 	// TODO: RENAME
-	populateAggregate(leftCanvasID, rightCanvasID) {
+	renderAggregate(leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
@@ -187,7 +187,7 @@ class SymbolsDAO {
 		}
 	}
 	
-	populateMostRecent(leftCanvasID, rightCanvasID) {
+	renderMostRecent(leftCanvasID, rightCanvasID) {
 		if (!this.docList[0]) {
 			console.log("First document (most recent) empty.")
 			return;
@@ -204,7 +204,7 @@ class SymbolsDAO {
 		this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
 	}
 	
-	populateByMonthSelector(month, leftCanvasID, rightCanvasID) {
+	renderSelectedMonth(month, leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		
@@ -239,7 +239,7 @@ class SymbolsDAO {
 		}
 	}
 	
-	populateByNumberMonths(monthsBack, leftCanvasID, rightCanvasID) {
+	renderMonthRange(monthsBack, leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		
@@ -324,14 +324,6 @@ class SymbolsDAO {
 		}
 		
 		return i;
-	}
-	
-	checkBeforeDate() {
-	
-	}
-	
-	alphaCreator(num) {
-		let n = 255 / num;
 	}
 	
 	formatDate(milliseconds) {

@@ -20,7 +20,7 @@ class FreeDrawDAO {
 		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
 	}
 	
-	async loadAll() {
+	async loadForDashboard() {
 		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
@@ -68,56 +68,6 @@ class FreeDrawDAO {
 			TimeStampMS: data.TimeStampMS,
 			ImageData: data.ImageData,
 		}
-	}
-	
-	drawToCanvas(ctx, drawingData) {
-		if (!canvas) {
-			console.log("Left Canvas DOM not found.");
-			return;
-		}
-		
-		let ratio = ctx.canvas.width / this.canvasSize;
-		// let ratio = 2;
-		
-		if (drawingData) {
-			for (let i = 0; i < drawingData.length - 1; i++) {
-				let line = drawingData[i];
-				
-				let x = line.x * ratio;
-				let y = line.y * ratio;
-				let pX = line.pX * ratio;
-				let pY = line.pY * ratio;
-				let w = line.w * ratio;
-				
-				// Draw shape as a line with stroke thickness 'w' and rounded end caps
-				this.line(ctx, x, y, pX, pY, w);
-			}
-		}
-		
-		this.drawStaticAxes(ctx, ctx.canvas.width, ctx.canvas.width);
-	}
-	
-	line(ctx, x, y, pX, pY, w) {
-		ctx.beginPath();
-		ctx.lineWidth = w;
-		ctx.lineCap = "round";
-		ctx.moveTo(x, y);
-		ctx.lineTo(pX, pY);
-		ctx.stroke();
-	}
-	
-	drawStaticAxes(ctx, w, h) {
-		ctx.lineWidth = 2;
-		
-		ctx.beginPath();
-		ctx.moveTo(w / 2, 0);
-		ctx.lineTo(w / 2, h);
-		ctx.stroke();
-		
-		ctx.beginPath();
-		ctx.moveTo(0, h / 2);
-		ctx.lineTo(w, h / 2);
-		ctx.stroke();
 	}
 	
 	populateHistoryTable(targetTableID) {
@@ -175,6 +125,56 @@ class FreeDrawDAO {
 		
 		// Add the Row to the Table
 		tableBody.appendChild(row);
+	}
+	
+	drawToCanvas(ctx, drawingData) {
+		if (!canvas) {
+			console.log("Left Canvas DOM not found.");
+			return;
+		}
+		
+		let ratio = ctx.canvas.width / this.canvasSize;
+		// let ratio = 2;
+		
+		if (drawingData) {
+			for (let i = 0; i < drawingData.length - 1; i++) {
+				let line = drawingData[i];
+				
+				let x = line.x * ratio;
+				let y = line.y * ratio;
+				let pX = line.pX * ratio;
+				let pY = line.pY * ratio;
+				let w = line.w * ratio;
+				
+				// Draw shape as a line with stroke thickness 'w' and rounded end caps
+				this.line(ctx, x, y, pX, pY, w);
+			}
+		}
+		
+		this.drawStaticAxes(ctx, ctx.canvas.width, ctx.canvas.width);
+	}
+	
+	line(ctx, x, y, pX, pY, w) {
+		ctx.beginPath();
+		ctx.lineWidth = w;
+		ctx.lineCap = "round";
+		ctx.moveTo(x, y);
+		ctx.lineTo(pX, pY);
+		ctx.stroke();
+	}
+	
+	drawStaticAxes(ctx, w, h) {
+		ctx.lineWidth = 2;
+		
+		ctx.beginPath();
+		ctx.moveTo(w / 2, 0);
+		ctx.lineTo(w / 2, h);
+		ctx.stroke();
+		
+		ctx.beginPath();
+		ctx.moveTo(0, h / 2);
+		ctx.lineTo(w, h / 2);
+		ctx.stroke();
 	}
 	
 	// !! NOTE: URI's are relative to dashboard.html. NOT this DAO file.

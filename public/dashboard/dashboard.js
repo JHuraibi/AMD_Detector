@@ -16,10 +16,10 @@ firebase.auth().onAuthStateChanged(user => {
 // TODO: Better and more robust error handling
 async function pageRouter() {
 	defineDAOs();
-	await growingCirclesDAO.loadAll();
-	await symbolsDAO.loadAll();
-	await fullBarsDAO.loadAll();
-	await freeDrawDAO.loadAll();
+	await growingCirclesDAO.loadForDashboard();
+	await symbolsDAO.loadForDashboard();
+	await fullBarsDAO.loadForDashboard();
+	await freeDrawDAO.loadForDashboard();
 	
 	renderDefaultCanvases();
 	renderDefaultTable();
@@ -28,9 +28,9 @@ async function pageRouter() {
 function renderDefaultCanvases() {
 	clearCanvases();
 	
-	growingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
-	symbolsDAO.populateAggregate("canvasLeft", "canvasRight");
-	fullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
+	growingCirclesDAO.renderAggregate("canvasLeft", "canvasRight");
+	symbolsDAO.renderAggregate("canvasLeft", "canvasRight");
+	fullBarsDAO.renderAggregate("canvasLeft", "canvasRight");
 }
 
 function renderDefaultTable() {
@@ -50,9 +50,9 @@ function defineDAOs() {
 function mostRecent() {
 	clearCanvases();
 	
-	growingCirclesDAO.populateMostRecent("canvasLeft", "canvasRight");
+	growingCirclesDAO.renderMostRecent("canvasLeft", "canvasRight");
 	symbolsDAO.populateMostRecent("canvasLeft", "canvasRight");
-	fullBarsDAO.populateMostRecent("canvasLeft", "canvasRight");
+	fullBarsDAO.renderMostRecent("canvasLeft", "canvasRight");
 }
 
 function monthSelect() {
@@ -65,9 +65,9 @@ function monthSelect() {
 	}
 	clearCanvases();
 	
-	growingCirclesDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
+	growingCirclesDAO.renderSelectedMonth(monthSelector.value, "canvasLeft", "canvasRight");
 	symbolsDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
-	fullBarsDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
+	fullBarsDAO.renderSelectedMonth(monthSelector.value, "canvasLeft", "canvasRight");
 }
 
 function numberOfMonths() {
@@ -81,9 +81,9 @@ function numberOfMonths() {
 	
 	clearCanvases();
 	
-	growingCirclesDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
+	growingCirclesDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
 	symbolsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
-	fullBarsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
+	fullBarsDAO.renderMonthName(monthInput.value, "canvasLeft", "canvasRight");
 }
 
 function clearCanvases() {
