@@ -64,7 +64,7 @@ class GrowingCirclesDAO {
 				} else {
 					// Else case uses document structures that predate commit 8f2d548
 					let ctxLeft = canvasLeft.getContext('2d');
-					let ctxRight = canvasLeft.getContext('2d');
+					let ctxRight = canvasRight.getContext('2d');
 					_this.drawToCanvas(ctxLeft, doc.data().XLocationsLeft,
 						doc.data().YLocationsLeft, doc.data().ZLocationsLeft);
 					_this.drawToCanvas(ctxRight, doc.data().XLocationsRight,
