@@ -333,35 +333,35 @@ class GrowingCirclesDAO {
 			}
 		}
 	}
-
+	
 	drawToCanvas(ctx, xPos, yPos, zPos) {
 		if (!ctx) {
 			console.log("Invalid Canvas Context.");
 			return;
 		}
+		
 		for (var i = 0; i < yPos.length; i++) {
-
-
+			
 			if (isNaN(xPos[i]) || isNaN(yPos[i]) || isNaN(zPos[i])) {
-				// This check here makes the populate(N) functions cleaner by removing checks there
+				// This check here makes the populateX functions cleaner by removing checks there
 				console.log("z: " + zPos[i]);
 				console.log("y: " + yPos[i]);
 				console.log("x: " + xPos[i]);
 				console.log("One of more locations NaN");
 				return;
 			}
-
+			
 			/* console.log("Not NaN z: " + zPos);
 			console.log("Not NaN y: " + yPos);
 			console.log("Not NaN x: " + xPos); */
-
+			
 			let ratio = ctx.canvas.width / this.canvasSize;
-			xPos[i] = xPos[i] * ratio;
-			yPos[i] = yPos[i] * ratio;
-			zPos[i] = zPos[i] * ratio;
-
+			let x = xPos[i] * ratio;
+			let y = yPos[i] * ratio;
+			let z = zPos[i] * ratio;
+			
 			ctx.beginPath();
-			ctx.arc(xPos[i], yPos[i], zPos[i], 0, Math.PI * 2);
+			ctx.arc(x, y, z, 0, Math.PI * 2);
 			ctx.fill();
 		}
 	}

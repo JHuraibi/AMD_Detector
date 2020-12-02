@@ -21,37 +21,23 @@ async function pageRouter() {
 	await fullBarsDAO.loadAll();
 	await freeDrawDAO.loadAll();
 	
-	renderDefaultView();
+	renderDefaultCanvases();
+	renderDefaultTable();
 }
 
-function renderDefaultView(){
+function renderDefaultCanvases() {
+	clearCanvases();
 	
-	growingCirclesDAO.populateHistoryTable("historyTable");
 	growingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
-	symbolsDAO.populateHistoryTable("historyTable");
 	symbolsDAO.populateAggregate("canvasLeft", "canvasRight");
-	fullBarsDAO.populateHistoryTable("historyTable");
 	fullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
-	
-	freeDrawDAO.populateHistoryTable("historyTable");
 }
 
-// TODO: Better method with async
-// NOTE: Takes about 400-600ms to recognize a user from auth() above
-function checkUserStatus() {
-	
-	while (!userRef && maxWaitTime > 0) {
-		maxWaitTime -= waitTime;
-		console.log("No User. Reattempting Lookup.");
-		setTimeout(null, waitTime);
-	}
-	
-	if (maxWaitTime < 0) {
-		console.log("User Lookup Timed Out");
-		return false;
-	}
-	
-	return true;
+function renderDefaultTable() {
+	growingCirclesDAO.populateHistoryTable("historyTable");
+	symbolsDAO.populateHistoryTable("historyTable");
+	fullBarsDAO.populateHistoryTable("historyTable");
+	freeDrawDAO.populateHistoryTable("historyTable");
 }
 
 function defineDAOs() {
@@ -61,9 +47,9 @@ function defineDAOs() {
 	freeDrawDAO = new FreeDrawDAO(dbRef, userRef.uid);
 }
 
-// Draws SINGLE most recent result of each test to the canvases
 function mostRecent() {
-	// symbolsDAO.populateMostRecent();
+	clearCanvases();
+	
 	growingCirclesDAO.populateMostRecent("canvasLeft", "canvasRight");
 	symbolsDAO.populateMostRecent("canvasLeft", "canvasRight");
 	fullBarsDAO.populateMostRecent("canvasLeft", "canvasRight");
@@ -73,9 +59,11 @@ function monthSelect() {
 	let monthSelector = document.getElementById("monthSelector");
 	
 	// TODO: Needs a try/catch
-	if (!monthSelector) {
-		console.log("Unable to retrieve month from selector.")
+	if (!monthSelector || !monthSelector.value) {
+		console.log("Unable to retrieve month from selector.");
+		return;
 	}
+	clearCanvases();
 	
 	growingCirclesDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
 	symbolsDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
@@ -86,11 +74,23 @@ function numberOfMonths() {
 	let monthInput = document.getElementById("numberMonthsInput");
 	
 	// TODO: Needs a try/catch
-	if (!monthInput) {
-		console.log("Unable to retrieve number of months value.")
+	if (!monthInput || !monthInput.value) {
+		console.log("Unable to retrieve number of months value.");
+		return;
 	}
+	
+	clearCanvases();
 	
 	growingCirclesDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
 	symbolsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
 	fullBarsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
+}
+
+function clearCanvases() {
+	let canvasLeft = document.getElementById("canvasLeft");
+	let canvasRight = document.getElementById("canvasRight");
+	let ctxLeft = canvasLeft.getContext('2d');
+	let ctxRight = canvasRight.getContext('2d');
+	ctxLeft.clearRect(0, 0, canvasLeft.width, canvasLeft.height);
+	ctxRight.clearRect(0, 0, canvasRight.width, canvasRight.height);
 }
