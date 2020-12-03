@@ -40,7 +40,7 @@ class GrowingCirclesDAO {
 	// !! NOTE: This function requires that a reference to the outer object be used
 	async loadForDetailedView(testID, canvasLeft, canvasRight) {
 		let _this = this;
-		
+
 		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
@@ -52,15 +52,14 @@ class GrowingCirclesDAO {
 					console.log("Document not found. ID: " + testID);
 					return;
 				}
-				
+
 				_this.detailedViewTimeStamp = doc.data().TimeStampMS;	// Used for subtitle on detailed_view.html
-				
-				if (doc.Tested == "left") {
+				if (doc.data().Tested == "left") {
 					let ctxLeft = canvasLeft.getContext('2d');
-					_this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
-				} else if (doc.Tested == "right") {
-					let ctxRight = canvasLeft.getContext('2d');
-					_this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
+					_this.drawToCanvas(ctxLeft, doc.data().XLocationsLeft, doc.data().YLocationsLeft, doc.data().ZLocationsLeft);
+				} else if (doc.data().Tested == "right") {
+					let ctxRight = canvasRight.getContext('2d');
+					_this.drawToCanvas(ctxRight, doc.data().XLocationsRight, doc.data().YLocationsRight, doc.data().ZLocationsRight);
 				} else {
 					// Else case uses document structures that predate commit 8f2d548
 					let ctxLeft = canvasLeft.getContext('2d');
@@ -339,7 +338,6 @@ class GrowingCirclesDAO {
 			console.log("Invalid Canvas Context.");
 			return;
 		}
-		
 		for (var i = 0; i < yPos.length; i++) {
 			
 			if (isNaN(xPos[i]) || isNaN(yPos[i]) || isNaN(zPos[i])) {

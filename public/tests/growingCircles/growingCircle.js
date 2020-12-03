@@ -23,8 +23,8 @@ var seenbtn = document.getElementById('button');
 var growingspeed = 1000;
 let timestamp;
 
-window.onkeydown = function(event){
-    if(event.keyCode === 32) {
+window.onkeydown = function (event) {
+    if (event.keyCode === 32) {
         event.preventDefault();
         myFunction();
     }
@@ -68,7 +68,14 @@ savebtn.style.display = "none";
 var x;
 var y;
 var z = 0;
-var j = 0;
+var testIterations = 0;
+var pointsx = [];
+var pointsy = [];
+var q1;
+var q2;
+var q3;
+var q4;
+var pointsIndex = 0;
 var results = [];
 var index;
 c.fillStyle = "black";
@@ -82,11 +89,15 @@ function test() {
     seenbtn.style.display = "inline-block";
     startbtn.style.display = "none";
 
-    //TODO: Change 5 before final
-    if (j < 5) {
+    if (testIterations < 20) {
+
         // New red dot location
-        x = Math.random() * 700;
-        y = Math.random() * 700;
+        // x = Math.random() * 700;
+        // y = Math.random() * 700;
+        x = getAllRegions("x");
+        y = getAllRegions("y");
+        addToQuadrant(x, y);
+
         z = 3
         grow();
 
@@ -106,7 +117,7 @@ function test() {
                 results[1][index] = y;
                 results[2][index] = z;
                 index++;
-                j++;
+                testIterations++;
                 seen = false;
                 c.clearRect(0, 0, 700, 700)
                 c.fillStyle = "black";
@@ -114,12 +125,12 @@ function test() {
                 c.arc(350, 350, 6, 0, Math.PI * 2, false);
                 c.fill();
                 c.stroke();
-                if (j < 5) {
+                if (testIterations < 20) {
                     setTimeout(test, growingspeed);
                 } else test();
             }
             else {                                       //user seen the dot right away
-                j++;
+                testIterations++;
                 seen = false;
                 c.clearRect(0, 0, 700, 700)
                 c.fillStyle = "black";
@@ -127,7 +138,7 @@ function test() {
                 c.arc(350, 350, 6, 0, Math.PI * 2, false);
                 c.fill();
                 c.stroke();
-                if (j < 5) {
+                if (testIterations < 20) {
                     setTimeout(test, growingspeed);
                 } else test();
             }
@@ -136,7 +147,7 @@ function test() {
         if (testing !== "botheyes") {
             console.log("Test is over.")
             showResults(results, "null");
-        }else{
+        } else {
             console.log("Starting next eye.");
             nextTest();
         }
@@ -184,7 +195,7 @@ function nextTest() {
 var x2;
 var y2;
 var z2 = 0;
-var j2 = 0;
+var testIterations2 = 0;
 var results2 = [];
 results2[0] = [];
 results2[1] = [];
@@ -201,10 +212,14 @@ function test2() {
     seenbtn.style.display = "inline-block";
     startSecond.style.display = "none";
 
-    if (j2 < 5) {
+    if (testIterations2 < 20) {
         // New red dot location
-        x2 = Math.random() * 700;
-        y2 = Math.random() * 700;
+        //x2 = Math.random() * 700;
+        //y2 = Math.random() * 700;
+        x = getAllRegions("x");
+        y = getAllRegions("y");
+        addToQuadrant(x, y);
+
         z2 = 3
         grow2();
 
@@ -225,7 +240,7 @@ function test2() {
                 results2[1][index2] = y2;
                 results2[2][index2] = z2;
                 index2++;
-                j2++;
+                testIterations2++;
                 seen = false;
                 c2.clearRect(0, 0, 700, 700)
 
@@ -235,12 +250,12 @@ function test2() {
                 c2.arc(350, 350, 6, 0, Math.PI * 2, false);
                 c2.fill();
                 c2.stroke();
-                if (j2 < 5) {
+                if (testIterations2 < 20) {
                     setTimeout(test2, growingspeed);
                 } else test2();
             }
             else {                                       //user seen the dot right away
-                j2++;
+                testIterations2++;
                 seen = false;
                 c2.clearRect(0, 0, 700, 700)
                 // Black Dot
@@ -249,7 +264,7 @@ function test2() {
                 c2.arc(350, 350, 6, 0, Math.PI * 2, false);
                 c2.fill();
                 c2.stroke();
-                if (j2 < 5) {
+                if (testIterations2 < 20) {
                     setTimeout(test2, growingspeed);
                 } else test2();
             }
@@ -273,8 +288,15 @@ function startTest2() {                               //start test and create an
     results2[0] = [];
     results2[1] = [];
     results2[2] = [];
+    pointsx = [];
+    pointsy = [];
+    pointsIndex = 0;
+    q1 = 0;
+    q2 = 0;
+    q3 = 0;
+    q4 = 0;
     index2 = 0;
-    j2 = 0;
+    testIterations2 = 0;
     seen = false;
 }
 
@@ -535,8 +557,15 @@ function oneEye() {
     results[0] = [];
     results[1] = [];
     results[2] = [];
+    pointsx = [];
+    pointsy = [];
+    pointsIndex = 0;
+    q1 = 0;
+    q2 = 0;
+    q3 = 0;
+    q4 = 0;
     index = 0;
-    j = 0;
+    testIterations = 0;
     seen = false;
     startbtn.style.display = "inline-block";
 
@@ -552,11 +581,111 @@ function twoEyes() {
     results[0] = [];
     results[1] = [];
     results[2] = [];
+    q1 = 0;
+    q2 = 0;
+    q3 = 0;
+    q4 = 0;
     index = 0;
-    j = 0;
+    testIterations = 0;
     seen = false;
 
     canvas.style.display = "inline-block";
     startbtn.style.display = "inline-block";
 
+}
+
+
+function getAllRegions(axis) {
+
+    //Quadrant 1
+    //Top-left corner = (350, 0) 
+    //Bottom-right corner = (700, 350)
+
+
+    //Quadrant 2
+    //Top-left corner = (0, 0) 
+    //Bottom-right corner = (350, 350)
+
+    //Quadrant 3
+    //Top-left corner = (0, 350) 
+    //Bottom-right corner = (350, 700)
+
+    //Quadrant 4
+    //Top-left corner = (350, 350) 
+    //Bottom-right corner = (700, 700)
+
+
+    //First circle generated 
+    if (pointsx.length == 0 && axis == "x") {
+        let point = Math.random() * 700;
+        pointsx.push(point);
+        return (point);
+    }
+    if (pointsy.length == 0 && axis == "y") {
+        let point = Math.random() * 700;
+        pointsy.push(point);
+        return (Math.random() * 700);
+    }
+
+    let point = Math.random() * 700;
+
+    if (axis == "x") {                                            //If we're checking the x-value
+
+        if (point < 350) {                                        //If random gave a point on the left side
+            if (q2 == 5 && q3 == 5) {                             //If the left side has reached the max...
+                point = (Math.random() * 350) + 350;              //...generate a new point for the right side
+                return point;
+            } else {                                              //Else - keep this point and return
+                return point;
+            }
+        } else {                                                  //If random gave a point on the right side
+            if (q1 == 5 && q4 == 5) {                             //If the right side reached the max...
+                point = (Math.random() * 350);                    //...generate a new point for the left
+                return point;
+            } else {
+                return point;                                     //Else - keep this point and return
+            }
+        }
+    } else {                                                      //If we're checking the y-value
+        if (point < 350) {                                        //If random gave a point on the top side
+            if (q1 == 5 && q2 == 5) {                             //If the top side has reached the max...
+                point = (Math.random() * 350) + 350;              //...generate a new point for the bottom side
+                return point;
+            } else {                                              //Else - keep this point and return
+                return point;
+            }
+        } else {                                                  //If random gave a point on the bottom side
+            if (q3 == 5 && q4 == 5) {                             //If the bottom side reached the max...
+                point = (Math.random() * 350);                    //...generate a new point for the top
+                return point;
+            } else {
+                return point;                                     //Else - keep this point and return
+            }
+        }
+    }
+
+}
+
+function addToQuadrant(x, y) {
+
+    if (y >= 0 && y < 350) {            //Top half
+
+        if (x >= 0 && x < 350) {            //Quadrant 2
+            q2++;
+            console.log("In quadrant 2. Value: " + x + ", " + y + ". Quadrant 2 count: "+ q2);
+        } else {                          //Quadrant 1
+            q1++;
+            console.log("In quadrant 1. Value: " + x + ", " + y + ". Quadrant 1 count: "+ q1);
+        }
+
+    } else {                            //Bottom half
+
+        if (x >= 0 && x < 350) {            //Quadrant 3
+            q3++;
+            console.log("In quadrant 3. Value: " + x + ", " + y + ". Quadrant 3 count: "+ q3);
+        } else {                          //Quadrant 4
+            q4++;
+            console.log("In quadrant 4. Value: " + x + ", " + y + ". Quadrant 4 count: "+ q4);
+        }
+    }
 }

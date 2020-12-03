@@ -138,6 +138,17 @@
 		</main>
 	
 	</div>
+
+	<script>
+		const signOut = document.querySelector('.sign-out');
+		
+		// sign out
+		signOut.addEventListener('click', () => {
+			firebase.auth().signOut()
+				.then(() => console.log('signed out'));
+			window.location = '../index.html';
+		});
+	</script>
 	
 	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
 	<script src="/__/firebase/7.23.0/firebase-app.js"></script>
@@ -162,21 +173,6 @@
 	<!-- Detailed Dashboard Functions -->
 	<script src="detailed_dashboard.js"></script>
 	
-	<script>
-		const signOut = document.querySelector('.sign-out');
-		
-		// sign out
-		signOut.addEventListener('click', () => {
-			firebase.auth().signOut()
-				.then(() => console.log('signed out'));
-			var url = location.href.split("/").slice(-1) + "";
-			if (url.startsWith("instructions_page.html", 0)) {
-				window.location = '../index.html';
-			}
-			else
-				window.location = '../index.html';
-		});
-	</script>
 	
 	<!-- Check if user is signed in -->
 	<script>
@@ -188,15 +184,11 @@
 					db.collection("users").doc(id)
 						.get()
 						.then(doc => {
-							let type = doc.data().type;
-							if (type != 'user') {
-								console.log("Physician Account. Access Denied.");
-								window.location = '404.html';
-							}
+							
 						});
 				} else {
 					console.log("Not logged in");
-					window.location = 'index.html';
+					window.location = '../index.html';
 				}
 			});
 		})();
