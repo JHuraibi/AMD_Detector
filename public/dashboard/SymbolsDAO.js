@@ -312,10 +312,12 @@ class SymbolsDAO {
 	// 		./dashboard/detailed_view.html
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
-		uri.append("TEST_NAME", "GrowingCircles");
+		uri.append("TEST_NAME", "Symbols");
 		uri.append("TEST_ID", docID);
 		
 		if (this.isPhysician) {
+			// When user is a physician, userID is their patient's ID
+			uri.append("PATIENT_ID", this.userID);
 			return "./physician_detailed_view.html?" + uri.toString();
 		}
 		else {

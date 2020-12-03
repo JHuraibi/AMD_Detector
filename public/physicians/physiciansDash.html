@@ -199,7 +199,6 @@
 	<!-- Initialize Firebase -->
 	<script src="/__/firebase/init.js"></script>
 	
-	
 	<!-- DAO JavaScripts -->
 	<script src="../dashboard/GrowingCirclesDAO.js"></script>
 	<script src="../dashboard/SymbolsDAO.js"></script>
@@ -211,16 +210,9 @@
 	<script src="dynamic_dropdown.js"></script>
 	<script src="../dashboard/dashboard_actions.js"></script>
 	<script src="../dashboard/physicians_dashboard.js"></script>
-	
+
 	<script>
-		// TODO: Check with T if this is still needed
-		// firebase.auth().onAuthStateChanged(user => {
-		// 	console.log(user);
-		// 	userRef = user;
-		// });
-	</script>
-	
-	<script>
+		// NOTE: Undefined until patient selected from drop down list on physician dashboard
 		let uriPassedIn = new URLSearchParams(window.location.search);
 		let dataSent = uriPassedIn.get("DATA");
 		let patientID = uriPassedIn.get("PATIENT_ID");
@@ -236,10 +228,9 @@
 			title.innerText = title.innerText + " - " + patientFirstName + " " + patientLastName;
 		}());
 	</script>
-	
+
 	<!-- Check if user is signed in -->
 	<script>
-		// let id = null;		// TODO: Check with T if "id" needs a declaration here
 		var db = firebase.firestore();
 		(async function checkUser() {
 			await firebase.auth().onAuthStateChanged(user => {
@@ -255,8 +246,10 @@
 							}
 							else {
 								// Two below functions are in physicians_dashboard.js
-								if (setPatientUID(patientID)) {
-									console.log("Patient UID set.")
+								let patientIDSaved = setPatientUID(patientID);
+								
+								if (patientIDSaved) {
+									console.log("Patient UID set. UID: " + patientID);
 									pageRouter();
 								}
 							}
