@@ -52,13 +52,13 @@ class GrowingCirclesDAO {
 					console.log("Document not found. ID: " + testID);
 					return;
 				}
-				
+
 				_this.detailedViewTimeStamp = doc.data().TimeStampMS;	// Used for subtitle on detailed_view.html
 				if (doc.data().Tested == "left") {
 					let ctxLeft = canvasLeft.getContext('2d');
 					_this.drawToCanvas(ctxLeft, doc.data().XLocationsLeft, doc.data().YLocationsLeft, doc.data().ZLocationsLeft);
 				} else if (doc.data().Tested == "right") {
-					let ctxRight = canvasLeft.getContext('2d');
+					let ctxRight = canvasRight.getContext('2d');
 					_this.drawToCanvas(ctxRight, doc.data().XLocationsRight, doc.data().YLocationsRight, doc.data().ZLocationsRight);
 				} else {
 					// Else case uses document structures that predate commit 8f2d548
