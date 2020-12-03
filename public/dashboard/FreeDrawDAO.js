@@ -37,14 +37,12 @@ class FreeDrawDAO {
 	}
 	
 	async loadForDetailedView(testID, canvasLeft, canvasRight) {
-		canvasRight.getContext('2d').style.display = "none";	// Free Draw always has only 1 canvas
-		
 		let _this = this;
 		
 		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
-			.collection("Symbols")
+			.collection("FreeDraw")
 			.doc(testID)
 			.get()
 			.then(function(doc) {
@@ -129,7 +127,7 @@ class FreeDrawDAO {
 	}
 	
 	drawToCanvas(ctx, drawingData) {
-		if (!canvas) {
+		if (!ctx) {
 			console.log("Left Canvas DOM not found.");
 			return;
 		}

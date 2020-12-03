@@ -6,6 +6,7 @@ let testID
 let patientUID = null;
 
 let genericDAO;
+let forFreeDraw = false;
 
 async function pageRouter() {
 	getURIData();
@@ -45,6 +46,7 @@ function defineDAO() {
 			break;
 		
 		case "FreeDraw":
+			forFreeDraw = true;
 			genericDAO = new FreeDrawDAO(dbRef, patientUID);
 			break;
 		
@@ -54,9 +56,15 @@ function defineDAO() {
 	}
 }
 
-async function drawResults(){
+async function drawResults() {
 	let canvasLeft = document.getElementById("detailedCanvasLeft");
 	let canvasRight = document.getElementById("detailedCanvasRight");
+	let captions = document.getElementById("canvasCaptions");
+	
+	if (forFreeDraw) {
+		canvasRight.style.display = "none";		// Free Draw always has only 1 canvas
+		captions.style.display = "none";		// Remove the captions as well
+	}
 	
 	await genericDAO.loadForDetailedView(testID, canvasLeft, canvasRight);
 	setDateSubtitle(genericDAO.detailedViewTimeStamp);
