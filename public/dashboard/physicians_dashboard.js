@@ -21,10 +21,10 @@ function setPatientUID(id) {
 async function pageRouter() {
 	defineDAOs();
 	
-	await patientGrowingCirclesDAO.loadAll();
-	await patientSymbolsDAO.loadAll();
-	await patientFullBarsDAO.loadAll();
-	await patientFreeDrawDAO.loadAll();
+	await patientGrowingCirclesDAO.loadForDashboard();
+	await patientSymbolsDAO.loadForDashboard();
+	await patientFullBarsDAO.loadForDashboard();
+	await patientFreeDrawDAO.loadForDashboard();
 	
 	renderDefaultCanvases();
 	renderDefaultTable();
@@ -33,9 +33,9 @@ async function pageRouter() {
 function renderDefaultCanvases() {
 	clearCanvases();
 	
-	patientGrowingCirclesDAO.populateAggregate("canvasLeft", "canvasRight");
-	patientSymbolsDAO.populateAggregate("canvasLeft", "canvasRight");
-	patientFullBarsDAO.populateAggregate("canvasLeft", "canvasRight");
+	patientGrowingCirclesDAO.renderAggregate("canvasLeft", "canvasRight");
+	patientSymbolsDAO.renderAggregate("canvasLeft", "canvasRight");
+	patientFullBarsDAO.renderAggregate("canvasLeft", "canvasRight");
 }
 
 function renderDefaultTable() {
@@ -55,9 +55,9 @@ function defineDAOs() {
 function mostRecent() {
 	clearCanvases();
 	
-	patientGrowingCirclesDAO.populateMostRecent("canvasLeft", "canvasRight");
+	patientGrowingCirclesDAO.renderMostRecent("canvasLeft", "canvasRight");
 	patientSymbolsDAO.populateMostRecent("canvasLeft", "canvasRight");
-	patientFullBarsDAO.populateMostRecent("canvasLeft", "canvasRight");
+	patientFullBarsDAO.renderMostRecent("canvasLeft", "canvasRight");
 }
 
 function monthSelect() {
@@ -70,9 +70,9 @@ function monthSelect() {
 	}
 	clearCanvases();
 	
-	patientGrowingCirclesDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
-	patientSymbolsDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
-	patientFullBarsDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
+	patientGrowingCirclesDAO.renderSelectedMonth(monthSelector.value, "canvasLeft", "canvasRight");
+	patientSymbolsDAO.renderSelectedMonth(monthSelector.value, "canvasLeft", "canvasRight");
+	patientFullBarsDAO.renderSelectedMonth(monthSelector.value, "canvasLeft", "canvasRight");
 }
 
 function numberOfMonths() {
@@ -86,9 +86,9 @@ function numberOfMonths() {
 	
 	clearCanvases();
 	
-	patientGrowingCirclesDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
-	patientSymbolsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
-	patientFullBarsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
+	patientGrowingCirclesDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
+	patientSymbolsDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
+	patientFullBarsDAO.renderSelectedMonth(monthInput.value, "canvasLeft", "canvasRight");
 }
 
 

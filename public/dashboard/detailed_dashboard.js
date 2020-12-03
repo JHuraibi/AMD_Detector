@@ -1,5 +1,5 @@
 let dbRef = firebase.firestore();
-let userRef = null;
+let patientUID = null;
 
 let uriPassedIn;
 let testName
@@ -7,13 +7,11 @@ let testID
 
 let genericDAO;
 
-
 firebase.auth().onAuthStateChanged(user => {
 	console.log(user);
-	userRef = user;
+	patientUID = user.uid;
 	pageRouter();
 });
-
 
 async function pageRouter() {
 	getURIData();
@@ -40,19 +38,19 @@ function defineDAO() {
 			break;
 		
 		case "GrowingCircles":
-			genericDAO = new GrowingCirclesDAO(dbRef, userRef.uid);
+			genericDAO = new GrowingCirclesDAO(dbRef, patientUID);
 			break;
 		
 		case "Symbols":
-			genericDAO = new SymbolsDAO(dbRef, userRef.uid);
+			genericDAO = new SymbolsDAO(dbRef, patientUID);
 			break;
 		
 		case "FullBars":
-			genericDAO = new FullBarsDAO(dbRef, userRef.uid);
+			genericDAO = new FullBarsDAO(dbRef, patientUID);
 			break;
 		
 		case "FreeDraw":
-			genericDAO = new FreeDrawDAO(dbRef, userRef.uid);
+			genericDAO = new FreeDrawDAO(dbRef, patientUID);
 			break;
 		
 		// case "Fractal":

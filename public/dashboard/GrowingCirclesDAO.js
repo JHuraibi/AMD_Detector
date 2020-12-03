@@ -3,10 +3,10 @@ class GrowingCirclesDAO {
 		this.dbRef = dbRef;
 		this.userID = userID;
 		this.docList = [];
-
+		
 		// !! TODO: This value to be dynamically set
 		this.canvasSize = 700;
-
+		
 		// These values are equal to 20, 45, and 95% opacity levels respectively
 		// Max alpha in hex is FF or 255 in decimal
 		// e.g. [Hex F3 == Dec 243]
@@ -18,9 +18,10 @@ class GrowingCirclesDAO {
 		this.useAlpha = false;
 		
 		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
+		this.isPhysician = false;
 	}
-
-	async loadAll() {
+	
+	async loadForDashboard() {
 		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
@@ -33,7 +34,7 @@ class GrowingCirclesDAO {
 					this.docList.push(extractedDoc);
 				});
 			});
-
+		
 		// this.manualAdd();	// This breaks as of (11/27/2020) due to missing fields in FireStore document
 	}
 	
@@ -47,24 +48,26 @@ class GrowingCirclesDAO {
 			.collection("GrowingCircles")
 			.doc(testID)
 			.get()
-			.then(function(doc) {
-				if (!doc){
+			.then(function (doc) {
+				if (!doc) {
 					console.log("Document not found. ID: " + testID);
 					return;
 				}
 				
 				_this.detailedViewTimeStamp = doc.data().TimeStampMS;	// Used for subtitle on detailed_view.html
 				
-				if (doc.Tested == "left") {
+				if (doc.data().Tested == "left") {
 					let ctxLeft = canvasLeft.getContext('2d');
-					_this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
-				} else if (doc.Tested == "right") {
-					let ctxRight = canvasLeft.getContext('2d');
-					_this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
-				} else {
+					_this.drawToCanvas(ctxLeft, doc.data().XLocationsLeft, doc.data().YLocationsLeft, doc.data().ZLocationsLeft);
+				}
+				else if (doc.data().Tested == "right") {
+					let ctxRight = canvasRight.getContext('2d');
+					_this.drawToCanvas(ctxRight, doc.data().XLocationsRight, doc.data().YLocationsRight, doc.data().ZLocationsRight);
+				}
+				else {
 					// Else case uses document structures that predate commit 8f2d548
 					let ctxLeft = canvasLeft.getContext('2d');
-					let ctxRight = canvasLeft.getContext('2d');
+					let ctxRight = canvasRight.getContext('2d');
 					_this.drawToCanvas(ctxLeft, doc.data().XLocationsLeft,
 						doc.data().YLocationsLeft, doc.data().ZLocationsLeft);
 					_this.drawToCanvas(ctxRight, doc.data().XLocationsRight,
@@ -73,7 +76,7 @@ class GrowingCirclesDAO {
 			});
 	}
 	
-
+	
 	// !! TESTING ONLY - Clones FireStore doc from existing
 	manualAdd() {
 		if (!this.docList[0]) {
@@ -88,10 +91,10 @@ class GrowingCirclesDAO {
 				console.log("Manual document added.");
 			});
 	}
-
+	
 	// NOTE: The JSON returned needs to match the FireStore document structure for GrowingCircles
 	extractor(id, data) {
-
+		
 		if (data.Tested == "left") {
 			//Test Results for left eye
 			return {
@@ -103,7 +106,8 @@ class GrowingCirclesDAO {
 				ZLocationsLeft: data.ZLocationsLeft,
 				Tested: data.Tested,
 			}
-		} else if (data.Tested == "right") {
+		}
+		else if (data.Tested == "right") {
 			//Test Results for right eye
 			return {
 				id: id,
@@ -129,85 +133,87 @@ class GrowingCirclesDAO {
 				ZLocationsRight: data.ZLocationsRight,
 			}
 		}
-
-
+		
+		
 	}
-
+	
 	populateHistoryTable(targetTableID) {
 		if (!this.userID) {
 			console.log("User ID is null");
 			return;
 		}
-
+		
 		for (let i = 0; i < this.docList.length; i++) {
 			let doc = this.docList[i];
 			let timeStamp = doc.TimeStampMS;
 			this.addRowToTable(doc.id, timeStamp, targetTableID);
 		}
 	}
-
+	
 	// TODO: Update with actual method for detailed view
 	// TODO: Refactor variable names below to be more readable
 	addRowToTable(docID, timeStamp, targetTableID) {
 		let testName = "Growing Circles";
 		let time = this.formatDate(timeStamp);
 		let urlOfDetailedView = this.URIBuilder(docID);
-
+		
 		// ID of which table to put the data into (HTML Attribute ID)
 		let tableBody = document.getElementById(targetTableID);
-
+		
 		// Table Row
 		let row = document.createElement("tr");
-
+		
 		// Table Columns
 		let columnTestName = document.createElement("td");
 		let columnTime = document.createElement("td");
 		let columnID = document.createElement("td");
-
+		
 		// Will be a child of columnURL so we can add hyperlink
 		let linkForDetailedView = document.createElement("a");
-
+		
 		// Text to be put in the Columns
 		let textTestName = document.createTextNode(testName);
 		let textTime = document.createTextNode(time);
 		let textID = document.createTextNode("Details");
-
+		
 		// Set href attribute for link to test
 		linkForDetailedView.appendChild(textID);
 		linkForDetailedView.setAttribute("href", urlOfDetailedView);
-
+		
 		// Put the Text into their respective Columns
 		columnTestName.appendChild(textTestName);
 		columnTime.appendChild(textTime);
 		columnID.appendChild(linkForDetailedView);
-
+		
 		// Add each the Columns to the Row
 		row.appendChild(columnTestName);
 		row.appendChild(columnTime);
 		row.appendChild(columnID);
-
+		
 		// Add the Row to the Table
 		tableBody.appendChild(row);
 	}
-
-	populateAll(leftCanvasID, rightCanvasID) {
+	
+	renderAll(leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
-
+		
 		this.docList.forEach((doc) => {
 			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
 			ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
-
+			
 			if (doc.Tested == "left") {
 				this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
-			} else if (doc.Tested == "right") {
+			}
+			else if (doc.Tested == "right") {
 				this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
-			} else {
+			}
+			else {
 				this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
 				this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 			}
-
+			
 			alphaIndex++;
 			if (alphaIndex > 3) {
 				alphaIndex = 3;
@@ -215,70 +221,74 @@ class GrowingCirclesDAO {
 			}
 		})
 	}
-
+	
 	// TODO: RENAME
-	populateAggregate(leftCanvasID, rightCanvasID) {
+	renderAggregate(leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
-
+		
 		let max = this.docList.length;
 		for (let i = 0; i < 3 && i < max; i++) {
 			let doc = this.docList[i];
 			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
 			ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
-
+			
 			if (doc.Tested == "left") {
 				this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
-			} else if (doc.Tested == "right") {
+			}
+			else if (doc.Tested == "right") {
 				this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
-			} else {
+			}
+			else {
 				this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
 				this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 			}
-
+			
 			alphaIndex++;
 			if (alphaIndex > 3) {
 				alphaIndex = 3;
 				console.log("Warning: Alpha Index Exceeded 3 Iterations.");
 			}
 		}
-
+		
 	}
-
-	populateMostRecent(leftCanvasID, rightCanvasID) {
+	
+	renderMostRecent(leftCanvasID, rightCanvasID) {
 		if (!this.docList[0]) {
 			console.log("First document (most recent) empty.")
 			return;
 		}
-
+		
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
-
+		
 		ctxLeft.fillStyle = "#f47171";
 		ctxRight.fillStyle = "#f47171";
-
+		
 		let doc = this.docList[0];
 		if (doc.Tested == "left") {
 			this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
-		} else if (doc.Tested == "right") {
+		}
+		else if (doc.Tested == "right") {
 			this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
-		} else {
+		}
+		else {
 			this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
 			this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 		}
 	}
-
-	populateByMonthSelector(month, leftCanvasID, rightCanvasID) {
+	
+	renderSelectedMonth(month, leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
-
+		
 		ctxLeft.fillStyle = "#f47171";
 		ctxRight.fillStyle = "#f47171";
-
+		
 		let dateStringEarliest = month + " 1 2020";
 		let dateStringLatest;
-
+		
 		if (+month === 12) {
 			// Handle December as chosen start month
 			dateStringLatest = "1 1 2021";
@@ -286,48 +296,52 @@ class GrowingCirclesDAO {
 		else {
 			dateStringLatest = (+month + 1) + " 1 2020";
 		}
-
+		
 		let msEarliest = (new Date(dateStringEarliest)).getTime();
 		let msLatest = (new Date(dateStringLatest)).getTime();
-
+		
 		// !! NOTE: docList[] is sorted in descending order by TimeStampMS
 		//       So the earlier date (smallest millisecond) is closer to the end of the array
 		let startIndex = this.setIndex(msLatest);
 		let endIndex = this.setIndex(msEarliest);
-
+		
 		// TODO: Check for off-by-one
 		for (let i = startIndex; i <= endIndex; i++) {
 			let doc = this.docList[i];
-
+			
 			if (doc.Tested == "left") {
 				this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
-			} else if (doc.Tested == "right") {
+			}
+			else if (doc.Tested == "right") {
 				this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
-			} else {
+			}
+			else {
 				this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
 				this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 			}
 		}
 	}
-
-	populateByNumberMonths(monthsBack, leftCanvasID, rightCanvasID) {
+	
+	renderMonthRange(monthsBack, leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
-
+		
 		ctxLeft.fillStyle = "#f47171";
 		ctxRight.fillStyle = "#f47171";
-
+		
 		let current = (new Date).getMonth();
 		let ms = this.monthMSHelper(current, monthsBack);
 		let index = this.setIndex(ms);
-
+		
 		for (let i = 0; i < index; i++) {
 			let doc = this.docList[i];
 			if (doc.Tested == "left") {
 				this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
-			} else if (doc.Tested == "right") {
+			}
+			else if (doc.Tested == "right") {
 				this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
-			} else {
+			}
+			else {
 				this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
 				this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 			}
@@ -339,7 +353,6 @@ class GrowingCirclesDAO {
 			console.log("Invalid Canvas Context.");
 			return;
 		}
-		
 		for (var i = 0; i < yPos.length; i++) {
 			
 			if (isNaN(xPos[i]) || isNaN(yPos[i]) || isNaN(zPos[i])) {
@@ -365,52 +378,61 @@ class GrowingCirclesDAO {
 			ctx.fill();
 		}
 	}
-
-	// !! NOTE: URI's are relative to dashboard.html. NOT this DAO file.
-	//		e.g.
-	//		[CORRECT] 	urlOfDetailedView == ./dashboard/detailed_view.html
-	//		[INCORRECT] urlOfDetailedView == ./detailed_view.html
-	// !! NOTE: The TEST_NAME key's value has to match Firestore's document exactly
+	
+	// !! NOTE: The TEST_NAME value has to match Firestore's collection name exactly
+	// !! NOTE: URI's are relative to dashboard.html OR physiciansDash.html. NOT this DAO file.
+	//	From physiciansDash.html
+	//		./physiciansDetailedDash.html
+	//
+	//	From dashboard.html
+	// 		./dashboard/detailed_view.html
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
 		uri.append("TEST_NAME", "GrowingCircles");
 		uri.append("TEST_ID", docID);
-		return "./dashboard/detailed_view.html?" + uri.toString();
+		
+		if (this.isPhysician) {
+			uri.append("PATIENT_ID", docID);
+			return "./physician_detailed_view.html?" + uri.toString();
+		}
+		else {
+			return "./dashboard/detailed_view.html?" + uri.toString();
+		}
 	}
-
+	
 	setIndex(ms) {
 		let length = this.docList.length;
 		let i = 0;
-
+		
 		// CHECK: Remove "or equal"?
 		while (this.docList[i].TimeStampMS >= ms && i < length - 1) {
 			i++;
 		}
-
+		
 		return i;
 	}
-
+	
 	formatDate(milliseconds) {
 		let date = new Date(milliseconds);
 		let timezoneOffset = -5;	// UTC -5:00
-
+		
 		let dateString = date.toDateString();
 		let hoursString = +date.getUTCHours() + timezoneOffset;
 		let minutesString = date.getUTCMinutes();
 		let postfix = hoursString > 11 ? "PM" : "AM";
-
+		
 		if (hoursString === 0) {
 			hoursString = 12;
 		}
-
+		
 		minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
 		hoursString = hoursString % 12;
-
+		
 		// Uncomment below line to add time of day
 		// return dateString + " at " + hoursString + ":" + minutesString + postfix;
 		return dateString;
 	}
-
+	
 	// TODO: docstring
 	// TODO: Better year handling (abs, then mod 12 for number of years)
 	monthMSHelper(current, number) {
@@ -419,26 +441,26 @@ class GrowingCirclesDAO {
 		if (current - number < 0) {
 			year = year - 1;
 		}
-
+		
 		let month = (current + (11 - number)) % 12;
-
+		
 		return Date.UTC(year, month, 1);
 	}
-
+	
 	monthName(number) {
 		if (number < 0 || number > 12) {
 			console.log("Month number invalid. Number: " + number);
 			return "January";
 		}
-
+		
 		let months = [
 			"January", "February", "March",
 			"April", "May", "June",
 			"July", "August", "September",
 			"October", "November", "December"
 		];
-
+		
 		return months[number];
 	}
-
+	
 }// class [ GrowingCirclesDAO ]
