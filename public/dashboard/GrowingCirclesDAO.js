@@ -20,7 +20,7 @@ class GrowingCirclesDAO {
 		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
 		this.isPhysician = false;
 	}
-	
+
 	async loadForDashboard() {
 		await this.dbRef
 			.collection("TestResults")
@@ -41,7 +41,7 @@ class GrowingCirclesDAO {
 	// !! NOTE: This function requires that a reference to the outer object be used
 	async loadForDetailedView(testID, canvasLeft, canvasRight) {
 		let _this = this;
-		
+
 		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
@@ -53,9 +53,9 @@ class GrowingCirclesDAO {
 					console.log("Document not found. ID: " + testID);
 					return;
 				}
-				
+
 				_this.detailedViewTimeStamp = doc.data().TimeStampMS;	// Used for subtitle on detailed_view.html
-				
+			
 				if (doc.data().Tested == "left") {
 					let ctxLeft = canvasLeft.getContext('2d');
 					_this.drawToCanvas(ctxLeft, doc.data().XLocationsLeft, doc.data().YLocationsLeft, doc.data().ZLocationsLeft);
@@ -193,7 +193,7 @@ class GrowingCirclesDAO {
 		// Add the Row to the Table
 		tableBody.appendChild(row);
 	}
-	
+
 	renderAll(leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
@@ -253,7 +253,7 @@ class GrowingCirclesDAO {
 		}
 		
 	}
-	
+
 	renderMostRecent(leftCanvasID, rightCanvasID) {
 		if (!this.docList[0]) {
 			console.log("First document (most recent) empty.")
@@ -278,7 +278,7 @@ class GrowingCirclesDAO {
 			this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
 		}
 	}
-	
+
 	renderSelectedMonth(month, leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
@@ -321,7 +321,7 @@ class GrowingCirclesDAO {
 			}
 		}
 	}
-	
+
 	renderMonthRange(monthsBack, leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');

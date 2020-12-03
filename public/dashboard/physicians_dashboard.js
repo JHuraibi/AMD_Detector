@@ -61,7 +61,7 @@ function mostRecent() {
 	clearCanvases();
 	
 	patientGrowingCirclesDAO.renderMostRecent("canvasLeft", "canvasRight");
-	patientSymbolsDAO.populateMostRecent("canvasLeft", "canvasRight");
+	patientSymbolsDAO.renderMostRecent("canvasLeft", "canvasRight");
 	patientFullBarsDAO.renderMostRecent("canvasLeft", "canvasRight");
 }
 

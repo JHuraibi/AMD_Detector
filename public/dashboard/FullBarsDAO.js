@@ -42,7 +42,7 @@ class FullBarsDAO {
 	async loadForDetailedView(testID, canvasLeft, canvasRight) {
 		let _this = this;
 		
-		this.dbRef
+		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
 			.collection("FullBars")
@@ -53,7 +53,6 @@ class FullBarsDAO {
 					console.log("Document not found. ID: " + testID);
 					return;
 				}
-				
 				_this.detailedViewTimeStamp = doc.data().TimeStampMS; 	// Used for subtitle on detailed_view.html
 				
 				let ctxLeft = canvasLeft.getContext('2d');

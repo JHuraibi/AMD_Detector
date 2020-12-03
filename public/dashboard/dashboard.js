@@ -25,19 +25,19 @@ async function pageRouter() {
 	renderDefaultTable();
 }
 
-function renderDefaultTable() {
-	growingCirclesDAO.populateHistoryTable("historyTable");
-	symbolsDAO.populateHistoryTable("historyTable");
-	fullBarsDAO.populateHistoryTable("historyTable");
-	freeDrawDAO.populateHistoryTable("historyTable");
-}
-
 function renderDefaultCanvases() {
 	clearCanvases();
 	
 	growingCirclesDAO.renderAggregate("canvasLeft", "canvasRight");
 	symbolsDAO.renderAggregate("canvasLeft", "canvasRight");
 	fullBarsDAO.renderAggregate("canvasLeft", "canvasRight");
+}
+
+function renderDefaultTable() {
+	growingCirclesDAO.populateHistoryTable("historyTable");
+	symbolsDAO.populateHistoryTable("historyTable");
+	fullBarsDAO.populateHistoryTable("historyTable");
+	freeDrawDAO.populateHistoryTable("historyTable");
 }
 
 function defineDAOs() {
