@@ -1,201 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="">
-	<link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32"/>
-	<link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16"/>
 	
-	<title>Vision Monitor · Dashboard</title>
-	
-	<!-- Bootstrap core CSS -->
-	<link href="../scss/custom.css" rel="stylesheet">
-	<!-- Custom styles for this template -->
-	<link href="../css/dashboard.css" rel="stylesheet">
-	<style>
-		.canvas-container {
-			/*margin: 1.5rem;*/
-			border-radius: 1rem;
-			background: #7171f47E;
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<link rel="icon" type="image/png" href="../images/favicon-32x32.png" sizes="32x32"/>
+		<link rel="icon" type="image/png" href="../images/favicon-16x16.png" sizes="16x16"/>
+		
+		<title>Vision Monitor · Dashboard</title>
+		
+		<!-- Bootstrap core CSS -->
+		<link href="../scss/custom.css" rel="stylesheet">
+		<!-- Custom styles for this template -->
+		<link href="../css/dashboard.css" rel="stylesheet">
+		<style>
+			.canvas-container {
+				/*margin: 1.5rem;*/
+				border-radius: 1rem;
+				background: #7171f47E;
+				
+				/*margin-top: 1em;*/
+				/*Light Orange: ffecc7*/
+				/*Lavender ffe4ff*/
+				/*Light Green: f7ffe4*/
+			}
 			
-			/*margin-top: 1em;*/
-			/*Light Orange: ffecc7*/
-			/*Lavender ffe4ff*/
-			/*Light Green: f7ffe4*/
-		}
+			.canvas-container > table {
+				height: 90%;
+				margin-bottom: 5em;
+				text-align: center !important;
+				font-size: large;
+			}
+			
+			canvas {
+				width: 90%;
+				/*height: 400px;*/
+				border: 5px solid black;
+				background-color: #fff;
+				margin: 1.5rem;
+			}
+		</style>
 		
-		.canvas-container > table {
-			height: 90%;
-			margin-bottom: 5em;
-			text-align: center !important;
-			font-size: large;
-		}
-		
-		canvas {
-			width: 90%;
-			/*height: 400px;*/
-			border: 5px solid black;
-			background-color: #fff;
-			margin: 1.5rem;
-		}
-	</style>
+		<script src="../tests/p5.js"></script>
+	</head>
 	
-	<script src="../tests/p5.js"></script>
-</head>
-
-<body>
-	<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-		<a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="../home.html">Vision Monitor</a>
-		<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
-				data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-		<ul class="navbar-nav px-3">
-			<li class="nav-item text-nowrap">
-				<a class="sign-out">Sign Out</a>
-			</li>
-		</ul>
-	</nav>
-	<div class="container-fluid">
-		<div class="row">
-			<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-				<div class="sidebar-sticky pt-3">
-					<ul class="nav flex-column">
-						<li class="nav-item">
-							<a class="nav-link active" href="../home.html">
-								<span data-feather="home"></span>
-								Home <span class="sr-only">(current)</span>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="../dashboard.html">
-								My Dashboard
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="../patients/myPhysicians.html">
-								My Physicians
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="../patients/profile.html">
-								My Profile
-							</a>
-						</li>
-					</ul>
+	<body>
+		<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+			<a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="../home.html">Vision Monitor</a>
+			<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
+					data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+			<ul class="navbar-nav px-3">
+				<li class="nav-item text-nowrap">
+					<a class="sign-out">Sign Out</a>
+				</li>
+			</ul>
+		</nav>
+		<div class="container-fluid">
+			<div class="row">
+				<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+					<div class="sidebar-sticky pt-3">
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link active" href="../home.html">
+									<span data-feather="home"></span>
+									Home <span class="sr-only">(current)</span>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="../dashboard.html">
+									My Dashboard
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="../patients/myPhysicians.html">
+									My Physicians
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="../patients/profile.html">
+									My Profile
+								</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+			
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+				<div
+						class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+					<h1 class="h2">My Progress</h1>
 				</div>
-			</nav>
+				
+				<h3 id="testTitle" style="margin-top: 2rem">
+					Detailed View
+					<!-- Remainder of title (i.e. test name) is set by DashboardInjector.js -->
+				</h3>
+				
+				<h5 id="dateSubtitle">
+					Date Test Taken:&nbsp;
+					<!-- Remainder of subtitle (i.e. Date taken) is set by DashboardInjector.js -->
+				</h5>
+				
+				<div class="canvas-container">
+					<!-- <table border="3"> -->
+					<table class="canvas-table">
+						<tr>
+							<td>
+								<canvas id="detailedCanvasLeft" width="400" height="400"></canvas>
+							</td>
+							<td>
+								<canvas id="detailedCanvasRight" width="400" height="400"></canvas>
+							</td>
+						</tr>
+						<tr id="canvasCaptions">
+							<td>Left Eye</td>
+							<td>Right Eye</td>
+						</tr>
+					</table>
+				</div>
+			
+			</main>
+		
 		</div>
 		
-		<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-			<div
-					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-				<h1 class="h2">My Progress</h1>
-				<!-- Additional Links -->
-				<!-- <div class="btn-toolbar mb-2 mb-md-0">-->
-				<!-- 	<div class="btn-group mr-2">-->
-				<!-- 		<button type="button" class="btn btn-sm btn-outline-secondary">Share</button>-->
-				<!-- 		<button type="button" class="btn btn-sm btn-outline-secondary">Export</button>-->
-				<!-- 	</div>-->
-				<!-- 	<button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">-->
-				<!-- 		<span data-feather="calendar"></span>-->
-				<!-- 		This week-->
-				<!-- 	</button>-->
-				<!-- </div>-->
-			</div>
-			
-			<h3 id="testTitle" style="margin-top: 2rem">
-				Detailed View
-				<!-- Remainder of title (i.e. test name) is set by DashboardInjector.js -->
-			</h3>
-			
-			<h5 id="dateSubtitle">
-				Date Test Taken:&nbsp;
-				<!-- Remainder of subtitle (i.e. Date taken) is set by DashboardInjector.js -->
-			</h5>
-			
-			<div class="canvas-container">
-				<!-- <table border="3"> -->
-				<table class="canvas-table">
-					<tr>
-						<td>
-							<canvas id="detailedCanvasLeft" width="400" height="400"></canvas>
-						</td>
-						<td>
-							<canvas id="detailedCanvasRight" width="400" height="400"></canvas>
-						</td>
-					</tr>
-					<tr id="canvasCaptions">
-						<td>Left Eye</td>
-						<td>Right Eye</td>
-					</tr>
-				</table>
-			</div>
+		<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+		<script src="/__/firebase/7.23.0/firebase-app.js"></script>
 		
-		</main>
-	
-	</div>
-	
-	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-	<script src="/__/firebase/7.23.0/firebase-app.js"></script>
-	
-	<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
-	<script src="/__/firebase/7.23.0/firebase-analytics.js"></script>
-	
-	<!-- Add Firebase products that you want to use -->
-	<script src="/__/firebase/7.23.0/firebase-auth.js"></script>
-	<script src="/__/firebase/7.23.0/firebase-firestore.js"></script>
-	
-	<!-- Initialize Firebase -->
-	<script src="/__/firebase/init.js"></script>
-	<script src="../auth.js"></script>
-	
-	<!-- DAO JavaScripts -->
-	<script src="GrowingCirclesDAO.js"></script>
-	<script src="SymbolsDAO.js"></script>
-	<script src="FullBarsDAO.js"></script>
-	<script src="FreeDrawDAO.js"></script>
-	
-	<!-- Detailed Dashboard Functions -->
-	<script src="detailed_dashboard.js"></script>
-	
-	<script>
-		const signOut = document.querySelector('.sign-out');
+		<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+		<script src="/__/firebase/7.23.0/firebase-analytics.js"></script>
 		
-		// sign out
-		signOut.addEventListener('click', () => {
-			firebase.auth().signOut()
-				.then(() => console.log('signed out'));
-			window.location = '../index.html';
-		});
-	</script>
-	
-	<!-- Check if user is signed in -->
-	<script>
-		var db = firebase.firestore();
-		(async function checkUser() {
-			await firebase.auth().onAuthStateChanged(user => {
-				if (user) {
-					id = user.uid;
-					db.collection("users").doc(id)
-						.get()
-						.then(doc => {
-							let type = doc.data().type;
-							if (type != 'user') {
-								console.log("Physician Account. Access Denied.");
-								window.location = '404.html';
-							}
-						});
-				} else {
-					console.log("Not logged in");
-					window.location = 'index.html';
-				}
+		<!-- Add Firebase products that you want to use -->
+		<script src="/__/firebase/7.23.0/firebase-auth.js"></script>
+		<script src="/__/firebase/7.23.0/firebase-firestore.js"></script>
+		
+		<!-- Initialize Firebase -->
+		<script src="/__/firebase/init.js"></script>
+		<script src="../auth.js"></script>
+		
+		<!-- DAO JavaScripts -->
+		<script src="GrowingCirclesDAO.js"></script>
+		<script src="SymbolsDAO.js"></script>
+		<script src="FullBarsDAO.js"></script>
+		<script src="FreeDrawDAO.js"></script>
+		
+		<!-- Detailed Dashboard Functions -->
+		<script src="detailed_dashboard.js"></script>
+		
+		<script>
+			const signOut = document.querySelector('.sign-out');
+			
+			// sign out
+			signOut.addEventListener('click', () => {
+				firebase.auth().signOut()
+					.then(() => console.log('signed out'));
+				window.location = '../index.html';
 			});
-		})();
-	</script>
-</body>
+		</script>
+		
+		<!-- Check if user is signed in -->
+		<script>
+			var db = firebase.firestore();
+			(async function checkUser() {
+				await firebase.auth().onAuthStateChanged(user => {
+					if (user) {
+						id = user.uid;
+						db.collection("users").doc(id)
+							.get()
+							.then(doc => {
+								let type = doc.data().type;
+								if (type != 'user') {
+									console.log("Physician Account. Access Denied.");
+									window.location = '404.html';
+								}
+							});
+					} else {
+						console.log("Not logged in");
+						window.location = 'index.html';
+					}
+				});
+			})();
+		</script>
+	</body>
 
 </html>

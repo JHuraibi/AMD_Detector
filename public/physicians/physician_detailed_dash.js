@@ -3,7 +3,7 @@ let dbRef = firebase.firestore();
 let uriPassedIn;
 let testName
 let testID
-let patientUID = null;
+let patientID = null;
 
 let genericDAO;
 let forFreeDraw = false;
@@ -19,7 +19,7 @@ function getURIData(){
 	uriPassedIn = new URLSearchParams(window.location.search);
 	testName = uriPassedIn.get("TEST_NAME");
 	testID = uriPassedIn.get("TEST_ID");
-	patientUID = uriPassedIn.get("PATIENT_ID");
+	patientID = uriPassedIn.get("PATIENT_ID");
 }
 
 function defineDAO() {
@@ -34,20 +34,20 @@ function defineDAO() {
 			break;
 		
 		case "GrowingCircles":
-			genericDAO = new GrowingCirclesDAO(dbRef, patientUID);
+			genericDAO = new GrowingCirclesDAO(dbRef, patientID);
 			break;
 		
 		case "Symbols":
-			genericDAO = new SymbolsDAO(dbRef, patientUID);
+			genericDAO = new SymbolsDAO(dbRef, patientID);
 			break;
 		
 		case "FullBars":
-			genericDAO = new FullBarsDAO(dbRef, patientUID);
+			genericDAO = new FullBarsDAO(dbRef, patientID);
 			break;
 		
 		case "FreeDraw":
 			forFreeDraw = true;
-			genericDAO = new FreeDrawDAO(dbRef, patientUID);
+			genericDAO = new FreeDrawDAO(dbRef, patientID);
 			break;
 		
 		// case "Fractal":
