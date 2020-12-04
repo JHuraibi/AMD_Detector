@@ -71,7 +71,7 @@ function resetOptions() {
 	numberMonthsInput.value = "";
 	defaultRadio.checked = true;
 	
-	// Redraw Default (function definition in dashboard.js)
+	// Redraw Default (function definition in dashboard_renderer.js)
 	renderDefaultCanvases();
 }
 
