@@ -9,7 +9,7 @@ let patientFreeDrawDAO;
 
 function setPatientUID(id) {
 	if (!id) {
-		console.log("Patient UID provided empty/invalid.")
+		console.log("Patient UID provided empty/invalid.");
 		return false;
 	}
 	
@@ -30,6 +30,18 @@ async function pageRouter() {
 	renderDefaultTable();
 }
 
+function defineDAOs() {
+	patientGrowingCirclesDAO = new GrowingCirclesDAO(dbRef, patientUID);
+	patientSymbolsDAO = new SymbolsDAO(dbRef, patientUID);
+	patientFullBarsDAO = new FullBarsDAO(dbRef, patientUID);
+	patientFreeDrawDAO = new FreeDrawDAO(dbRef, patientUID);
+	
+	patientGrowingCirclesDAO.isPhysician = true;
+	patientSymbolsDAO.isPhysician = true;
+	patientFullBarsDAO.isPhysician = true;
+	patientFreeDrawDAO.isPhysician = true;
+}
+
 function renderDefaultCanvases() {
 	clearCanvases();
 	
@@ -45,18 +57,11 @@ function renderDefaultTable() {
 	patientFreeDrawDAO.populateHistoryTable("historyTable");
 }
 
-function defineDAOs() {
-	patientGrowingCirclesDAO = new GrowingCirclesDAO(dbRef, patientUID);
-	patientSymbolsDAO = new SymbolsDAO(dbRef, patientUID);
-	patientFullBarsDAO = new FullBarsDAO(dbRef, patientUID);
-	patientFreeDrawDAO = new FreeDrawDAO(dbRef, patientUID);
-}
-
 function mostRecent() {
 	clearCanvases();
 	
 	patientGrowingCirclesDAO.renderMostRecent("canvasLeft", "canvasRight");
-	patientSymbolsDAO.populateMostRecent("canvasLeft", "canvasRight");
+	patientSymbolsDAO.renderMostRecent("canvasLeft", "canvasRight");
 	patientFullBarsDAO.renderMostRecent("canvasLeft", "canvasRight");
 }
 
@@ -71,7 +76,7 @@ function monthSelect() {
 	clearCanvases();
 	
 	patientGrowingCirclesDAO.renderSelectedMonth(monthSelector.value, "canvasLeft", "canvasRight");
-	patientSymbolsDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
+	patientSymbolsDAO.renderSelectedMonth(monthSelector.value, "canvasLeft", "canvasRight");
 	patientFullBarsDAO.renderSelectedMonth(monthSelector.value, "canvasLeft", "canvasRight");
 }
 
@@ -87,10 +92,9 @@ function numberOfMonths() {
 	clearCanvases();
 	
 	patientGrowingCirclesDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
-	patientSymbolsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
-	patientFullBarsDAO.renderMonthName(monthInput.value, "canvasLeft", "canvasRight");
+	patientSymbolsDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
+	patientFullBarsDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
 }
-
 
 function clearCanvases() {
 	let canvasLeft = document.getElementById("canvasLeft");

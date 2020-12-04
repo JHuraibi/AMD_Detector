@@ -18,6 +18,7 @@ class FreeDrawDAO {
 		this.useAlpha = false;
 		
 		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
+		this.isPhysician = false;
 	}
 	
 	async loadForDashboard() {
@@ -36,14 +37,12 @@ class FreeDrawDAO {
 	}
 	
 	async loadForDetailedView(testID, canvasLeft, canvasRight) {
-		canvasRight.getContext('2d').style.display = "none";	// Free Draw always has only 1 canvas
-		
 		let _this = this;
 		
 		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
-			.collection("Symbols")
+			.collection("FreeDraw")
 			.doc(testID)
 			.get()
 			.then(function(doc) {
@@ -128,7 +127,7 @@ class FreeDrawDAO {
 	}
 	
 	drawToCanvas(ctx, drawingData) {
-		if (!canvas) {
+		if (!ctx) {
 			console.log("Left Canvas DOM not found.");
 			return;
 		}
@@ -177,16 +176,26 @@ class FreeDrawDAO {
 		ctx.stroke();
 	}
 	
-	// !! NOTE: URI's are relative to dashboard.html. NOT this DAO file.
-	// !! NOTE: The TEST_NAME key's value has to match Firestore's document exactly
-	//			e.g.
-	//			[CORRECT] 	urlOfDetailedView == ./dashboard/detailed_view.html
-	//			[INCORRECT] urlOfDetailedView == ./detailed_view.html
+	// !! NOTE: The TEST_NAME value has to match Firestore's collection name exactly
+	// !! NOTE: URI's are relative to dashboard.html OR physiciansDash.html. NOT this DAO file.
+	//	From physiciansDash.html
+	//		./physiciansDetailedDash.html
+	//
+	//	From dashboard.html
+	// 		./dashboard/detailed_view.html
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
 		uri.append("TEST_NAME", "FreeDraw");
 		uri.append("TEST_ID", docID);
-		return "./dashboard/detailed_view.html?" + uri.toString();
+		
+		if (this.isPhysician) {
+			// When user is a physician, userID is their patient's ID
+			uri.append("PATIENT_ID", this.userID);
+			return "./physician_detailed_view.html?" + uri.toString();
+		}
+		else {
+			return "./dashboard/detailed_view.html?" + uri.toString();
+		}
 	}
 	
 	// !! TODO: Bug when hoursString < timezoneOffset

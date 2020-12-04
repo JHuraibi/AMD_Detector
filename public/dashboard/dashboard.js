@@ -66,7 +66,7 @@ function monthSelect() {
 	clearCanvases();
 	
 	growingCirclesDAO.renderSelectedMonth(monthSelector.value, "canvasLeft", "canvasRight");
-	symbolsDAO.populateByMonthSelector(monthSelector.value, "canvasLeft", "canvasRight");
+	symbolsDAO.renderSelectedMonth(monthSelector.value, "canvasLeft", "canvasRight");
 	fullBarsDAO.renderSelectedMonth(monthSelector.value, "canvasLeft", "canvasRight");
 }
 
@@ -82,8 +82,8 @@ function numberOfMonths() {
 	clearCanvases();
 	
 	growingCirclesDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
-	symbolsDAO.populateByNumberMonths(monthInput.value, "canvasLeft", "canvasRight");
-	fullBarsDAO.renderMonthName(monthInput.value, "canvasLeft", "canvasRight");
+	symbolsDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
+	fullBarsDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
 }
 
 function clearCanvases() {

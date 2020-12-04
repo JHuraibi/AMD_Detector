@@ -19,7 +19,7 @@
 			/*margin: 1.5rem;*/
 			border-radius: 1rem;
 			background: #7171f47E;
-			
+			height: auto;
 			/*margin-top: 1em;*/
 			/*Light Orange: ffecc7*/
 			/*Lavender ffe4ff*/
@@ -28,7 +28,7 @@
 		
 		.canvas-container > table {
 			height: 90%;
-			margin-bottom: 5em;
+			/*margin-bottom: 1em;*/
 			text-align: center !important;
 			font-size: large;
 		}
@@ -47,7 +47,7 @@
 
 <body>
 	<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-		<a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="../home.html">Vision Monitor</a>
+		<a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="physiciansHome.html">Vision Monitor</a>
 		<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
 				data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -65,24 +65,20 @@
 				<div class="sidebar-sticky pt-3">
 					<ul class="nav flex-column">
 						<li class="nav-item">
-							<a class="nav-link active" href="../home.html">
+							<a class="nav-link active" href="physiciansHome.html">
 								<span data-feather="home"></span>
 								Home <span class="sr-only">(current)</span>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="../dashboard.html">
-								My Dashboard
+							<a class="nav-link" href="physiciansHome.html">
+								<span data-feather="file"></span>
+								Test Guides
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="../patients/myPhysicians.html">
-								My Physicians
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="../patients/profile.html">
-								My Profile
+							<a class="nav-link" href="myPatients.html" id="newPatients">
+								My Patients
 							</a>
 						</li>
 					</ul>
@@ -129,8 +125,8 @@
 						</td>
 					</tr>
 					<tr id="canvasCaptions">
-						<td>Left Eye</td>
-						<td>Right Eye</td>
+						<td><strong>Left Eye</strong></td>
+						<td><strong>Right Eye</strong></td>
 					</tr>
 				</table>
 			</div>
@@ -138,6 +134,17 @@
 		</main>
 	
 	</div>
+
+	<script>
+		const signOut = document.querySelector('.sign-out');
+		
+		// sign out
+		signOut.addEventListener('click', () => {
+			firebase.auth().signOut()
+				.then(() => console.log('signed out'));
+			window.location = '../index.html';
+		});
+	</script>
 	
 	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
 	<script src="/__/firebase/7.23.0/firebase-app.js"></script>
@@ -154,24 +161,14 @@
 	<script src="../auth.js"></script>
 	
 	<!-- DAO JavaScripts -->
-	<script src="GrowingCirclesDAO.js"></script>
-	<script src="SymbolsDAO.js"></script>
-	<script src="FullBarsDAO.js"></script>
-	<script src="FreeDrawDAO.js"></script>
+	<script src="../dashboard/GrowingCirclesDAO.js"></script>
+	<script src="../dashboard/SymbolsDAO.js"></script>
+	<script src="../dashboard/FullBarsDAO.js"></script>
+	<script src="../dashboard/FreeDrawDAO.js"></script>
 	
 	<!-- Detailed Dashboard Functions -->
-	<script src="detailed_dashboard.js"></script>
+	<script src="physician_detailed_dash.js"></script>
 	
-	<script>
-		const signOut = document.querySelector('.sign-out');
-		
-		// sign out
-		signOut.addEventListener('click', () => {
-			firebase.auth().signOut()
-				.then(() => console.log('signed out'));
-			window.location = '../index.html';
-		});
-	</script>
 	
 	<!-- Check if user is signed in -->
 	<script>
@@ -184,14 +181,17 @@
 						.get()
 						.then(doc => {
 							let type = doc.data().type;
-							if (type != 'user') {
-								console.log("Physician Account. Access Denied.");
-								window.location = '404.html';
+							if (type != 'physician') {
+								console.log("User Account. Access Denied.");
+								window.location = '../404.html';
+							}
+							else {
+								pageRouter();
 							}
 						});
 				} else {
 					console.log("Not logged in");
-					window.location = 'index.html';
+					window.location = '../index.html';
 				}
 			});
 		})();

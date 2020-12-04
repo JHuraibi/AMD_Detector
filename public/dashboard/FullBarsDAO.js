@@ -18,6 +18,7 @@ class FullBarsDAO {
 		this.useAlpha = false;
 		
 		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
+		this.isPhysician = false;
 	}
 	
 	async loadForDashboard() {
@@ -41,7 +42,7 @@ class FullBarsDAO {
 	async loadForDetailedView(testID, canvasLeft, canvasRight) {
 		let _this = this;
 		
-		this.dbRef
+		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
 			.collection("FullBars")
@@ -52,7 +53,6 @@ class FullBarsDAO {
 					console.log("Document not found. ID: " + testID);
 					return;
 				}
-				
 				_this.detailedViewTimeStamp = doc.data().TimeStampMS; 	// Used for subtitle on detailed_view.html
 				
 				let ctxLeft = canvasLeft.getContext('2d');
@@ -238,7 +238,7 @@ class FullBarsDAO {
 		}
 	}
 	
-	renderMonthName(monthsBack, leftCanvasID, rightCanvasID) {
+	renderMonthRange(monthsBack, leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		
@@ -305,16 +305,26 @@ class FullBarsDAO {
 		ctx.fill();
 	}
 	
-	// !! NOTE: URI's are relative to dashboard.html. NOT this DAO file.
-	//		e.g.
-	//		[CORRECT] 	urlOfDetailedView == ./dashboard/detailed_view.html
-	//		[INCORRECT] urlOfDetailedView == ./detailed_view.html
-	// !! NOTE: The TEST_NAME key's value has to match Firestore's document exactly
+	// !! NOTE: The TEST_NAME value has to match Firestore's collection name exactly
+	// !! NOTE: URI's are relative to dashboard.html OR physiciansDash.html. NOT this DAO file.
+	//	From physiciansDash.html
+	//		./physiciansDetailedDash.html
+	//
+	//	From dashboard.html
+	// 		./dashboard/detailed_view.html
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
 		uri.append("TEST_NAME", "FullBars");
 		uri.append("TEST_ID", docID);
-		return "./dashboard/detailed_view.html?" + uri.toString();
+		
+		if (this.isPhysician) {
+			// When user is a physician, userID is their patient's ID
+			uri.append("PATIENT_ID", this.userID);
+			return "./physician_detailed_view.html?" + uri.toString();
+		}
+		else {
+			return "./dashboard/detailed_view.html?" + uri.toString();
+		}
 	}
 	
 	setIndex(ms) {

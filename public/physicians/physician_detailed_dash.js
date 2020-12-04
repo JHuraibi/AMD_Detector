@@ -1,18 +1,12 @@
 let dbRef = firebase.firestore();
-let patientUID = null;
 
 let uriPassedIn;
 let testName
 let testID
+let patientUID = null;
 
 let genericDAO;
 let forFreeDraw = false;
-
-firebase.auth().onAuthStateChanged(user => {
-	console.log(user);
-	patientUID = user.uid;
-	pageRouter();
-});
 
 async function pageRouter() {
 	getURIData();
@@ -21,10 +15,11 @@ async function pageRouter() {
 	drawResults();
 }
 
-function getURIData() {
+function getURIData(){
 	uriPassedIn = new URLSearchParams(window.location.search);
 	testName = uriPassedIn.get("TEST_NAME");
 	testID = uriPassedIn.get("TEST_ID");
+	patientUID = uriPassedIn.get("PATIENT_ID");
 }
 
 function defineDAO() {
@@ -111,7 +106,7 @@ function setTestNameTitle() {
 
 
 function setDateSubtitle(milliseconds) {
-	if (!milliseconds) {
+	if (!milliseconds){
 		console.log("Error getting Time Stamp from DAO");
 		return;
 	}
