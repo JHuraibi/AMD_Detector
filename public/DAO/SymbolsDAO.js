@@ -1,4 +1,4 @@
-class FullBarsDAO {
+class SymbolsDAO {
 	constructor(dbRef, userID) {
 		this.dbRef = dbRef;
 		this.userID = userID;
@@ -25,7 +25,7 @@ class FullBarsDAO {
 		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
-			.collection("FullBars")
+			.collection("Symbols")
 			.orderBy("TimeStampMS", "desc")
 			.get()
 			.then((querySnapshot) => {
@@ -34,26 +34,26 @@ class FullBarsDAO {
 					this.docList.push(extractedDoc);
 				});
 			});
-		
+
 		// this.manualAdd();
 	}
 	
-	// !! NOTE: This function requires that a reference to the outer object be used
 	async loadForDetailedView(testID, canvasLeft, canvasRight) {
 		let _this = this;
 		
 		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
-			.collection("FullBars")
+			.collection("Symbols")
 			.doc(testID)
 			.get()
-			.then(function (doc) {
+			.then(function(doc) {
 				if (!doc) {
 					console.log("Document not found. ID: " + testID);
 					return;
 				}
-				_this.detailedViewTimeStamp = doc.data().TimeStampMS; 	// Used for subtitle on detailed_view.html
+				
+				_this.detailedViewTimeStamp = doc.data().TimeStampMS;	// Used for subtitle on detailed_view.html
 				
 				let ctxLeft = canvasLeft.getContext('2d');
 				let ctxRight = canvasRight.getContext('2d');
@@ -67,21 +67,23 @@ class FullBarsDAO {
 	manualAdd() {
 		this.dbRef.collection("TestResults")
 			.doc(this.userID)
-			.collection("FullBars")
+			.collection("Symbols")
 			.add(this.docList[0])
 			.then(() => {
 				console.log("Manual document added.");
 			});
 	}
 	
-	// NOTE: The JSON returned needs to match the FireStore document structure for FullBars
+	// NOTE: The JSON returned needs to match the FireStore document structure for Symbols
 	extractor(id, data) {
 		return {
 			id: id,
 			TestName: data.TestName,
 			TimeStampMS: data.TimeStampMS,
+			LeftResultsSymbols: data.LeftResultsSymbols,
 			LeftXLocations: data.LeftXLocations,
 			LeftYLocations: data.LeftYLocations,
+			RightResultsSymbols: data.RightResultsSymbols,
 			RightXLocations: data.RightXLocations,
 			RightYLocations: data.RightYLocations,
 		}
@@ -103,7 +105,7 @@ class FullBarsDAO {
 	// TODO: Update with actual method for detailed view
 	// TODO: Refactor variable names below to be more readable
 	addRowToTable(docID, timeStamp, targetTableID) {
-		let testName = "Full Bars";
+		let testName = "Symbols";
 		let time = this.formatDate(timeStamp);
 		let urlOfDetailedView = this.URIBuilder(docID);
 		
@@ -264,16 +266,14 @@ class FullBarsDAO {
 		}
 		
 		let ratio = ctx.canvas.width / this.canvasSize;
-		let barL = ctx.canvas.width;
-		let barW = 10;
-		let r = (barW / 2) / 1.5;		// !! MAXIMUM radius is half the bar's thickness
+		let w = 35;
+		let h = 35;
+		let r = w / 6;
 		
 		if (xPositions) {
 			xPositions.forEach((xPos) => {
 				let x = xPos * ratio;
 				let y = 0;
-				let w = barW;
-				let h = barL;
 				
 				// Draw shape as rectangle with rounded corners
 				this.roundedRectangle(ctx, x, y, w, h, r);
@@ -284,8 +284,6 @@ class FullBarsDAO {
 			yPositions.forEach((yPos) => {
 				let x = 0;
 				let y = yPos * ratio;
-				let w = barL;
-				let h = barW;
 				
 				// Draw shape as rectangle with rounded corners
 				this.roundedRectangle(ctx, x, y, w, h, r);
@@ -314,13 +312,13 @@ class FullBarsDAO {
 	// 		./dashboard/detailed_view.html
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
-		uri.append("TEST_NAME", "FullBars");
+		uri.append("TEST_NAME", "Symbols");
 		uri.append("TEST_ID", docID);
 		
 		if (this.isPhysician) {
 			// When user is a physician, userID is their patient's ID
 			uri.append("PATIENT_ID", this.userID);
-			return "./physician_detailed_view.html?" + uri.toString();
+			return "./physicianDetailedView.html?" + uri.toString();
 		}
 		else {
 			return "./dashboard/detailed_view.html?" + uri.toString();
@@ -390,4 +388,4 @@ class FullBarsDAO {
 		return months[number];
 	}
 	
-}// class [ FullBarsDAO ]
+}// class [ SymbolsDAO ]

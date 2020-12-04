@@ -1,5 +1,3 @@
-// TODO: Move file locaiton to "physicians" directory?
-
 let dbRef = firebase.firestore();
 let patientUID = null;
 let patientGrowingCirclesDAO;
