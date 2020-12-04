@@ -385,7 +385,7 @@ class GrowingCirclesDAO {
 	//		./physiciansDetailedDash.html
 	//
 	//	From dashboard.html
-	// 		./dashboard/detailed_view.html
+	// 		./detailed_view.html
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
 		uri.append("TEST_NAME", "GrowingCircles");
@@ -397,7 +397,7 @@ class GrowingCirclesDAO {
 			return "./physicianDetailedView.html?" + uri.toString();
 		}
 		else {
-			return "./dashboard/detailed_view.html?" + uri.toString();
+			return "./detailed_view.html?" + uri.toString();
 		}
 	}
 	
