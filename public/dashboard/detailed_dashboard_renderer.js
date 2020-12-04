@@ -75,7 +75,6 @@ async function drawResults() {
 	setDateSubtitle(genericDAO.detailedViewTimeStamp);
 }
 
-// CHECK: Function even necessary?
 // NOTE: The single dash and space characters are here so that
 //			if this function fails to return a test name to
 //			the header, the header then won't look incomplete.

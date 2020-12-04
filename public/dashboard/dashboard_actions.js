@@ -67,7 +67,6 @@ function resetOptions() {
 	monthSelector.style.backgroundColor = "";		// Additional style edit on top of disabler()'s
 	numberMonthsInput.style.backgroundColor = "";	// Additional style edit on top of disabler()'s
 	
-	monthSelector.value = ""; // CHECK: Does anything?
 	numberMonthsInput.value = "";
 	defaultRadio.checked = true;
 	

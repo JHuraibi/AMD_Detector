@@ -189,7 +189,6 @@ class PatientFullBarsDAO {
 		ctx.fill();
 	}
 	
-	// CHECK: How can I make this more modular for different tables?
 	populateHistoryTable(targetTableID) {
 		if (!this.uid) {
 			console.log("[PatientFullBarsDAO] - User is null");

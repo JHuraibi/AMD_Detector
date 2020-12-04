@@ -256,7 +256,6 @@ function loadPhysicianDashboard() {
     uri.append("FIRST", "");
     uri.append("LAST", "");
 
-    // CHECK: replace() okay or use .location?
     // window.location = "./physiciansDash.html?" + uri.toString();
     window.location.replace("./physiciansDash.html?" + uri.toString());
 }
