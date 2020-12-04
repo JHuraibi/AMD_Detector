@@ -93,7 +93,7 @@ function numberOfMonths() {
 	
 	patientGrowingCirclesDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
 	patientSymbolsDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
-	patientFullBarsDAO.renderSelectedMonth(monthInput.value, "canvasLeft", "canvasRight");
+	patientFullBarsDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
 }
 
 function clearCanvases() {
