@@ -47,8 +47,6 @@ let patients = [];
 
 
 function dropdown() {
-	console.log("PUSHING TO DROPDOWN");
-
 	for (let i = 0; i < patients.length; i++) {
 		let p = patients[i];
 		let a = document.createElement("a");
@@ -62,10 +60,7 @@ function dropdown() {
 
 }
 
-(function () {
-
-}());
-
+// !! TODO: Dont put name in URL
 function URIBuilder(p) {
 	let uri = new URLSearchParams();
 	uri.append("DATA", "True");
