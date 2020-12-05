@@ -1,3 +1,8 @@
+/*
+	On the physicians dashboard, the drop down menu is dynamically created here. We get the user's
+	set of patients and create a value in drop menu for each patient. 
+*/
+
 let dropDown = document.getElementById("patientList");
 let patients = [];
 

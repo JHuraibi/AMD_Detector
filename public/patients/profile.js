@@ -1,10 +1,22 @@
+/**
+ *  Profile.js has the following features:
+ *      1. loadInfo() - Gets all the informatin of the currently sign-in user and calls insertData()
+ *      2. insertData() - Displays the current users account information
+ *      3. accountForm query which updates the users account information
+ *      4. medicalForm query which updates the users medical information
+ *      5. savePast() - saves the current medical history if it is updated
+ *      6. loadHistory() - gets the medical history of the user and calls addTable
+ *      7. addTable() - Dynamically creates a table and populates it with each set of past medical history
+ *      8. deleteHistory() - deletes the document for the selected medical information 
+ */
+
 var tableContainer = document.getElementById('tableContainer');
 var db = firebase.firestore();
 var userData;
 loadInfo();
 loadHistory();
 
-async function loadInfo() {
+async function loadInfo() {                                             //Gets the users current data
     await firebase.auth().onAuthStateChanged(user => {
         if (user) {
             id = user.uid;
@@ -12,14 +24,14 @@ async function loadInfo() {
                 .get()
                 .then(doc => {
                     userData = doc.data();
-                    insertData(userData);
+                    insertData(userData);                               //Calls insert data to display it
                 });
         }
     });
 }
 
-//load current user information
-function insertData(data) {
+
+function insertData(data) {                                             //Display current user information
 
     //account information
     document.getElementById('firstname').placeholder = data.firstname;
@@ -48,8 +60,8 @@ function insertData(data) {
 }
 
 
-// Update Account Information after clicking 'save' button
-const accountForm = document.querySelector('.accountForm');
+
+const accountForm = document.querySelector('.accountForm');             //Update Account Information after clicking 'save' button
 
 accountForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -99,8 +111,8 @@ accountForm.addEventListener('submit', (e) => {
 
 });
 
-//Update Medical Information after clicking 'save' button
-const medicalForm = document.querySelector('.medicalForm');
+
+const medicalForm = document.querySelector('.medicalForm');             //Update Medical Information after clicking 'save' button
 
 medicalForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -153,7 +165,7 @@ medicalForm.addEventListener('submit', (e) => {
 
 });
 
-async function savePast() {
+async function savePast() {                                             //Saves the current medical history if updated
     datatowrite = jsonresults();
 
     //Check values
@@ -184,7 +196,7 @@ async function savePast() {
     });
 }
 
-function jsonresults() {
+function jsonresults() {                                                //Converts information into json for saving to Firestore
     return {
         "areds": userData.areds,
         "TimeStampMS": userData.TimeStampMS,
@@ -195,8 +207,7 @@ function jsonresults() {
     }
 }
 
-
-function loadHistory() {
+function loadHistory() {                                                //Loads the medical history of the user
 
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
@@ -217,7 +228,9 @@ function loadHistory() {
 
 }
 
-function addTable(data, docID) {
+function addTable(data, docID) {                                        //Dynamically creates a table and populates it with each set of past medical history
+    
+    //Get the data
     let areds = data.areds;
     let disease = data.disease;
     let eyewear = data.eyewear;
@@ -373,7 +386,7 @@ function addTable(data, docID) {
 
 }
 
-function formatDate(milliseconds) {
+function formatDate(milliseconds) {                                     //Formates the date
     let date = new Date(milliseconds);
     let timezoneOffset = 5;	// UTC -5:00
 
@@ -394,7 +407,7 @@ function formatDate(milliseconds) {
     return dateString;
 }
 
-async function deleteHistory(id) {
+async function deleteHistory(id) {                                      //Delete the document for the selected history 
     await firebase.auth().onAuthStateChanged(user => {
         if (user) {
             let uid = user.uid;

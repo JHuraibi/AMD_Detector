@@ -91,7 +91,7 @@
 				<input type="range" id="speed" max="5" min="1" style="width:80%" oninput="num.value = this.value">
 				<output id="num"></output>
 				<div class="btn-group">
-					<button type="button" onclick="setspeed()" class="btn btn-sm btn-outline-secondary">Set Speed</button>
+					<button type="button" onclick="setspeed()" class="btn btn-sm btn-outline-secondary" id="speedbtn">Set Speed</button>
 				</div>
 			</div>
 			
@@ -132,7 +132,7 @@
 			// var db = firebase.initializeApp(firebaseConfig);
 			function setspeed() {
 				var obj = new FirebaseDAO(firebase.firestore());
-				obj.changeSpeed();
+				obj.savespeed();
 			}
 		</script>
 
