@@ -49,7 +49,7 @@ function mostRecent() {
 	clearCanvases();
 	
 	growingCirclesDAO.renderMostRecent("canvasLeft", "canvasRight");
-	symbolsDAO.populateMostRecent("canvasLeft", "canvasRight");
+	symbolsDAO.renderMostRecent("canvasLeft", "canvasRight");
 	fullBarsDAO.renderMostRecent("canvasLeft", "canvasRight");
 }
 
