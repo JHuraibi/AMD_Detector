@@ -118,21 +118,9 @@ function setDateSubtitle(milliseconds) {
 	
 	let subtitleElement = document.getElementById("dateSubtitle");
 	let date = new Date(milliseconds);
-	let timezoneOffset = 5;	// UTC -5:00
-	
 	let dateString = date.toDateString();
-	let hoursString = +date.getUTCHours() - timezoneOffset;
-	let minutesString = date.getUTCMinutes();
-	let postfix = hoursString > 11 ? "PM" : "AM";
-	
-	if (hoursString === 0) {
-		hoursString = 12;
-	}
-	
-	minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
-	hoursString = hoursString % 12;
-	
+	let timezoneHour = date.toLocaleTimeString("en-US", {timeZone: "America/New_York"});	// IF TIME: Remove seconds
+
 	subtitleElement.innerText =
-		subtitleElement.innerText + dateString + " at " +
-		hoursString + ":" + minutesString + postfix;
+		subtitleElement.innerText + dateString + " at " + timezoneHour;
 }
