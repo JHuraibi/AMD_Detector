@@ -70,11 +70,9 @@ async function drawResults() {
 	setDateSubtitle(genericDAO.detailedViewTimeStamp);
 }
 
-// CHECK: Function even necessary?
-// NOTE: The single dash and space characters are here so that
+// NOTE: The single dash and two space characters are here so that
 //			if this function fails to return a test name to
-//			the header, the header then won't look incomplete.
-//			(See the testTitle <h3> in detailed_view.html).
+//			the dashboard, the header then won't look incomplete.
 function setTestNameTitle() {
 	let title = document.getElementById('testTitle');
 	let postfix = "";

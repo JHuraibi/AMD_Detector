@@ -66,7 +66,6 @@ function retrieveInstructions(target_test) {
 		
 		// FREE DRAW
 		case 'free_draw':
-			// CHECK: Wording of "... on Mac ..."
 			return "Using your input device (mouse or touchscreen), try recreating areas of issue in your" +
 				" vision by drawing on the empty canvas." +
 				"<br\><br\>To undo the last mark you made click the \"Undo\" button. " +
@@ -79,7 +78,7 @@ function retrieveInstructions(target_test) {
 			" If plan to test both eyes, your right eye will be tested first. "+
 			" Focus on the black dot in the center " +
 			"You will see random faces appearing on the screen " +
-			"if you see a \"smiley face\" press \"S\" and if you a \"frowny face\"  press \"F\".";
+			"if you see a \"smiley face\" press \"S\" and if you see a \"frowny face\" press \"F\".";
 		
 		// FRACTAL
 		case "fractal":

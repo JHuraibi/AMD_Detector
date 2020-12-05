@@ -56,7 +56,6 @@ function mostRecent() {
 function monthSelect() {
 	let monthSelector = document.getElementById("monthSelector");
 	
-	// TODO: Needs a try/catch
 	if (!monthSelector || !monthSelector.value) {
 		console.log("Unable to retrieve month from selector.");
 		return;
@@ -71,7 +70,6 @@ function monthSelect() {
 function numberOfMonths() {
 	let monthInput = document.getElementById("numberMonthsInput");
 	
-	// TODO: Needs a try/catch
 	if (!monthInput || !monthInput.value) {
 		console.log("Unable to retrieve number of months value.");
 		return;

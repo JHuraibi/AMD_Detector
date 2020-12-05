@@ -79,9 +79,7 @@ function addRow(data, type, userID) {                              //adds the ro
 
     button.onclick = function () {
         if (type == "current") {
-            // CHECK
-            // window.location = "physiciansDash.html";
-            loadPhysicianDashboard();
+			loadPhysicianDashboard();
         }
         else {
             let r = confirm("You are about to add this user as your patient.")
@@ -263,6 +261,5 @@ function loadPhysicianDashboard() {
     uri.append("FIRST", "");
     uri.append("LAST", "");
 
-    // window.location = "./physiciansDash.html?" + uri.toString();
     window.location.replace("./physiciansDash.html?" + uri.toString());
 }

@@ -50,7 +50,6 @@
 			<div class="instruct">
 				<script src="instructions_injector.js"></script>
 				<script>
-					// TODO: New line characters are not being printed right
 					// The URL will have which test attached to the end
 					// e.g. "instructions_page.html?growing_circles"
 					var uriPassedIn = decodeURIComponent(window.location.search);
@@ -128,7 +127,6 @@
 		<script src="speed.js"></script>
 		
 		<script>
-			// !! Note: Formatting is currently hard-coded for each tag target (will be dynamic in the near future)
 			// var db = firebase.initializeApp(firebaseConfig);
 			function setspeed() {
 				var obj = new FirebaseDAO(firebase.firestore());

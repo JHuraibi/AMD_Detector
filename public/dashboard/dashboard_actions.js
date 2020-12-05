@@ -8,14 +8,14 @@ function applyBtnRouter() {
 	
 	let value = chosenOption.value;
 	
-	// Defaults to Aggregate View
+	// Defaults to General View
 	switch (value) {
 		default:
 			console.log("Default");
 			console.log("VALUE: " + chosenOption);
 			resetOptions();
 			break;
-		case 'aggregateDefault':
+		case 'generalDefault':
 			resetOptions();
 			break;
 		case "mostRecent":
