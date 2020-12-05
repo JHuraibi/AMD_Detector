@@ -1,3 +1,15 @@
+/**
+ * 		myPhysicians has the following features:
+ * 			1. getDocs() - Loads all the physicians this user has added
+ * 			2. addRow() - Populates the selected tables with the information given
+ * 			3. loadAll() - Loads all the physicians listed in the database
+ * 			4. search() - searches the database for physicians by name, location, and specialty. 
+ * 			5. saveToLocal() - locally saves the physicians for easy sub-string searching
+ * 			6. addPhysician() - Sends an request to the chosen physician to be added
+ * 			7. deletePhysician() - lets the user remove their physician, which will also remove the user from the physicians patient list
+ */
+
+
 var tableBody = document.getElementById('currentList');
 var tableBodySearch = document.getElementById('searchList');
 var title = document.getElementById('title');
@@ -12,7 +24,7 @@ getDocs();
 loadAll();
 
 
-async function getDocs() {
+async function getDocs() {													//Loads users current list of added doctors
 	//let user = await firebase.auth().currentUser;
 	await firebase.auth().onAuthStateChanged(user => {
 		if (user) {
@@ -40,7 +52,7 @@ async function getDocs() {
 
 
 // TODO: Refactor variable names below to be more readable
-function addRow(data, targetTableID, id, type) {
+function addRow(data, targetTableID, id, type) {							//Adds the physicians information to the specified table
 	let name = data.firstname + " " + data.lastname;
 	let speciality = data.title;
 	let work = data.location;
@@ -102,7 +114,7 @@ function addRow(data, targetTableID, id, type) {
 	targetTableID.appendChild(row);
 }
 
-async function search() {
+async function search() {													//Seacrh method used in the "All Physicians" section
 	if (query.value.length < 3) {
 		console.log("Less than 3");
 		searchWarning.innerText = "Searches must be three (3) or more characters.";
@@ -177,7 +189,7 @@ async function search() {
 	
 }
 
-function loadAll() {
+function loadAll() {														//Loads all the physicians registered on the website
 	db.collection("users").where("type", "==", "physician")
 		.get()
 		.then(function (querySnapshot) {
@@ -196,8 +208,8 @@ function loadAll() {
 	
 }
 
-function saveToLocal(docID, data) {
-	let newPhysician = {
+function saveToLocal(docID, data) {											//Locally saves the physician for easy sub searching
+	let newPhysician = {	
 		id: docID,
 		email: data.email,
 		firstname: data.firstname,
@@ -217,7 +229,7 @@ function testPrint() {
 	}
 }
 
-function addPhysician(docID) {
+function addPhysician(docID) {												//Sends a pateint request to the physician selected
 	
 	var id = firebase.auth().currentUser.uid;
 	db.collection("users").doc(docID)
@@ -252,7 +264,7 @@ function addPhysician(docID) {
 	
 }
 
-function update(data, docs) {
+function update(data, docs) {												//updates user information
 	var id = firebase.auth().currentUser.uid;
 	db.collection("users").doc(id).update({
 		firstname: data.firstname,
@@ -271,7 +283,7 @@ function update(data, docs) {
 		});
 }
 
-async function deletePhysician(docID) {
+async function deletePhysician(docID) {										//Delete physician from both the patient and physicians database
 	
 	await firebase.auth().onAuthStateChanged(user => {
 		if (user) {

@@ -321,7 +321,7 @@ class SymbolsDAO {
 			return "./physicianDetailedView.html?" + uri.toString();
 		}
 		else {
-			return "./dashboard/detailed_view.html?" + uri.toString();
+			return "./detailed_view.html?" + uri.toString();
 		}
 	}
 	
