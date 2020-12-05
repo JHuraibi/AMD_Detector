@@ -50,7 +50,7 @@ function dropdown() {
 
 }
 
-// !! TODO: Dont put name in URL
+// !! TODO: Dont put patient name in URL with UID
 function URIBuilder(p) {
 	let uri = new URLSearchParams();
 	uri.append("DATA", "True");

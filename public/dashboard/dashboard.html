@@ -5,21 +5,21 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="">
-	<link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32"/>
-	<link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16"/>
+	<link rel="icon" type="image/png" href="../images/favicon-32x32.png" sizes="32x32"/>
+	<link rel="icon" type="image/png" href="../images/favicon-16x16.png" sizes="16x16"/>
 	
 	<title>Vision Monitor · My Dashboard</title>
 	
 	<!-- Bootstrap core CSS -->
-	<link href="./scss/custom.css" rel="stylesheet">
+	<link href="../scss/custom.css" rel="stylesheet">
 	<!-- Custom styles for this template -->
-	<link href="./css/dashboard.css" rel="stylesheet">
+	<link href="../css/dashboard.css" rel="stylesheet">
 
 </head>
 
 <body>
 	<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-		<a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="home.html">Vision Monitor</a>
+		<a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="../home.html">Vision Monitor</a>
 		<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
 				data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -37,18 +37,18 @@
 				<div class="sidebar-sticky pt-3">
 					<ul class="nav flex-column">
 						<li class="nav-item">
-							<a class="nav-link active" href="home.html">
+							<a class="nav-link active" href="../home.html">
 								<span data-feather="home"></span>
 								Home <span class="sr-only">(current)</span>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="patients/myPhysicians.html">
+							<a class="nav-link" href="../patients/myPhysicians.html">
 								My Physicians
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="patients/profile.html">
+							<a class="nav-link" href="../patients/profile.html">
 								My Profile
 							</a>
 						</li>
@@ -88,7 +88,6 @@
 					<!-- VIEW OPTION: Aggregate/Default ---------------------->
 					<tr>
 						<td class="options">
-							<!-- TODO: Better name than aggregate? -->
 							<input type="radio" id="defaultRadio" name="viewOptions"
 								   value="aggregateDefault" onchange="enableBtns()" checked>
 							<label for="defaultRadio">Aggregate (Default)</label>
@@ -190,17 +189,17 @@
 	
 	<!-- Initialize Firebase -->
 	<script src="/__/firebase/init.js"></script>
-	<script src="./auth.js"></script>
+	<script src="../auth.js"></script>
 	
 	<!-- DAO JavaScripts -->
-	<script src="DAO/GrowingCirclesDAO.js"></script>
-	<script src="DAO/SymbolsDAO.js"></script>
-	<script src="DAO/FullBarsDAO.js"></script>
-	<script src="DAO/FreeDrawDAO.js"></script>
+	<script src="../DAO/GrowingCirclesDAO.js"></script>
+	<script src="../DAO/SymbolsDAO.js"></script>
+	<script src="../DAO/FullBarsDAO.js"></script>
+	<script src="../DAO/FreeDrawDAO.js"></script>
 	
 	<!-- Dashboard Functions -->
-	<script src="./dashboard/dashboard_actions.js"></script>
-	<script src="./dashboard/dashboard.js"></script>
+	<script src="dashboard_actions.js"></script>
+	<script src="dashboard_renderer.js"></script>
 	
 	<script>
 		const signOut = document.querySelector('.sign-out');

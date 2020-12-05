@@ -1,5 +1,3 @@
-// TODO: Swap names with "dashboard_actions.js" ?
-
 let dbRef = firebase.firestore();
 let userRef = null;
 let growingCirclesDAO;

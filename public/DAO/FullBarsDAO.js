@@ -311,7 +311,7 @@ class FullBarsDAO {
 	//		./physiciansDetailedDash.html
 	//
 	//	From dashboard.html
-	// 		./dashboard/detailed_view.html
+	// 		./detailed_view.html
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
 		uri.append("TEST_NAME", "FullBars");
@@ -323,7 +323,7 @@ class FullBarsDAO {
 			return "./physicianDetailedView.html?" + uri.toString();
 		}
 		else {
-			return "./dashboard/detailed_view.html?" + uri.toString();
+			return "./detailed_view.html?" + uri.toString();
 		}
 	}
 	

@@ -67,11 +67,10 @@ function resetOptions() {
 	monthSelector.style.backgroundColor = "";		// Additional style edit on top of disabler()'s
 	numberMonthsInput.style.backgroundColor = "";	// Additional style edit on top of disabler()'s
 	
-	monthSelector.value = ""; // CHECK: Does anything?
 	numberMonthsInput.value = "";
 	defaultRadio.checked = true;
 	
-	// Redraw Default (function definition in dashboard.js)
+	// Redraw Default (function definition in dashboard_renderer.js)
 	renderDefaultCanvases();
 }
 
