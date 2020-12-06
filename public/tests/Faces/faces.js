@@ -589,7 +589,7 @@ function showExitButton() {
 // Function to save results to db
 function getFacesResults() {
 	return {
-		"TestName": "symbols",
+		"TestName": "smiley",
 		"TimeStampMS": timestamp,
 		"LeftXLocations": leftResultX,
 		"LeftYLocations": leftResultY,
