@@ -40,6 +40,7 @@
 			color: #282828;
 		}
 	</style>
+	<script src="../phrase_injector.js"></script>
 </head>
 
 <body class="text-center">
@@ -49,7 +50,7 @@
 				<h3 class="masthead-brand">Vision Monitor</h3>
 				<nav class="nav nav-masthead justify-content-center">
 					<a class="nav-link active" href="../../home.html">Home</a>
-					<a class="nav-link" href="../../dashboard.html">My Dashboard</a>
+					<a class="nav-link" href="../../dashboard/dashboard.html">My Dashboard</a>
 				</nav>
 			</div>
 		</header>
@@ -63,7 +64,8 @@
 
 			<div class="instruct" id="nextEye">
 				<p>
-					Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
+					<script>document.write(writePhrase())</script>
+					Now cover your left eye, and with your right eye focus on the black dot in the center.
 					Follow same directions as previous test.
 				</p>
 				<button onclick="leftEyeTest()" id="nexttestbtn" class="btn btn-sm btn-outline-secondary"

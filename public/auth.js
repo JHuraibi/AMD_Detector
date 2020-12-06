@@ -32,36 +32,36 @@ registerForm.addEventListener('submit', (e) => {
     registerForm.querySelector('.error').textContent = error;
     return;
   }
- 
-// get user info
-    const email = registerForm.email.value;
-    const password = registerForm.password.value;
-  
-    // sign up the user & add firestore data
-    firebase.auth().createUserWithEmailAndPassword(email, password).then(cred => {
-      return db.collection('users').doc(cred.user.uid).set({
-        email: registerForm['email'].value,
-        firstname: registerForm['firstname'].value,
-        lastname: registerForm['lastname'].value,
-        birthday: registerForm['birthdate'].value,
-        gender: registerForm['gender'].value,
-        testSpeeds: 1,
-        type: "user"
-      });
-    }).then(() => {
-      firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          id = user.uid;
-          console.log(id);
-          db.collection("TestResults").doc(id).set({
-            exists: true
-          }).then(() => { sendemail(); });
-        }
-      });
-      //window.location = 'index.html';
-    }).catch(error => {
-      registerForm.querySelector('.error').textContent = error.message;
-    });  
+
+  // get user info
+  const email = registerForm.email.value;
+  const password = registerForm.password.value;
+
+  // sign up the user & add firestore data
+  firebase.auth().createUserWithEmailAndPassword(email, password).then(cred => {
+    return db.collection('users').doc(cred.user.uid).set({
+      email: registerForm['email'].value,
+      firstname: registerForm['firstname'].value,
+      lastname: registerForm['lastname'].value,
+      birthday: registerForm['birthdate'].value,
+      gender: registerForm['gender'].value,
+      testSpeeds: 1,
+      type: "user"
+    });
+  }).then(() => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        id = user.uid;
+        console.log(id);
+        db.collection("TestResults").doc(id).set({
+          exists: true
+        }).then(() => { sendemail(); });
+      }
+    });
+    //window.location = 'index.html';
+  }).catch(error => {
+    registerForm.querySelector('.error').textContent = error.message;
+  });
 
   // sign up the user & add firestore data
   firebase.auth().createUserWithEmailAndPassword(email, password).then(cred => {
@@ -84,7 +84,7 @@ registerForm.addEventListener('submit', (e) => {
         console.log(id);
         db.collection("TestResults").doc(id).set({
           exists: true,
-		  firstTest: true
+          firstTest: true
         }).then(() => { sendemail(); });
       }
     });
@@ -147,12 +147,12 @@ async function getType() {
 async function sendemail() {
   var user = firebase.auth().currentUser;
   await user.sendEmailVerification().then(
-  	function() {
-		alert("verification email sent");
-		window.location.replace("./index.html");
-  }).catch(function(error) {
-	  alert("verification email sent");
-	  console.log("Error sending verification email: " + error);
-  });
+    function () {
+      alert("verification email sent");
+      window.location.replace("./index.html");
+    }).catch(function (error) {
+      alert("verification email sent");
+      console.log("Error sending verification email: " + error);
+    });
 }
 

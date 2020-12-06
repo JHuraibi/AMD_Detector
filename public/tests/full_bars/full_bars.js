@@ -3,7 +3,10 @@
 
 // NOTE: fill() can be called at any point and sets the color (and optionally opacity) for EVERYTHING
 // 			drawn to the canvas. So all new objects will be drawn in the same color until another fill() call is made.
+//			This applies to only P5 related function calls and drawing,
+//					i.e. does NOT apply for showLeftResults() and showRightResults()
 
+let canvasRef;						// Reference object to the DOM canvas element
 let timestamp;						// Will record the time the test was started (in milliseconds since Epoch)
 let backgroundColor = 240;			// Greyscale color for canvas background (0:Black, 255:White)
 let barFillAlpha = 0;				// Will control the bars' alpha
@@ -24,31 +27,75 @@ let yLocationLeft = [];				// LEFT EYE: Y locations at the time of a click event
 let xLocationRight = [];			// RIGHT EYE: X locations at the time of a click event
 let yLocationRight = [];			// RIGHT EYE: Y locations at the time of a click event
 
-let numBars = 40;					// How many bars to draw
-let barW;							// How thick each bar will be (is a function of numbers of bars vs canvas size)
+// let numBars = 40;					// How many bars to draw
+let numBars = 8;			// !! FOR TESTING
+// let barW;							// How thick each bar will be (is a function of numbers of bars vs canvas size)
+let barW = 20;				// !! FOR TESTING
 let canvasSize = 700;				// Size of width and height of the canvas (in pixels)
 
 let clickUsedThisRound = false;		// Disables click if one was already received for current bar being shown
 let verticalInProgress = true;		// Indicates whether bars are currently being drawn vertically or horizontally
-let leftEyeTestInProgress = true;	// Indicates if bars are currently being drawn vertically or horizontally
+let leftEyeInProgress = true;		// Indicates if bars are currently being drawn vertically or horizontally
+let rightEyeInProgress = false;
+let doNotTestLeft = false;
+let doNotTestRight = false;
 
 let waitingToStart = true;			// Status indicator: Waiting for user to click "Start (X) Eye" button
-let testFinished = false;			// Status indicator: Waiting for user to click "Start (X) Eye" button
+let testFinished = false;			// Status indicator: Testing complete
 
-let canvasRef;						// Reference object to the DOM canvas element
+function setupForLeftEyeOnly() {
+	leftEyeInProgress = true;
+	doNotTestLeft = false;
+	doNotTestRight = true;
+	canvasRef.show();
+}
 
+function setupForRightEyeOnly() {
+	leftEyeInProgress = false;
+	rightEyeInProgress = true;
+	doNotTestLeft = true;
+	doNotTestRight = false;
+	canvasRef.show();
+}
 
+function setupForBothEyes() {
+	leftEyeInProgress = true;
+	rightEyeInProgress = false;
+	doNotTestLeft = false;
+	doNotTestRight = false;
+	canvasRef.show();
+}
 
 /**
  * Unhides the test canvas. Enables canvas to update via setting
- * 	waitingToStart to false. Records the current time and starts automatic looping of draw()
+ * 	waitingToStart to false. Records the current time and fills the position queue.
+ * 	Starts automatic looping of draw(). Hides the "Start Test" button.
  * This function runs after user clicks button on instructions page.
  * 	Upon page loading, setup() and draw() both run once.
  */
 function startTest() {
+	document.getElementById("startTestBtn").style.display = "none";
+	
 	canvasRef.show();
 	waitingToStart = false;
-	timestamp = Date.now();	// TODO: Moved timestamp here from setup()
+	timestamp = Date.now();
+	fillPositionQueue();
+	loop();
+}
+
+/**
+ * Similar to startTest().
+ * Hides the right eye prompt div (id="nextEye").
+ * 	Unhides the test canvas. Enables canvas to update via
+ * 	setting waitingToStart to false. Fills the position queue.
+ * 	And finally, starts automatic looping of draw().
+ */
+function startRightTest() {
+	document.getElementById("nextEye").style.display = "none";
+	
+	canvasRef.show();
+	waitingToStart = false;
+	fillPositionQueue();
 	loop();
 }
 
@@ -61,11 +108,10 @@ function startTest() {
  */
 function setup() {
 	// canvasRef = createCanvas(canvasSize, canvasSize);
-	noLoop();
 	canvasRef = createCanvas(canvasSize, canvasSize);
 	canvasRef.id('canvasRef');
 	
-	barW = canvasSize / numBars;
+	// barW = canvasSize / numBars;
 	currentAxis = 'x';
 	
 	// numBars needs to be a multiple of 2
@@ -73,22 +119,18 @@ function setup() {
 		numBars--;
 	}
 	
-	fillPositionQueue();
-	
-	canvasRef.show();
 	background(backgroundColor);
 	drawCenterDot();
 	drawStaticBorder();
+	canvasRef.hide();
+	
+	noLoop();
 }
 
 /**
  * Main test controller. Automatically loops 60 times per second.
  * If waitingToStart is true:
  * 	- Prematurely returns so that nothing is attempted to be drawn to the canvas.
- *
- * If the test is done:
- *  - Show the results.
- *  - Unhide the exit button
  *
  * Every n-seconds (n set by the "sec" variable)
  *  - Updates relevant items (See updateAll() docstring)
@@ -101,22 +143,15 @@ function setup() {
  */
 function draw() {
 	if (waitingToStart) {
-		// Force draw not to execute
+		// Force draw() not to put anything onto the canvas
 		return;
-	}
-	background(backgroundColor);
-	
-	if (testFinished) {
-		showLeftResults();
-		showRightResults();
-		showExitButton();
-		noLoop();
 	}
 	
 	if (timer % (60 * sec) === 0) {
 		updateAll();
 	}
 	
+	background(backgroundColor);
 	drawBar();
 	drawCenterDot();
 	drawClickIndicator();
@@ -135,10 +170,10 @@ function draw() {
  * If the click was a mouse click other than a left click:
  * 	- Take no action.
  *
- * If leftEyeTestInProgress is TRUE:
+ * If leftEyeInProgress is TRUE:
  *  - Record the location of the currently-shown bar.
  *
- * If leftEyeTestInProgress is FALSE:
+ * If leftEyeInProgress is FALSE:
  *  - Record the location of the currently-shown bar.
  *
  * Always:
@@ -151,28 +186,28 @@ function mousePressed() {
 		return;
 	}
 	
-	if (mouseButton !== LEFT){
+	if (mouseButton !== LEFT) {
 		return;
 	}
 	
-	if (leftEyeTestInProgress) {
+	if (leftEyeInProgress) {
 		if (currentAxis === 'x') {
 			xLocationLeft.push(currentPos);
-			console.log("CLICK: Left X");
+			console.log("CLICK: Left X [[ VALUE: " + currentPos + " ]]");
 		}
 		else {
 			yLocationLeft.push(currentPos);
-			console.log("CLICK: Left Y");
+			console.log("CLICK: Left Y [[ VALUE: " + currentPos + " ]]");
 		}
 	}
 	else {
 		if (currentAxis === 'x') {
 			xLocationRight.push(currentPos);
-			console.log("CLICK: Right X");
+			console.log("CLICK: Right X [[ VALUE: " + currentPos + " ]]");
 		}
 		else {
 			yLocationRight.push(currentPos);
-			console.log("CLICK: Right Y");
+			console.log("CLICK: Right Y [[ VALUE: " + currentPos + " ]]");
 		}
 	}
 	
@@ -182,7 +217,29 @@ function mousePressed() {
 	clickFillAlpha = 255;
 }
 
+// // !! TODO: Update docstring for the two different methods
+// /**
+//  * Fill Method #1
+//  * Fills posQueue[] with the locations to draw the lines.
+//  * To keep two bars from being drawn in the same place:
+//  *    The width of the canvas is divided by number of bars. Each bar
+//  *    is drawn at increments of this interval.
+//  * posQueue is given values sequentially (1, 2, 3, ... numBars),
+//  *    so it needs to be shuffled randomly to make the locations
+//  *    of the bars random
+//  */
+// function fillPositionQueue() {
+// 	let interval = (canvasSize / numBars);
+//
+// 	for (let i = 0; i < numBars; i++) {
+// 		posQueue[i] = interval * i;
+// 	}
+//
+// 	posQueue = shuffle(posQueue);
+// }
+
 /**
+ * Fill Method #2
  * Fills posQueue[] with the locations to draw the lines.
  * To keep two bars from being drawn in the same place:
  *    The width of the canvas is divided by number of bars. Each bar
@@ -192,13 +249,13 @@ function mousePressed() {
  *    of the bars random
  */
 function fillPositionQueue() {
-	// TODO: Don't draw bars at edges of canvas?
-	let interval = (canvasSize / numBars);
-	
+	let interval = canvasSize / (numBars + 1);
+	// console.log("[[ FILLING POS QUEUE ]]");
 	for (let i = 0; i < numBars; i++) {
-		posQueue[i] = interval * i;
+		posQueue[i] = interval * (i + 1);
+		// console.log("[[ i: " + (i + 1) + " ]]");
 	}
-	
+
 	posQueue = shuffle(posQueue);
 }
 
@@ -279,40 +336,54 @@ function loadNextBarPos() {
 
 // TODO: Refactor function name
 /**
- * Handles events to run when the position queue becomes empty.
+ * Handles events to run when the position queue is/becomes empty. Flow control
+ * 	is determined by which eye is currently being tested and also by
+ * 	which eye(s) the user opted to test.
  * [1] Left Eye
  * 		- [A] Vertical Bars are done. Move on to horizontal bars.
- * 		- [B] Horizontal bars are done. Move to right eye.
+ * 		- [B] Horizontal bars are done. Move to right eye (if user opted to test right eye).
+ * 		- [C] Horizontal bars are done and user opted not to test right eye. Test is done.
  * [2] Right Eye
  * 		- [A] Vertical Bars are done. Move on to horizontal bars.
  * 		- [B] Horizontal bars are done. Test is done.
  */
 function updateBarStatus() {
 	// [1]
-	if (leftEyeTestInProgress) {
+	if (leftEyeInProgress) {
 		// [1A]
 		if (verticalInProgress) {
+			console.log("LEFT: SWITCHING TO HORIZONTAL");
 			fillPositionQueue();
 			switchAxis();
 		}
 		// [1B]
-		else {
-			fillPositionQueue();
+		else if (!verticalInProgress && !doNotTestRight) {
+			console.log("LEFT: SWITCHING TO RIGHT EYE");
 			switchAxis();
 			transitionToNextEye();
 		}
+		// [1C]
+		else {
+			console.log("LEFT: DONE LEFT EYE. NO RIGHT EYE");
+			endOfTestHandler();
+		}
 	}
 	// [2]
-	else {
+	else if (rightEyeInProgress && !doNotTestRight) {
 		// [2A]
 		if (verticalInProgress) {
+			console.log("RIGHT: SWITCHING TO HORIZONTAL");
 			fillPositionQueue();
 			switchAxis();
 		}
 		// [2B]
 		else {
-			testFinished = true;
+			console.log("RIGHT: DONE");
+			endOfTestHandler();
 		}
+	}
+	else {
+		// !! CHECK: Does reaching this final else statement indicate a syntax error?
 	}
 }
 
@@ -335,15 +406,16 @@ function switchAxis() {
  *
  */
 function transitionToNextEye() {
-	leftEyeTestInProgress = false;
+	leftEyeInProgress = false;
+	rightEyeInProgress = true;
 	waitingToStart = true;
 	
 	indicatorStartTime = 0;
-	// timer = 0;
 	canvasRef.hide();
 	noLoop();
+	
 	document.getElementById("startTest").style.display = "none";
-	document.getElementById("rightEyeInstruct").style.display = "block";
+	document.getElementById("nextEye").style.display = "block";
 }
 
 /**
@@ -396,57 +468,145 @@ function fadeOutIndicator() {
  */
 function drawStaticBorder() {
 	noFill();
-	strokeWeight(10);
+	strokeWeight(4);
 	stroke(0);
 	rect(0, 0, width, height);
+}
+
+function endOfTestHandler() {
+	document.getElementById("resultsLabels").style.display = "inherit";
+	testFinished = true;
+	showExitButton();
+	canvasRef.hide();
+	noLoop();
+	
+	let ratioToTestCanvas = 0.5;
+	let canvasLeft = document.getElementById("leftResultsCanvas");
+	let canvasRight = document.getElementById("rightResultsCanvas");
+	
+	let ctxLeft = setupResultCanvas(canvasLeft, ratioToTestCanvas);
+	let ctxRight = setupResultCanvas(canvasRight, ratioToTestCanvas);
+	
+	if (!doNotTestLeft) {
+		showLeftResults(ctxLeft, ratioToTestCanvas);
+	}
+	
+	if (!doNotTestRight) {
+		showRightResults(ctxRight, ratioToTestCanvas);
+	}
+	
+	drawResultCenterDot(ctxLeft, ratioToTestCanvas);
+	drawResultCenterDot(ctxRight, ratioToTestCanvas);
+}
+
+function setupResultCanvas(canvas, ratio) {
+	canvas.style.display = "inline-block";
+	
+	let resultCanvasSize = canvasSize * ratio;
+	let ctx = canvas.getContext('2d');
+	
+	ctx.canvas.width = resultCanvasSize;
+	ctx.canvas.height = resultCanvasSize;
+	
+	return ctx;
+}
+
+function drawResultCenterDot(ctx, ratio) {
+	ctx.beginPath();
+	ctx.fillStyle = "black";
+	ctx.arc(ctx.canvas.width / 2, ctx.canvas.width / 2, (15 / 2) * ratio, 0, Math.PI * 2);
+	ctx.fill();
 }
 
 /**
  * Test finished: Draws the bars that were clicked during the Left eye test.
  */
-function showLeftResults() {
+function showLeftResults(ctx, ratio) {
+	if (!ctx) {
+		console.log("Invalid Left Canvas Context.");
+		return;
+	}
+	
 	let numClickedX = xLocationLeft.length;
 	let numClickedY = yLocationLeft.length;
 	
-	let barW = width / 20;
+	let barL = ctx.canvas.width;
+	let r = (barW / 2) / 10;		// !! MAXIMUM radius is half the bar's thickness. r is arbitrary
+	ctx.fillStyle = "rgba(255, 194, 114, 0.5)";		// Light Yellow, 50% opacity
 	
 	for (let i = 0; i < numClickedX; i++) {
-		let x = xLocationLeft[i];
-		noStroke();
-		fill(255, 194, 114, 50);
-		rect(x, 0, barW, height);
+		let xPos = xLocationLeft[i];
+		let x = xPos * ratio;
+		let y = 0;
+		let w = barW;
+		let h = barL;
+		
+		// Draw shape as rectangle with rounded corners
+		roundedRectangle(ctx, x, y, w, h, r);
 	}
 	
 	for (let i = 0; i < numClickedY; i++) {
-		let y = yLocationLeft[i];
-		noStroke();
-		fill(255, 194, 114, 50);
-		rect(0, y, width, barW);
+		let yPos = yLocationLeft[i];
+		let x = 0;
+		let y = yPos * ratio;
+		let w = barL;
+		let h = barW;
+		
+		// Draw shape as rectangle with rounded corners
+		roundedRectangle(ctx, x, y, w, h, r);
 	}
 }
 
 /**
  * Test finished: Draws the bars that were clicked during the Right eye test.
  */
-function showRightResults() {
+function showRightResults(ctx, ratio) {
+	if (!ctx) {
+		console.log("Invalid Right Canvas Context.");
+		return;
+	}
+	
 	let numClickedX = xLocationRight.length;
 	let numClickedY = yLocationRight.length;
 	
-	let barW = width / 20;
+	let barL = ctx.canvas.width;
+	let r = (barW / 2) / 10;		// !! MAXIMUM radius is half the bar's thickness. r is arbitrary
+	ctx.fillStyle = "rgba(133,114,255,0.5)";		// Light Purple, 50% opacity
 	
 	for (let i = 0; i < numClickedX; i++) {
-		let x = xLocationRight[i];
-		noStroke();
-		fill(133, 114, 255, 50);
-		rect(x, 0, barW, height);
+		let xPos = xLocationRight[i];
+		let x = xPos * ratio;
+		let y = 0;
+		let w = barW;
+		let h = barL;
+		
+		// Draw shape as rectangle with rounded corners
+		roundedRectangle(ctx, x, y, w, h, r);
 	}
 	
 	for (let i = 0; i < numClickedY; i++) {
-		let y = yLocationRight[i];
-		noStroke();
-		fill(133, 114, 255, 50);
-		rect(0, y, width, barW);
+		let yPos = yLocationRight[i];
+		let x = 0;
+		let y = yPos * ratio;
+		let w = barL;
+		let h = barW;
+		
+		// Draw shape as rectangle with rounded corners
+		roundedRectangle(ctx, x, y, w, h, r);
 	}
+}
+
+// Similar to FullBarsDAO
+function roundedRectangle(ctx, x, y, w, h, r) {
+	ctx.beginPath();
+	ctx.moveTo(x + r, y);
+	ctx.arcTo(x + w, y, x + w, y + h, r);
+	ctx.arcTo(x + w, y + h, x, y + h, r);
+	ctx.arcTo(x, y + h, x, y, r);
+	ctx.arcTo(x, y, x + w, y, r);
+	ctx.closePath();
+	
+	ctx.fill();
 }
 
 /**
@@ -489,6 +649,6 @@ function getFullBarsResults() {
 		"LeftXLocations": xLocationLeft,
 		"LeftYLocations": yLocationLeft,
 		"RightXLocations": xLocationRight,
-		"RightYLocations": yLocationRight
+		"RightYLocations": yLocationRight,
 	}
 }

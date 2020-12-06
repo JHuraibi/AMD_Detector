@@ -39,6 +39,7 @@
 		.columns {
 			float: left;
 			width: 48%;
+			height: 100%;
 			padding: 30px;
 			margin-top: 25px;
 			border-radius: 10px;
@@ -46,7 +47,7 @@
 			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
 			text-align: center;
 			display: table-cell;
-			height: 250px;
+			/*height: 250px;*/
 			margin-right: 2px;
 			margin-left: 15px;
 		}
@@ -101,10 +102,28 @@
 						style="height: 200px; width: 200px;">
 				</div>
 				<div class="columns">
-					<p style="padding: 45px;">
+					<p>
 						The test starts off with a blank canvas. The user at this point can freely draw onto the canvas.
-						Additional items are available around the canvas. There is a slider to change the size of the
-						brush, as well as a "Clear Canvas" button to erase anything they've drawn.
+						Additional items are available around the canvas. The user's mouse cursor will be replaced with
+						the brush indicator. The brush indicator previews both where the brush is, the color, and also the 
+						size of the brush.
+					</p>
+				</div>
+			</div>
+			<div class="rows" style="height: auto">
+				<div class="columns">
+					<img src="./images/free_draw/free_draw_top-tools.png" alt="Free Draw Start"
+						style="height: 200px; width: 300px;">
+				</div>
+				<div class="columns">
+					<p>
+						Above the canvas, there are a few items. An "Undo" button to undo the last item drawn on the canvas.
+						"Redo" will put the item just removed (via Undo) back onto the canvas. "Invert Colors" will swap
+						the color of the canvas with the color of the brush and the color of anything that had already been
+						drawn onto the canvas. "Clear Canvas" will remove everything from the canvas.
+						<br><br>
+						(Tip: Pressing CTRL+Z(Windows) / CMD+Z(MacOS) can also undo. Pressing CTRL+Y(Windows) / CMD+Z(Mac)
+						can also redo)
 					</p>
 				</div>
 			</div>
@@ -145,6 +164,16 @@
 	<!-- Initialize Firebase -->
 	<script src="/__/firebase/init.js"></script>
 
+<!--	<script>-->
+<!--		(function updateHeights(){-->
+<!--			let rows = document.getElementsByClassName("rows");-->
+<!--			rows.forEach((parent) => {-->
+<!--				// parents.getElements-->
+<!--				// jQuery children()-->
+<!--			});-->
+<!--		})();-->
+<!--	</script>-->
+	
 	<script>
 		const signOut = document.querySelector('.sign-out');
 		// sign out

@@ -16,9 +16,12 @@ class FreeDrawDAO {
 		this.leftAlphaIndex = 0;
 		this.rightAlphaIndex = 0;
 		this.useAlpha = false;
+		
+		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
+		this.isPhysician = false;
 	}
 	
-	async loadAll() {
+	async loadForDashboard() {
 		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
@@ -33,6 +36,29 @@ class FreeDrawDAO {
 			});
 	}
 	
+	async loadForDetailedView(testID, canvasLeft, canvasRight) {
+		let _this = this;
+		
+		await this.dbRef
+			.collection("TestResults")
+			.doc(this.userID)
+			.collection("FreeDraw")
+			.doc(testID)
+			.get()
+			.then(function(doc) {
+				if (!doc) {
+					console.log("Document not found. ID: " + testID);
+					return;
+				}
+				
+				_this.detailedViewTimeStamp = doc.data().TimeStampMS;	// Used for subtitle on detailed_view.html
+				
+				let ctxLeft = canvasLeft.getContext('2d');
+				_this.drawToCanvas(ctxLeft, doc.data().ImageData);
+			});
+		
+	}
+	
 	// NOTE: The JSON returned needs to match the FireStore document structure for FullBars
 	extractor(id, data) {
 		return {
@@ -41,67 +67,6 @@ class FreeDrawDAO {
 			TimeStampMS: data.TimeStampMS,
 			ImageData: data.ImageData,
 		}
-	}
-	
-	// TODO: Update away from using non-local doc?
-	drawToCanvas(doc, canvasID) {
-		if (!doc) {
-			console.log("FireStore document provided was null.");
-			return;
-		}
-		
-		let canvas = document.getElementById(canvasID);
-		
-		if (!canvas) {
-			console.log("Left Canvas DOM not found.");
-			return;
-		}
-		
-		let drawingData = doc.data().ImageData;
-		
-		let ctxLeft = canvas.getContext('2d');
-		let ratio = canvas.width / this.canvasSize;
-		// let ratio = 2;
-		
-		if (drawingData) {
-			for (let i = 0; i < drawingData.length - 1; i++) {
-				let line = drawingData[i];
-				
-				let x = line.x * ratio;
-				let y = line.y * ratio;
-				let pX = line.pX * ratio;
-				let pY = line.pY * ratio;
-				let w = line.w * ratio;
-				
-				// Draw shape as a line with stroke thickness 'w' and rounded end caps
-				this.line(ctxLeft, x, y, pX, pY, w);
-			}
-		}
-		
-		this.drawStaticAxes(ctxLeft, canvas.width, canvas.width);
-	}
-	
-	line(ctx, x, y, pX, pY, w) {
-		ctx.beginPath();
-		ctx.lineWidth = w;
-		ctx.lineCap = "round";
-		ctx.moveTo(x, y);
-		ctx.lineTo(pX, pY);
-		ctx.stroke();
-	}
-	
-	drawStaticAxes(ctx, w, h) {
-		ctx.lineWidth = 2;
-		
-		ctx.beginPath();
-		ctx.moveTo(w / 2, 0);
-		ctx.lineTo(w / 2, h);
-		ctx.stroke();
-		
-		ctx.beginPath();
-		ctx.moveTo(0, h / 2);
-		ctx.lineTo(w, h / 2);
-		ctx.stroke();
 	}
 	
 	populateHistoryTable(targetTableID) {
@@ -161,18 +126,79 @@ class FreeDrawDAO {
 		tableBody.appendChild(row);
 	}
 	
-	// !! NOTE: URI's are relative to dashboard.html. NOT this DAO file.
-	// !! NOTE: The TEST_NAME key's value has to match Firestore's document exactly
-	//			e.g.
-	//			[CORRECT] 	urlOfDetailedView == ./dashboard/detailed_view.html
-	//			[INCORRECT] urlOfDetailedView == ./detailed_view.html
+	drawToCanvas(ctx, drawingData) {
+		if (!ctx) {
+			console.log("Left Canvas DOM not found.");
+			return;
+		}
+		
+		let ratio = ctx.canvas.width / this.canvasSize;
+		// let ratio = 2;
+		
+		if (drawingData) {
+			for (let i = 0; i < drawingData.length - 1; i++) {
+				let line = drawingData[i];
+				
+				let x = line.x * ratio;
+				let y = line.y * ratio;
+				let pX = line.pX * ratio;
+				let pY = line.pY * ratio;
+				let w = line.w * ratio;
+				
+				// Draw shape as a line with stroke thickness 'w' and rounded end caps
+				this.line(ctx, x, y, pX, pY, w);
+			}
+		}
+		
+		this.drawStaticAxes(ctx, ctx.canvas.width, ctx.canvas.width);
+	}
+	
+	line(ctx, x, y, pX, pY, w) {
+		ctx.beginPath();
+		ctx.lineWidth = w;
+		ctx.lineCap = "round";
+		ctx.moveTo(x, y);
+		ctx.lineTo(pX, pY);
+		ctx.stroke();
+	}
+	
+	drawStaticAxes(ctx, w, h) {
+		ctx.lineWidth = 2;
+		
+		ctx.beginPath();
+		ctx.moveTo(w / 2, 0);
+		ctx.lineTo(w / 2, h);
+		ctx.stroke();
+		
+		ctx.beginPath();
+		ctx.moveTo(0, h / 2);
+		ctx.lineTo(w, h / 2);
+		ctx.stroke();
+	}
+	
+	// !! NOTE: The TEST_NAME value has to match Firestore's collection name exactly
+	// !! NOTE: URI's are relative to dashboard.html OR physiciansDash.html. NOT this DAO file.
+	//	From physiciansDash.html
+	//		./physiciansDetailedDash.html
+	//
+	//	From dashboard.html
+	// 		./detailed_view.html
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
 		uri.append("TEST_NAME", "FreeDraw");
 		uri.append("TEST_ID", docID);
-		return "./dashboard/detailed_view.html?" + uri.toString();
+		
+		if (this.isPhysician) {
+			// When user is a physician, userID is their patient's ID
+			uri.append("PATIENT_ID", this.userID);
+			return "./physicianDetailedView.html?" + uri.toString();
+		}
+		else {
+			return "./detailed_view.html?" + uri.toString();
+		}
 	}
 	
+	// !! TODO: Bug when hoursString < timezoneOffset
 	formatDate(milliseconds) {
 		let date = new Date(milliseconds);
 		let timezoneOffset = 5;	// UTC -5:00

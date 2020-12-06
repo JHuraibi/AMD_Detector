@@ -1,11 +1,11 @@
-class GrowingCirclesDAO {
+class SymbolsDAO {
 	constructor(dbRef, userID) {
 		this.dbRef = dbRef;
 		this.userID = userID;
 		this.docList = [];
 		
 		// !! TODO: This value to be dynamically set
-		this.canvasSize = 700;
+		this.canvasSize = 800;
 		
 		// These values are equal to 20, 45, and 95% opacity levels respectively
 		// Max alpha in hex is FF or 255 in decimal
@@ -16,13 +16,16 @@ class GrowingCirclesDAO {
 		this.leftAlphaIndex = 0;
 		this.rightAlphaIndex = 0;
 		this.useAlpha = false;
+		
+		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
+		this.isPhysician = false;
 	}
 	
-	async loadAll() {
+	async loadForDashboard() {
 		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
-			.collection("GrowingCircles")
+			.collection("Symbols")
 			.orderBy("TimeStampMS", "desc")
 			.get()
 			.then((querySnapshot) => {
@@ -31,40 +34,61 @@ class GrowingCirclesDAO {
 					this.docList.push(extractedDoc);
 				});
 			});
+
+		// this.manualAdd();
+	}
+	
+	async loadForDetailedView(testID, canvasLeft, canvasRight) {
+		let _this = this;
 		
-		// this.manualAdd();	// This breaks as of (11/27/2020) due to missing fields in FireStore document
+		await this.dbRef
+			.collection("TestResults")
+			.doc(this.userID)
+			.collection("Symbols")
+			.doc(testID)
+			.get()
+			.then(function(doc) {
+				if (!doc) {
+					console.log("Document not found. ID: " + testID);
+					return;
+				}
+				
+				_this.detailedViewTimeStamp = doc.data().TimeStampMS;	// Used for subtitle on detailed_view.html
+				
+				let ctxLeft = canvasLeft.getContext('2d');
+				let ctxRight = canvasRight.getContext('2d');
+				_this.drawToCanvas(ctxLeft, doc.data().LeftXLocations, doc.data().LeftYLocations);
+				_this.drawToCanvas(ctxRight, doc.data().RightXLocations, doc.data().RightYLocations);
+			});
+		
 	}
 	
 	// !! TESTING ONLY - Clones FireStore doc from existing
 	manualAdd() {
-		if (!this.docList[0]) {
-			console.log("MANUAL ADD - Index 0 empty");
-			return;
-		}
 		this.dbRef.collection("TestResults")
 			.doc(this.userID)
-			.collection("GrowingCircles")
+			.collection("Symbols")
 			.add(this.docList[0])
 			.then(() => {
 				console.log("Manual document added.");
 			});
 	}
 	
-	// NOTE: The JSON returned needs to match the FireStore document structure for GrowingCircles
+	// NOTE: The JSON returned needs to match the FireStore document structure for Symbols
 	extractor(id, data) {
 		return {
 			id: id,
 			TestName: data.TestName,
 			TimeStampMS: data.TimeStampMS,
-			XLocationsLeft: data.LeftXLocations,
-			XLocationsRight: data.XLocationsRight,
-			YLocationsLeft: data.YLocationsLeft,
-			YLocationsRight: data.YLocationsRight,
-			ZLocationsLeft: data.ZLocationsLeft,
-			ZLocationsRight: data.ZLocationsRight,
+			LeftResultsSymbols: data.LeftResultsSymbols,
+			LeftXLocations: data.LeftXLocations,
+			LeftYLocations: data.LeftYLocations,
+			RightResultsSymbols: data.RightResultsSymbols,
+			RightXLocations: data.RightXLocations,
+			RightYLocations: data.RightYLocations,
 		}
 	}
-
+	
 	populateHistoryTable(targetTableID) {
 		if (!this.userID) {
 			console.log("User ID is null");
@@ -81,7 +105,7 @@ class GrowingCirclesDAO {
 	// TODO: Update with actual method for detailed view
 	// TODO: Refactor variable names below to be more readable
 	addRowToTable(docID, timeStamp, targetTableID) {
-		let testName = "Growing Circles";
+		let testName = "Symbols";
 		let time = this.formatDate(timeStamp);
 		let urlOfDetailedView = this.URIBuilder(docID);
 		
@@ -122,7 +146,7 @@ class GrowingCirclesDAO {
 		tableBody.appendChild(row);
 	}
 	
-	populateAll(leftCanvasID, rightCanvasID) {
+	renderAll(leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
@@ -130,9 +154,8 @@ class GrowingCirclesDAO {
 		this.docList.forEach((doc) => {
 			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
 			ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
-			
-			this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
-			this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
+			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
+			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
 			
 			alphaIndex++;
 			if (alphaIndex > 3) {
@@ -143,7 +166,7 @@ class GrowingCirclesDAO {
 	}
 	
 	// TODO: RENAME
-	populateAggregate(leftCanvasID, rightCanvasID) {
+	renderAggregate(leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
@@ -154,8 +177,8 @@ class GrowingCirclesDAO {
 			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
 			ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
 			
-			this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
-			this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
+			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
+			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
 			
 			alphaIndex++;
 			if (alphaIndex > 3) {
@@ -165,7 +188,7 @@ class GrowingCirclesDAO {
 		}
 	}
 	
-	populateMostRecent(leftCanvasID, rightCanvasID) {
+	renderMostRecent(leftCanvasID, rightCanvasID) {
 		if (!this.docList[0]) {
 			console.log("First document (most recent) empty.")
 			return;
@@ -178,11 +201,11 @@ class GrowingCirclesDAO {
 		ctxRight.fillStyle = "#f47171";
 		
 		let doc = this.docList[0];
-		this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
-		this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
+		this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
+		this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
 	}
 	
-	populateByMonthSelector(month, leftCanvasID, rightCanvasID) {
+	renderSelectedMonth(month, leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		
@@ -217,7 +240,7 @@ class GrowingCirclesDAO {
 		}
 	}
 	
-	populateByNumberMonths(monthsBack, leftCanvasID, rightCanvasID) {
+	renderMonthRange(monthsBack, leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		
@@ -230,43 +253,76 @@ class GrowingCirclesDAO {
 		
 		for (let i = 0; i < index; i++) {
 			let doc = this.docList[i];
-			this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
-			this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
+			
+			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
+			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
 		}
 	}
 	
-	drawToCanvas(ctx, xPos, yPos, zPos) {
+	drawToCanvas(ctx, xPositions, yPositions) {
 		if (!ctx) {
 			console.log("Invalid Canvas Context.");
 			return;
 		}
 		
-		if (isNaN(xPos) || isNaN(yPos) || isNaN(zPos)) {
-			// This check here makes the populate(N) functions cleaner by removing checks there
-			// console.log("One of more locations NaN");
-			return;
+		let ratio = ctx.canvas.width / this.canvasSize;
+		let w = 35;
+		let h = 35;
+		let r = w / 6;
+		
+		if (xPositions) {
+			xPositions.forEach((xPos) => {
+				let x = xPos * ratio;
+				let y = 0;
+				
+				// Draw shape as rectangle with rounded corners
+				this.roundedRectangle(ctx, x, y, w, h, r);
+			});
 		}
 		
-		let ratio = ctx.canvas.width / this.canvasSize;
-		xPos = xPos * ratio;
-		yPos = yPos * ratio;
-		zPos = zPos * ratio;
-		
+		if (yPositions) {
+			yPositions.forEach((yPos) => {
+				let x = 0;
+				let y = yPos * ratio;
+				
+				// Draw shape as rectangle with rounded corners
+				this.roundedRectangle(ctx, x, y, w, h, r);
+			});
+		}
+	}
+	
+	roundedRectangle(ctx, x, y, w, h, r) {
 		ctx.beginPath();
-		ctx.arc(xPos, yPos, zPos, 0, Math.PI * 2);
+		ctx.moveTo(x + r, y);
+		ctx.arcTo(x + w, y, x + w, y + h, r);
+		ctx.arcTo(x + w, y + h, x, y + h, r);
+		ctx.arcTo(x, y + h, x, y, r);
+		ctx.arcTo(x, y, x + w, y, r);
+		ctx.closePath();
+		
 		ctx.fill();
 	}
 	
-	// !! NOTE: URI's are relative to dashboard.html. NOT this DAO file.
-	//		e.g.
-	//		[CORRECT] 	urlOfDetailedView == ./dashboard/detailed_view.html
-	//		[INCORRECT] urlOfDetailedView == ./detailed_view.html
-	// !! NOTE: The TEST_NAME key's value has to match Firestore's document exactly
+	// !! NOTE: The TEST_NAME value has to match Firestore's collection name exactly
+	// !! NOTE: URI's are relative to dashboard.html OR physiciansDash.html. NOT this DAO file.
+	//	From physiciansDash.html
+	//		./physiciansDetailedDash.html
+	//
+	//	From dashboard.html
+	// 		./detailed_view.html
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
-		uri.append("TEST_NAME", "GrowingCircles");
+		uri.append("TEST_NAME", "Symbols");
 		uri.append("TEST_ID", docID);
-		return "./dashboard/detailed_view.html?" + uri.toString();
+		
+		if (this.isPhysician) {
+			// When user is a physician, userID is their patient's ID
+			uri.append("PATIENT_ID", this.userID);
+			return "./physicianDetailedView.html?" + uri.toString();
+		}
+		else {
+			return "./detailed_view.html?" + uri.toString();
+		}
 	}
 	
 	setIndex(ms) {
@@ -332,4 +388,4 @@ class GrowingCirclesDAO {
 		return months[number];
 	}
 	
-}// class [ GrowingCirclesDAO ]
+}// class [ SymbolsDAO ]

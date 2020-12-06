@@ -1,3 +1,8 @@
+/*
+	On the physicians dashboard, the drop down menu is dynamically created here. We get the user's
+	set of patients and create a value in drop menu for each patient. 
+*/
+
 let dropDown = document.getElementById("patientList");
 let patients = [];
 
@@ -28,27 +33,10 @@ let patients = [];
 				});
 		}
 	});
-
-/* 	let patient1 = {
-		id: "Ii4NKqGowiVtH14FK8O3b7Wfuri1",
-		firstName: "John",
-		lastName: "Doe",
-	}
-
-	let patient2 = {
-		id: "NqP2JTgoCpYPixkCFVkvFyHUs7x1",
-		firstName: "Smitty",
-		lastName: "WerbenJagermanJensen",
-	}
-	console.log("PUSHING USERS");
-	patients.push(patient1);
-	patients.push(patient2); */
 }());
 
 
 function dropdown() {
-	console.log("PUSHING TO DROPDOWN");
-
 	for (let i = 0; i < patients.length; i++) {
 		let p = patients[i];
 		let a = document.createElement("a");
@@ -62,10 +50,7 @@ function dropdown() {
 
 }
 
-(function () {
-
-}());
-
+// !! TODO: Dont put patient name in URL with UID
 function URIBuilder(p) {
 	let uri = new URLSearchParams();
 	uri.append("DATA", "True");

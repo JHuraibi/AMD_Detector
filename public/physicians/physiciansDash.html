@@ -90,17 +90,16 @@
 					</tr>
 					<!-- VIEW OPTIONS LABEL ---------------------------------->
 					<tr>
-						<td class="view">
+						<td class="view" style="padding-top: 1em">
 							View Options
 						</td>
 					</tr>
-					<!-- VIEW OPTION: Aggregate/Default ---------------------->
+					<!-- VIEW OPTION: General/Default ---------------------->
 					<tr>
 						<td class="options">
-							<!-- TODO: Better name than aggregate? -->
 							<input type="radio" id="defaultRadio" name="viewOptions"
-								   value="aggregateDefault" onchange="enableBtns()" checked>
-							<label for="defaultRadio">Aggregate (Default)</label>
+								   value="generalDefault" onchange="enableBtns()" checked>
+							<label for="defaultRadio">General View (Default)</label>
 						</td>
 					</tr>
 					<!-- VIEW OPTION: Most Recent ---------------------------->
@@ -199,30 +198,20 @@
 	<!-- Initialize Firebase -->
 	<script src="/__/firebase/init.js"></script>
 	
-	
 	<!-- DAO JavaScripts -->
-	<script src="../dashboard/GrowingCirclesDAO.js"></script>
-	<script src="../dashboard/SymbolsDAO.js"></script>
-	<script src="../dashboard/FullBarsDAO.js"></script>
-	<script src="../dashboard/FreeDrawDAO.js"></script>
+	<script src="../DAO/GrowingCirclesDAO.js"></script>
+	<script src="../DAO/SymbolsDAO.js"></script>
+	<script src="../DAO/FullBarsDAO.js"></script>
+	<script src="../DAO/FreeDrawDAO.js"></script>
 	<script src="physiciansDAO.js"></script>
 	
-	<script src="testDynamicDropDown.js"></script>
-	<script src="PatientFullBarsDAO.js"></script>
-	
 	<!-- Dashboard Functions -->
+	<script src="patientDropdownList.js"></script>
 	<script src="../dashboard/dashboard_actions.js"></script>
-	<script src="../dashboard/physicians_dashboard.js"></script>
-	
+	<script src="physicians_dashboard.js"></script>
+
 	<script>
-		// TODO: Check with T if this is still needed
-		// firebase.auth().onAuthStateChanged(user => {
-		// 	console.log(user);
-		// 	userRef = user;
-		// });
-	</script>
-	
-	<script>
+		// NOTE: Undefined until patient selected from drop down list on physician dashboard
 		let uriPassedIn = new URLSearchParams(window.location.search);
 		let dataSent = uriPassedIn.get("DATA");
 		let patientID = uriPassedIn.get("PATIENT_ID");
@@ -238,10 +227,9 @@
 			title.innerText = title.innerText + " - " + patientFirstName + " " + patientLastName;
 		}());
 	</script>
-	
+
 	<!-- Check if user is signed in -->
 	<script>
-		// let id = null;		// TODO: Check with T if "id" needs a declaration here
 		var db = firebase.firestore();
 		(async function checkUser() {
 			await firebase.auth().onAuthStateChanged(user => {
@@ -257,8 +245,10 @@
 							}
 							else {
 								// Two below functions are in physicians_dashboard.js
-								if (setPatientUID(patientID)) {
-									console.log("Patient UID set.")
+								let patientIDSaved = setPatientUID(patientID);
+								
+								if (patientIDSaved) {
+									console.log("Patient UID set. UID: " + patientID);
 									pageRouter();
 								}
 							}

@@ -8,26 +8,23 @@ function applyBtnRouter() {
 	
 	let value = chosenOption.value;
 	
-	// Defaults to Aggregate View
+	// Defaults to General View
 	switch (value) {
 		default:
 			console.log("Default");
 			console.log("VALUE: " + chosenOption);
 			resetOptions();
 			break;
-		case 'aggregateDefault':
+		case 'generalDefault':
 			resetOptions();
 			break;
 		case "mostRecent":
-			clearCanvases();
 			mostRecent();
 			break;
 		case "monthSelector":
-			clearCanvases();
 			monthSelect();
 			break;
 		case "numberMonths":
-			clearCanvases();
 			numberOfMonths();
 			break;
 	}
@@ -70,23 +67,11 @@ function resetOptions() {
 	monthSelector.style.backgroundColor = "";		// Additional style edit on top of disabler()'s
 	numberMonthsInput.style.backgroundColor = "";	// Additional style edit on top of disabler()'s
 	
-	monthSelector.value = ""; // CHECK: Does anything?
 	numberMonthsInput.value = "";
 	defaultRadio.checked = true;
 	
-	clearCanvases();
-	
-	// Redraw Default (function definition in dashboard.js)
-	renderDefaultView();
-}
-
-function clearCanvases() {
-	let canvasLeft = document.getElementById("canvasLeft");
-	let canvasRight = document.getElementById("canvasRight");
-	let ctxLeft = canvasLeft.getContext('2d');
-	let ctxRight = canvasRight.getContext('2d');
-	ctxLeft.clearRect(0, 0, canvasLeft.width, canvasLeft.height);
-	ctxRight.clearRect(0, 0, canvasRight.width, canvasRight.height);
+	// Redraw Default (function definition in dashboard_renderer.js)
+	renderDefaultCanvases();
 }
 
 function enabler(element) {

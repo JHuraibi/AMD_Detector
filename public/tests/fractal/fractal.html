@@ -29,6 +29,7 @@
 				color: #282828;
 			}
 		</style>
+		<script src="../phrase_injector.js"></script>
 	</head>
 	<body class="text-center">
 		<div class="d-flex w-auto h-auto p-3 mx-auto flex-column">
@@ -37,7 +38,7 @@
 					<h3 class="masthead-brand">Vision Monitor</h3>
 					<nav class="nav nav-masthead justify-content-center">
 						<a class="nav-link active" href="../../home.html">Home</a>
-						<a class="nav-link" href="../../dashboard.html">My Dashboard</a>
+						<a class="nav-link" href="../../dashboard/dashboard.html">My Dashboard</a>
 					</nav>
 				</div>
 			</header>
@@ -58,7 +59,8 @@
 				<!--				</div>-->
 				<div class="instruct" id="rightEyeInstruct" style="display: none">
 					<p>
-						Great! Now cover your left eye, and with your right eye focus on the black dot in the center.
+						<script>document.write(writePhrase())</script>
+						Now cover your left eye, and with your right eye focus on the black dot in the center.
 						Click to Start Right Eye Test.
 					</p>
 					<button class="btn btn-sm btn-outline-secondary"
@@ -69,16 +71,6 @@
 			</main>
 			
 			<div>
-				
-				<script>
-					function hideLeftEyeBtn() {
-						document.getElementById("leftEyeInstruct").style.display = "none";
-					}
-					
-					function hideRightEyeBtn() {
-						document.getElementById("rightEyeInstruct").style.display = "none";
-					}
-				</script>
 				
 				<div class="btn-group" id="startTestBtn">
 					<button type="button" id="startTest" onClick="startTest()"

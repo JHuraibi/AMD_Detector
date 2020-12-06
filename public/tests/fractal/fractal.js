@@ -157,7 +157,7 @@ function keyPressed() {
 		
 		// Below function is defined in fractal.html.
 		// It hides the button to upload to Firestore.
-		updateButtons();
+		updateFirebaseButtons();
 	}
 	
 	// CHECK: Extract into separate functions?
@@ -458,7 +458,7 @@ function showExitButton() {
  */
 function getFractalResults() {
 	return {
-		"TestName": "full_bars",
+		"TestName": "fractal",
 		"TimeStampMS": timestamp,
 		"TestCanvasSize": canvasSize,
 		"LeftXCoordinate": xCoordinateLeft,

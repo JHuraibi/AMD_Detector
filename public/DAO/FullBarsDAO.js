@@ -16,9 +16,12 @@ class FullBarsDAO {
 		this.leftAlphaIndex = 0;
 		this.rightAlphaIndex = 0;
 		this.useAlpha = false;
+		
+		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
+		this.isPhysician = false;
 	}
 	
-	async loadAll() {
+	async loadForDashboard() {
 		await this.dbRef
 			.collection("TestResults")
 			.doc(this.userID)
@@ -33,6 +36,31 @@ class FullBarsDAO {
 			});
 		
 		// this.manualAdd();
+	}
+	
+	// !! NOTE: This function requires that a reference to the outer object be used
+	async loadForDetailedView(testID, canvasLeft, canvasRight) {
+		let _this = this;
+		
+		await this.dbRef
+			.collection("TestResults")
+			.doc(this.userID)
+			.collection("FullBars")
+			.doc(testID)
+			.get()
+			.then(function (doc) {
+				if (!doc) {
+					console.log("Document not found. ID: " + testID);
+					return;
+				}
+				_this.detailedViewTimeStamp = doc.data().TimeStampMS; 	// Used for subtitle on detailed_view.html
+				
+				let ctxLeft = canvasLeft.getContext('2d');
+				let ctxRight = canvasRight.getContext('2d');
+				_this.drawToCanvas(ctxLeft, doc.data().LeftXLocations, doc.data().LeftYLocations);
+				_this.drawToCanvas(ctxRight, doc.data().RightXLocations, doc.data().RightYLocations);
+			});
+		
 	}
 	
 	// !! TESTING ONLY - Clones FireStore doc from existing
@@ -116,7 +144,7 @@ class FullBarsDAO {
 		tableBody.appendChild(row);
 	}
 	
-	populateAll(leftCanvasID, rightCanvasID) {
+	renderAll(leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
@@ -136,7 +164,7 @@ class FullBarsDAO {
 	}
 	
 	// TODO: RENAME
-	populateAggregate(leftCanvasID, rightCanvasID) {
+	renderAggregate(leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
@@ -158,7 +186,7 @@ class FullBarsDAO {
 		}
 	}
 	
-	populateMostRecent(leftCanvasID, rightCanvasID) {
+	renderMostRecent(leftCanvasID, rightCanvasID) {
 		if (!this.docList[0]) {
 			console.log("First document (most recent) empty.")
 			return;
@@ -175,7 +203,7 @@ class FullBarsDAO {
 		this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
 	}
 	
-	populateByMonthSelector(month, leftCanvasID, rightCanvasID) {
+	renderSelectedMonth(month, leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		
@@ -192,15 +220,15 @@ class FullBarsDAO {
 		else {
 			dateStringLatest = (+month + 1) + " 1 2020";
 		}
-
+		
 		let msEarliest = (new Date(dateStringEarliest)).getTime();
 		let msLatest = (new Date(dateStringLatest)).getTime();
-
+		
 		// !! NOTE: docList[] is sorted in descending order by TimeStampMS
 		//       So the earlier date (smallest millisecond) is closer to the end of the array
 		let startIndex = this.setIndex(msLatest);
 		let endIndex = this.setIndex(msEarliest);
-
+		
 		// TODO: Check for off-by-one
 		for (let i = startIndex; i <= endIndex; i++) {
 			let doc = this.docList[i];
@@ -210,7 +238,7 @@ class FullBarsDAO {
 		}
 	}
 	
-	populateByNumberMonths(monthsBack, leftCanvasID, rightCanvasID) {
+	renderMonthRange(monthsBack, leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		
@@ -277,16 +305,26 @@ class FullBarsDAO {
 		ctx.fill();
 	}
 	
-	// !! NOTE: URI's are relative to dashboard.html. NOT this DAO file.
-	//		e.g.
-	//		[CORRECT] 	urlOfDetailedView == ./dashboard/detailed_view.html
-	//		[INCORRECT] urlOfDetailedView == ./detailed_view.html
-	// !! NOTE: The TEST_NAME key's value has to match Firestore's document exactly
+	// !! NOTE: The TEST_NAME value has to match Firestore's collection name exactly
+	// !! NOTE: URI's are relative to dashboard.html OR physiciansDash.html. NOT this DAO file.
+	//	From physiciansDash.html
+	//		./physiciansDetailedDash.html
+	//
+	//	From dashboard.html
+	// 		./detailed_view.html
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
 		uri.append("TEST_NAME", "FullBars");
 		uri.append("TEST_ID", docID);
-		return "./dashboard/detailed_view.html?" + uri.toString();
+		
+		if (this.isPhysician) {
+			// When user is a physician, userID is their patient's ID
+			uri.append("PATIENT_ID", this.userID);
+			return "./physicianDetailedView.html?" + uri.toString();
+		}
+		else {
+			return "./detailed_view.html?" + uri.toString();
+		}
 	}
 	
 	setIndex(ms) {
@@ -299,14 +337,6 @@ class FullBarsDAO {
 		}
 		
 		return i;
-	}
-	
-	checkBeforeDate() {
-	
-	}
-	
-	alphaCreator(num) {
-		let n = 255 / num;
 	}
 	
 	formatDate(milliseconds) {

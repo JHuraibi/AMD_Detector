@@ -50,7 +50,6 @@
 			<div class="instruct">
 				<script src="instructions_injector.js"></script>
 				<script>
-					// TODO: New line characters are not being printed right
 					// The URL will have which test attached to the end
 					// e.g. "instructions_page.html?growing_circles"
 					var uriPassedIn = decodeURIComponent(window.location.search);
@@ -91,7 +90,7 @@
 				<input type="range" id="speed" max="5" min="1" style="width:80%" oninput="num.value = this.value">
 				<output id="num"></output>
 				<div class="btn-group">
-					<button type="button" onclick="setspeed()" class="btn btn-sm btn-outline-secondary">Set Speed</button>
+					<button type="button" onclick="setspeed()" class="btn btn-sm btn-outline-secondary" id="speedbtn">Set Speed</button>
 				</div>
 			</div>
 			
@@ -128,11 +127,10 @@
 		<script src="speed.js"></script>
 		
 		<script>
-			// !! Note: Formatting is currently hard-coded for each tag target (will be dynamic in the near future)
 			// var db = firebase.initializeApp(firebaseConfig);
 			function setspeed() {
 				var obj = new FirebaseDAO(firebase.firestore());
-				obj.changeSpeed();
+				obj.savespeed();
 			}
 		</script>
 

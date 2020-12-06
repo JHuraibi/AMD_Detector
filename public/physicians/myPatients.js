@@ -1,3 +1,13 @@
+/*
+    myPatients.js has the following features:
+        1. getCurrent() - Loads the physicians curreent list of patients and sends to addRow
+        2. checkForRequests() - Loads the physicians current patient request list and changes title of requests to match number of requests
+        3. getRequests() - Loads the physicians current list of patient requests and sends to addRow
+        4. addRow() - adds rows of patient information to their respected tables
+        5. acceptUser() - lets physician accept a pateint requests and updates the databases
+        6. rejectUser() - lets physician reject a patient requests and updates request list
+*/
+
 var tableBody = document.getElementById('currentList');
 var requestListTable = document.getElementById('requestList');
 var title = document.getElementById('title');
@@ -6,8 +16,8 @@ var db = firebase.firestore();
 checkForRequests();
 getCurrent();
 
-//updates the title page based on requests
-async function checkForRequests() {
+
+async function checkForRequests() {                                 //updates the title page based on requests
 
     await firebase.auth().onAuthStateChanged(user => {
         if (user) {
@@ -25,8 +35,7 @@ async function checkForRequests() {
     });
 }
 
-//loads the users requesting this doc
-function getRequests(array) {
+function getRequests(array) {                                       //loads the users requesting this doc
 
     for (var i = 0; i < array.length; i++) {
         db.collection("users").doc(array[i])
@@ -38,8 +47,8 @@ function getRequests(array) {
     }
 }
 
-//adds the rows to their corresponding tables
-function addRow(data, type, userID) {
+
+function addRow(data, type, userID) {                              //adds the rows to their corresponding tables
     let name = data.firstname + " " + data.lastname;
     let birthday = data.birthday;
 
@@ -70,9 +79,7 @@ function addRow(data, type, userID) {
 
     button.onclick = function () {
         if (type == "current") {
-            // CHECK
-            // window.location = "physiciansDash.html";
-            loadPhysicianDashboard();
+			loadPhysicianDashboard();
         }
         else {
             let r = confirm("You are about to add this user as your patient.")
@@ -115,8 +122,8 @@ function addRow(data, type, userID) {
         requestListTable.appendChild(row);
 }
 
-//adds users to their docs and vice versa
-async function acceptUser(pId) {
+
+async function acceptUser(pId) {                                //adds users to their docs and vice versa
 
     await firebase.auth().onAuthStateChanged(user => {
         if (user) {
@@ -124,7 +131,7 @@ async function acceptUser(pId) {
             db.collection("users").doc(id)
                 .get()
                 .then(doc => {
-                    //add patient to physician side
+                                                                //add patient to physician side
                     let array = doc.data().patients;
                     let check = false;
                     for (var i = 0; i < array.length; i++) {
@@ -142,7 +149,7 @@ async function acceptUser(pId) {
                             .then(function () {
                                 console.log("Patient successfully added to Physicians!");
 
-                                //Add physician to patients side
+                                                                //Add physician to patients side
                                 db.collection("users").doc(pId)
                                     .get()
                                     .then(doc => {
@@ -180,13 +187,12 @@ async function acceptUser(pId) {
 
 }
 
-//rejects the request
-function rejectUser(pId) {
+
+function rejectUser(pId) {                                      //rejects the request
     removeRequest(pId);
 }
 
-//Removes the request from the physicians requests array and off the requests table.
-async function removeRequest(pID) {
+async function removeRequest(pID) {                             //Removes the request from the physicians requests array and off the requests table.
 
     console.log("Attempting to delete request");
 
@@ -218,8 +224,7 @@ async function removeRequest(pID) {
 
 }
 
-//gets the current list of patients this doctor has
-async function getCurrent() {
+async function getCurrent() {                                    //gets the current list of patients this doctor has
     await firebase.auth().onAuthStateChanged(user => {
         if (user) {
             let id = user.uid;
@@ -256,7 +261,5 @@ function loadPhysicianDashboard() {
     uri.append("FIRST", "");
     uri.append("LAST", "");
 
-    // CHECK: replace() okay or use .location?
-    // window.location = "./physiciansDash.html?" + uri.toString();
     window.location.replace("./physiciansDash.html?" + uri.toString());
 }
