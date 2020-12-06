@@ -1,4 +1,4 @@
-class SmileyDAO {
+class FacesDAO {
 	constructor(dbRef, userID) {
 		this.dbRef = dbRef;
 		this.userID = userID;

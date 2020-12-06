@@ -4,6 +4,7 @@ let growingCirclesDAO;
 let symbolsDAO;
 let fullBarsDAO;
 let freeDrawDAO;
+let facesDAO;
 
 firebase.auth().onAuthStateChanged(user => {
 	console.log(user);
@@ -18,7 +19,8 @@ async function pageRouter() {
 	await symbolsDAO.loadForDashboard();
 	await fullBarsDAO.loadForDashboard();
 	await freeDrawDAO.loadForDashboard();
-	
+	await facesDAO.loadForDashboard();
+
 	renderDefaultCanvases();
 	renderDefaultTable();
 }
@@ -29,6 +31,7 @@ function renderDefaultCanvases() {
 	growingCirclesDAO.renderAggregate("canvasLeft", "canvasRight");
 	symbolsDAO.renderAggregate("canvasLeft", "canvasRight");
 	fullBarsDAO.renderAggregate("canvasLeft", "canvasRight");
+	facesDAO.renderAggregate("canvasLeft", "canvasRight");
 }
 
 function renderDefaultTable() {
@@ -36,6 +39,7 @@ function renderDefaultTable() {
 	symbolsDAO.populateHistoryTable("historyTable");
 	fullBarsDAO.populateHistoryTable("historyTable");
 	freeDrawDAO.populateHistoryTable("historyTable");
+	facesDAO.populateHistoryTable("historyTable");
 }
 
 function defineDAOs() {
@@ -43,6 +47,7 @@ function defineDAOs() {
 	symbolsDAO = new SymbolsDAO(dbRef, userRef.uid);
 	fullBarsDAO = new FullBarsDAO(dbRef, userRef.uid);
 	freeDrawDAO = new FreeDrawDAO(dbRef, userRef.uid);
+	facesDAO = new FacesDAO(dbRef, userRef.uid);
 }
 
 function mostRecent() {
@@ -51,6 +56,7 @@ function mostRecent() {
 	growingCirclesDAO.renderMostRecent("canvasLeft", "canvasRight");
 	symbolsDAO.renderMostRecent("canvasLeft", "canvasRight");
 	fullBarsDAO.renderMostRecent("canvasLeft", "canvasRight");
+	facesDAO.renderMostRecent("canvasLeft", "canvasRight");
 }
 
 function monthSelect() {
@@ -65,6 +71,7 @@ function monthSelect() {
 	growingCirclesDAO.renderSelectedMonth(monthSelector.value, "canvasLeft", "canvasRight");
 	symbolsDAO.renderSelectedMonth(monthSelector.value, "canvasLeft", "canvasRight");
 	fullBarsDAO.renderSelectedMonth(monthSelector.value, "canvasLeft", "canvasRight");
+	facesDAO.renderSelectedMonth(monthSelector.value, "canvasLeft", "canvasRight");
 }
 
 function numberOfMonths() {
@@ -80,6 +87,7 @@ function numberOfMonths() {
 	growingCirclesDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
 	symbolsDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
 	fullBarsDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
+	facesDAO.renderMonthRange(monthInput.value, "canvasLeft", "canvasRight");
 }
 
 function clearCanvases() {

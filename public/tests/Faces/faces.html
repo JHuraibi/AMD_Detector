@@ -92,11 +92,11 @@
 			<!-- These buttons will only become visible once the user has finished the test -->
 			<div class="btn-group" id="exitTestBtns" style="display: none">
 				<button type="button" onClick="sendToFirestore();showStatusIndicator();"
-					class="btn btn-sm btn-outline-secondary">
+						class="btn btn-sm btn-outline-secondary test-buttons">
 					Upload Results
 				</button>
 				<button type="button" onClick="location.href='../../home.html'"
-					class="btn btn-sm btn-outline-secondary">
+						class="btn btn-sm btn-outline-secondary test-buttons">
 					Exit without Upload
 				</button>
 				<p id="uploadStatus" style="display: none">
@@ -104,12 +104,11 @@
 				</p>
 			</div>
 		</div>
-
-		<footer class="mastfoot mt-auto">
-			<div class="inner">
-			</div>
-		</footer>
-
+	</div>
+	<footer class="mastfoot mt-auto">
+		<div class="inner">
+		</div>
+	</footer>
 	</div>
 
 
@@ -149,7 +148,7 @@
 		function sendToFirestore() {
 			attemptUserLookup();
 
-			var dataToWrite = getSymbolsResults();
+			var dataToWrite = getFacessResults();
 
 			if (userRef) {
 				dbRef.collection("TestResults")
