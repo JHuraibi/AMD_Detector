@@ -47,6 +47,7 @@ function defineDAOs() {
 	symbolsDAO = new SymbolsDAO(dbRef, userRef.uid);
 	fullBarsDAO = new FullBarsDAO(dbRef, userRef.uid);
 	freeDrawDAO = new FreeDrawDAO(dbRef, userRef.uid);
+	facesDAO = new FacesDAO(dbRef, userRef.uid);
 }
 
 /**
@@ -72,14 +73,6 @@ function populateDefaultTable() {
 	fullBarsDAO.populateHistoryTable("historyTable");
 	freeDrawDAO.populateHistoryTable("historyTable");
 	facesDAO.populateHistoryTable("historyTable");
-}
-
-function defineDAOs() {
-	growingCirclesDAO = new GrowingCirclesDAO(dbRef, userRef.uid);
-	symbolsDAO = new SymbolsDAO(dbRef, userRef.uid);
-	fullBarsDAO = new FullBarsDAO(dbRef, userRef.uid);
-	freeDrawDAO = new FreeDrawDAO(dbRef, userRef.uid);
-	facesDAO = new FacesDAO(dbRef, userRef.uid);
 }
 
 /**
