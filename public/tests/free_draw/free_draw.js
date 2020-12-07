@@ -1,3 +1,15 @@
+//--------------------------------------------------------------------------------------------------------------------//
+// NOTE: This test is implemented using P5.js
+// P5.js Reference: https://p5js.org/reference/
+//
+// NOTE: P5.js's fill() can be called at any point and sets the color (and optionally opacity) for EVERYTHING
+// 			drawn to the canvas. So all new objects will be drawn in the same color until another fill() call is made.
+//			This applies to only P5-related function calls and drawing,
+//					e.g. Does NOT apply for showLeftResults() and showRightResults()
+//
+// NOTE: Upon the HTML page loading, setup() and draw() both run once automatically.
+//--------------------------------------------------------------------------------------------------------------------//
+
 let canvasSize = 600;
 let timestamp;
 
@@ -224,10 +236,6 @@ function redo() {
 		drawing.push(redoRecord[i]);
 	}
 	redoRecord = [];
-	// let removalIndex = drawing.length - actions.pop();
-	// drawing.splice(removalIndex, drawing.length);
-	// clear();
-	// background(backgroundColor);
 }
 
 /**
