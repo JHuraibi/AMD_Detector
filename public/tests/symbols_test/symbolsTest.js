@@ -53,7 +53,7 @@ var id;
 var db = firebase.firestore();
 getUid();
 async function getUid() {
-	//let user = await firebase.auth().currentUser;
+	
 	await firebase.auth().onAuthStateChanged(user => {
 		if (user) {
 			id = user.uid;
@@ -78,23 +78,23 @@ window.addEventListener('keydown', function (e) {
 	key = key.toLowerCase();
 
 	if (key === 's') {
-		//if key pressed is s
-		console.log("KeyPress: S");
+		
+		console.log("KeyPress: S"); 	//if key pressed is s
 		sKey();
 	}
 	else if (key === 'a') {
-		// if a key is pressed
-		console.log("KeyPress: A");
+		
+		console.log("KeyPress: A"); 		// if a key is pressed
 		aKey();
 	}
 	else if (key === 'd') {
-		//if d key is pressed
-		console.log("KeyPress: D");
+		
+		console.log("KeyPress: D");		//if d key is pressed
 		dKey();
 	}
 	else if (key === 'x') {
-		// if x key is pressed
-		console.log("KeyPress: X");
+		
+		console.log("KeyPress: X"); 	// if x key is pressed
 		xKey();
 	}
 	else {
@@ -647,7 +647,7 @@ function showExitButton() {
 //End of Function
 
 
-// Function to save results to db
+// Function to get results to send to db
 function getSymbolsResults() {
 	return {
 		"TestName": "symbols",
