@@ -1,10 +1,14 @@
-// TODO: Add pause or confirmation before switching eyes
-// TODO: When drawing the results at the end, the first Left Y is black
-
-// NOTE: fill() can be called at any point and sets the color (and optionally opacity) for EVERYTHING
+//--------------------------------------------------------------------------------------------------------------------//
+// NOTE: This test is implemented using P5.js
+// P5.js Reference: https://p5js.org/reference/
+//
+// NOTE: P5.js's fill() can be called at any point and sets the color (and optionally opacity) for EVERYTHING
 // 			drawn to the canvas. So all new objects will be drawn in the same color until another fill() call is made.
-//			This applies to only P5 related function calls and drawing,
-//					i.e. does NOT apply for showLeftResults() and showRightResults()
+//			This applies to only P5-related function calls and drawing,
+//					e.g. Does NOT apply for showLeftResults() and showRightResults()
+//
+// NOTE: Upon the HTML page loading, setup() and draw() both run once automatically.
+//--------------------------------------------------------------------------------------------------------------------//
 
 let canvasRef;						// Reference object to the DOM canvas element
 let timestamp;						// Will record the time the test was started (in milliseconds since Epoch)
@@ -15,7 +19,7 @@ let clickFillAlpha = 0;				// Will control the click indicator's alpha
 
 let timer = 0;						// Frame counter
 let sec = 2;						// Seconds between showing each bar
-let indicatorStartTime = 0;			// Will track the current timer value when a click is registered
+let indicatorStartTime = 0;			// Akin to a stopwatch for the click indicator
 let indicatorDuration = 65;			// How many frames to show the indicator (60 frames is 1 second)
 
 let posQueue = [];					// Holds the randomly-shuffled locations to draw the bars
@@ -35,14 +39,19 @@ let canvasSize = 700;				// Size of width and height of the canvas (in pixels)
 
 let clickUsedThisRound = false;		// Disables click if one was already received for current bar being shown
 let verticalInProgress = true;		// Indicates whether bars are currently being drawn vertically or horizontally
-let leftEyeInProgress = true;		// Indicates if bars are currently being drawn vertically or horizontally
-let rightEyeInProgress = false;
-let doNotTestLeft = false;
-let doNotTestRight = false;
+let leftEyeInProgress = true;		// Indicates if the left eye test is being ran
+let rightEyeInProgress = false;		// Indicates if the right eye test is being ran
+let doNotTestLeft = false;			// Disables the left eye test in event user chooses only to test their right eye
+let doNotTestRight = false;			// Disables the right eye test in event user chooses only to test their right eye
 
-let waitingToStart = true;			// Status indicator: Waiting for user to click "Start (X) Eye" button
+let waitingToStart = true;			// Status indicator: Waiting for user to click "Start <X> Eye" button
 let testFinished = false;			// Status indicator: Testing complete
 
+
+/**
+ * Sets up the boolean variables to control only a left eye test.
+ * Unhides the canvas.
+ */
 function setupForLeftEyeOnly() {
 	leftEyeInProgress = true;
 	doNotTestLeft = false;
@@ -50,6 +59,10 @@ function setupForLeftEyeOnly() {
 	canvasRef.show();
 }
 
+/**
+ * Sets up the boolean variables to control only a right eye test.
+ * Unhides the canvas.
+ */
 function setupForRightEyeOnly() {
 	leftEyeInProgress = false;
 	rightEyeInProgress = true;
@@ -58,6 +71,10 @@ function setupForRightEyeOnly() {
 	canvasRef.show();
 }
 
+/**
+ * Sets up the boolean variables to control both a left and right eye test.
+ * Unhides the canvas.
+ */
 function setupForBothEyes() {
 	leftEyeInProgress = true;
 	rightEyeInProgress = false;
@@ -67,11 +84,10 @@ function setupForBothEyes() {
 }
 
 /**
- * Unhides the test canvas. Enables canvas to update via setting
- * 	waitingToStart to false. Records the current time and fills the position queue.
- * 	Starts automatic looping of draw(). Hides the "Start Test" button.
- * This function runs after user clicks button on instructions page.
- * 	Upon page loading, setup() and draw() both run once.
+ *
+ * Hides the "Start Test" button. Records the current time and fills
+ * 	the position queue. Starts automatic looping of draw(). Hides the
+ * "Start Test" button. This function runs after user clicks button on instructions page.
  */
 function startTest() {
 	document.getElementById("startTestBtn").style.display = "none";
