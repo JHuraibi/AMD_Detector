@@ -268,7 +268,7 @@ function test2() {                                                              
         y = Math.random() * 700;
         getAllRegions(x);
 
-        z2 = 3
+        z = 3
         grow2();
 
 
@@ -276,22 +276,22 @@ function test2() {                                                              
         function grow2() {
             c2.fillStyle = "red";
             c2.beginPath();
-            c2.arc(x2, y2, z2, 0, Math.PI * 2, false);
+            c2.arc(x, y, z, 0, Math.PI * 2, false);
             c2.fill();
             c2.stroke();
-            if (seen == false) {                          
-                z2++;
+            if (seen == false) {
+                z++;
                 setTimeout(grow2, 1000);
-            } else if (seen == true && z2 > 5) {                
+            } else if (seen == true && z > 5) {
                 console.log("create array of the coorinates and size of dot")
-                results2[0][index2] = x2;
-                results2[1][index2] = y2;
-                results2[2][index2] = z2;
+                results2[0][index2] = x;
+                results2[1][index2] = y;
+                results2[2][index2] = z;
                 index2++;
                 seen = false;
                 c2.clearRect(0, 0, 700, 700)
 
-                
+
                 c2.fillStyle = "black";
                 c2.beginPath();
                 c2.arc(350, 350, 6, 0, Math.PI * 2, false);
@@ -301,7 +301,7 @@ function test2() {                                                              
                     setTimeout(test2, growingspeed);
                 } else test2();
             }
-            else {                                      
+            else {
 
                 seen = false;
                 c2.clearRect(0, 0, 700, 700)
@@ -356,6 +356,7 @@ function showResults(r, r2) {                                                   
     canvas.width = size * scale;
     canvas.height = size * scale;
 
+
     // Normalize coordinate system to use css pixels.
     c.scale(scale, scale);
     if (testing == "righteye") {
@@ -403,12 +404,12 @@ function showResults(r, r2) {                                                   
 
     //If two tests were taken
     if (r2 != "null") {
-        c2.scale(scale, scale);
         canvas2.style.width = size + "px";
         canvas2.style.height = size + "px";
-
         canvas2.width = size * scale;
         canvas2.height = size * scale;
+        c2.scale(scale, scale);
+
         LER.style.display = "inline-block";
         RER.style.display = "inline-block";
         canvas2.style.display = "inline-block";
@@ -567,7 +568,7 @@ function updateFirstTest() {                                                    
         });
 }
 
-                                                                        
+
 function lefteye() {                                                                //Testing the left eye has been selected. 
     testing = "lefteye";                                                            //Save which eye we're testing in the 'testing' variable
     document.getElementById('whichEye').style.display = "none";                     //Hide the HTML element that asks which eye they would like to test
@@ -611,8 +612,8 @@ function setValues() {                                                          
 
 
 function getAllRegions() {                                                          //checks to see if the current x and y value should be used
-                                                                                    //We want to cover all regions of the canvas, so if a region has reached 5
-                                                                                    //get a new point. Else, keep current point
+    //We want to cover all regions of the canvas, so if a region has reached 5
+    //get a new point. Else, keep current point
 
     //Quadrant 1
     //Top-left corner = (350, 0) 
