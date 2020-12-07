@@ -74,15 +74,15 @@
 
 			<div>
 				<div class="instuct btn-group" id="btns">
-					<button onclick="rightOption();" id="rightBtn"
-						class="btn btn-sm btn-outline-secondary test-buttons">
-						Right Eye
-					</button>
 					<button id="leftBtn" onclick="leftOption();" class="btn btn-sm btn-outline-secondary test-buttons">
 						Left Eye
 					</button>
 					<button id="bothBtn" onclick="bothOption();" class="btn btn-sm btn-outline-secondary test-buttons">
 						Both Eyes
+					</button>
+					<button onclick="rightOption();" id="rightBtn"
+						class="btn btn-sm btn-outline-secondary test-buttons">
+						Right Eye
 					</button>
 				</div>
 			</div>
@@ -92,11 +92,11 @@
 			<!-- These buttons will only become visible once the user has finished the test -->
 			<div class="btn-group" id="exitTestBtns" style="display: none">
 				<button type="button" onClick="sendToFirestore();showStatusIndicator();"
-					class="btn btn-sm btn-outline-secondary">
+						class="btn btn-sm btn-outline-secondary test-buttons">
 					Upload Results
 				</button>
 				<button type="button" onClick="location.href='../../home.html'"
-					class="btn btn-sm btn-outline-secondary">
+						class="btn btn-sm btn-outline-secondary test-buttons">
 					Exit without Upload
 				</button>
 				<p id="uploadStatus" style="display: none">
@@ -104,12 +104,11 @@
 				</p>
 			</div>
 		</div>
-
-		<footer class="mastfoot mt-auto">
-			<div class="inner">
-			</div>
-		</footer>
-
+	</div>
+	<footer class="mastfoot mt-auto">
+		<div class="inner">
+		</div>
+	</footer>
 	</div>
 
 
@@ -140,7 +139,7 @@
 	</script>
 
 	<script>
-		// !! TODO: Handle errors with getsybolsTestResults()
+		// !! TODO: Handle errors with getfacesTestResults()
 		// !! TODO: Docstrings and comments
 		// If Time: Use event listeners instead of onclick (Unobtrusive Javascript)
 		let maxWaitTime = 2000;
@@ -149,12 +148,12 @@
 		function sendToFirestore() {
 			attemptUserLookup();
 
-			var dataToWrite = getSymbolsResults();
+			var dataToWrite = getFacesResults();
 
 			if (userRef) {
 				dbRef.collection("TestResults")
 					.doc(userRef.uid)
-					.collection("Faces")
+					.collection("Smiley")
 					.add(dataToWrite)
 					.then(() => {
 						uploadSuccess();
@@ -176,6 +175,7 @@
 		function uploadSuccess() {
 			let uploadStatusIndicator = document.getElementById('uploadStatus');
 			uploadStatusIndicator.textContent = "Results Saved!";
+			window.location = '../../home.html';
 		}
 		
 		function updateFirstTest() {

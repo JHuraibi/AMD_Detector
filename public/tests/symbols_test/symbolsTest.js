@@ -16,7 +16,8 @@ var leftEyeInProgress;
 var bothREyeinProgress;
 var bothLEyeInProgress;
 
-//Html elements
+//Html elements: Using 2 Canvases
+// Three Buttons Both eye, Right, and Left. Exit buttons as well
 var canvas = document.getElementById('canvas1');
 var canvas2 = document.getElementById("canvas2");
 var rightBtn = document.getElementById("rightBtn");
@@ -28,6 +29,7 @@ var c = canvas.getContext('2d');
 var c2 = canvas2.getContext('2d');
 let exitBtns = document.getElementById('exitTestBtns');
 
+// Canvas Sizing
 var size = 700;
 canvas.style.width = size + "px";
 canvas.style.height = size + "px";
@@ -42,6 +44,8 @@ canvas2.height = size * scale;
 
 c.scale(scale, scale);
 c2.scale(scale, scale);
+// End of Canvas Sizing
+
 
 //Speed of test
 var speed = 3000;
@@ -49,7 +53,7 @@ var id;
 var db = firebase.firestore();
 getUid();
 async function getUid() {
-	//let user = await firebase.auth().currentUser;
+	
 	await firebase.auth().onAuthStateChanged(user => {
 		if (user) {
 			id = user.uid;
@@ -66,32 +70,31 @@ async function getUid() {
 	});
 }
 
+// Function to see if User pressed the wrong key 
 window.addEventListener('keydown', function (e) {
-
-	// var key = e.keyCode;
 
 	// key variable
 	var key = e.key;
 	key = key.toLowerCase();
 
 	if (key === 's') {
-		//if key pressed is s
-		console.log("KeyPress: S");
+		
+		console.log("KeyPress: S"); 	//if key pressed is s
 		sKey();
 	}
 	else if (key === 'a') {
-		// if a key is pressed
-		console.log("KeyPress: A");
+		
+		console.log("KeyPress: A"); 		// if a key is pressed
 		aKey();
 	}
 	else if (key === 'd') {
-		//if d key is pressed
-		console.log("KeyPress: D");
+		
+		console.log("KeyPress: D");		//if d key is pressed
 		dKey();
 	}
 	else if (key === 'x') {
-		// if x key is pressed
-		console.log("KeyPress: X");
+		
+		console.log("KeyPress: X"); 	// if x key is pressed
 		xKey();
 	}
 	else {
@@ -99,13 +102,15 @@ window.addEventListener('keydown', function (e) {
 	}
 
 });
+//End of Function
 
-// initalizing canvas
-// c.fillStyle = "White";
-// c.fillRect(0, 0, size, size);
+//Placing black dot in the center before the test so user can focus on center dot
 blackDot();
 
-// Variable
+// Variables:
+// X, Y for random placement of symbols
+//Variables labeled with a "result" show user the mistakes when pressing wrong key
+// Symbols is array for random symbols
 var x, y;
 var symbols = ["+", "-", "x", "÷"];
 var rightResultX = [];
@@ -115,6 +120,7 @@ var leftResultY = [];
 var rightResultsSymbols = [];
 var leftResultsSymbols = [];
 
+
 // Not displaying second canvas
 canvas2.style.display = "none";
 
@@ -123,7 +129,9 @@ canvas2.style.display = "none";
 var t = 0;
 var t2 = 0;
 
-// if the key pressed is not a capture the result for the next 4 functions
+
+// Next 4 functions capture any mistake the user made at iteration t and display at the end of the test
+// Four functions for each key pressed
 function aKey() {
 	if (rightEyeInProgress) {
 		if (symbols[r] != "+") {
@@ -296,6 +304,8 @@ function dKey() {
 	}
 
 }
+// End of functions that capture mistakes
+
 
 // function to hide display buttons
 nexteyebtn.style.display = "none";
@@ -305,9 +315,10 @@ function hideBtns() {
 	leftBtn.style.display = "none";
 	bothBtn.style.display = "none";
 }
+// End of Function
 
 
-//function to clear canvas
+//function to clear canvas after each iteration
 function clearCanvas() {
 	c.clearRect(0, 0, size, size);
 	c.fillStyle = "White";
@@ -318,8 +329,10 @@ function clearCanvas() {
 	c2.fillStyle = "White";
 	c2.fillRect(0, 0, size, size);
 }
+// End of Function
 
-//Function have black dot in the center
+
+//Function have black dot in the center after each iteration
 function blackDot() {
 	c.fillStyle = "black";
 	c.beginPath();
@@ -331,8 +344,9 @@ function blackDot() {
 	c2.arc(size / 2, size / 2, 6.5, 0, Math.PI * 2);
 	c2.fill();
 }
+//End of function
 
-// indexing random symbols
+// Variables for indexing random symbols for Test not results
 var r;
 var r2;
 
@@ -340,9 +354,6 @@ var r2;
 function randomSymbol() {
 	r = Math.floor(Math.random() * 4);
 	r2 = Math.floor(Math.random() * 4);
-	// TODO: Suppose to be 580? Or canvasSize?
-	// x = Math.floor(Math.random() * 580);
-	// y = Math.floor(Math.random() * 580);
 	x = Math.floor(Math.random() * size);
 	y = Math.floor(Math.random() * size);
 
@@ -376,8 +387,10 @@ function randomSymbol() {
 	}
 
 }
+//End of Function
 
-//Right eye option
+
+//Function for right eye test only
 function rightOption() {
 	hideBtns();
 	rightEyeInProgress = true;
@@ -389,7 +402,9 @@ function rightOption() {
 	}
 
 }
+// End of Function
 
+//Function of left eye test only
 function leftOption() {
 
 	hideBtns();
@@ -403,6 +418,9 @@ function leftOption() {
 
 
 }
+//End of function
+
+//Function to test both eyes
 function bothOption() {
 
 	hideBtns();
@@ -416,10 +434,13 @@ function bothOption() {
 
 
 }
+//End of Function
 
-// Vaariable representing iterations
+
+// Vaariable representing iterations for right eye test(s)
 var i = 0;
 
+//Function to test right eye for Right eye only test and Right eye portion of both eye test
 function rightEyeTest() {
 
 
@@ -460,9 +481,11 @@ function rightEyeTest() {
 	}
 
 }
+//End of Function
 
+//Function for Both eye test to transition to next eye
 function nexttest() {
-	// TODO: canvas2 is shifting to left between switching (might be display attr)
+	
 	canvas.style.display = "none";
 	canvas2.style.display = "none";
 
@@ -473,11 +496,14 @@ function nexttest() {
 	bothLEyeInProgress = true;
 
 }
+//End of Function
 
 
-// Representing left eye iterations
+
+// Representing iterations for Left eye test(s)
 var a = 0;
 
+// Function to test left eye for Left eye only test and left portion of both eye test
 function leftEyeTest() {
 
 	canvas.style.display = "none";
@@ -521,14 +547,15 @@ function leftEyeTest() {
 
 	}
 }
+//End of Function
+
 
 var j;
 var j2;
-
 // Results for tests shows 1 canvas'
 // blue represents right eye
 // orange represents left eye
-// function to show the erros after test is conducted
+// function to show the erros after test is conducted for both eyes
 function bothResults() {
 
 	// console.log("Result Symbols: " + resultsSymbols);
@@ -555,8 +582,9 @@ function bothResults() {
 	}
 	showExitButton();
 }
+//End of function
 
-//Right Eye Results
+//Function to display right eye results
 function rightResults() {
 	console.log("Reading from right results");
 	canvas.style.display = "inline-block";
@@ -574,7 +602,9 @@ function rightResults() {
 
 
 }
+//End of function
 
+//Function to display left eye results
 function leftResults() {
 	canvas.style.display = "none";
 	canvas2.style.display = "inline-block";
@@ -591,8 +621,9 @@ function leftResults() {
 
 
 }
+//End of function
 
-
+//Function to let user exit and save results
 function showExitButton() {
 
 	exitBtns.style.display = "inline-block";
@@ -613,8 +644,10 @@ function showExitButton() {
 		}
 	}, fadeInSpeed);
 }
+//End of Function
 
-// Update value names
+
+// Function to get results to send to db
 function getSymbolsResults() {
 	return {
 		"TestName": "symbols",
@@ -627,3 +660,4 @@ function getSymbolsResults() {
 		"RightResultsSymbols": rightResultsSymbols
 	}
 }
+//End of function
