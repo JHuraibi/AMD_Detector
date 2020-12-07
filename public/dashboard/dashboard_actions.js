@@ -1,3 +1,7 @@
+/**
+ * Fires off an action dependent upon what radio button (and options if applicable)
+ * 	that updates what data is being drawn the canvas.
+ */
 function applyBtnRouter() {
 	// jQuery to determine which radio option is selected by user (adapted from online example)
 	let chosenOption = document.querySelector('input[name="viewOptions"]:checked');
@@ -30,6 +34,12 @@ function applyBtnRouter() {
 	}
 }
 
+/**
+ * Enables the view option components. This is called after:
+ * 		1) The page is just loaded or the reset button was pressed
+ * 			[AND]
+ * 		2) Changing the value of any one of the radio options
+ */
 function enableBtns() {
 	let applyBtn = document.getElementById("applyBtn");
 	let resetBtn = document.getElementById("resetBtn");
@@ -52,6 +62,12 @@ function enableBtns() {
 	}
 }
 
+/**
+ * Disables the view option components. This is called after:
+ * 		1) The above function enabledBtns() has executed
+ * 			[AND]
+ * 		2) The "Reset" button was clicked
+ */
 function resetOptions() {
 	let applyBtn = document.getElementById("applyBtn");
 	let resetBtn = document.getElementById("resetBtn");
@@ -74,6 +90,10 @@ function resetOptions() {
 	renderDefaultCanvases();
 }
 
+/**
+ * Changes components of the view options to the primary blue color.
+ * Set the HTML disabled property to false.
+ */
 function enabler(element) {
 	if (element && element.disabled) {
 		element.style.backgroundColor = "#33CEFF";
@@ -83,6 +103,10 @@ function enabler(element) {
 	}
 }
 
+/**
+ * Changes components of the view options to a light grey color.
+ * Set the HTML disabled property to true.
+ */
 function disabler(element) {
 	if (element && !element.disabled) {
 		element.style.backgroundColor = "#999999";
