@@ -35,11 +35,11 @@ function extractor(id, data) {
 
 insert(data)
 {
-    document.getElementById('q1').placeholer = data.AmslerQuestions.q1.value;
-    document.getElementById('sq1').placeholer = data.sec1Answers;
-    document.getElementById('sq2').placeholer = data.sec2Answers;
-    document.getElementById('sq3').placeholer = data.sec3Answers;
-    document.getElementById('sq4').placeholer = data.sec4Answers;
+    document.getElementById('q1').placeholder = data.AmslerQuestions.q1.value;
+    document.getElementById('sq1').placeholder = data.sec1Answers;
+    document.getElementById('sq2').placeholder = data.sec2Answers;
+    document.getElementById('sq3').placeholder = data.sec3Answers;
+    document.getElementById('sq4').placeholder = data.sec4Answers;
     
 
 }
