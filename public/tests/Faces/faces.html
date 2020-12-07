@@ -74,15 +74,15 @@
 
 			<div>
 				<div class="instuct btn-group" id="btns">
-					<button onclick="rightOption();" id="rightBtn"
-						class="btn btn-sm btn-outline-secondary test-buttons">
-						Right Eye
-					</button>
 					<button id="leftBtn" onclick="leftOption();" class="btn btn-sm btn-outline-secondary test-buttons">
 						Left Eye
 					</button>
 					<button id="bothBtn" onclick="bothOption();" class="btn btn-sm btn-outline-secondary test-buttons">
 						Both Eyes
+					</button>
+					<button onclick="rightOption();" id="rightBtn"
+						class="btn btn-sm btn-outline-secondary test-buttons">
+						Right Eye
 					</button>
 				</div>
 			</div>
@@ -148,7 +148,7 @@
 		function sendToFirestore() {
 			attemptUserLookup();
 
-			var dataToWrite = getFacessResults();
+			var dataToWrite = getFacesResults();
 
 			if (userRef) {
 				dbRef.collection("TestResults")
@@ -175,6 +175,7 @@
 		function uploadSuccess() {
 			let uploadStatusIndicator = document.getElementById('uploadStatus');
 			uploadStatusIndicator.textContent = "Results Saved!";
+			window.location = '../../home.html';
 		}
 		
 		function updateFirstTest() {
