@@ -76,13 +76,13 @@ window.addEventListener('keydown', function (e) {
 	key = key.toLowerCase();
 
 	if (key === 's') {
-		//if key pressed is s
-		console.log("KeyPress: S");
+	
+		console.log("KeyPress: S"); 	//if key pressed is s
 		sKey();
 	}
 	else if (key === 'f') {
-		// if f key is pressed
-		console.log("KeyPress: F");
+		
+		console.log("KeyPress: F");		// if f key is pressed
 		fKey();
 	}
 	else {
@@ -105,6 +105,7 @@ var frown = String.fromCodePoint(9785);
 var smile = String.fromCodePoint(9786);
 
 //Function to size Symbols to make sure they are correct
+// By default the frowny faces are larger than the smiley faces
 function sizingSymbols() {
 	if (symbols[r] == smile) {
 
@@ -586,7 +587,7 @@ function showExitButton() {
 //End of Function
 
 
-// Function to save results to db
+// Function to get results to send to db
 function getFacesResults() {
 	return {
 		"TestName": "Smiley",
