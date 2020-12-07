@@ -126,21 +126,21 @@ function sizingSymbols() {
 		c2.fillStyle = "black";
 		c2.font = "40px Arial";
 	}
-	if (symbols[j] == smile) {
+	if (rightResultsSymbols[j] == smile) {
 
 		c.fillStyle = "red";
 		c.font = "60px Arial";
 	}
-	if (symbols[j] == frown) {
+	if (rightResultsSymbols[j] == frown) {
 
 		c.fillStyle = "red";
 		c.font = "40px Arial";
 	}
-	if (symbols[j2] == smile) {
+	if (leftResultsSymbols[j2] == smile) {
 		c2.fillStyle = "red";
 		c2.font = "60px Arial";
 	}
-	if (symbols[j2] == frown) {
+	if (leftResultsSymbols[j2] == frown) {
 
 		c2.fillStyle = "red";
 		c2.font = "40px Arial";
@@ -535,7 +535,7 @@ function rightResults() {
 	blackDot();
 
 	for (j = 0; j < rightResultsSymbols.length; j++) {
-		sizingSymbols();
+		 sizingSymbols();
 		c.fillText(rightResultsSymbols[j], rightResultX[j], rightResultY[j]);
 
 	}
