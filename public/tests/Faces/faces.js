@@ -8,21 +8,21 @@
 let timestamp = Date.now();
 
 //Bool values for tests that are in progress
-var rightEyeInProgress;
-var leftEyeInProgress;
-var bothREyeinProgress;
+var rightEyeInProgress; 					// Shows only right eye test in progress
+var leftEyeInProgress;  					// Shows Left eye test in progress
+var bothREyeinProgress;						// Shows both eyes test in progress
 var bothLEyeInProgress;
 
 //HTML variables:
 // Two canvases for left and right eyey
 // Buttons for right, left, both eye test(s) and exit button
-var canvas = document.getElementById('canvas1');
-var canvas2 = document.getElementById("canvas2");
-var rightBtn = document.getElementById("rightBtn");
-var leftBtn = document.getElementById("leftBtn");
-var bothBtn = document.getElementById("bothBtn");
-var nexteyebtn = document.getElementById("nexttestbtn");
-var nextEye = document.getElementById("nextEye");
+var canvas = document.getElementById('canvas1');			// Right eye canvas
+var canvas2 = document.getElementById("canvas2");			// Left eye Canvas
+var rightBtn = document.getElementById("rightBtn");			// Button to initate right eye test
+var leftBtn = document.getElementById("leftBtn");			// Button to initate left eye test
+var bothBtn = document.getElementById("bothBtn");			// Button to intiate both eye test
+var nexteyebtn = document.getElementById("nexttestbtn");	// Button to iniate next eye when user selects both eyes
+var nextEye = document.getElementById("nextEye");			// To display the next eye div
 var c = canvas.getContext('2d');
 var c2 = canvas2.getContext('2d');
 let exitBtns = document.getElementById('exitTestBtns');
