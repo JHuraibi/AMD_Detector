@@ -11,8 +11,8 @@ firebase.auth().onAuthStateChanged(user => {
 	pageRouter();
 });
 
-// TODO: Better and more robust error handling
 async function pageRouter() {
+	// TODO: This function would benefit from some sort of parallelization
 	defineDAOs();
 	await growingCirclesDAO.loadForDashboard();
 	await symbolsDAO.loadForDashboard();
@@ -20,7 +20,7 @@ async function pageRouter() {
 	await freeDrawDAO.loadForDashboard();
 	
 	renderDefaultCanvases();
-	renderDefaultTable();
+	populateDefaultTable();
 }
 
 function renderDefaultCanvases() {
@@ -31,7 +31,7 @@ function renderDefaultCanvases() {
 	fullBarsDAO.renderAggregate("canvasLeft", "canvasRight");
 }
 
-function renderDefaultTable() {
+function populateDefaultTable() {
 	growingCirclesDAO.populateHistoryTable("historyTable");
 	symbolsDAO.populateHistoryTable("historyTable");
 	fullBarsDAO.populateHistoryTable("historyTable");
