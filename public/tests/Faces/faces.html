@@ -139,7 +139,7 @@
 	</script>
 
 	<script>
-		// !! TODO: Handle errors with getsybolsTestResults()
+		// !! TODO: Handle errors with getfacesTestResults()
 		// !! TODO: Docstrings and comments
 		// If Time: Use event listeners instead of onclick (Unobtrusive Javascript)
 		let maxWaitTime = 2000;
@@ -153,7 +153,7 @@
 			if (userRef) {
 				dbRef.collection("TestResults")
 					.doc(userRef.uid)
-					.collection("Faces")
+					.collection("Smiley")
 					.add(dataToWrite)
 					.then(() => {
 						uploadSuccess();
