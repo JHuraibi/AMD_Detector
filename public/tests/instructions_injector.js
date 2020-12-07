@@ -1,3 +1,8 @@
+/**
+ * Returns the test title string for the corresponding test the user is going to take.
+ * @param target_test
+ * @returns {string}
+ */
 function retrieveTestTitle(target_test) {
 	switch (target_test) {
 		default:
@@ -15,9 +20,8 @@ function retrieveTestTitle(target_test) {
 		case "full_bars":
 			return "Full Bars";
 		
-		// case "smiley":
-		// 	return "Smiley";
-		//
+		case "smiley":
+			return "Smiley";
 		
 		case "free_draw":
 			return "Free Draw";
@@ -27,6 +31,11 @@ function retrieveTestTitle(target_test) {
 	}
 }
 
+/**
+ * Returns the instructions string for the corresponding test the user is going to take.
+ * @param target_test
+ * @returns {string}
+ */
 function retrieveInstructions(target_test) {
 	// NOTE: For a newline use: <br\> (Must be within the double quotes with the other text)
 	switch (target_test) {
@@ -86,7 +95,14 @@ function retrieveInstructions(target_test) {
 	}
 }
 
-// Default case will return '#' which will make the button not change the page
+/**
+ * Returns the URL string needed to get to the testing page once clicking Start on
+ * 	the instructions page.
+ * Default case will return '#' which will make the button not change the page
+ *
+ * @param target_test
+ * @returns {string}
+ */
 function retrieveURLLink(target_test) {
 	switch (target_test) {
 		default:

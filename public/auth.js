@@ -22,6 +22,12 @@ registerForm.addEventListener('submit', (e) => {
     if (registerForm['lastname'].value == "") {
       throw "Error: Enter a Last Name";
     }
+    if (parseInt((registerForm['birthdate'].value).substring(0,4)) > (new Date().getFullYear())) {
+      throw "Error: Must be a real birthday";
+    }
+    if ((new Date().getFullYear()) - parseInt((registerForm['birthdate'].value).substring(0,4)) < 18) {
+      throw "Error: Must be over 18";
+    }
     if (registerForm['birthdate'].value == "") {
       throw "Error: Enter a Birthdate";
     }

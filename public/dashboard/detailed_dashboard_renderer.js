@@ -14,6 +14,20 @@ firebase.auth().onAuthStateChanged(user => {
 	pageRouter();
 });
 
+/**
+ * Handles the extraction of the data put into the URI, initialization of the DAO,
+ * 	setting the title, and drawing to the canvas(es).
+ *
+ * A single generic DAO is defined and is then initialized by a switch statement
+ * 	with the case value being extracted from the URI (the URI is encoded when the
+ * 	dashboard is loaded. And is specifically set in the DAOs' populateHistoryTable() ).
+ * 	This is possible because each DAO has the same loadForDetailedView() function with
+ * 	the same parameters (i.e. the test result Firestore document ID and the DOM IDs of the HTML
+ * 	canvas element(s)). The difference is in what the DAOs draws.
+ *
+ * The promise returned is not used, as of (Dec 6, 2020)
+ * @returns {Promise<void>}
+ */
 async function pageRouter() {
 	getURIData();
 	await defineDAO();
@@ -21,12 +35,19 @@ async function pageRouter() {
 	drawResults();
 }
 
+/**
+ * Extracts the information encoded into the URI (URI is encoded when the
+ * 	dashboard is loaded. And is specifically set in the DAOs' populateHistoryTable() ).
+ */
 function getURIData() {
 	uriPassedIn = new URLSearchParams(window.location.search);
 	testName = uriPassedIn.get("TEST_NAME");
 	testID = uriPassedIn.get("TEST_ID");
 }
 
+/**
+ * Initializes the single, generic DAO object.
+ */
 function defineDAO() {
 	if (!testName) {
 		console.log("Error getting Test Name from URI.")
@@ -66,6 +87,15 @@ function defineDAO() {
 	}
 }
 
+/**
+ * The DAO loads the single test result document from FireStore. loadForDetailedView()
+ * 	will also record the timestamp of the single loaded document. This lets setDateSubtitle()
+ * 	use the date at a later time.
+ *
+ * If the DAO is drawing results for Free Draw, the extra right canvas and the
+ * 	"Left" and "Right" table captions are all hidden. Free Draw only uses 1 canvas.
+ * @returns {Promise<void>}
+ */
 async function drawResults() {
 	let canvasLeft = document.getElementById("detailedCanvasLeft");
 	let canvasRight = document.getElementById("detailedCanvasRight");
@@ -80,10 +110,13 @@ async function drawResults() {
 	setDateSubtitle(genericDAO.detailedViewTimeStamp);
 }
 
+/**
+ * Sets the title for the page (i.e. the test's name) using the extracted
+ *  name from the URI.
+ */
 // NOTE: The single dash and space characters are here so that
 //			if this function fails to return a test name to
 //			the header, the header then won't look incomplete.
-//			(See the testTitle <h3> in detailed_view.html).
 function setTestNameTitle() {
 	let title = document.getElementById('testTitle');
 	let postfix = "";
@@ -117,7 +150,10 @@ function setTestNameTitle() {
 	title.innerText = title.innerText + postfix;
 }
 
-
+/**
+ * Converts, formats, and sets the date/time subtitle.
+ * @param milliseconds
+ */
 function setDateSubtitle(milliseconds) {
 	if (!milliseconds) {
 		console.log("Error getting Time Stamp from DAO");
