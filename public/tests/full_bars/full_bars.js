@@ -32,7 +32,8 @@ let xLocationRight = [];			// RIGHT EYE: X locations at the time of a click even
 let yLocationRight = [];			// RIGHT EYE: Y locations at the time of a click event
 
 // let numBars = 40;					// How many bars to draw
-let numBars = 8;			// !! FOR TESTING
+let numBars = 4;			// !! FOR TESTING/FOR BRIEF INSTRUCTIONAL VIDEO
+
 // let barW;							// How thick each bar will be (is a function of numbers of bars vs canvas size)
 let barW = 20;				// !! FOR TESTING
 let canvasSize = 700;				// Size of width and height of the canvas (in pixels)
