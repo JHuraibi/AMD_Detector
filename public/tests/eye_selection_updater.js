@@ -11,7 +11,7 @@
  *
  * 	General Plan:
  *  [1] Load document
- *  [2] Check doc is LESS THAN 12 hours old
+ *  [2] Check doc is LESS THAN 24 hours old
  * 		No:  Return
  * 		Yes: Continue
  *  [3] Check if document is BEFORE midnight of the current day
@@ -42,6 +42,7 @@ async function updateEyeSelection(userID, testName) {
 	
 	if(!lessThan12Hours()){
 		console.log("Last Test Result older than 12 hours.");
+		console.log("Last Test Result older than 24 hours.");
 		return;
 	}
 	
@@ -67,7 +68,8 @@ async function loadDocument() {
 		});
 }
 
-function checkIfToday() {
+/**
+ * 1 Hour 	==  3 600 000 ms
 	return false;
 }
 
