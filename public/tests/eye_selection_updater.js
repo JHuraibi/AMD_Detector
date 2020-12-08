@@ -108,10 +108,11 @@ function checkWhichEyesTested(testName) {
 		left: false,
 		right: false
 	};
-
+	
 	switch (testName) {
 		case 'Symbols':
 			whichEyesTested = SymbolsDAO.getWhichTakenResults(testResult);
+			console.log("Symbols");
 			break;
 		default:
 			console.log("Unrecognized test name provided. Test Name: " + testName);
@@ -122,36 +123,40 @@ function checkWhichEyesTested(testName) {
 function changeEyeButtons() {
 	let message = document.getElementById("whichEyeStatusMessage");
 	
-	console.log("NOW: " + new Date(Date.now()).toString());
-	console.log("OTH: " + new Date(testResult.TimeStampMS).toString());
-
+	console.log("L length: " + whichEyesTested.left);
+	console.log("R length: " + whichEyesTested.right);
+	
 	if (whichEyesTested.left && whichEyesTested.right) {
-		hideLeftOption();
-		// hideRight();
-		// showLeftCheckmark();
-		// showRightCheckmark();
-		message.innerHTML = "Looks like you've finished both your eyes today for this test";
+		console.log("BOTH");
+		document.getElementById("lefteye").disabled = true;
+		document.getElementById("botheyes").disabled = true;
+		document.getElementById("righteye").disabled = true;
+		
+		document.getElementById("leftCheckmark").visibility = "visible";
+		document.getElementById("rightCheckmark").visibility = "visible";
+		document.getElementById("bothCheckmark").visibility = "visible";
+		
+		// message.style.display = "block";
+		document.getElementById("whichEyeStatusMessage").innerHTML = "Looks like you've finished both your eyes today for this test";
 	}
-	else if (whichEyesTested.left){
-		hideLeftOption();
-		// showLeftCheckmark();
-		message.innerHTML = "Looks like you've finished your right eye " +
+	else if (whichEyesTested.left) {
+		console.log("[1] LEFT DONE");
+		document.getElementById("lefteye").disabled = true;
+		document.getElementById("botheyes").disabled = true;
+		
+		document.getElementById("leftCheckmark").style.visibility = "visible";
+		
+		message.innerHTML = "Looks like you've finished your left eye " +
 			"already today for this test. You can still take the test for your right eye.";
 	}
-	else if (whichEyesTested.right){
-		// hideRight();
-		// showLeftCheckmark();
-		// showRightCheckmark();
+	else if (whichEyesTested.right) {
+		console.log("[2] RIGHT DONE");
+		document.getElementById("righteye").disabled = true;
+		document.getElementById("botheyes").disabled = true;
+		
+		document.getElementById("rightCheckmark").style.visibility = "visible";
+		
 		message.innerHTML = "Looks like you've finished your right eye " +
 			"already today for this test. You can still take the test for your left eye.";
 	}
 }
-
-function hideLeftOption(){
-	let leftButton = document.getElementById("lefteye");
-}
-
-function hideRightOption(){
-	let leftButton = document.getElementById("righteye");
-}
-
