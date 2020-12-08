@@ -71,7 +71,7 @@
 			</header>
 			
 			<!-- Which eyes to test -->
-			<div class="instruct" id="whichEye">
+			<div class="instruct" id="eyeSelector">
 				<p>
 					Choose which eye to test. Choosing the left eye requires you to cover your right eye. Choosing the right
 					eye
@@ -251,10 +251,10 @@
 		
 		<script>
 			function updateButtons() {
-				let whichEye = document.getElementById("whichEye");
+				let eyeSelector = document.getElementById("eyeSelector");
 				let startTestBtn = document.getElementById("startTestBtn");
 				
-				whichEye.style.display = "none";
+				eyeSelector.style.display = "none";
 				startTestBtn.style.display = "inherit";
 			}
 			
