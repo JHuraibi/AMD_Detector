@@ -1,6 +1,6 @@
 /**
- * This new function aims to check if a user has already taken a certain test previously, but within the current
- * day. Functionally, the goal is to have the eye selection options (HTML button elements) update accordingly.
+ * The new functionality within aims to check if a user has already taken a certain test previously, but within the
+ * 	current day. The goal is to have the eye selection options (HTML button elements) to update accordingly.
  * Some reasons/scenarios for this implementing this are:
  * 		a. Update the buttons so that the user cannot retake the same test for the same eye in 1 day
  * 		b. Update the buttons such that a user can take a test for one eye and return
@@ -29,10 +29,31 @@
  */
 
 let dbRef = firebase.firestore();
+let doc;
 
-// TODO: Refactor name
-function updateEyeSelection(userID, testName) {
-	let hasTaken = false;
+// TODO: Refactor name and flow control
+async function updateEyeSelection(userID, testName) {
+	doc = await loadDocument(userID, testName);
+	
+	if (!doc) {
+		console.log("No document loaded");
+		return;
+	}
+	
+	if(!lessThan12Hours()){
+		console.log("Last Test Result older than 12 hours.");
+		return;
+	}
+	
+	if(!afterMidnight){
+		console.log("Last Results older than midnight of today.");
+		return;
+	}
+	
+	// Call static method of appropriate DAO to check which eyes were tested
+}
+
+async function loadDocument() {
 	
 	dbRef.collection("TestResults")
 		.doc(userID)
@@ -41,12 +62,7 @@ function updateEyeSelection(userID, testName) {
 		.get()
 		.then((querySnapshot) => {
 			if (querySnapshot[0]) {
-				hasTaken = checkIfToday();
-				
-				if (hasTaken) {
-					console.log("");
-					// Check which
-				}
+				doc = querySnapshot.data();
 			}
 		});
 }
