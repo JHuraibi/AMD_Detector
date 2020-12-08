@@ -108,8 +108,7 @@
 				<div class="inner">
 				</div>
 			</footer>
-		
-		</main>
+		</div>
 		
 		
 		<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
@@ -127,6 +126,8 @@
 		<script src="/__/firebase/init.js"></script>
 		<!-- <script src="../../auth.js"></script> -->
 		<script src="symbolsTest.js"></script>
+		
+		<script src="../eye_selection_updater.js"></script>
 		
 		<script>
 			let dbRef = firebase.firestore();
@@ -204,7 +205,7 @@
 				uploadStatusIndicator.style.display = "inherit";
 			}
 		</script>
-
+		
 		<!-- Check if user is signed in -->
 	<script>
 		var db = firebase.firestore();
@@ -219,6 +220,10 @@
 							if (type != 'user') {
 								console.log("Physician Account. Access Denied.");
 								window.location = '../../404.html';
+							}
+							else {
+								// NOTE: The test name parameter needs to the match with the Firestore collection
+								updateEyeSelection(user.uid, "symbols");
 							}
 						});
 				} else {
