@@ -9,22 +9,18 @@
  * 			visual indicator that the user has indeed already taken the partical test
  * 			they are attempting to (re)take.
  *
- *	CRITICAL: UPDATE
- * 	General Layout:
- *  [1] Load document
- *  [2] Check doc is LESS THAN 24 hours old
- * 		No:  Return
- * 		Yes: Continue
- *  [3] Check if document is BEFORE midnight of the current day
- * 		No:  Return
- * 		Yes: Continue
- *  [4] Process the test result's data to determine which eye(s) has data
- *  [5] Update buttons accordingly which eyes have been completed:
- * 		[Left Eye only]
+ * 	General Explanation of Process:
+ *  [1] Load two most recent documents (if exist)
+ *  [2] Check whether the two documents are before or after midnight of the current day
+ *  [3] Utilize a static method to the appropriate DAO to check the test results
+ *  	and whether they include left, right, or both eye data points
+ *  [4] Update buttons accordingly which eyes have been completed across
+ *  	either a single, or both test results loaded from Step 1:
+ * 		[Left Eye only completed]
  * 			- Disable button for left eye, show a checkmark
- * 		[Right Eye only]
+ * 		[Right Eye only completed]
  * 			- Disable button for right eye, show a checkmark
- * 		[Both Eyes taken]
+ * 		[Both Eyes completed]
  * 			- Disable both buttons, show two checkmarks and also a message explaining
  * 			 that the user has already fully completed the test for the current day
  */
@@ -32,8 +28,8 @@
 let dbRef = firebase.firestore();
 // let testResult;
 let testResults = [];
-let newerResult;
-let olderResult;
+let mostRecentResult;
+let secondMostRecentResult;
 let whichEyesTested;
 
 /**
@@ -45,21 +41,30 @@ async function updateEyeSelection(userID, testName) {
 	// TODO: Refactor name and flow control
 	await loadDocuments(userID, testName);
 	
-	if (!newerResult && !olderResult) {
+	if (!mostRecentResult && !secondMostRecentResult) {
 		console.log("No documents loaded");
 		return;
 	}
-	else if (!newerResult.TimeStampMS || !olderResult.TimeStampMS) {
+	
+	if ((mostRecentResult && !mostRecentResult.TimeStampMS) ||
+		(secondMostRecentResult && !secondMostRecentResult.TimeStampMS)) {
 		console.log("Error retrieving timestamps of loaded documents.");
 		return;
 	}
 	
-	checkTestsTakenToday();
+	checkIfResultsFromToday();
 	checkWhichEyesTested(testName);
 	updateEyeButtons();
 	displayLastTestTime();
 }
 
+/**
+ * Loads the two most-recent documents from the FireStore collection that
+ * 	corresponds to the testName parameter.
+ * @param userID
+ * @param testName
+ * @returns {Promise<void>}
+ */
 async function loadDocuments(userID, testName) {
 	await dbRef.collection("TestResults")
 		.doc(userID)
@@ -75,43 +80,70 @@ async function loadDocuments(userID, testName) {
 		});
 }
 
+/**
+ * Stores the passed-in data to either of the two variables.
+ * If the user has take the test in question two or more times,
+ * 	then both mostRecentResult and secondMostRecentResult should
+ * 	be populated with data.
+ * Assignment is controlled by checking whether mostRecentResult
+ * 	is null or not.
+ * 	If yes:
+ * 		Store data into mostRecentResult
+ *  If no:
+ *  	Store data into the next variable, secondMostRecentResult
+ *
+ * NOTE: If this function is called when both mostRecent and secondMostRecent
+ *   are not null, there are too many documents being queried from Firestore
+ *   or the variables are not null beforehand.
+ * NOTE: parameter "data" is the .data() component of a Firestore
+ * 	document.
+ * @param data
+ */
 function saveResult(data) {
-	if (!newerResult) {
-		newerResult = data;
+	if (!mostRecentResult) {
+		mostRecentResult = data;
 	}
-	else if (!olderResult) {
-		olderResult = data;
+	else if (!secondMostRecentResult) {
+		secondMostRecentResult = data;
 	}
 	else {
-		console.log("Issues loading documents. newer and older variables both occupied.")
+		console.log("Issues loading documents. Containment variables both already occupied.");
 	}
 }
 
-// TODO: Rename
-function checkTestsTakenToday() {
-	if (afterMidnight(newerResult.TimeStampMS)) {
-		testResults.push(newerResult);
-		console.log("Newer today. Time: (" + time(newerResult.TimeStampMS) + ")");
+/**
+ * If the test is valid and occurred at or after midnight, record it by pushing it to
+ * 	the local testResults array.
+ */
+function checkIfResultsFromToday() {
+	if (afterMidnight(mostRecentResult.TimeStampMS)) {
+		testResults.push(mostRecentResult);
 	}
 	
-	if (afterMidnight(olderResult.TimeStampMS)) {
-		testResults.push(olderResult);
-		console.log("Older today. Time: (" + time(olderResult.TimeStampMS) + ")");
+	if (afterMidnight(secondMostRecentResult.TimeStampMS)) {
+		testResults.push(secondMostRecentResult);
 	}
-}
-
-function time(ms) {
-	return new Date(ms).toLocaleTimeString("en-US", {timeZone: "America/New_York"});
 }
 
 /**
  * Uses a new Date object to get the current date. Then sets the hour, minute, seconds,
  * 	and milliseconds to 0 to get the current day's midnight in milliseconds
  * 	(i.e. 00:00:00:00 HH:MM:SS:MsMs)
- * Returns true if the test result's timestamp is equal to or after this midnight value.
+ * 		Returns true if:
+ * 			- Valid timestamp was provided
+ * 			- Timestamp is equal to or greater than midnight of the current day
+ * 		Returns false if:
+ * 			- Invalid timestamp or no timestamp provided.
+ * 			- Timestamp was less than midnight of the current day
  * @returns {boolean}
  */
 function afterMidnight(timestamp) {
+	// TODO: Null check probably better in calling function
+	if (!timestamp) {
+		console.log("No timestamp");
+		return false;
+	}
+	
 	let midnight = new Date();
 	let timeStamp = timestamp;
 	
@@ -124,8 +156,9 @@ function afterMidnight(timestamp) {
 }
 
 /**
- * Uses a static method in the DAO to check which eye has testing result data.
- * 	The DAO returns the results of its check as a JSON that was initialized to false.
+ * Uses a static method in the corresponding DAO to check which eye has testing result data.
+ * The DAO returns the result of its by updating the values of the whichEyesTested JSON
+ * 	that was initialized to false beforehand.
  * @param testName
  */
 function checkWhichEyesTested(testName) {
@@ -137,15 +170,15 @@ function checkWhichEyesTested(testName) {
 	let staticDAO;
 	switch (testName) {
 		case 'Symbols':
-			// whichEyesTested = SymbolsDAO.getWhichTakenResults(testResult);
 			staticDAO = SymbolsDAO;
-			console.log("Symbols");
+			console.log("SymbolsDAO used.");
 			break;
 		default:
 			console.log("Unrecognized test name provided. Test Name: " + testName);
 			break;
 	}
 	
+	// TODO: Would be cleaner to ditch testResults all together
 	testResults.forEach((result) => {
 		staticDAO.getWhichTakenResults(whichEyesTested, result);
 	});
@@ -231,12 +264,12 @@ function displayLastTestTime() {
 	
 	// First if() should be redundant if this function executes at all
 	if (testResults[0]) {
-		newerTime = (new Date(newerResult.TimeStampMS)).toLocaleTimeString("en-US", {timeZone: "America/New_York"});
+		newerTime = (new Date(mostRecentResult.TimeStampMS)).toLocaleTimeString("en-US", {timeZone: "America/New_York"});
 		message = message + ("</br>" + newerTime);
 	}
 	
 	if (testResults[1]) {
-		olderTime = (new Date(olderResult.TimeStampMS)).toLocaleTimeString("en-US", {timeZone: "America/New_York"});
+		olderTime = (new Date(secondMostRecentResult.TimeStampMS)).toLocaleTimeString("en-US", {timeZone: "America/New_York"});
 		message = message + ("</br>" + olderTime);
 	}
 	
