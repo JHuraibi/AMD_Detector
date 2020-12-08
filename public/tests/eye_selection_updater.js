@@ -160,3 +160,10 @@ function changeEyeButtons() {
 			"already today for this test. You can still take the test for your left eye.";
 	}
 }
+
+function displayLastTestTime(){
+	let time = (new Date(testResult.TimeStampMS)).toLocaleTimeString("en-US", { timeZone: "America/New_York" });
+	let time = (new Date(testResult.TimeStampMS)).toLocaleTimeString("en-US", { timeZone: "America/New_York" });
+	document.getElementById("lastTestTime").innerHTML =
+		"Last Test Taken at: " +
+}
