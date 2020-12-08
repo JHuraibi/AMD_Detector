@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>Tutorials · Vision Monitor</title>
+    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
+
+    <!-- Bootstrap core CSS -->
+    <link href="./scss/custom.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="./css/home.css" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .logo_background {
+            background-image: url(../../images/logo_small_offset_left_cropped.png);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+
+        }
+
+        .logo {
+            height: 25px;
+            width: 25px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container d-flex justify-content-between">
+                <a class="nav-link active" href="home.html">
+                    <span data-feather="home"></span>
+                    Back <span class="sr-only">(current)</span>
+                </a>
+
+                <div style="color: white; font-size: 1.5em;"> <img class="logo" src="images/logo_square.png" alt="Logo">
+                    &nbsp; Vision Monitor</div>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
+                    aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                    <a class="sign-out">Sign Out</a>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main role="main">
+        <br>
+
+        <h1 class="h2" style="margin: 20px;">Test Tutorials </h1>
+        <!--------------------------------------------------| ROW 1 |-------------------------------------------------->
+        <div class="row" style="margin: auto;">
+
+            <!-- Amsler Grid -->
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <video class="bd-placeholder-img card-img-top" controls>
+                        <!-- Add videos to videos folder and add the extension below -->
+                        <source src="videos/" type="video/mp4">
+                    </video>
+
+                    <div class="card-body">
+                        <p class="card-text"><span style="font-weight: bold">Amsler Grid</span></p>
+                        <p class="card-text"> <br>The standard Amsler Grid test.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                    onClick="location.href='./tests/instructions_page.html?amsler_grid'">
+                                    Start Test
+                                </button>
+                            </div>
+                            <small class="text-muted">Est Duration: 1 mins</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END AMSLER GRID -->
+
+            <!-- GROWING CIRCLES -->
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <video class="bd-placeholder-img card-img-top" controls>
+                        <!-- Add videos to videos folder and add the extension below -->
+                        <source src="videos/" type="video/mp4">
+                    </video>
+
+                    <div class="card-body">
+                        <p class="card-text"><span style="font-weight: bold">Growing Circles</span></p>
+                        <p class="card-text">Click your mouse any time a new red circle pops
+                            up on the screen.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                    onClick="location.href='./tests/instructions_page.html?growing_circles'">Start
+                                    Test
+                                </button>
+                            </div>
+                            <small class="text-muted">Est Duration: 4 mins</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END GROWING CIRCLES -->
+
+            <!-- SYMBOLS -->
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <video class="bd-placeholder-img card-img-top" controls>
+                        <!-- Add videos to videos folder and add the extension below -->
+                        <source src="videos/" type="video/mp4">
+                    </video>
+
+                    <div class="card-body">
+                        <p class="card-text"><span style="font-weight: bold">Symbols</span></p>
+                        <p class="card-text">Click the correct button any time a symbol appears.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                    onClick="location.href='./tests/instructions_page.html?symbols'">
+                                    Start Test
+                                </button>
+                            </div>
+                            <small class="text-muted">Est Duration: 3 mins</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END SYMBOLS -->
+
+            <!------------------------------------------------| END ROW 1 |------------------------------------------------>
+
+            <!--------------------------------------------------| ROW 2 |-------------------------------------------------->
+            <div class="row" style="margin: auto;">
+
+                <!-- FULL BARS -->
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <video class="bd-placeholder-img card-img-top" controls>
+                            <!-- Add videos to videos folder and add the extension below -->
+                            <source src="videos/" type="video/mp4">
+                        </video>
+
+                        <div class="card-body">
+                            <p class="card-text"><span style="font-weight: bold">Full Bars</span></p>
+                            <p class="card-text"> <br>Click your mouse any time you see a bar bend.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        onClick="location.href='./tests/instructions_page.html?full_bars'">
+                                        Start Test
+                                    </button>
+                                </div>
+                                <small class="text-muted">Est Duration: 5 mins</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END FULL BARS -->
+
+                <!-- FREE DRAW -->
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <video class="bd-placeholder-img card-img-top" controls>
+                            <!-- Add videos to videos folder and add the extension below -->
+                            <source src="videos/" type="video/mp4">
+                        </video>
+
+                        <div class="card-body">
+                            <p class="card-text"><span style="font-weight: bold">Free Draw</span></p>
+                            <p class="card-text">Try recreating areas of issue in your visual field
+                                by drawing.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        onClick="location.href='./tests/instructions_page.html?free_draw'">
+                                        Start Test
+                                    </button>
+                                </div>
+                                <small class="text-muted">
+                                    <!-- No Time Duration Estimate --></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END FREE DRAW -->
+
+                <!-- SMILEY -->
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <video class="bd-placeholder-img card-img-top" controls>
+                            <!-- Add videos to videos folder and add the extension below -->
+                            <source src="videos/" type="video/mp4">
+                        </video>
+
+                        <div class="card-body">
+                            <p class="card-text"><span style="font-weight: bold">Smiley</span></p>
+                            <p class="card-text"><br>Click the correct button any time a face appears.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        onClick="location.href='./tests/instructions_page.html?smiley'">
+                                        Start Test
+                                    </button>
+                                </div>
+                                <small class="text-muted">Est Duration: 3 mins</small>
+                            </div>
+                        </div>
+                        <!-- END SMILEY -->
+                    </div>
+                </div>
+                <!------------------------------------------------| END ROW 2 |------------------------------------------------>
+                
+                <h1 class="h2" style="margin: 20px;">Extra Tutorials</h1> 
+                <!--------------------------------------------------| ROW 3 |-------------------------------------------------->
+                <div class="row" style="margin: auto;">
+
+                    <!-- Dashboard -->
+                    <div class="col-md-4">
+                        <div class="card mb-4 shadow-sm">
+                            <video class="bd-placeholder-img card-img-top" controls>
+                                <!-- Add videos to videos folder and add the extension below -->
+                                <source src="videos/" type="video/mp4">
+                            </video>
+
+                            <div class="card-body">
+                                <p class="card-text"><span style="font-weight: bold">Dashboard</span></p>
+                                <p class="card-text"> <br>View past test results</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                            onClick="location.href='dashboard/dashboard.html'">
+                                            My Dashboard
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Adding Physicians -->
+                    <div class="col-md-4">
+                        <div class="card mb-4 shadow-sm">
+                            <video class="bd-placeholder-img card-img-top" controls>
+                                <!-- Add videos to videos folder and add the extension below -->
+                                <source src="videos/" type="video/mp4">
+                            </video>
+
+                            <div class="card-body">
+                                <p class="card-text"><span style="font-weight: bold">My Physicians</span></p>
+                                <p class="card-text">Connect with your doctor and share your test results</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                            onClick="location.href='patients/myPhysicians.html'">
+                                            My Physicians
+                                        </button>
+                                    </div>
+                                    <small class="text-muted">
+                                        <!-- No Time Duration Estimate --></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card mb-4 shadow-sm">
+                            <video class="bd-placeholder-img card-img-top" controls>
+                                <!-- Add videos to videos folder and add the extension below -->
+                                <source src="videos/" type="video/mp4">
+                            </video>
+
+                            <div class="card-body">
+                                <p class="card-text"><span style="font-weight: bold">My Profile</span></p>
+                                <p class="card-text">Save your medical history or change your account information</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                            onClick="location.href='patients/profile.html'">
+                                            My Profile
+                                        </button>
+                                    </div>
+                                    <small class="text-muted">
+                                        <!-- No Time Duration Estimate --></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!------------------------------------------------| END ROW 3 |------------------------------------------------>
+    </main>
+
+    <!-- Firebase Items-->
+    <script src="/__/firebase/7.21.0/firebase-app.js"></script>
+
+    <script src="/__/firebase/7.7.0/firebase-auth.js"></script>
+    <script src="/__/firebase/7.7.0/firebase-firestore.js"></script>
+    <script src="/__/firebase/7.7.0/firebase-functions.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-firestore.js"></script>
+
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
+    <script src="/__/firebase/7.23.0/firebase-firestore.js"></script>
+
+
+    <!-- Check if user is signed in -->
+    <script>
+        var db = firebase.firestore();
+        (async function checkUser() {
+            await firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    id = user.uid;
+                    db.collection("users").doc(id)
+                        .get()
+                        .then(doc => {
+                            let type = doc.data().type;
+                            if (type != 'user') {
+                                console.log("Physician Account. Access Denied.");
+                                window.location = '../404.html';
+                            }
+                        });
+                } else {
+                    console.log("Not logged in");
+                    window.location = '../index.html';
+                }
+            });
+        })();
+    </script>
+
+</body>
+
+</html>
