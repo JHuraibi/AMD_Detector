@@ -83,13 +83,14 @@ async function loadDocument(userID, testName) {
 /**
  * 1 Hour 	==  3 600 000 ms
  * 12 Hours == 43 200 000 ms
+ * 24 Hours == 86 400 000 ms
  * @returns {boolean}
  */
 function lessThan24Hours() {
 	let current = Date.now();
 	let timeStamp = testResult.TimeStampMS;
 	
-	return (current - timeStamp) < 43200000;
+	return (current - timeStamp) < 86400000;
 }
 
 function afterMidnight() {
