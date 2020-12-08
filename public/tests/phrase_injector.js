@@ -1,5 +1,12 @@
+/**
+ * (Fluff) Returns a random "happy" phrase that is shown on the popup window that
+ * 	occurs between when the left eye test ends and the right eye begins.
+ * To see an example -> full_bars.html:121, as of Dec 6, 2020
+ *
+ * @returns {string}
+ */
 function writePhrase() {
-	// NOTE: Each phrase ends with a single whitespace
+	// NOTE: Notice that each phrase ends with a single whitespace
 	let phrases = [
 		"Great! ",
 		"Nicely Done! ",
@@ -14,7 +21,8 @@ function writePhrase() {
 		"Fabulous! ",
 	]
 	
-	let phrase = phrases[Math.floor(Math.random() * phrases.length)];
+	let index = Math.floor(Math.random() * phrases.length);
+	let phrase = phrases[index];
 	
 	if (!phrase){
 		console.log("Problem with loading phrase.")
