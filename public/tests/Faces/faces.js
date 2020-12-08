@@ -21,8 +21,8 @@ var canvas2 = document.getElementById("canvas2");			// Left eye Canvas
 var rightBtn = document.getElementById("rightBtn");			// Button to initate right eye test
 var leftBtn = document.getElementById("leftBtn");			// Button to initate left eye test
 var bothBtn = document.getElementById("bothBtn");			// Button to intiate both eye test
-var nexteyebtn = document.getElementById("nexttestbtn");	// Button to iniate next eye when user selects both eyes
 var nextEye = document.getElementById("nextEye");			// To display the next eye div
+var eyeSelector = document.getElementById("eyeSelector");
 var c = canvas.getContext('2d');
 var c2 = canvas2.getContext('2d');
 let exitBtns = document.getElementById('exitTestBtns');
@@ -257,16 +257,6 @@ function sKey() {
 //End of function (Past 2 functions)
 
 
-// function to hide display buttons
-nexteyebtn.style.display = "none";
-nextEye.style.display = "none";
-function hideBtns() {
-	rightBtn.style.display = "none";
-	leftBtn.style.display = "none";
-	bothBtn.style.display = "none";
-}
-//End of function
-
 //function to clear canvas after each iteration
 function clearCanvas() {
 	c.clearRect(0, 0, size, size);
@@ -312,7 +302,6 @@ function randomSymbol() {
 
 	}
 	if (leftEyeInProgress) {
-		console.log("In the else c2 random symbols")
 		// Canvas 2
 		sizingSymbols();
 		c2.beginPath();
@@ -336,7 +325,9 @@ function randomSymbol() {
 
 //Function to test right eye only
 function rightOption() {
-	hideBtns();
+
+	eyeSelector.style.display = "none";
+	canvas.style.display = "inherit";
 	rightEyeInProgress = true;
 	bothREyeinProgress = false;
 	leftEyeInProgress = false;
@@ -350,7 +341,8 @@ function rightOption() {
 //Function to test left eye only
 function leftOption() {
 
-	hideBtns();
+	eyeSelector.style.display = "none";
+	canvas2.style.display = "inherit";
 	leftEyeInProgress = true;
 	rightEyeInProgress = false;
 	bothREyeinProgress = false;
@@ -365,7 +357,8 @@ function leftOption() {
 //Function to test both eyes
 function bothOption() {
 
-	hideBtns();
+	eyeSelector.style.display = "none";
+	canvas.style.display = "inherit";
 	bothREyeinProgress = true;
 	rightEyeInProgress = false;
 	leftEyeInProgress = false;
@@ -431,7 +424,6 @@ function nexttest() {
 	canvas2.style.display = "none";
 
 	nextEye.style.display = "inline-block";
-	nexteyebtn.style.display = "inline-block";
 	bothREyeinProgress = false;
 	bothLEyeInProgress = true;
 
@@ -471,7 +463,6 @@ function leftEyeTest() {
 		console.log("In Left both if statement")
 		console.log(a);
 		nextEye.style.display = "none";
-		nexteyebtn.style.display = "none";
 		exitBtns.style.display = "none";
 		if (a < 8) {
 			// console.log("In test 2 loop");

@@ -23,7 +23,6 @@ var canvas2 = document.getElementById("canvas2");
 var rightBtn = document.getElementById("rightBtn");
 var leftBtn = document.getElementById("leftBtn");
 var bothBtn = document.getElementById("bothBtn");
-var nexteyebtn = document.getElementById("nexttestbtn");
 var nextEye = document.getElementById("nextEye");
 var c = canvas.getContext('2d');
 var c2 = canvas2.getContext('2d');
@@ -308,7 +307,6 @@ function dKey() {
 
 
 // function to hide display buttons
-nexteyebtn.style.display = "none";
 nextEye.style.display = "none";
 function hideBtns() {
 	rightBtn.style.display = "none";
@@ -392,7 +390,8 @@ function randomSymbol() {
 
 //Function for right eye test only
 function rightOption() {
-	hideBtns();
+	eyeSelector.style.display = "none";
+	canvas.style.display = "inherit";
 	rightEyeInProgress = true;
 	bothREyeinProgress = false;
 	leftEyeInProgress = false;
@@ -407,7 +406,9 @@ function rightOption() {
 //Function of left eye test only
 function leftOption() {
 
-	hideBtns();
+	
+	eyeSelector.style.display = "none";
+	canvas.style.display = "inherit";
 	leftEyeInProgress = true;
 	rightEyeInProgress = false;
 	bothREyeinProgress = false;
@@ -423,7 +424,9 @@ function leftOption() {
 //Function to test both eyes
 function bothOption() {
 
-	hideBtns();
+	
+	eyeSelector.style.display = "none";
+	canvas.style.display = "inherit";
 	bothREyeinProgress = true;
 	rightEyeInProgress = false;
 	leftEyeInProgress = false;
@@ -491,7 +494,6 @@ function nexttest() {
 
 
 	nextEye.style.display = "inline-block";
-	nexteyebtn.style.display = "inline-block";
 	bothREyeinProgress = false;
 	bothLEyeInProgress = true;
 
@@ -510,9 +512,11 @@ function leftEyeTest() {
 	canvas2.style.display = "inline-block";
 
 	// console.log("Test2");
+	console.log("Test2");
 	if (leftEyeInProgress) {
 		if (a < 5) {
 			// console.log("In test 2 loop");
+			console.log("In test 2 loop");
 			clearCanvas();
 			blackDot();
 			randomSymbol();
@@ -528,10 +532,10 @@ function leftEyeTest() {
 
 	if (bothLEyeInProgress) {
 		nextEye.style.display = "none";
-		nexteyebtn.style.display = "none";
 		exitBtns.style.display = "none";
 		if (a < 5) {
 			// console.log("In test 2 loop");
+			console.log("In test 2 loop");
 			clearCanvas();
 			blackDot();
 			randomSymbol();

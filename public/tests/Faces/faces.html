@@ -54,15 +54,34 @@
 				</nav>
 			</div>
 		</header>
-
-
+		
+		<!-- Which eyes to test -->
+		<div class="instruct" id="eyeSelector">
+			<p>
+				Choose which eye to test. Choosing the left eye requires you to cover your right eye. Choosing the right
+				eye
+				requires you to cover your left eye. Choosing both eyes will do both processes, starting with the left
+				eye.
+			</p>
+			<button id="lefteye" class="btn btn-sm btn-outline-secondary" onclick="leftOption(); updateButtons()"
+					style="color: #282828; border-color: #282828;">Test Left Eye
+			</button>
+			<button id="botheyes" class="btn btn-sm btn-outline-secondary" onclick="bothOption(); updateButtons()"
+					style="color: #282828; border-color: #282828;">Test Both Eyes
+			</button>
+			<button id="righteye" class="btn btn-sm btn-outline-secondary" onclick="rightOption(); updateButtons()"
+					style="color: #282828; border-color: #282828;">Test Right Eye
+			</button>
+			<!-- Use a basic text element here to test the check mark -->
+		</div>
+		
 		<main class="canvas-container">
 			<div>
-				<canvas id="canvas1"></canvas>
-				<canvas id="canvas2"></canvas>
+				<canvas id="canvas1" style="display: none;"></canvas>
+				<canvas id="canvas2" style="display: none;"></canvas>
 			</div>
 
-			<div class="instruct" id="nextEye">
+			<div class="instruct" id="nextEye" style="display: none">
 				<p>
 					<script>document.write(writePhrase())</script>
 					Now cover your left eye, and with your right eye focus on the black dot in the center.
@@ -70,21 +89,6 @@
 				</p>
 				<button onclick="leftEyeTest()" id="nexttestbtn" class="btn btn-sm btn-outline-secondary"
 					style="color: #282828; border-color: #282828;">Start next eye</button>
-			</div>
-
-			<div>
-				<div class="instuct btn-group" id="btns">
-					<button id="leftBtn" onclick="leftOption();" class="btn btn-sm btn-outline-secondary test-buttons">
-						Left Eye
-					</button>
-					<button id="bothBtn" onclick="bothOption();" class="btn btn-sm btn-outline-secondary test-buttons">
-						Both Eyes
-					</button>
-					<button onclick="rightOption();" id="rightBtn"
-						class="btn btn-sm btn-outline-secondary test-buttons">
-						Right Eye
-					</button>
-				</div>
 			</div>
 		</main>
 
@@ -194,6 +198,10 @@
 	</script>
 
 	<script>
+		function updateButtons() {
+			document.getElementById("eyeSelector").style.display = "none";
+		}
+		
 		function showStatusIndicator() {
 			let uploadStatusIndicator = document.getElementById('uploadStatus');
 			uploadStatusIndicator.style.display = "inherit";
