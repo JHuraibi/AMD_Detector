@@ -20,6 +20,24 @@ class SymbolsDAO {
 		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
 		this.isPhysician = false;
 	}
+
+	// TODO: Determine how to handle empty fields but test WAS taken?
+	static getWhichTakenResults(dataJSON) {
+		let whichEyesRecord = {
+			left: false,
+			right: false
+		};
+		
+		if (dataJSON.LeftResultsSymbols) {
+			whichEyesRecord.left = true;
+		}
+		
+		if (dataJSON.RightResultsSymbols) {
+			whichEyesRecord.right = true;
+		}
+		
+		return whichEyesRecord;
+	}
 	
 	async loadForDashboard() {
 		await this.dbRef
@@ -34,7 +52,7 @@ class SymbolsDAO {
 					this.docList.push(extractedDoc);
 				});
 			});
-
+		
 		// this.manualAdd();
 	}
 	
@@ -47,7 +65,7 @@ class SymbolsDAO {
 			.collection("Symbols")
 			.doc(testID)
 			.get()
-			.then(function(doc) {
+			.then(function (doc) {
 				if (!doc) {
 					console.log("Document not found. ID: " + testID);
 					return;

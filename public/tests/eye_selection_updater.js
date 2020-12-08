@@ -29,10 +29,13 @@
  */
 
 
-console.log("JS LOADED!");
+// May be possible to merge two JSONs:
+// 	Just += the individual fields of each.
+// 	Probably use a static function in each DAO
 
 let dbRef = firebase.firestore();
 let testResult;
+let whichEyesTested;
 
 // TODO: Refactor name and flow control
 async function updateEyeSelection(userID, testName) {
@@ -42,25 +45,24 @@ async function updateEyeSelection(userID, testName) {
 		console.log("No document loaded");
 		return;
 	}
-	else if (!testResult.TimeStampMS){
+	else if (!testResult.TimeStampMS) {
 		console.log("Error retrieving timestamp of loaded document");
 		return;
 	}
 	
-	console.log("Current: " + Date.now());
-	console.log("Current: " + testResult.TimeStampMS);
-	
-	if(!lessThan24Hours()){
+	if (!lessThan24Hours()) {
 		console.log("Last Test Result older than 24 hours.");
 		return;
 	}
 	
-	if(!afterMidnight()){
+	if (!afterMidnight()) {
 		console.log("Last Results older than midnight of today.");
 		return;
 	}
 	
 	// Call static method of appropriate DAO to check which eyes were tested
+	checkWhichEyesTested(testName);
+	updateButtons();
 }
 
 async function loadDocument(userID, testName) {
@@ -101,6 +103,47 @@ function afterMidnight() {
 	return timeStamp >= midnight;
 }
 
-// May be possible to merge two JSONs:
-// 	Just += the individual fields of each.
-// 	Probably use a static function in each DAO
+function checkWhichEyesTested(testName) {
+	whichEyesTested = {
+		left: false,
+		right: false
+	};
+	
+	switch (testName) {
+		case 'symbols':
+			whichEyesTested = SymbolsDAO.getWhichTakenResults();
+			break;
+		default:
+			console.log("Unrecognized test name provided. Test Name: " + testName);
+			break;
+	}
+}
+
+function updateButtons() {
+	let message = document.getElementById("whichEyeStatusMessage");
+	
+	if (whichEyesTested.left && whichEyesTested.left) {
+		hideLeftOption();
+		hideRight();
+		showLeftCheckmark();
+		showRightCheckmark();
+		message.innerHTML = "Looks like you've finished both your eyes today for this test";
+	}
+	else if (whichEyesTested.left){
+		hideLeftOption();
+		showLeftCheckmark();
+		message.innerHTML = "Looks like you've finished your right eye " +
+			"already today for this test. You can still take the test for your right eye.";
+	}
+	else if (whichEyesTested.right){
+		hideRight();
+		showLeftCheckmark();
+		showRightCheckmark();
+		message.innerHTML = "Looks like you've finished your right eye " +
+			"already today for this test. You can still take the test for your left eye.";
+	}
+}
+
+function hideLeftOption(){
+	let leftButton = document.getElementById("lefteye");
+}
