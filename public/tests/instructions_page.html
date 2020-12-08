@@ -1,53 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-	
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="icon" type="image/png" href="../images/favicon-32x32.png" sizes="32x32"/>
-		<link rel="icon" type="image/png" href="../images/favicon-16x16.png" sizes="16x16"/>
-		
-		<title>Instructions</title>
-		
-		<link href="../scss/custom.css" rel="stylesheet">
-		
-		<style>
-			.instruct {
-				width: 400px;
-				padding: 30px;
-				margin: 100px auto;
-				border-radius: 10px;
-				background: white;
-				box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
-				text-align: center;
-			}
-		</style>
-	</head>
-	
-	<body>
-		<header>
-			<div class="navbar navbar-dark bg-dark shadow-sm">
-				<div class="container d-flex justify-content-between">
-					<a href="#" class="navbar-brand d-flex align-items-center">
-						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
-							 stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2"
-							 viewBox="0 0 100 100" focusable="false">
-							<path d="M 10,30 A 20,20 0,0,1 50,30 A 20,20 0,0,1 90,30 Q 90,60 50,90 Q 10,60 10,30 z"/>
-							<circle cx="12" cy="13" r="4"/>
-						</svg>
-						<!--        <strong>Your Results</strong>-->
-					</a>
-					
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
-							aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-						<a class="sign-out"><span>Sign Out</span></a>
-					</button>
-				</div>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/png" href="../images/favicon-32x32.png" sizes="32x32" />
+	<link rel="icon" type="image/png" href="../images/favicon-16x16.png" sizes="16x16" />
+
+	<title>Instructions</title>
+
+	<link href="../scss/custom.css" rel="stylesheet">
+
+	<style>
+		.instruct {
+			width: 400px;
+			padding: 30px;
+			border-radius: 10px;
+			background: white;
+			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+			text-align: center;
+			margin: 10px;
+			height: auto;
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<div class="navbar navbar-dark bg-dark shadow-sm">
+			<div class="container d-flex justify-content-between">
+				<a href="#" class="navbar-brand d-flex align-items-center">
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+						stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2"
+						viewBox="0 0 100 100" focusable="false">
+						<path d="M 10,30 A 20,20 0,0,1 50,30 A 20,20 0,0,1 90,30 Q 90,60 50,90 Q 10,60 10,30 z" />
+						<circle cx="12" cy="13" r="4" />
+					</svg>
+					<!--        <strong>Your Results</strong>-->
+				</a>
+
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
+					aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+					<a class="sign-out"><span>Sign Out</span></a>
+				</button>
 			</div>
-		</header>
-		<br>
-		<div style="text-align: center;">
-			<div class="instruct">
+		</div>
+	</header>
+	<br>
+	<div style="text-align: center;">
+
+
+			<div class="instruct" style="display: inline-block;">
 				<script src="instructions_injector.js"></script>
 				<script>
 					// The URL will have which test attached to the end
@@ -58,13 +61,13 @@
 					var customInstructions = retrieveInstructions(whichTest);
 					var destinationTestPage = retrieveURLLink(whichTest);
 				</script>
-				
+
 				<h2>
 					<script>
 						document.write(testTitle);
 					</script>
 				</h2>
-				
+
 				<p>
 					<script>
 						document.write(customInstructions);
@@ -73,68 +76,97 @@
 						<br><br>Ensure That Your Eyes are 1 foot (12 inches) away from your screen.
 					</span>
 				</p>
-				
+
 				<div class="btn-group">
-					<button type="button" onClick="location.href=destinationTestPage"
-							id="startButton"
-							class="btn btn-sm btn-outline-secondary">Start Test
+					<button type="button" onClick="location.href=destinationTestPage" id="startButton"
+						class="btn btn-sm btn-outline-secondary">Start Test
 					</button>
 				</div>
 			</div>
-			
-			<div class="instruct" id="speedSlider">
-				<p>
-					Set the test speed below to change the rate at which your tests will run.
-				</p>
-				
-				<input type="range" id="speed" max="5" min="1" style="width:80%" oninput="num.value = this.value">
-				<output id="num"></output>
-				<div class="btn-group">
-					<button type="button" onclick="setspeed()" class="btn btn-sm btn-outline-secondary" id="speedbtn">Set Speed</button>
+
+			<div style="display: inline-block;" >
+
+				<div class="instruct" >
+
+
+					<video class="bd-placeholder-img card-img-top" controls id="video">
+						<!-- Add videos to videos folder and add the extension below -->
+						<source src="videos/" type="video/mp4">
+					</video>
+
+				</div>
+
+				<div class="instruct" id="speedSlider" style="height: 175px;">
+					<p>
+						Set the test speed below to change the rate at which your tests will run.
+					</p>
+
+					<input type="range" id="speed" max="5" min="1" style="width:80%" oninput="num.value = this.value">
+					<output id="num"></output>
+					<div class="btn-group">
+						<button type="button" onclick="setspeed()" class="btn btn-sm btn-outline-secondary"
+							id="speedbtn">Set
+							Speed</button>
+					</div>
 				</div>
 			</div>
-			
-			<script>
-				let distancePrompt = document.getElementById("distancePrompt");
-				let speedSlider = document.getElementById('speedSlider');
-				let startButton = document.getElementById('startButton');
-				
-				// Hide the speed slider if the user is taking the Amsler Grid test
-				if (whichTest == "amsler_grid") {
-					speedSlider.style.display = "none";
-				}
-				
-				// Free Draw: Hide speed slider. Hide distance prompt. Button text "Start Test" to "Start".
-				if (whichTest == "free_draw") {
-					distancePrompt.style.display = "none";
-					speedSlider.style.display = "none";
-					startButton.innerText = "Start";
-				}
-			</script>
-		</div>
-		<script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-app.js"></script>
-		<script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-firestore.js"></script>
-		
-		
-		<script src="/__/firebase/7.7.0/firebase-auth.js"></script>
-		
-		<script src="/__/firebase/7.7.0/firebase-functions.js"></script>
-		
-		<!-- Initialize Firebase -->
-		<script src="/__/firebase/init.js"></script>
-		<script src="growingCircles/growingCircle.js"></script>
-		<script src="../home.js"></script>
-		<script src="speed.js"></script>
-		
+
+
 		<script>
-			// var db = firebase.initializeApp(firebaseConfig);
-			function setspeed() {
-				var obj = new FirebaseDAO(firebase.firestore());
-				obj.savespeed();
+			let distancePrompt = document.getElementById("distancePrompt");
+			let speedSlider = document.getElementById('speedSlider');
+			let startButton = document.getElementById('startButton');
+
+			// Hide the speed slider if the user is taking the Amsler Grid test
+			if (whichTest == "amsler_grid") {
+				speedSlider.style.display = "none";
+			}
+
+			// Free Draw: Hide speed slider. Hide distance prompt. Button text "Start Test" to "Start".
+			if (whichTest == "free_draw") {
+				distancePrompt.style.display = "none";
+				speedSlider.style.display = "none";
+				startButton.innerText = "Start";
+			}
+
+			if (whichTest == "amsler_grid") {
+				document.getElementById("video").src="../videos/AmslerGrid.MP4";
+			}else if (whichTest == "free_draw") {
+				document.getElementById("video").src="../videos/FreeDraw.mp4";
+			}else if (whichTest == "growing_circles") {
+				document.getElementById("video").src="../videos/GrowingCircles.mp4";
+			}else if (whichTest == "full_bars") {
+				document.getElementById("video").src="../videos/Fullbars.mp4";
+			}else if (whichTest == "symbols") {
+				document.getElementById("video").src="../videos/Symbols.mp4";
+			}else if (whichTest == "smiley") {
+				document.getElementById("video").src="../videos/Smiley.mp4";
 			}
 		</script>
+	</div>
+	<script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-firestore.js"></script>
 
-		<!-- Check if user is signed in -->
+
+	<script src="/__/firebase/7.7.0/firebase-auth.js"></script>
+
+	<script src="/__/firebase/7.7.0/firebase-functions.js"></script>
+
+	<!-- Initialize Firebase -->
+	<script src="/__/firebase/init.js"></script>
+	<script src="growingCircles/growingCircle.js"></script>
+	<script src="../home.js"></script>
+	<script src="speed.js"></script>
+
+	<script>
+		// var db = firebase.initializeApp(firebaseConfig);
+		function setspeed() {
+			var obj = new FirebaseDAO(firebase.firestore());
+			obj.savespeed();
+		}
+	</script>
+
+	<!-- Check if user is signed in -->
 	<script>
 		var db = firebase.firestore();
 		(async function checkUser() {
@@ -150,14 +182,14 @@
 								window.location = '../404.html';
 							}
 						});
-				}else{
+				} else {
 					console.log("Not logged in");
 					window.location = '../index.html';
 				}
 			});
 		})();
 	</script>
-	
-	</body>
+
+</body>
 
 </html>
