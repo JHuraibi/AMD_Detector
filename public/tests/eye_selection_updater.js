@@ -173,6 +173,11 @@ function checkWhichEyesTested(testName) {
 			staticDAO = SymbolsDAO;
 			console.log("SymbolsDAO used.");
 			break;
+		case 'Smiley':
+			staticDAO = FacesDAO;
+			console.log("FacesDAO used.");
+			break;
+		
 		default:
 			console.log("Unrecognized test name provided. Test Name: " + testName);
 			break;
@@ -180,7 +185,7 @@ function checkWhichEyesTested(testName) {
 	
 	// TODO: Would be cleaner to ditch testResults all together
 	testResults.forEach((result) => {
-		staticDAO.getWhichTakenResults(whichEyesTested, result);
+		staticDAO.checkWhichEyes(whichEyesTested, result);
 	});
 }
 

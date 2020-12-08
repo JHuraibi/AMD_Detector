@@ -21,14 +21,14 @@ class SymbolsDAO {
 		this.isPhysician = false;
 	}
 
-	// TODO: Determine how to handle empty fields but test WAS taken
+	// TODO: Determine how to handle a test that was taken but had empty fields
 	/**
-	 * !! Only updates true values. Leaves the false value as-in.
+	 * !! Only updates for true values. Leaves the false values as-in.
 	 * @param whichEyesRecord
 	 * @param dataJSON
 	 * @returns {*}
 	 */
-	static getWhichTakenResults(whichEyesRecord, dataJSON) {
+	static checkWhichEyes(whichEyesRecord, dataJSON) {
 		if (dataJSON.LeftResultsSymbols.length) {
 			whichEyesRecord.left = true;
 		}
