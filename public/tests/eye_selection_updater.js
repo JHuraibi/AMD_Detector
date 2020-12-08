@@ -9,7 +9,7 @@
  * 			visual indicator that the user has indeed already taken the partical test
  * 			they are attempting to (re)take.
  *
- * 	General Plan:
+ * 	General Layout:
  *  [1] Load document
  *  [2] Check doc is LESS THAN 24 hours old
  * 		No:  Return
@@ -28,17 +28,20 @@
  * 			 that the user has already fully completed the test for the current day
  */
 
-
-// May be possible to merge two JSONs:
-// 	Just += the individual fields of each.
-// 	Probably use a static function in each DAO
-
 let dbRef = firebase.firestore();
 let testResult;
 let whichEyesTested;
 
-// TODO: Refactor name and flow control
+/**
+ * Functionality controller. Uses gate-style if()'s to check if the user has taken the test in
+ * 	question within the last 24 hours. The if conditions are ordered to become more specific in
+ * 	likelihood in an attempt to be more efficient (See "General Layout" above).
+ * @param userID
+ * @param testName
+ * @returns {Promise<void>}
+ */
 async function updateEyeSelection(userID, testName) {
+	// TODO: Refactor name and flow control
 	await loadDocument(userID, testName);
 	
 	if (!testResult) {
@@ -60,14 +63,21 @@ async function updateEyeSelection(userID, testName) {
 		return;
 	}
 	
-	// Call static method of appropriate DAO to check which eyes were tested
 	checkWhichEyesTested(testName);
 	updateEyeButtons();
 	displayLastTestTime();
 }
 
+/**
+ * Loads the single most-recent test result to record of the current user and the specified
+ * 	test to get its timestamp.
+ * @param userID
+ * @param testName
+ * @returns {Promise<void>}
+ */
 async function loadDocument(userID, testName) {
-	// TODO: Why do non "foreach" methods not getting the document?
+	// !! CRITICAL: Needs to check the TWO most-recent documents
+	// TODO: Why do non "foreach" methods not get the document?
 	await dbRef.collection("TestResults")
 		.doc(userID)
 		.collection(testName)
@@ -94,6 +104,13 @@ function lessThan24Hours() {
 	return (current - timeStamp) < 86400000;
 }
 
+/**
+ * Uses a new Date object to get the current date. Then sets the hour, minute, seconds,
+ * 	and milliseconds to 0 to get the current day's midnight in milliseconds
+ * 	(i.e. 00:00:00:00 HH:MM:SS:MsMs)
+ * Returns true if the test result's timestamp is equal to or after this midnight value.
+ * @returns {boolean}
+ */
 function afterMidnight() {
 	let midnight = new Date();
 	let timeStamp = testResult.TimeStampMS;
@@ -106,6 +123,11 @@ function afterMidnight() {
 	return timeStamp >= midnight;
 }
 
+/**
+ * Uses a static method in the DAO to check which eye has testing result data.
+ * 	The DAO returns the results of its check as a JSON that was initialized to false.
+ * @param testName
+ */
 function checkWhichEyesTested(testName) {
 	whichEyesTested = {
 		left: false,
@@ -123,14 +145,40 @@ function checkWhichEyesTested(testName) {
 	}
 }
 
+/**
+ * Updates the HTML elements on the testing page to reflect what eye(s) were
+ * 	found to already have been completed during the current day. The local
+ * 	JSON "whichEyesTested" records which eyes were determined to be complete.
+ * 		i.e.
+ * 			whichEyesTested.left is true  --> left eye was found to be tested
+ * 			whichEyesTested.right is true --> right eye was found to tested
+ *
+ * 	Left and Right Complete:
+ * 		- Disable all 3 eye selection buttons
+ * 		- Show check marks under all 3 buttons
+ * 		- Display message that says both eyes complete
+ *
+ * 	Left Complete:
+ * 		- Disable Left eye and Both eye selection buttons
+ * 		- Show check marks under Left eye and Both buttons
+ * 		- Display message that says the left has already been complete
+ * 		- Display message that says the user may still test the right
+ * 			eye if they wish
+ *
+ *	Right complete
+ *		- Disable Right eye and Both eye selection buttons
+ * 		- Show check marks under Right eye and Both buttons
+ * 		- Display message that says the right has already been complete
+ * 		- Display message that says the user may still test the left
+ * 			eye if they wish
+ *
+ * 	Neither complete:
+ * 		- Take no action. Simple console out for acknowledgement.
+ */
 function updateEyeButtons() {
 	let message = document.getElementById("whichEyeStatusMessage");
 	
-	console.log("L length: " + whichEyesTested.left);
-	console.log("R length: " + whichEyesTested.right);
-	
 	if (whichEyesTested.left && whichEyesTested.right) {
-		console.log("BOTH");
 		document.getElementById("lefteye").disabled = true;
 		document.getElementById("botheyes").disabled = true;
 		document.getElementById("righteye").disabled = true;
@@ -139,12 +187,10 @@ function updateEyeButtons() {
 		document.getElementById("rightCheckmark").visibility = "visible";
 		document.getElementById("bothCheckmark").visibility = "visible";
 		
-		// message.style.display = "block";
 		document.getElementById("whichEyeStatusMessage").innerHTML =
 			"Looks like you've finished both your eyes today for this test!";
 	}
 	else if (whichEyesTested.left) {
-		console.log("[1] LEFT DONE");
 		document.getElementById("lefteye").disabled = true;
 		document.getElementById("botheyes").disabled = true;
 		
@@ -154,7 +200,6 @@ function updateEyeButtons() {
 			"already today for this test. You can still take the test for your right eye.";
 	}
 	else if (whichEyesTested.right) {
-		console.log("[2] RIGHT DONE");
 		document.getElementById("righteye").disabled = true;
 		document.getElementById("botheyes").disabled = true;
 		
@@ -163,8 +208,16 @@ function updateEyeButtons() {
 		message.innerHTML = "Looks like you've finished your right eye " +
 			"already today for this test. You can still take the test for your left eye.";
 	}
+	else {
+		console.log("No results for either eye found for the current day.");
+	}
 }
 
+/**
+ * Simple time to text converter to display the time of the last test result to the
+ * 	eye selection window for the user.
+ * Timezone currently hard-coded to US East
+ */
 function displayLastTestTime() {
 	let time = (new Date(testResult.TimeStampMS)).toLocaleTimeString("en-US", {timeZone: "America/New_York"});
 	document.getElementById("lastTestTime").innerHTML =
