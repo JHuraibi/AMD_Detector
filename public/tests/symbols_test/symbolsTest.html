@@ -130,13 +130,13 @@
 		<script src="../eye_selection_updater.js"></script>
 		
 		<script>
-			let dbRef = firebase.firestore();
-			let userRef = null;
-			
-			firebase.auth().onAuthStateChanged(user => {
-				console.log(user);
-				userRef = user;
-			});
+			// let dbRef = firebase.firestore();
+			// let userRef = null;
+			//
+			// firebase.auth().onAuthStateChanged(user => {
+			// 	console.log(user);
+			// 	userRef = user;
+			// });
 		</script>
 		
 		<script>
@@ -223,7 +223,8 @@
 							}
 							else {
 								// NOTE: The test name parameter needs to the match with the Firestore collection
-								updateEyeSelection(user.uid, "symbols");
+								console.log("FIREBASE USER ID");
+								updateEyeSelection(id, "Symbols");
 							}
 						});
 				} else {

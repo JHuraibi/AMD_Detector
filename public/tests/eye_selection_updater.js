@@ -28,25 +28,34 @@
  * 			 that the user has already fully completed the test for the current day
  */
 
+
+console.log("JS LOADED!");
+
 let dbRef = firebase.firestore();
-let doc;
+let testResult;
 
 // TODO: Refactor name and flow control
 async function updateEyeSelection(userID, testName) {
-	doc = await loadDocument(userID, testName);
+	await loadDocument(userID, testName);
 	
-	if (!doc) {
+	if (!testResult) {
 		console.log("No document loaded");
 		return;
 	}
+	else if (!testResult.TimeStampMS){
+		console.log("Error retrieving timestamp of loaded document");
+		return;
+	}
 	
-	if(!lessThan12Hours()){
-		console.log("Last Test Result older than 12 hours.");
+	console.log("Current: " + Date.now());
+	console.log("Current: " + testResult.TimeStampMS);
+	
+	if(!lessThan24Hours()){
 		console.log("Last Test Result older than 24 hours.");
 		return;
 	}
 	
-	if(!afterMidnight){
+	if(!afterMidnight()){
 		console.log("Last Results older than midnight of today.");
 		return;
 	}
@@ -54,23 +63,42 @@ async function updateEyeSelection(userID, testName) {
 	// Call static method of appropriate DAO to check which eyes were tested
 }
 
-async function loadDocument() {
-	
-	dbRef.collection("TestResults")
+async function loadDocument(userID, testName) {
+	// TODO: Why do non "foreach" methods not getting the document?
+	await dbRef.collection("TestResults")
 		.doc(userID)
 		.collection(testName)
 		.orderBy("TimeStampMS", "desc")
+		.limit(1)
 		.get()
 		.then((querySnapshot) => {
-			if (querySnapshot[0]) {
-				doc = querySnapshot.data();
-			}
+			querySnapshot.forEach((doc) => {
+				testResult = doc.data();
+			});
 		});
 }
 
 /**
  * 1 Hour 	==  3 600 000 ms
-	return false;
+ * 12 Hours == 43 200 000 ms
+ * @returns {boolean}
+ */
+function lessThan24Hours() {
+	let current = Date.now();
+	let timeStamp = testResult.TimeStampMS;
+	
+	return (current - timeStamp) < 43200000;
+}
+
+function afterMidnight() {
+	let midnight = new Date();
+	let timeStamp = testResult.TimeStampMS;
+	
+	midnight.setHours(0);
+	midnight.setMinutes(0);
+	midnight.setMilliseconds(0);
+	
+	return timeStamp >= midnight;
 }
 
 // May be possible to merge two JSONs:
