@@ -63,6 +63,7 @@ async function updateEyeSelection(userID, testName) {
 	// Call static method of appropriate DAO to check which eyes were tested
 	checkWhichEyesTested(testName);
 	changeEyeButtons();
+	displayLastTestTime();
 }
 
 async function loadDocument(userID, testName) {
@@ -138,7 +139,8 @@ function changeEyeButtons() {
 		document.getElementById("bothCheckmark").visibility = "visible";
 		
 		// message.style.display = "block";
-		document.getElementById("whichEyeStatusMessage").innerHTML = "Looks like you've finished both your eyes today for this test";
+		document.getElementById("whichEyeStatusMessage").innerHTML =
+			"Looks like you've finished both your eyes today for this test!";
 	}
 	else if (whichEyesTested.left) {
 		console.log("[1] LEFT DONE");
@@ -162,9 +164,8 @@ function changeEyeButtons() {
 	}
 }
 
-function displayLastTestTime(){
-	let time = (new Date(testResult.TimeStampMS)).toLocaleTimeString("en-US", { timeZone: "America/New_York" });
-	let time = (new Date(testResult.TimeStampMS)).toLocaleTimeString("en-US", { timeZone: "America/New_York" });
+function displayLastTestTime() {
+	let time = (new Date(testResult.TimeStampMS)).toLocaleTimeString("en-US", {timeZone: "America/New_York"});
 	document.getElementById("lastTestTime").innerHTML =
-		"Last Test Taken at: " +
+		"Last Test Taken at: " + time;
 }
