@@ -62,7 +62,7 @@ async function updateEyeSelection(userID, testName) {
 	
 	// Call static method of appropriate DAO to check which eyes were tested
 	checkWhichEyesTested(testName);
-	changeEyeButtons();
+	updateEyeButtons();
 	displayLastTestTime();
 }
 
@@ -122,7 +122,7 @@ function checkWhichEyesTested(testName) {
 	}
 }
 
-function changeEyeButtons() {
+function updateEyeButtons() {
 	let message = document.getElementById("whichEyeStatusMessage");
 	
 	console.log("L length: " + whichEyesTested.left);
