@@ -9,6 +9,7 @@
  * 			visual indicator that the user has indeed already taken the partical test
  * 			they are attempting to (re)take.
  *
+ *	CRITICAL: UPDATE
  * 	General Layout:
  *  [1] Load document
  *  [2] Check doc is LESS THAN 24 hours old
@@ -29,79 +30,78 @@
  */
 
 let dbRef = firebase.firestore();
-let testResult;
+// let testResult;
+let testResults = [];
+let newerResult;
+let olderResult;
 let whichEyesTested;
 
 /**
- * Functionality controller. Uses gate-style if()'s to check if the user has taken the test in
- * 	question within the last 24 hours. The if conditions are ordered to become more specific in
- * 	likelihood in an attempt to be more efficient (See "General Layout" above).
  * @param userID
  * @param testName
  * @returns {Promise<void>}
  */
 async function updateEyeSelection(userID, testName) {
 	// TODO: Refactor name and flow control
-	await loadDocument(userID, testName);
+	await loadDocuments(userID, testName);
 	
-	if (!testResult) {
-		console.log("No document loaded");
+	if (!newerResult && !olderResult) {
+		console.log("No documents loaded");
 		return;
 	}
-	else if (!testResult.TimeStampMS) {
-		console.log("Error retrieving timestamp of loaded document");
-		return;
-	}
-	
-	if (!lessThan24Hours()) {
-		console.log("Last Test Result older than 24 hours.");
+	else if (!newerResult.TimeStampMS || !olderResult.TimeStampMS) {
+		console.log("Error retrieving timestamps of loaded documents.");
 		return;
 	}
 	
-	if (!afterMidnight()) {
-		console.log("Last Results older than midnight of today.");
-		return;
-	}
-	
+	checkTestsTakenToday();
 	checkWhichEyesTested(testName);
 	updateEyeButtons();
 	displayLastTestTime();
 }
 
-/**
- * Loads the single most-recent test result to record of the current user and the specified
- * 	test to get its timestamp.
- * @param userID
- * @param testName
- * @returns {Promise<void>}
- */
-async function loadDocument(userID, testName) {
-	// !! CRITICAL: Needs to check the TWO most-recent documents
-	// TODO: Why do non "foreach" methods not get the document?
+async function loadDocuments(userID, testName) {
 	await dbRef.collection("TestResults")
 		.doc(userID)
 		.collection(testName)
 		.orderBy("TimeStampMS", "desc")
-		.limit(1)
+		.limit(2)
 		.get()
 		.then((querySnapshot) => {
+			// TODO: May require a size() call
 			querySnapshot.forEach((doc) => {
-				testResult = doc.data();
-			});
+				saveResult(doc.data());
+			})
 		});
 }
 
-/**
- * 1 Hour 	==  3 600 000 ms
- * 12 Hours == 43 200 000 ms
- * 24 Hours == 86 400 000 ms
- * @returns {boolean}
- */
-function lessThan24Hours() {
-	let current = Date.now();
-	let timeStamp = testResult.TimeStampMS;
+function saveResult(data) {
+	if (!newerResult) {
+		newerResult = data;
+	}
+	else if (!olderResult) {
+		olderResult = data;
+	}
+	else {
+		console.log("Issues loading documents. newer and older variables both occupied.")
+	}
+}
+
+// TODO: Rename
+function checkTestsTakenToday() {
+	if (afterMidnight(newerResult.TimeStampMS)) {
+		testResults.push(newerResult);
+		console.log("Newer today. Time: (" + time(newerResult.TimeStampMS) + ")");
+	}
 	
-	return (current - timeStamp) < 86400000;
+	if (afterMidnight(olderResult.TimeStampMS)) {
+		testResults.push(olderResult);
+		console.log("Older today. Time: (" + time(olderResult.TimeStampMS) + ")");
+	}
+}
+
+function time(ms) {
+	return new Date(ms).toLocaleTimeString("en-US", {timeZone: "America/New_York"});
 }
 
 /**
@@ -111,9 +111,9 @@ function lessThan24Hours() {
  * Returns true if the test result's timestamp is equal to or after this midnight value.
  * @returns {boolean}
  */
-function afterMidnight() {
+function afterMidnight(timestamp) {
 	let midnight = new Date();
-	let timeStamp = testResult.TimeStampMS;
+	let timeStamp = timestamp;
 	
 	midnight.setHours(0);
 	midnight.setMinutes(0);
@@ -134,15 +134,21 @@ function checkWhichEyesTested(testName) {
 		right: false
 	};
 	
+	let staticDAO;
 	switch (testName) {
 		case 'Symbols':
-			whichEyesTested = SymbolsDAO.getWhichTakenResults(testResult);
+			// whichEyesTested = SymbolsDAO.getWhichTakenResults(testResult);
+			staticDAO = SymbolsDAO;
 			console.log("Symbols");
 			break;
 		default:
 			console.log("Unrecognized test name provided. Test Name: " + testName);
 			break;
 	}
+	
+	testResults.forEach((result) => {
+		staticDAO.getWhichTakenResults(whichEyesTested, result);
+	});
 }
 
 /**
@@ -183,9 +189,9 @@ function updateEyeButtons() {
 		document.getElementById("botheyes").disabled = true;
 		document.getElementById("righteye").disabled = true;
 		
-		document.getElementById("leftCheckmark").visibility = "visible";
-		document.getElementById("rightCheckmark").visibility = "visible";
-		document.getElementById("bothCheckmark").visibility = "visible";
+		document.getElementById("leftCheckmark").style.visibility = "visible";
+		document.getElementById("rightCheckmark").style.visibility = "visible";
+		document.getElementById("bothCheckmark").style.visibility = "visible";
 		
 		document.getElementById("whichEyeStatusMessage").innerHTML =
 			"Looks like you've finished both your eyes today for this test!";
@@ -219,7 +225,20 @@ function updateEyeButtons() {
  * Timezone currently hard-coded to US East
  */
 function displayLastTestTime() {
-	let time = (new Date(testResult.TimeStampMS)).toLocaleTimeString("en-US", {timeZone: "America/New_York"});
-	document.getElementById("lastTestTime").innerHTML =
-		"Last Test Taken at: " + time;
+	let message = "Last Test(s) Taken at:";
+	let newerTime;
+	let olderTime;
+	
+	// First if() should be redundant if this function executes at all
+	if (testResults[0]) {
+		newerTime = (new Date(newerResult.TimeStampMS)).toLocaleTimeString("en-US", {timeZone: "America/New_York"});
+		message = message + ("</br>" + newerTime);
+	}
+	
+	if (testResults[1]) {
+		olderTime = (new Date(olderResult.TimeStampMS)).toLocaleTimeString("en-US", {timeZone: "America/New_York"});
+		message = message + ("</br>" + olderTime);
+	}
+	
+	document.getElementById("lastTestTime").innerHTML = message;
 }
