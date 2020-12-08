@@ -62,7 +62,7 @@ async function updateEyeSelection(userID, testName) {
 	
 	// Call static method of appropriate DAO to check which eyes were tested
 	checkWhichEyesTested(testName);
-	updateButtons();
+	changeEyeButtons();
 }
 
 async function loadDocument(userID, testName) {
@@ -108,10 +108,10 @@ function checkWhichEyesTested(testName) {
 		left: false,
 		right: false
 	};
-	
+
 	switch (testName) {
-		case 'symbols':
-			whichEyesTested = SymbolsDAO.getWhichTakenResults();
+		case 'Symbols':
+			whichEyesTested = SymbolsDAO.getWhichTakenResults(testResult);
 			break;
 		default:
 			console.log("Unrecognized test name provided. Test Name: " + testName);
@@ -119,26 +119,29 @@ function checkWhichEyesTested(testName) {
 	}
 }
 
-function updateButtons() {
+function changeEyeButtons() {
 	let message = document.getElementById("whichEyeStatusMessage");
 	
-	if (whichEyesTested.left && whichEyesTested.left) {
+	console.log("NOW: " + new Date(Date.now()).toString());
+	console.log("OTH: " + new Date(testResult.TimeStampMS).toString());
+
+	if (whichEyesTested.left && whichEyesTested.right) {
 		hideLeftOption();
-		hideRight();
-		showLeftCheckmark();
-		showRightCheckmark();
+		// hideRight();
+		// showLeftCheckmark();
+		// showRightCheckmark();
 		message.innerHTML = "Looks like you've finished both your eyes today for this test";
 	}
 	else if (whichEyesTested.left){
 		hideLeftOption();
-		showLeftCheckmark();
+		// showLeftCheckmark();
 		message.innerHTML = "Looks like you've finished your right eye " +
 			"already today for this test. You can still take the test for your right eye.";
 	}
 	else if (whichEyesTested.right){
-		hideRight();
-		showLeftCheckmark();
-		showRightCheckmark();
+		// hideRight();
+		// showLeftCheckmark();
+		// showRightCheckmark();
 		message.innerHTML = "Looks like you've finished your right eye " +
 			"already today for this test. You can still take the test for your left eye.";
 	}
@@ -147,3 +150,8 @@ function updateButtons() {
 function hideLeftOption(){
 	let leftButton = document.getElementById("lefteye");
 }
+
+function hideRightOption(){
+	let leftButton = document.getElementById("righteye");
+}
+

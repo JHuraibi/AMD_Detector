@@ -28,11 +28,11 @@ class SymbolsDAO {
 			right: false
 		};
 		
-		if (dataJSON.LeftResultsSymbols) {
+		if (dataJSON.LeftResultsSymbols.length) {
 			whichEyesRecord.left = true;
 		}
 		
-		if (dataJSON.RightResultsSymbols) {
+		if (dataJSON.RightResultsSymbols.length) {
 			whichEyesRecord.right = true;
 		}
 		
