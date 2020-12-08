@@ -41,18 +41,21 @@
                 color: #282828;
                 border-color: #282828;
             }
-			
-			td {
-                padding-top: 1em;
-			}
-			
-			.check-mark{
-				height: 2em;
-				width: 2em;
-				padding: 0.5em;
-				visibility: hidden;
-			}
-		
+
+            td {
+                padding-top: 0.5em;
+            }
+
+            .check-mark {
+                height: 2em;
+                width: 2em;
+                padding: 0.5em;
+                visibility: hidden;
+            }
+
+            p {
+                margin-bottom: 0.1em;
+            }
 		</style>
 		<script src="../phrase_injector.js"></script>
 	</head>
@@ -86,7 +89,7 @@
 								Test Left Eye Only
 							</button>
 						</td>
-						<td >
+						<td>
 							<button class="btn-extra btn btn-sm btn-outline-secondary" id="botheyes"
 									onclick="bothOption(); updateButtons()">
 								Test Both Eyes
@@ -121,13 +124,20 @@
 						</td>
 					</tr>
 					<tr>
-						<td colspan="3">
+						<td colspan="3" style="padding-top: 0.1em">
 							<p id="lastTestTime">
 								<!-- Updated by eye_selection_updater.js -->
 							</p>
 						</td>
 					</tr>
-					
+					<tr>
+						<td colspan="3">
+							<button onclick="window.location.replace('../../home.html')" class="btn btn-sm btn-outline-secondary"
+									id="returnHome" style="display: none; margin-top: 1em; color: #282828; border-color: #282828;">
+								Return to Homepage
+							</button>
+						</td>
+					</tr>
 				</table>
 			</div>
 			

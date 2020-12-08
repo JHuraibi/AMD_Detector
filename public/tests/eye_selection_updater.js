@@ -196,6 +196,7 @@ function checkWhichEyesTested(testName) {
  * 		- Disable all 3 eye selection buttons
  * 		- Show check marks under all 3 buttons
  * 		- Display message that says both eyes complete
+ * 		- Show the button to return to the home page
  *
  * 	Left Complete:
  * 		- Disable Left eye and Both eye selection buttons
@@ -228,6 +229,8 @@ function updateEyeButtons() {
 		
 		document.getElementById("whichEyeStatusMessage").innerHTML =
 			"Looks like you've finished both your eyes today for this test!";
+		
+		document.getElementById("returnHome").style.display = "inherit";
 	}
 	else if (whichEyesTested.left) {
 		document.getElementById("lefteye").disabled = true;
@@ -258,19 +261,19 @@ function updateEyeButtons() {
  * Timezone currently hard-coded to US East
  */
 function displayLastTestTime() {
-	let message = "Last Test(s) Taken at:";
+	let message = "Last Test(s) Taken Today at:";
 	let newerTime;
 	let olderTime;
 	
-	// First if() should be redundant if this function executes at all
-	if (testResults[0]) {
-		newerTime = (new Date(mostRecentResult.TimeStampMS)).toLocaleTimeString("en-US", {timeZone: "America/New_York"});
-		message = message + ("</br>" + newerTime);
-	}
-	
+	// Printer older result first (if exist)
 	if (testResults[1]) {
 		olderTime = (new Date(secondMostRecentResult.TimeStampMS)).toLocaleTimeString("en-US", {timeZone: "America/New_York"});
 		message = message + ("</br>" + olderTime);
+	}
+
+	if (testResults[0]) {
+		newerTime = (new Date(mostRecentResult.TimeStampMS)).toLocaleTimeString("en-US", {timeZone: "America/New_York"});
+		message = message + ("</br>" + newerTime);
 	}
 	
 	document.getElementById("lastTestTime").innerHTML = message;
