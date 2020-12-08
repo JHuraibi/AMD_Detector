@@ -45,6 +45,13 @@
 			td {
                 padding-top: 1em;
 			}
+			
+			.check-mark{
+				height: 2em;
+				width: 2em;
+				padding: 0.5em;
+				visibility: hidden;
+			}
 		
 		</style>
 		<script src="../phrase_injector.js"></script>
@@ -90,6 +97,20 @@
 									onclick="rightOption(); updateButtons()">
 								Test Right Eye
 							</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<img class="check-mark" id="leftCheckmark"
+								 src="../../images/checkmark.png" alt="Standard Amsler Grid">
+						</td>
+						<td>
+							<img class="check-mark" id="bothCheckmark"
+								 src="../../images/checkmark.png" alt="Standard Amsler Grid">
+						</td>
+						<td>
+							<img class="check-mark" id="rightCheckmark"
+								 src="../../images/checkmark.png" alt="Standard Amsler Grid">
 						</td>
 					</tr>
 					<tr>
