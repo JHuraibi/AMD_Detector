@@ -3,7 +3,7 @@
 // // If the user sees Frowny face press "f"
 // // Any error in pressing the wrong key should be flagged and displayed after the test is conducted
 // // JS code
-// //
+// ------------------------------------------------------------------------------------------------------------------ //
 
 let timestamp = Date.now();
 
@@ -61,7 +61,7 @@ async function getUid() {
 
 					let newgrowingspeed = (doc.data().testSpeeds);
 					speed = newgrowingspeed * 1000;
-
+					
 				});
 		}
 	});
@@ -70,35 +70,27 @@ async function getUid() {
 
 //Function to flag if user isnt pressing correct key
 window.addEventListener('keydown', function (e) {
-
-
 	var key = e.key;
 	key = key.toLowerCase();
 
 	if (key === 's') {
-	
-		console.log("KeyPress: S"); 	//if key pressed is s
+		console.log("KeyPress: S"); 		// If S key is pressed
 		sKey();
 	}
 	else if (key === 'f') {
-		
-		console.log("KeyPress: F");		// if f key is pressed
+		console.log("KeyPress: F");			// If F key is pressed
 		fKey();
 	}
 	else {
-		console.log("KeyPress: Other");
+		console.log("KeyPress: Other");		// Some other key
 	}
-
 });
 //End of Function
-
-
 
 // initalizing canvas
 c.fillStyle = "White";
 c.fillRect(0, 0, size, size);
 blackDot();
-
 
 //Getting Smiley and Frowny face emoji using its unicode
 var frown = String.fromCodePoint(9785);
@@ -146,7 +138,6 @@ function sizingSymbols() {
 		c2.fillStyle = "red";
 		c2.font = "40px Arial";
 	}
-
 }
 //End of function
 
@@ -202,12 +193,7 @@ function fKey() {
 			leftResultY[t2] = y;
 			t2++;
 		}
-
-
-
 	}
-
-
 }
 
 function sKey() {
@@ -246,13 +232,7 @@ function sKey() {
 			leftResultY[t2] = y;
 			t2++;
 		}
-
-
-
 	}
-
-
-
 }
 //End of function (Past 2 functions)
 
@@ -317,70 +297,58 @@ function randomSymbol() {
 		sizingSymbols();
 		c2.beginPath();
 		c2.fillText(symbols[r2], x, y);
-
 	}
-
 }
 //End of Function
 
 //Function to test right eye only
 function rightOption() {
-
 	eyeSelector.style.display = "none";
 	canvas.style.display = "inherit";
 	rightEyeInProgress = true;
 	bothREyeinProgress = false;
 	leftEyeInProgress = false;
+	
 	if (rightEyeInProgress) {
 		rightEyeTest();
-
 	}
 }
 //End of function
 
 //Function to test left eye only
 function leftOption() {
-
 	eyeSelector.style.display = "none";
 	canvas2.style.display = "inherit";
 	leftEyeInProgress = true;
 	rightEyeInProgress = false;
 	bothREyeinProgress = false;
+	
 	if (leftEyeInProgress) {
 		leftEyeTest();
 	}
-
-
 }
 //End of function
 
 //Function to test both eyes
 function bothOption() {
-
 	eyeSelector.style.display = "none";
 	canvas.style.display = "inherit";
 	bothREyeinProgress = true;
 	rightEyeInProgress = false;
 	leftEyeInProgress = false;
+	
 	if (bothREyeinProgress) {
 		rightEyeTest();
 	}
-
-
-
 }
 //End of function
-
-
 
 // Vaariable representing iterations for right eye
 var i = 0;
 
 //Function to test right eye for Right eye only test or right eye test portion of both tests
 function rightEyeTest() {
-
 	if (rightEyeInProgress) {
-		console.log("Right eye test");
 		blackDot();
 		if (i < 8) {
 			clearCanvas();
@@ -388,16 +356,13 @@ function rightEyeTest() {
 			randomSymbol();
 			i++;
 			setTimeout(rightEyeTest, speed);
-			// setTimeout(test1, 1000);	// !! FOR TESTING
-
 		}
 		else {
-
 			rightResults();
 		}
 	}
+	
 	if (bothREyeinProgress) {
-		console.log("both eye test");
 		blackDot();
 		if (i < 8) {
 			clearCanvas();
@@ -405,31 +370,22 @@ function rightEyeTest() {
 			randomSymbol();
 			i++;
 			setTimeout(rightEyeTest, speed);
-			// setTimeout(test1, 1000);	// !! FOR TESTING
 		}
 		else {
-
 			nexttest();
 		}
-
 	}
-
 }
-//End of funtion
+//End of function
 
 //Function to Transition for both eye test
 function nexttest() {
-	// TODO: canvas2 is shifting to left between switching (might be display attr)
 	canvas.style.display = "none";
 	canvas2.style.display = "none";
 
 	nextEye.style.display = "inline-block";
 	bothREyeinProgress = false;
 	bothLEyeInProgress = true;
-
-
-
-
 }
 //End of function
 
@@ -442,17 +398,13 @@ function leftEyeTest() {
 	canvas.style.display = "none";
 	canvas2.style.display = "inline-block";
 
-	// console.log("Test2");
 	if (leftEyeInProgress) {
 		if (a < 8) {
-			// console.log("In test 2 loop");
 			clearCanvas();
 			blackDot();
 			randomSymbol();
 			a++;
 			setTimeout(leftEyeTest, speed);
-
-			// setTimeout(test2, 1000);	// !! FOR TESTING
 		}
 		else {
 			leftResults();
@@ -460,29 +412,23 @@ function leftEyeTest() {
 	}
 
 	if (bothLEyeInProgress) {
-		console.log("In Left both if statement")
 		console.log(a);
 		nextEye.style.display = "none";
 		exitBtns.style.display = "none";
+		
 		if (a < 8) {
-			// console.log("In test 2 loop");
 			clearCanvas();
 			blackDot();
 			randomSymbol();
 			a++;
 			setTimeout(leftEyeTest, speed);
-			// setTimeout(test2, 1000);	// !! FOR TESTING
-			console.log("End of the if statement for both left")
 		}
 		else {
-			console.log("I'm in the both results else")
 			bothResults();
 		}
-
-
 	}
 }
-//En of function
+//End of function
 
 //Iterations for results
 var j;
@@ -493,9 +439,6 @@ var j2;
 // orange represents left eye
 // function to show the errors after test is conducted for both eyes
 function bothResults() {
-
-	// console.log("Result Symbols: " + resultsSymbols);
-
 	// TODO: The two canvases are being stacked on top of each other
 	canvas.style.display = "inline-block";
 	canvas2.style.display = "inline-block";
@@ -505,22 +448,19 @@ function bothResults() {
 	for (j = 0; j < rightResultsSymbols.length; j++) {
 		sizingSymbols();
 		c.fillText(rightResultsSymbols[j], rightResultX[j], rightResultY[j]);
-
 	}
 
 	for (j2 = 0; j2 < leftResultsSymbols.length; j2++) {
-		console.log("In loop of c2 results ");
 		sizingSymbols();
 		c2.fillText(leftResultsSymbols[j2], leftResultX[j2], leftResultY[j2]);
-
 	}
+	
 	showExitButton();
 }
 //End of function
 
 //Right Eye test Results
 function rightResults() {
-	console.log("Reading from right results");
 	canvas.style.display = "inline-block";
 	canvas2.style.display = "none";
 	clearCanvas();
@@ -529,11 +469,9 @@ function rightResults() {
 	for (j = 0; j < rightResultsSymbols.length; j++) {
 		 sizingSymbols();
 		c.fillText(rightResultsSymbols[j], rightResultX[j], rightResultY[j]);
-
 	}
+	
 	showExitButton();
-
-
 }
 //End of Function
 
@@ -543,15 +481,14 @@ function leftResults() {
 	canvas2.style.display = "inline-block";
 	clearCanvas();
 	blackDot();
+	
 	for (j2 = 0; j2 < leftResultsSymbols.length; j2++) {
-		console.log("In loop of c2 results ");
 		sizingSymbols();
 		c2.fillText(leftResultsSymbols[j2], leftResultX[j2], leftResultY[j2]);
 
 	}
+	
 	showExitButton();
-
-
 }
 //End of function
 
@@ -565,7 +502,6 @@ function showExitButton() {
 
 	let fadeIn = setInterval(function () {
 		if (exitBtns.style.opacity < 1.0) {
-
 			// Needs the plus sign before "exitBtns"
 			exitBtns.style.opacity = +exitBtns.style.opacity + 0.01;
 		}
