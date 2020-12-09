@@ -176,6 +176,10 @@ function checkWhichEyesTested(testName) {
 			staticDAO = FacesDAO;
 			console.log("FacesDAO used.");
 			break;
+		case 'GrowingCircles':
+			staticDAO = GrowingCirclesDAO;
+			console.log("GrowingCirclesDAO used.");
+			break;
 		
 		default:
 			console.log("Unrecognized test name provided. Test Name: " + testName);

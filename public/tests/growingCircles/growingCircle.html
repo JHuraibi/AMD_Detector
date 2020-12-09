@@ -27,7 +27,7 @@
         }
 
         .instruct {
-            width: 400px;
+            width: 500px;
             padding: 30px;
             margin: 100px auto;
             border-radius: 10px;
@@ -56,6 +56,21 @@
             width: 50%;
             text-align: center;
         }
+
+        td {
+            padding-top: 0.5em;
+        }
+
+        .check-mark {
+            height: 2em;
+            width: 2em;
+            padding: 0.5em;
+            visibility: hidden;
+        }
+
+        p {
+            margin-bottom: 0.1em;
+        }
     </style>
 	<script src="../phrase_injector.js"></script>
 </head>
@@ -72,23 +87,72 @@
             </div>
         </header>
 
-        <!-- Which eyes to test -->
-        <!-- Next Eye -->
-        <div class="instruct" id="whichEye">
-            <p>
-                Choose which eye to test. Choosing the left eye requires you to cover your right eye. Choosing the right
-                eye
-                requires you to cover your left eye. Choosing both eyes will do both processes, starting with the left
-                eye.
-            </p>
-            <button id="lefteye" class="btn btn-sm btn-outline-secondary"
-                style="color: #282828; border-color: #282828;">Test Left Eye</button>
-            <button id="botheyes" class="btn btn-sm btn-outline-secondary"
-                style="color: #282828; border-color: #282828;">Test Both Eyes</button>
-            <button id="righteye" class="btn btn-sm btn-outline-secondary"
-                style="color: #282828; border-color: #282828;">Test Right Eye</button>
-        </div>
-
+		<!-- Which eyes to test -->
+		<div class="instruct" id="eyeSelector">
+			<table>
+				<tr>
+					<td colspan="3" style="text-align: center">
+						Choose which eye to test. Choosing the left eye requires you to cover your right eye. Choosing the right
+						eye
+						requires you to cover your left eye. Choosing both eyes will do both processes, starting with the left
+						eye.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<button class="btn-extra btn btn-sm btn-outline-secondary" id="lefteye">
+							Test Left Eye Only
+						</button>
+					</td>
+					<td>
+						<button class="btn-extra btn btn-sm btn-outline-secondary" id="botheyes">
+							Test Both Eyes
+						</button>
+					</td>
+					<td>
+						<button class="btn-extra btn btn-sm btn-outline-secondary" id="righteye">
+							Test Right Eye Only
+						</button>
+					</td>
+				</tr>
+				<tr id="trCheckmarks" style="display: none">
+					<td>
+						<img class="check-mark" id="leftCheckmark"
+							 src="../../images/checkmark.png" alt="Standard Amsler Grid">
+					</td>
+					<td>
+						<img class="check-mark" id="bothCheckmark"
+							 src="../../images/checkmark.png" alt="Standard Amsler Grid">
+					</td>
+					<td>
+						<img class="check-mark" id="rightCheckmark"
+							 src="../../images/checkmark.png" alt="Standard Amsler Grid">
+					</td>
+				</tr>
+				<tr id="trMessage" style="display: none">
+					<td colspan="3">
+						<p id="whichEyeStatusMessage">
+							<!-- Updated by eye_selection_updater.js -->
+						</p>
+					</td>
+				</tr>
+				<tr id="trLastDates" style="display: none">
+					<td colspan="3" style="padding-top: 0.1em">
+						<p id="lastTestTime">
+							<!-- Updated by eye_selection_updater.js -->
+						</p>
+					</td>
+				</tr>
+				<tr id="trHomeButton" style="display: none">
+					<td colspan="3">
+						<button onclick="window.location.replace('../../home.html')" class="btn btn-sm btn-outline-secondary"
+								id="returnHome" style="display: none; margin-top: 1em; color: #282828; border-color: #282828;">
+							Return to Homepage
+						</button>
+					</td>
+				</tr>
+			</table>
+		</div>
 
         <!-- Result Titles -->
         <div class="row">
@@ -154,6 +218,9 @@
     <script src="growingCircle.js"></script>
 
     <script src="../speed.js"></script>
+	
+	<script src="../../DAO/GrowingCirclesDAO.js"></script>
+	<script src="../eye_selection_updater.js"></script>
 
     <!-- Check if user is signed in -->
     <script>
@@ -170,6 +237,10 @@
                                 console.log("Physician Account. Access Denied.");
                                 window.location = '../../404.html';
                             }
+							else {
+								// NOTE: The test name parameter needs to the match with the Firestore collection
+								updateEyeSelection(id, "GrowingCircles");
+							}
                         });
                 } else {
                     console.log("Not logged in");
