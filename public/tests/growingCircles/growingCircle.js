@@ -77,6 +77,11 @@ var growingspeed = 1000;
 let timestamp;
 var seen = false;
 
+//counter
+var testIterations = 0;
+//Max iterations, change for testing
+var maxInterations = 8;
+
 
 window.onkeydown = function (event) {                                               //Alternate input to the 'Seen' button
     if (event.keyCode === 32) {
@@ -143,7 +148,7 @@ function test() {                                                               
     seenbtn.style.display = "inline-block";                                             //Display the 'seen' button
     startbtn.style.display = "none";                                                    //Hide the 'Start' button
 
-    if (q1 < 5 || q2 < 5 || q3 < 5 || q4 < 5) {                                         //If the quadrants have not reached the max value, display another button
+    if (testIterations < maxInterations) {                                         //If the quadrants have not reached the max value, display another button
 
         x = Math.random() * 700;                                                        // New red dot x-location
         y = Math.random() * 700;                                                        // New red dot y-location
@@ -179,7 +184,7 @@ function test() {                                                               
                 c.fill();
                 c.stroke();
 
-                if (q1 < 5 || q2 < 5 || q3 < 5 || q4 < 5) {                             //if the test isnt over
+                if (testIterations < maxInterations) {                             //if the test isnt over
                     setTimeout(test, growingspeed);                                     //Call for another circle after growingspeed (user chosen test speed)
                 } else test();                                                          //else, call test and the test will end 
             }
@@ -192,7 +197,7 @@ function test() {                                                               
                 c.fill();
                 c.stroke();
 
-                if (q1 < 5 || q2 < 5 || q3 < 5 || q4 < 5) {                             //if the test isnt over
+                if (testIterations < maxInterations) {                             //if the test isnt over
                     setTimeout(test, growingspeed);                                     //Call for another circle after growingspeed (user chosen test speed)
                 } else test();                                                          //else, call test and the test will end 
             }
@@ -262,7 +267,7 @@ function test2() {                                                              
     seenbtn.style.display = "inline-block";
     startSecond.style.display = "none";
 
-    if (q1 < 5 || q2 < 5 || q3 < 5 || q4 < 5) {
+    if (testIterations < maxInterations) {
         // New red dot location
         x = Math.random() * 700;
         y = Math.random() * 700;
@@ -297,7 +302,7 @@ function test2() {                                                              
                 c2.arc(350, 350, 6, 0, Math.PI * 2, false);
                 c2.fill();
                 c2.stroke();
-                if (q1 < 5 || q2 < 5 || q3 < 5 || q4 < 5) {
+                if (testIterations < maxInterations) {
                     setTimeout(test2, growingspeed);
                 } else test2();
             }
@@ -311,7 +316,7 @@ function test2() {                                                              
                 c2.arc(350, 350, 6, 0, Math.PI * 2, false);
                 c2.fill();
                 c2.stroke();
-                if (q1 < 5 || q2 < 5 || q3 < 5 || q4 < 5) {
+                if (testIterations < maxInterations) {
                     setTimeout(test2, growingspeed);
                 } else test2();
             }
@@ -336,6 +341,7 @@ function startTest2() {                                                         
     pointsx = [];
     pointsy = [];
     pointsIndex = 0;
+    testIterations = 0;
     q1 = 0;
     q2 = 0;
     q3 = 0;
@@ -599,6 +605,7 @@ function setValues() {                                                          
     pointsx = [];
     pointsy = [];
     pointsIndex = 0;
+    testIterations = 0;
     q1 = 0;
     q2 = 0;
     q3 = 0;
@@ -637,6 +644,7 @@ function getAllRegions() {                                                      
         if (x >= 0 && x < 350) {                                                                 //Quadrant 2
             if (q2 != 5) {
                 q2++;
+                testIterations++;
                 console.log("In quadrant 2. Value: " + x + ", " + y + ". Quadrant 2 count: " + q2);
                 return;
             } else
@@ -644,6 +652,7 @@ function getAllRegions() {                                                      
         } else {                                                                                //Quadrant 1
             if (q1 != 5) {
                 q1++;
+                testIterations++;
                 console.log("In quadrant 1. Value: " + x + ", " + y + ". Quadrant 1 count: " + q1);
                 return;
             } else
@@ -655,6 +664,7 @@ function getAllRegions() {                                                      
         if (x >= 0 && x < 350) {                                                                //Quadrant 3
             if (q3 != 5) {
                 q3++;
+                testIterations++;
                 console.log("In quadrant 3. Value: " + x + ", " + y + ". Quadrant 3 count: " + q3);
                 return;
             } else
@@ -662,6 +672,7 @@ function getAllRegions() {                                                      
         } else {                                                                                //Quadrant 4
             if (q4 != 5) {
                 q4++;
+                testIterations++;
                 console.log("In quadrant 4. Value: " + x + ", " + y + ". Quadrant 4 count: " + q4);
                 return;
             } else
@@ -678,21 +689,25 @@ function newPoint() {                                                           
         x = (Math.random() * 350) + 350;
         y = Math.random() * 350;
         q1++;
+        testIterations++;
         return;
     } else if (q2 < 5) {                                                           //If this quadrant isnt full, get a point in this region
         x = Math.random() * 350;
         y = Math.random() * 350;
         q2++;
+        testIterations++;
         return;
     } else if (q3 < 5) {                                                           //If this quadrant isnt full, get a point in this region
         x = Math.random() * 350;
         y = (Math.random() * 350) + 350;
         q3++;
+        testIterations++;
         return;
     } else if (q4 < 5) {                                                          //If this quadrant isnt full, get a point in this region
         x = (Math.random() * 350) + 350;
         y = (Math.random() * 350) + 350;
         q4++;
+        testIterations++;
         return;
     }
 
