@@ -51,12 +51,9 @@
     <header>
         <div class="navbar navbar-dark bg-dark shadow-sm">
             <div class="container d-flex justify-content-between">
-                <a class="nav-link active" href="home.html">
-                    <span data-feather="home"></span>
-                    Back <span class="sr-only">(current)</span>
-                </a>
 
-                <div style="color: white; font-size: 1.5em;"> <img class="logo" src="images/logo_square.png" alt="Logo">
+
+                <div style="color: white; font-size: 1.5em;"> <img class="logo" src="images/favicon-32x32.png" Logo">
                     &nbsp; Vision Monitor</div>
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
@@ -259,58 +256,28 @@
                     </div>
                 </div>
 
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <video class="bd-placeholder-img card-img-top" controls>
 
-                <!-- Adding Physicians -->
-                <!--  <div class="col-md-4">
-                        <div class="card mb-4 shadow-sm">
-                            <video class="bd-placeholder-img card-img-top" controls>
-    
-                                <source src="videos/" type="video/mp4">
-                            </video>
+                            <source src="videos/physicians.mp4" type="video/mp4">
+                        </video>
 
-                            <div class="card-body">
-                                <p class="card-text"><span style="font-weight: bold">My Physicians</span></p>
-                                <p class="card-text">Connect with your doctor and share your test results</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"
-                                            onClick="location.href='patients/myPhysicians.html'">
-                                            My Physicians
-                                        </button>
-                                    </div>
-                                    <small class="text-muted">
-                                        </small>
-                                </div>
-                            </div>
+                        <div class="card-body">
+                            <p class="card-text"><span style="font-weight: bold">Physician Accounts</span></p>
+                            <p class="card-text"><br>Navigating the website as a physician: regisration, home page, and
+                                patient test results</p>
+
+                            <small class="text-muted">
+                            </small>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <div class="col-md-4">
-                        <div class="card mb-4 shadow-sm">
-                            <video class="bd-placeholder-img card-img-top" controls>
-                        
-                                <source src="videos/" type="video/mp4">
-                            </video>
-
-                            <div class="card-body">
-                                <p class="card-text"><span style="font-weight: bold">My Profile</span></p>
-                                <p class="card-text">Save your medical history or change your account information</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"
-                                            onClick="location.href='patients/profile.html'">
-                                            My Profile
-                                        </button>
-                                    </div>
-                                    <small class="text-muted">
-                                       </small>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-
-                <!------------------------------------------------| END ROW 3 |------------------------------------------------>
+            <!------------------------------------------------| END ROW 3 |------------------------------------------------>
     </main>
+
 
     <!-- Firebase Items-->
     <script src="/__/firebase/7.21.0/firebase-app.js"></script>
@@ -324,29 +291,14 @@
     <script src="/__/firebase/init.js"></script>
     <script src="/__/firebase/7.23.0/firebase-firestore.js"></script>
 
-
-    <!-- Check if user is signed in -->
     <script>
-        var db = firebase.firestore();
-        (async function checkUser() {
-            await firebase.auth().onAuthStateChanged(user => {
-                if (user) {
-                    id = user.uid;
-                    db.collection("users").doc(id)
-                        .get()
-                        .then(doc => {
-                            let type = doc.data().type;
-                            if (type != 'user') {
-                                console.log("Physician Account. Access Denied.");
-                                window.location = '../404.html';
-                            }
-                        });
-                } else {
-                    console.log("Not logged in");
-                    window.location = '../index.html';
-                }
-            });
-        })();
+        const signOut = document.querySelector('.sign-out');
+        // sign out
+        signOut.addEventListener('click', () => {
+            firebase.auth().signOut()
+                .then(() => console.log('signed out'));
+            window.location = '../index.html';
+        });
     </script>
 
 </body>
