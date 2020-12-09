@@ -91,7 +91,7 @@ function retrieveInstructions(target_test) {
 		
 		// FRACTAL
 		case "fractal":
-			return "[FRACTAL INSTRUCTIONS]";
+			return "The Fractal test is under maintenance! Check back soon!";
 	}
 }
 
@@ -120,6 +120,7 @@ function retrieveURLLink(target_test) {
 		case "smiley":
 			return "./Faces/faces.html";
 		case "fractal":
-			return "./fractal/fractal.html";
+			return "../home.html";
+			// return "./fractal/fractal.html";
 	}
 }
