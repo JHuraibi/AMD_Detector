@@ -577,19 +577,19 @@ function updateFirstTest() {                                                    
 
 function lefteye() {                                                                //Testing the left eye has been selected. 
     testing = "lefteye";                                                            //Save which eye we're testing in the 'testing' variable
-    document.getElementById('whichEye').style.display = "none";                     //Hide the HTML element that asks which eye they would like to test
+    document.getElementById('eyeSelector').style.display = "none";                  //Hide the HTML element that asks which eye they would like to test
     setValues();                                                                    //Call the setVales() method to set default values for the test
 }
 
 function righteye() {                                                               //Testing the right eye has been selected. 
     testing = "righteye";                                                           //Save which eye we're testing in the 'testing' variable
-    document.getElementById('whichEye').style.display = "none";                     //Hide the HTML element that asks which eye they would like to test
+    document.getElementById('eyeSelector').style.display = "none";                  //Hide the HTML element that asks which eye they would like to test
     setValues();                                                                    //Call the setVales() method to set default values for the test
 }
 
 function botheyes() {                                                               //Testing both eyes has been selected. 
     testing = "botheyes";                                                           //Save which eye we're testing in the 'testing' variable
-    document.getElementById('whichEye').style.display = "none";                     //Hide the HTML element that asks which eye they would like to test
+    document.getElementById('eyeSelector').style.display = "none";                  //Hide the HTML element that asks which eye they would like to test
     setValues();                                                                    //Call the setVales() method to set default values for the test
 }
 
