@@ -72,7 +72,7 @@
 					<br>
 					
 					<!-- Section 1 part -->
-					<div placeholder="s1" class="section-container">
+					<div class="section-container">
 						<p>Did you have trouble seeing this section?</p>
 						
 					
@@ -81,10 +81,7 @@
 						<div id="qSec1">
 							
 							<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
-							<input type="radio" id="S1_Q1_Yes" name="S1_Q1" value="yes">
-							<label for="S1_Q1_Yes">Yes</label>
-							<input type="radio" id="S1_Q1_No" name="S1_Q1" value="no">
-							<label for="S1_Q1_No">No</label>
+							<p id="testQ"></p>
 							
 							<br><br>
 							
@@ -246,5 +243,46 @@
 			<footer class="mastfoot mt-auto"></footer>
 		</div>
 </body>
-<script src="showQuestions.js"></script>
+	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+	<script src="/__/firebase/7.23.0/firebase-app.js"></script>
+	
+	<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+	<script src="/__/firebase/7.23.0/firebase-analytics.js"></script>
+	
+	<!-- Add Firebase products that you want to use -->
+	<script src="/__/firebase/7.23.0/firebase-auth.js"></script>
+	<script src="/__/firebase/7.23.0/firebase-firestore.js"></script>
+	
+	<!-- Initialize Firebase -->
+	<script src="/__/firebase/init.js"></script>
+	
+	<!-- Check if user is signed in -->
+	<script>
+		var db = firebase.firestore();
+		let userRef;
+		(async function checkUser() {
+			await firebase.auth().onAuthStateChanged(user => {
+				if (user) {
+					id = user.uid;
+					db.collection("users").doc(id)
+						.get()
+						.then(doc => {
+							let type = doc.data().type;
+							if (type != 'user') {
+								console.log("Physician Account. Access Denied.");
+								window.location = '../404.html';
+							}
+							else {
+								loadAll(user);
+							}
+						});
+				} else {
+					console.log("Not logged in");
+					window.location = '../index.html';
+				}
+			});
+		})();
+	</script>
+	
+	<script src="showQuestions.js"></script>
 </html>
