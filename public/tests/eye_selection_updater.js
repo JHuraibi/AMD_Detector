@@ -53,8 +53,8 @@ async function updateEyeSelection(userID, testName) {
 	
 	checkIfResultsFromToday();
 	checkWhichEyesTested(testName);
-	// updateEyeButtons();
-	// displayLastTestTime();
+	updateEyeButtons();
+	displayLastTestTime();
 }
 
 /**
