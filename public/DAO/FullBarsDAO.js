@@ -21,6 +21,25 @@ class FullBarsDAO {
 		this.isPhysician = false;
 	}
 	
+	// TODO: Determine how to handle a test that was taken but had empty fields
+	/**
+	 * !! Only updates for true values. Leaves the false values as-in.
+	 * @param whichEyesRecord
+	 * @param dataJSON
+	 * @returns {*}
+	 */
+	static checkWhichEyes(whichEyesRecord, dataJSON) {
+		if (dataJSON.LeftXLocations.length || dataJSON.LeftYLocations.length) {
+			whichEyesRecord.left = true;
+		}
+		
+		if (dataJSON.RightXLocations.length || dataJSON.RightYLocations.length) {
+			whichEyesRecord.right = true;
+		}
+		
+		return whichEyesRecord;
+	}
+	
 	async loadForDashboard() {
 		await this.dbRef
 			.collection("TestResults")

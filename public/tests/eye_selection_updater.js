@@ -180,13 +180,17 @@ function checkWhichEyesTested(testName) {
 			staticDAO = GrowingCirclesDAO;
 			console.log("GrowingCirclesDAO used.");
 			break;
+		case 'FullBars':
+			staticDAO = FullBarsDAO;
+			console.log("FullBarsDAO used.");
+			break;
 		
 		default:
 			console.log("Unrecognized test name provided. Test Name: " + testName);
 			break;
 	}
 	
-	// TODO: Would be cleaner to ditch testResults all together
+	// TODO: Would be cleaner to ditch testResults[] all together?
 	testResults.forEach((result) => {
 		staticDAO.checkWhichEyes(whichEyesTested, result);
 	});
