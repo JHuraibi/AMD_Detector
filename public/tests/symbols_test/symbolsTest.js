@@ -339,46 +339,53 @@ function randomSymbol() {
 }
 //End of Function
 
+function startTest(){
+	document.getElementById("startTestBtn").style.display = "none";
+	
+	if (bothREyeinProgress || rightEyeInProgress) {
+		rightEyeTest();
+	}
+	else if (leftEyeInProgress) {
+		leftEyeTest();
+	}
+}
 
 //Function for right eye test only
 function rightOption() {
+	document.getElementById("eyeSelector").style.display = "none";
+	document.getElementById("startTestBtn").style.display = "block";
+	
 	eyeSelector.style.display = "none";
 	canvas.style.display = "inherit";
 	rightEyeInProgress = true;
 	bothREyeinProgress = false;
 	leftEyeInProgress = false;
-	
-	if (rightEyeInProgress) {
-		rightEyeTest();
-	}
 }
 // End of Function
 
 //Function of left eye test only
 function leftOption() {
+	document.getElementById("eyeSelector").style.display = "none";
+	document.getElementById("startTestBtn").style.display = "block";
+	
 	eyeSelector.style.display = "none";
 	canvas.style.display = "inherit";
 	leftEyeInProgress = true;
 	rightEyeInProgress = false;
 	bothREyeinProgress = false;
-	
-	if (leftEyeInProgress) {
-		leftEyeTest();
-	}
 }
 //End of function
 
 //Function to test both eyes
 function bothOption() {
+	document.getElementById("eyeSelector").style.display = "none";
+	document.getElementById("startTestBtn").style.display = "block";
+	
 	eyeSelector.style.display = "none";
 	canvas.style.display = "inherit";
 	bothREyeinProgress = true;
 	rightEyeInProgress = false;
 	leftEyeInProgress = false;
-	
-	if (bothREyeinProgress) {
-		rightEyeTest();
-	}
 }
 //End of Function
 

@@ -20,7 +20,28 @@ class GrowingCirclesDAO {
 		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
 		this.isPhysician = false;
 	}
-
+	
+	// TODO: Determine how to handle a test that was taken but had empty fields
+	/**
+	 * !! Only updates for true values. Leaves the false values as-in.
+	 * Any of the Left/Right test result variables can be used as equally
+	 * 	effective ways to determine if a right/left eye test was taken.
+	 * @param whichEyesRecord
+	 * @param dataJSON
+	 * @returns {*}
+	 */
+	static checkWhichEyes(whichEyesRecord, dataJSON) {
+		if (dataJSON.XLocationsLeft.length) {
+			whichEyesRecord.left = true;
+		}
+		
+		if (dataJSON.XLocationsRight.length) {
+			whichEyesRecord.right = true;
+		}
+		
+		return whichEyesRecord;
+	}
+	
 	async loadForDashboard() {
 		await this.dbRef
 			.collection("TestResults")

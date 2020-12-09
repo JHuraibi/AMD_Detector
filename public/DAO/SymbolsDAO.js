@@ -20,6 +20,25 @@ class SymbolsDAO {
 		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
 		this.isPhysician = false;
 	}
+
+	// TODO: Determine how to handle a test that was taken but had empty fields
+	/**
+	 * !! Only updates for true values. Leaves the false values as-in.
+	 * @param whichEyesRecord
+	 * @param dataJSON
+	 * @returns {*}
+	 */
+	static checkWhichEyes(whichEyesRecord, dataJSON) {
+		if (dataJSON.LeftResultsSymbols.length) {
+			whichEyesRecord.left = true;
+		}
+		
+		if (dataJSON.RightResultsSymbols.length) {
+			whichEyesRecord.right = true;
+		}
+		
+		return whichEyesRecord;
+	}
 	
 	async loadForDashboard() {
 		await this.dbRef
@@ -34,7 +53,7 @@ class SymbolsDAO {
 					this.docList.push(extractedDoc);
 				});
 			});
-
+		
 		// this.manualAdd();
 	}
 	
@@ -47,7 +66,7 @@ class SymbolsDAO {
 			.collection("Symbols")
 			.doc(testID)
 			.get()
-			.then(function(doc) {
+			.then(function (doc) {
 				if (!doc) {
 					console.log("Document not found. ID: " + testID);
 					return;
