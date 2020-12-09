@@ -42,6 +42,14 @@
                 border-color: #282828;
             }
 
+            .bigbtn {
+                height: auto;
+                width: auto;
+                font-size: 1.3em;
+                padding-bottom: 5px;
+                margin: 5px;
+            }
+
             td {
                 padding-top: 0.5em;
             }
@@ -160,6 +168,13 @@
 			</main>
 			
 			<div>
+				<!-- Button to start the left eye test -->
+				<div class="btn-group" id="startTestBtn" style="display: none">
+					<button type="button" id="startTest" onClick="startTest()"
+							class="bigbtn btn btn-sm btn-outline-secondary test-buttons">
+						Start Test
+					</button>
+				</div>
 				<div>
 					<!-- These buttons will only become visible once the user has finished the test -->
 					<div class="btn-group" id="exitTestBtns" style="display: none">
@@ -177,6 +192,8 @@
 					</div>
 				</div>
 			</div>
+			
+
 			
 			<footer class="mastfoot mt-auto">
 				<div class="inner">
