@@ -26,7 +26,6 @@
  */
 
 let dbRef = firebase.firestore();
-// let testResult;
 let testResults = [];
 let mostRecentResult;
 let secondMostRecentResult;
@@ -54,8 +53,8 @@ async function updateEyeSelection(userID, testName) {
 	
 	checkIfResultsFromToday();
 	checkWhichEyesTested(testName);
-	updateEyeButtons();
-	displayLastTestTime();
+	// updateEyeButtons();
+	// displayLastTestTime();
 }
 
 /**
@@ -196,12 +195,14 @@ function checkWhichEyesTested(testName) {
  * 		i.e.
  * 			whichEyesTested.left is true  --> left eye was found to be tested
  * 			whichEyesTested.right is true --> right eye was found to tested
+ *	All
+ *		- Unhide the relevant table rows
  *
  * 	Left and Right Complete:
  * 		- Disable all 3 eye selection buttons
  * 		- Show check marks under all 3 buttons
  * 		- Display message that says both eyes complete
- * 		- Show the button to return to the home page
+ * 		- Unhide the last table row with the button to return to the home page
  *
  * 	Left Complete:
  * 		- Disable Left eye and Both eye selection buttons
@@ -224,10 +225,12 @@ function updateEyeButtons() {
 	let message = document.getElementById("whichEyeStatusMessage");
 	
 	if (whichEyesTested.left && whichEyesTested.right) {
+		unhideRows();
+		document.getElementById("trHomeButton").style.display = "table-row";
+		
 		document.getElementById("lefteye").disabled = true;
 		document.getElementById("botheyes").disabled = true;
 		document.getElementById("righteye").disabled = true;
-		
 		document.getElementById("leftCheckmark").style.visibility = "visible";
 		document.getElementById("rightCheckmark").style.visibility = "visible";
 		document.getElementById("bothCheckmark").style.visibility = "visible";
@@ -238,18 +241,20 @@ function updateEyeButtons() {
 		document.getElementById("returnHome").style.display = "inherit";
 	}
 	else if (whichEyesTested.left) {
+		unhideRows();
+		
 		document.getElementById("lefteye").disabled = true;
 		document.getElementById("botheyes").disabled = true;
-		
 		document.getElementById("leftCheckmark").style.visibility = "visible";
 		
 		message.innerHTML = "Looks like you've finished your left eye " +
 			"already today for this test. You can still take the test for your right eye.";
 	}
 	else if (whichEyesTested.right) {
+		unhideRows();
+		
 		document.getElementById("righteye").disabled = true;
 		document.getElementById("botheyes").disabled = true;
-		
 		document.getElementById("rightCheckmark").style.visibility = "visible";
 		
 		message.innerHTML = "Looks like you've finished your right eye " +
@@ -258,6 +263,16 @@ function updateEyeButtons() {
 	else {
 		console.log("No results for either eye found for the current day.");
 	}
+}
+
+/**
+ * Unhides the table row HTML elements that are required for any of the
+ * 	if/else cases of the updateEyeButtons() function (minus the final else).
+ */
+function unhideRows(){
+	document.getElementById("trCheckmarks").style.display = "table-row";
+	document.getElementById("trMessage").style.display = "table-row";
+	document.getElementById("trLastDates").style.display = "table-row";
 }
 
 /**
