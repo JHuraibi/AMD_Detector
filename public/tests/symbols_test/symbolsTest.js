@@ -7,6 +7,7 @@
 // // JS code
 // ------------------------------------------------------------------------------------------------------------------ //
 
+//For the time and date
 let timestamp = Date.now();
 
 //Bool values for tests that are in progress
