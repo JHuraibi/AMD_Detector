@@ -41,7 +41,8 @@ AmslerQuestions.addEventListener('submit', (e) => {
 			updateFirstTest();
 			setTimeout(() => {
 				// Use replace() to disallow back button to come back to this page
-				window.location.replace("../../tests/free_draw/free_draw.html");
+				// window.location.replace("../../tests/free_draw/free_draw.html");
+				window.location.replace("showQuestions.html");
 			}, 2000);
 		});
 });
