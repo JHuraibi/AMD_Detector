@@ -122,13 +122,13 @@
 		<script src="../../auth.js"></script>
 		
 		<script>
-			let dbRef = firebase.firestore();
+			let db = firebase.firestore();
 			let userRef = null;
 			
-			firebase.auth().onAuthStateChanged(user => {
-				console.log(user);
-				userRef = user;
-			});
+			// firebase.auth().onAuthStateChanged(user => {
+			// 	console.log(user);
+			// 	userRef = user;
+			// });
 		</script>
 		
 		<script>
@@ -144,7 +144,7 @@
 				let dataToWrite = getFractalResults();
 				
 				if (userRef) {
-					dbRef.collection("TestResults")
+					db.collection("TestResults")
 						.doc(userRef.uid)
 						.collection("Fractal")
 						.add(dataToWrite)
@@ -171,7 +171,7 @@
 			}
 			
 			function updateFirstTest() {
-				dbRef.collection("TestResults")
+				db.collection("TestResults")
 					.doc(userRef.uid)
 					.set({
 						firstTest: false
@@ -205,11 +205,12 @@
 
 		<!-- Check if user is signed in -->
 	<script>
-		var db = firebase.firestore();
 		(async function checkUser() {
+			var db = firebase.firestore();
 			await firebase.auth().onAuthStateChanged(user => {
 				if (user) {
 					id = user.uid;
+					userRef = user;
 					db.collection("users").doc(id)
 						.get()
 						.then(doc => {
