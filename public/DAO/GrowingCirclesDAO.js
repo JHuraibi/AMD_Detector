@@ -1,6 +1,6 @@
 class GrowingCirclesDAO {
-	constructor(dbRef, userID) {
-		this.dbRef = dbRef;
+	constructor(db, userID) {
+		this.db = db;
 		this.userID = userID;
 		this.docList = [];
 		
@@ -43,7 +43,7 @@ class GrowingCirclesDAO {
 	}
 	
 	async loadForDashboard() {
-		await this.dbRef
+		await this.db
 			.collection("TestResults")
 			.doc(this.userID)
 			.collection("GrowingCircles")
@@ -63,7 +63,7 @@ class GrowingCirclesDAO {
 	async loadForDetailedView(testID, canvasLeft, canvasRight) {
 		let _this = this;
 
-		await this.dbRef
+		await this.db
 			.collection("TestResults")
 			.doc(this.userID)
 			.collection("GrowingCircles")
@@ -104,7 +104,7 @@ class GrowingCirclesDAO {
 			console.log("MANUAL ADD - Index 0 empty");
 			return;
 		}
-		this.dbRef.collection("TestResults")
+		this.db.collection("TestResults")
 			.doc(this.userID)
 			.collection("GrowingCircles")
 			.add(this.docList[0])
