@@ -25,7 +25,6 @@
  * 			 that the user has already fully completed the test for the current day
  */
 
-let db = firebase.firestore();
 let testResults = [];
 let mostRecentResult;
 let secondMostRecentResult;
@@ -65,6 +64,7 @@ async function updateEyeSelection(userID, testName) {
  * @returns {Promise<void>}
  */
 async function loadDocuments(userID, testName) {
+	let db = firebase.firestore();
 	await db.collection("TestResults")
 		.doc(userID)
 		.collection(testName)
