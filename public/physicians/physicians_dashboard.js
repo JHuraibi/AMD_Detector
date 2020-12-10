@@ -1,4 +1,4 @@
-let dbRef = firebase.firestore();
+let db = firebase.firestore();
 let patientUID = null;
 let patientGrowingCirclesDAO;
 let patientSymbolsDAO;
@@ -29,10 +29,10 @@ async function pageRouter() {
 }
 
 function defineDAOs() {
-	patientGrowingCirclesDAO = new GrowingCirclesDAO(dbRef, patientUID);
-	patientSymbolsDAO = new SymbolsDAO(dbRef, patientUID);
-	patientFullBarsDAO = new FullBarsDAO(dbRef, patientUID);
-	patientFreeDrawDAO = new FreeDrawDAO(dbRef, patientUID);
+	patientGrowingCirclesDAO = new GrowingCirclesDAO(db, patientUID);
+	patientSymbolsDAO = new SymbolsDAO(db, patientUID);
+	patientFullBarsDAO = new FullBarsDAO(db, patientUID);
+	patientFreeDrawDAO = new FreeDrawDAO(db, patientUID);
 	
 	patientGrowingCirclesDAO.isPhysician = true;
 	patientSymbolsDAO.isPhysician = true;
