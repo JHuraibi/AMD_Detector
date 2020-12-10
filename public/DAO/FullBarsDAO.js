@@ -1,6 +1,6 @@
 class FullBarsDAO {
-	constructor(dbRef, userID) {
-		this.dbRef = dbRef;
+	constructor(db, userID) {
+		this.db = db;
 		this.userID = userID;
 		this.docList = [];
 		
@@ -41,7 +41,7 @@ class FullBarsDAO {
 	}
 	
 	async loadForDashboard() {
-		await this.dbRef
+		await this.db
 			.collection("TestResults")
 			.doc(this.userID)
 			.collection("FullBars")
@@ -61,7 +61,7 @@ class FullBarsDAO {
 	async loadForDetailedView(testID, canvasLeft, canvasRight) {
 		let _this = this;
 		
-		await this.dbRef
+		await this.db
 			.collection("TestResults")
 			.doc(this.userID)
 			.collection("FullBars")
@@ -84,7 +84,7 @@ class FullBarsDAO {
 	
 	// !! TESTING ONLY - Clones FireStore doc from existing
 	manualAdd() {
-		this.dbRef.collection("TestResults")
+		this.db.collection("TestResults")
 			.doc(this.userID)
 			.collection("FullBars")
 			.add(this.docList[0])
