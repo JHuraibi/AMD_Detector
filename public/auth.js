@@ -60,7 +60,8 @@ registerForm.addEventListener('submit', (e) => {
         id = user.uid;
         console.log(id);
         db.collection("TestResults").doc(id).set({
-          exists: true
+          exists: true,
+		  firstTest: true
         }).then(() => { sendemail(); });
       }
     });
