@@ -231,8 +231,8 @@
 	<!-- Check if user is signed in -->
 	<script>
 		(async function checkUser() {
+			var db = firebase.firestore();
 			await firebase.auth().onAuthStateChanged(user => {
-				var db = firebase.firestore();
 				if (user) {
 					id = user.uid;
 					db.collection("users").doc(id)

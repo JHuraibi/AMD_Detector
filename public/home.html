@@ -334,7 +334,7 @@
 	<script src="./home.js"></script>
 
 	<script>
-		let db = firebase.firestore();
+		let dbRef = firebase.firestore();
 		let userRef = null;
 
 		firebase.auth().onAuthStateChanged(user => {
@@ -362,7 +362,7 @@
 		})();
 
 		function checkIfNoTestsTaken() {
-			db.collection("TestResults")
+			dbRef.collection("TestResults")
 				.doc(userRef.uid)
 				.get()
 				.then((doc) => {
@@ -376,6 +376,7 @@
 	<!-- Check if user is signed in -->
 	<script>
 		(async function checkUser() {
+			var db = firebase.firestore();
 			await firebase.auth().onAuthStateChanged(user => {
 				if (user) {
 					id = user.uid;
