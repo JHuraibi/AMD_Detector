@@ -1,6 +1,6 @@
-let dbRef = firebase.firestore();
-let patientUID = null;
+let db = firebase.firestore();
 
+let patientUID = null;
 let uriPassedIn;
 let testName
 let testID
@@ -60,24 +60,24 @@ function defineDAO() {
 			break;
 
 		case "GrowingCircles":
-			genericDAO = new GrowingCirclesDAO(dbRef, patientUID);
+			genericDAO = new GrowingCirclesDAO(db, patientUID);
 			break;
 
 		case "Symbols":
-			genericDAO = new SymbolsDAO(dbRef, patientUID);
+			genericDAO = new SymbolsDAO(db, patientUID);
 			break;
 
 		case "FullBars":
-			genericDAO = new FullBarsDAO(dbRef, patientUID);
+			genericDAO = new FullBarsDAO(db, patientUID);
 			break;
 
 		case "FreeDraw":
 			forFreeDraw = true;
-			genericDAO = new FreeDrawDAO(dbRef, patientUID);
+			genericDAO = new FreeDrawDAO(db, patientUID);
 			break;
 
 		case "Smiley":
-			genericDAO = new FacesDAO(dbRef, patientUID);
+			genericDAO = new FacesDAO(db, patientUID);
 			break;
 
 

@@ -218,10 +218,9 @@ function seenRedDot() {                                                         
     seen = true;                                                                        //input: the user clicks the 'seen' button or the space bar during the test
 }
 
-var id;
-
-async function getUid() {                                                               //Gets the test speed of the user    
-
+async function getUid() {                                                               //Gets the test speed of the user
+	var db = firebase.firestore();
+	var id = firebase.auth().currentUser.uid;
     await firebase.auth().onAuthStateChanged(user => {
         if (user) {
             id = user.uid;
@@ -566,8 +565,9 @@ function uploadSuccess() {                                                      
 
 function updateFirstTest() {                                                        //If this was their first test, it will update in the database
 
-    let dbRef = firebase.firestore();
-    dbRef.collection("TestResults")
+    let db = firebase.firestore();
+	let id = firebase.auth().currentUser.uid;
+    db.collection("TestResults")
         .doc(id)
         .set({
             firstTest: false

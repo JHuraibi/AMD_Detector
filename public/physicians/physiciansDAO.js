@@ -1,9 +1,8 @@
 var newPatients = document.getElementById('newPatients');
-var db = firebase.firestore();
 checkForRequests();
 
 async function checkForRequests() {
-
+	var db = firebase.firestore();
     await firebase.auth().onAuthStateChanged(user => {
         if (user) {
             let id = user.uid;

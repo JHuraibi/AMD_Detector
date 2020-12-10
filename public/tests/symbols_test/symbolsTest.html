@@ -222,9 +222,9 @@
 		<script src="../eye_selection_updater.js"></script>
 		
 		<script>
-			// let dbRef = firebase.firestore();
+			let db = firebase.firestore();
 			let userRef = null;
-			//
+
 			// firebase.auth().onAuthStateChanged(user => {
 			// 	console.log(user);
 			// 	userRef = user;
@@ -244,7 +244,7 @@
 				var dataToWrite = getSymbolsResults();
 				
 				if (userRef) {
-					dbRef.collection("TestResults")
+					db.collection("TestResults")
 						.doc(userRef.uid)
 						.collection("Symbols")
 						.add(dataToWrite)
@@ -272,7 +272,7 @@
 			}
 			
 			function updateFirstTest() {
-				dbRef.collection("TestResults")
+				db.collection("TestResults")
 					.doc(userRef.uid)
 					.set({
 						firstTest: false
@@ -300,8 +300,8 @@
 		
 		<!-- Check if user is signed in -->
 		<script>
-			var db = firebase.firestore();
 			(async function checkUser() {
+				var db = firebase.firestore();
 				await firebase.auth().onAuthStateChanged(user => {
 					if (user) {
 						id = user.uid;

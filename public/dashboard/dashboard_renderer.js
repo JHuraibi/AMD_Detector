@@ -1,4 +1,5 @@
-let dbRef = firebase.firestore();
+let db = firebase.firestore();
+
 let userRef = null;
 let growingCirclesDAO;
 let symbolsDAO;
@@ -39,15 +40,15 @@ async function pageRouter() {
  * Initializes the DAO objects.
  *
  * This function is Called by pageRouter() (which in turn, is called by Firebase auth at top).
- * 	By the time this function is called, both the dbRef and userRef variables should be defined.
+ * 	By the time this function is called, both the db and userRef variables should be defined.
  * 	The DAOs require those two to get the correct results from FireStore.
  */
 function defineDAOs() {
-	growingCirclesDAO = new GrowingCirclesDAO(dbRef, userRef.uid);
-	symbolsDAO = new SymbolsDAO(dbRef, userRef.uid);
-	fullBarsDAO = new FullBarsDAO(dbRef, userRef.uid);
-	freeDrawDAO = new FreeDrawDAO(dbRef, userRef.uid);
-	facesDAO = new FacesDAO(dbRef, userRef.uid);
+	growingCirclesDAO = new GrowingCirclesDAO(db, userRef.uid);
+	symbolsDAO = new SymbolsDAO(db, userRef.uid);
+	fullBarsDAO = new FullBarsDAO(db, userRef.uid);
+	freeDrawDAO = new FreeDrawDAO(db, userRef.uid);
+	facesDAO = new FacesDAO(db, userRef.uid);
 }
 
 /**

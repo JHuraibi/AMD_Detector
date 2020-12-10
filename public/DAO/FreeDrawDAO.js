@@ -1,6 +1,6 @@
 class FreeDrawDAO {
-	constructor(dbRef, userID) {
-		this.dbRef = dbRef;
+	constructor(db, userID) {
+		this.db = db;
 		this.userID = userID;
 		this.docList = [];
 		
@@ -22,7 +22,7 @@ class FreeDrawDAO {
 	}
 	
 	async loadForDashboard() {
-		await this.dbRef
+		await this.db
 			.collection("TestResults")
 			.doc(this.userID)
 			.collection("FreeDraw")
@@ -39,7 +39,7 @@ class FreeDrawDAO {
 	async loadForDetailedView(testID, canvasLeft, canvasRight) {
 		let _this = this;
 		
-		await this.dbRef
+		await this.db
 			.collection("TestResults")
 			.doc(this.userID)
 			.collection("FreeDraw")

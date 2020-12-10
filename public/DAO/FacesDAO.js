@@ -1,6 +1,6 @@
 class FacesDAO {
-	constructor(dbRef, userID) {
-		this.dbRef = dbRef;
+	constructor(db, userID) {
+		this.db = db;
 		this.userID = userID;
 		this.docList = [];
 		
@@ -41,7 +41,7 @@ class FacesDAO {
 	}
 	
 	async loadForDashboard() {
-		await this.dbRef
+		await this.db
 			.collection("TestResults")
 			.doc(this.userID)
 			.collection("Smiley")
@@ -60,7 +60,7 @@ class FacesDAO {
 	async loadForDetailedView(testID, canvasLeft, canvasRight) {
 		let _this = this;
 		
-		await this.dbRef
+		await this.db
 			.collection("TestResults")
 			.doc(this.userID)
 			.collection("Smiley")
@@ -84,7 +84,7 @@ class FacesDAO {
 	
 	// !! TESTING ONLY - Clones FireStore doc from existing
 	manualAdd() {
-		this.dbRef.collection("TestResults")
+		this.db.collection("TestResults")
 			.doc(this.userID)
 			.collection("Smiley")
 			.add(this.docList[0])
