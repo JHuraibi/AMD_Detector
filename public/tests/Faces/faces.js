@@ -88,8 +88,6 @@ window.addEventListener('keydown', function (e) {
 //End of Function
 
 // initalizing canvas
-c.fillStyle = "White";
-c.fillRect(0, 0, size, size);
 blackDot();
 
 //Getting Smiley and Frowny face emoji using its unicode
