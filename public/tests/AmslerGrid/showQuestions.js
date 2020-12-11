@@ -60,70 +60,70 @@ function displayResults() {
 
 function fillSectionOne() {
 	if (testResult.Section1.distortion) {
-		document.getElementById("Sec1Q1").innerHTML = "Yes";
+		document.getElementById("Sec1Q1").innerHTML = "Answered: Yes";
 	}
 	
 	if (testResult.Section1.holes) {
-		document.getElementById("Sec1Q2").innerHTML = "Yes";
+		document.getElementById("Sec1Q2").innerHTML = "Answered: Yes";
 	}
 	
 	if (testResult.Section1.corners) {
-		document.getElementById("Sec1Q3").innerHTML = "Yes";
+		document.getElementById("Sec1Q3").innerHTML = "Answered: Yes";
 	}
 	
 	if (testResult.Section1.concerns != "") {
-		document.getElementById("Sec1Concerns").innerHTML = testResult.Section1.concerns;
+		document.getElementById("Sec1Concerns").innerHTML = "Answered: " + testResult.Section1.concerns;
 	}
 }
 
 function fillSectionTwo() {
 	if (testResult.Section2.distortion) {
-		document.getElementById("Sec2Q1").innerHTML = "Yes";
+		document.getElementById("Sec2Q1").innerHTML = "Answered: Yes";
 	}
 	
 	if (testResult.Section2.holes) {
-		document.getElementById("Sec2Q2").innerHTML = "Yes";
+		document.getElementById("Sec2Q2").innerHTML = "Answered: Yes";
 	}
 	
 	if (testResult.Section2.corners) {
-		document.getElementById("Sec2Q3").innerHTML = "Yes";
+		document.getElementById("Sec2Q3").innerHTML = "Answered: Yes";
 	}
 	
 	if (testResult.Section1.concerns != "") {
-		document.getElementById("Sec2Concerns").innerHTML = testResult.Section2.concerns;
+		document.getElementById("Sec2Concerns").innerHTML = "Answered: " + testResult.Section2.concerns;
 	}
 }
 
 function fillSectionThree() {
 	if (testResult.Section3.distortion) {
-		document.getElementById("Sec3Q1").innerHTML = "Yes";
+		document.getElementById("Sec3Q1").innerHTML = "Answered: Yes";
 	}
 	
 	if (testResult.Section3.holes) {
-		document.getElementById("Sec3Q2").innerHTML = "Yes";
+		document.getElementById("Sec3Q2").innerHTML = "Answered: Yes";
 	}
 	
 	if (testResult.Section3.corners) {
-		document.getElementById("Sec3Q3").innerHTML = "Yes";
+		document.getElementById("Sec3Q3").innerHTML = "Answered: Yes";
 	}
 	
 	if (testResult.Section3.concerns != "") {
-		document.getElementById("Sec3Concerns").innerHTML = testResult.Section3.concerns;
+		document.getElementById("Sec3Concerns").innerHTML = "Answered: " + testResult.Section3.concerns;
 	}
 }
 
 function fillSectionFour() {
 	if (testResult.Section4.distortion) {
-		document.getElementById("Sec4Q1").innerHTML = "Yes";
+		document.getElementById("Sec4Q1").innerHTML = "Answered: Yes";
 	}
 	if (testResult.Section4.holes) {
-		document.getElementById("Sec4Q2").innerHTML = "Yes";
+		document.getElementById("Sec4Q2").innerHTML = "Answered: Yes";
 	}
 	if (testResult.Section4.corners) {
-		document.getElementById("Sec4Q3").innerHTML = "Yes";
+		document.getElementById("Sec4Q3").innerHTML = "Answered: Yes";
 	}
 	
 	if (testResult.Section4.concerns != "") {
-		document.getElementById("Sec4Concerns").innerHTML = testResult.Section4.concerns;
+		document.getElementById("Sec4Concerns").innerHTML = "Answered: " + testResult.Section4.concerns;
 	}
 }
