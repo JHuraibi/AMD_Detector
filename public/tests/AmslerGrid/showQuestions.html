@@ -35,9 +35,22 @@
 				color: #282828;
 			}
 			
+			.which-eye-container {
+				border: solid black 2px;
+				padding: 5%;
+			}
+			
 			.section-container {
 				border: solid black 2px;
 				padding: 5%;
+				display: none;
+			}
+			
+			.title{
+                text-align: center;
+				font-size: 1.5em;
+				margin-top: 1em;
+				margin-bottom: 0.5em;
 			}
 			
 		</style>
@@ -49,17 +62,16 @@
 					<h3 class="masthead-brand">Vision Monitor</h3>
 					<nav class="nav nav-masthead justify-content-center">
 						<a class="nav-link active" href="../../home.html">Home</a>
-						<a class="nav-link" href="../../dashboard.html">My Dashboard</a>
+						<a class="nav-link" href="../../dashboard/dashboard.html">My Dashboard</a>
 					</nav>
 				</div>
 			</header>
 			
 			<main role="main" class="inner cover">
-				<header style="text-align: center; font-size: 40px;">Amsler Grid Test Answers</header>
-<!--				<form action="../../home.html">-->
+				<p class="title">Amsler Grid Test Answers</p>
+				
 				<form class="AmslerQuestions">
-					
-					<div placeholder="q1" class="section-container">
+					<div class="which-eye-container">
 						<p>Eye Tested: </p>
 						<p id="TestEye"></p>
 					</div>
@@ -68,35 +80,31 @@
 					
 					<!-- Section 1 part -->
 					<div id="Sec1" class="section-container">
-						
-
 						<div>
-							<!--TODO: Use relative sizing if possible, not hard coded-->
 							<img src="amsler_images/amslerS1.png" width="105" height="105" alt="AmslerGrid Section 1">
 						</div>
 
-						
-						<label for="sec1Checkbox">Section 1: </label>
+						<label>Section 1: </label>
+
 						<div id="qSec1">
 							
 							<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
-							<p id="Sec1Q1"></p>
+							<p id="Sec1Q1">No</p>
 							
 							<br><br>
 							
 							<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
-							<p id="Sec1Q2"></p>
-							
+							<p id="Sec1Q2">No</p>
 							
 							<br><br>
 							
 							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
-							<p id="Sec1Q3"></p>
+							<p id="Sec1Q3">No</p>
 							
 							<br><br>
 							
-							<label for="S1_Concerns">Is there any other details you would like to mention?</label>
-							<p id=Sec1Concerns></p>
+							<label>Is there any other details you would like to mention?</label>
+							<p id=Sec1Concerns>(None Given)</p>
 						
 						</div>
 					</div>
@@ -105,34 +113,31 @@
 					
 					<!-- section 2 part  -->
 					<div id="Sec2" class="section-container">
-						
-
 						<div>
 							<!--TODO: Use relative sizing if possible, not hard coded-->
 							<img src="amsler_images/amslerS2.png" width="105" height="105">
 						</div>
-					
 						
-						<label for="sec2Checkbox">Section 2</label>
+						<label>Section 2</label>
 						<div id="qSec2">
 							
 							<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
-							<p id="Sec2Q1"></p>
+							<p id="Sec2Q1">No</p>
 							
 							<br><br>
 							
 							<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
-							<p id="Sec2Q2"></p>
+							<p id="Sec2Q2">No</p>
 							
 							<br><br>
 							
 							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
-							<p id="Sec2Q3"></p>
+							<p id="Sec2Q3">No</p>
 							
 							<br><br>
 							
-							<label for="S2_Concerns">Is there any other details you would like to mention?</label>
-							<p id=Sec2Concerns></p>
+							<label>Is there any other details you would like to mention?</label>
+							<p id=Sec2Concerns>(None Given)</p>
 						
 						</div>
 					</div>
@@ -141,34 +146,32 @@
 					
 					<!-- Section 3 part  -->
 					<div id="Sec3" class="section-container">
-						
-						
 						<div>
 							<!--TODO: Use relative sizing if possible, not hard coded-->
 							<img src="amsler_images/amslerS3.png" width="105" height="105">
 						</div>
 						
 						
-						<label for="sec3Checkbox">Section 3</label>
+						<label>Section 3</label>
 						<div id="qSec3">
 							
 							<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
-							<p id="Sec3Q1"></p>
+							<p id="Sec3Q1">No</p>
 							
 							<br><br>
 							
 							<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
-							<p id="Sec3Q2"></p>
+							<p id="Sec3Q2">No</p>
 							
 							<br><br>
 							
 							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
-							<p id="Sec3Q3"></p>
+							<p id="Sec3Q3">No</p>
 							
 							<br><br>
 							
-							<label for="S3_Concerns">Is there any other details you would like to mention?</label>
-							<p id=Sec3Concerns></p>
+							<label>Is there any other details you would like to mention?</label>
+							<p id=Sec3Concerns>(None Given)</p>
 							
 						</div>
 					</div>
@@ -177,32 +180,30 @@
 					
 					<!-- Section 4 part  -->
 					<div id="Sec4" class="section-container">
-						
 						<div>
 							<img src="amsler_images/amslerS4.png" width="105" height="105">
 						</div>
 						
-						
-						<label for="sec4Checkbox">Section 4</label>
+						<label>Section 4</label>
 						<div id="qSec4">
 
 							<p>Do any of the lines in the grid appear wavy, blurred or distorted?</p>
-							<p id="Sec4Q1"></p>
+							<p id="Sec4Q1">No</p>
 							
 							<br><br>
 							
 							<p>Are there any "holes" (missing areas) or dark areas in the grid?</p>
-							<p id="Sec4Q2"></p>
+							<p id="Sec4Q2">No</p>
 							
 							<br><br>
 							
 							<p>Can you see all corners and sides of the grid (while keeping your eye on the central dot)?</p>
-							<p id="Sec4Q3"></p>
+							<p id="Sec4Q3">No</p>
 							
 							<br><br>
 							
-							<label for="S4_Concerns">Is there any other details you would like to mention?</label><br>
-							<p id=Sec4Concerns></p>
+							<label>Is there any other details you would like to mention?</label><br>
+							<p id=Sec4Concerns>(None Given)</p>
 						</div>
 					</div>
 
@@ -219,47 +220,49 @@
 			
 			<footer class="mastfoot mt-auto"></footer>
 		</div>
+		
+		<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+		<script src="/__/firebase/7.23.0/firebase-app.js"></script>
+		
+		<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+		<script src="/__/firebase/7.23.0/firebase-analytics.js"></script>
+		
+		<!-- Add Firebase products that you want to use -->
+		<script src="/__/firebase/7.23.0/firebase-auth.js"></script>
+		<script src="/__/firebase/7.23.0/firebase-firestore.js"></script>
+		
+		<!-- Initialize Firebase -->
+		<script src="/__/firebase/init.js"></script>
+		
+		<script src="showQuestions.js"></script>
+		
+		<!-- Check if user is signed in -->
+		<script>
+			(async function checkUser() {
+				var db = firebase.firestore();
+				var userRef;
+				await firebase.auth().onAuthStateChanged(user => {
+					if (user) {
+						id = user.uid;
+						db.collection("users").doc(id)
+							.get()
+							.then(doc => {
+								let type = doc.data().type;
+								if (type != 'user') {
+									console.log("Physician Account. Access Denied.");
+									window.location = '../404.html';
+								}
+								else {
+									loadAll(user);
+								}
+							});
+					} else {
+						console.log("Not logged in");
+						window.location = '../index.html';
+					}
+				});
+			})();
+		</script>
 </body>
-	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-	<script src="/__/firebase/7.23.0/firebase-app.js"></script>
-	
-	<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
-	<script src="/__/firebase/7.23.0/firebase-analytics.js"></script>
-	
-	<!-- Add Firebase products that you want to use -->
-	<script src="/__/firebase/7.23.0/firebase-auth.js"></script>
-	<script src="/__/firebase/7.23.0/firebase-firestore.js"></script>
-	
-	<!-- Initialize Firebase -->
-	<script src="/__/firebase/init.js"></script>
-	
-	<!-- Check if user is signed in -->
-	<script>
-		var db = firebase.firestore();
-		let userRef;
-		(async function checkUser() {
-			await firebase.auth().onAuthStateChanged(user => {
-				if (user) {
-					id = user.uid;
-					db.collection("users").doc(id)
-						.get()
-						.then(doc => {
-							let type = doc.data().type;
-							if (type != 'user') {
-								console.log("Physician Account. Access Denied.");
-								window.location = '../404.html';
-							}
-							else {
-								loadAll(user);
-							}
-						});
-				} else {
-					console.log("Not logged in");
-					window.location = '../index.html';
-				}
-			});
-		})();
-	</script>
-	<script src="showQuestions.js"></script>
-	
+
 </html>
