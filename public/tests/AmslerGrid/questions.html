@@ -255,13 +255,12 @@
 		<!-- Initialize Firebase -->
 		<script src="/__/firebase/init.js"></script>
 		<script src="questions.js"></script>
-		<!--		<script src="Amsler.js"></script>-->
 
 	
 <!-- Check if user is signed in -->
 <script>
-	var db = firebase.firestore();
 	(async function checkUser() {
+		var db = firebase.firestore();
 		await firebase.auth().onAuthStateChanged(user => {
 			if (user) {
 				id = user.uid;
