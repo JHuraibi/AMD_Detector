@@ -190,7 +190,9 @@ function checkWhichEyesTested(testName) {
 			break;
 	}
 	
-	// TODO: Would be cleaner to ditch testResults[] all together?
+	// NOTE: JavaScript passes arrays and objects by reference. So this includes
+	//  		JSON's (or, JavaScript Object Notation). This is how whichEyesTested
+	//  		can have its values updated by just simply passing it to checkWhichEyes()
 	testResults.forEach((result) => {
 		staticDAO.checkWhichEyes(whichEyesTested, result);
 	});
