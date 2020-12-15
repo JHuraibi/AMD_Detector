@@ -1,4 +1,10 @@
 class FreeDrawDAO {
+	
+	/**
+	 * Constructor for the FreeDrawDAO
+	 * @param db			- Reference to Firestore
+	 * @param userID		- User's Firebase Auth UID
+	 */
 	constructor(db, userID) {
 		this.db = db;
 		this.userID = userID;
@@ -7,7 +13,13 @@ class FreeDrawDAO {
 		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
 		this.isPhysician = false;
 	}
-	
+
+	/**
+	 * Loads all documents within the FreeDraw Firestore subcollection
+	 * 	for the currently logged-in user. Saves the ID and data of the documents
+	 * 	to the object instance.
+	 * @returns {Promise<void>}
+	 */
 	async loadForDashboard() {
 		await this.db
 			.collection("TestResults")
@@ -22,7 +34,19 @@ class FreeDrawDAO {
 				});
 			});
 	}
-	
+
+	/**
+	 * Loads the single document whose ID is specified by the testID parameter.
+	 * Uses the canvas reference parameters to render the single document's results.
+	 * NOTE: The "_this" variable maintains a reference to the calling object from
+	 * 	within the anonymous function in the then() block.
+	 * NOTE: The right canvas is not used. In fact, it is disabled and hidden before this function
+	 * 	is even called. The FreeDraw test only has a single canvas-worth of data.
+	 * @param testID				- ID of Firestore document
+	 * @param canvasLeft			- Reference to DOM of left canvas
+	 * @param canvasRight			- Reference to DOM of right canvas
+	 * @returns {Promise<void>}
+	 */
 	async loadForDetailedView(testID, canvasLeft, canvasRight) {
 		let _this = this;
 		
@@ -45,8 +69,17 @@ class FreeDrawDAO {
 			});
 		
 	}
-	
-	// NOTE: The JSON returned needs to match the FireStore document structure for FullBars
+
+	/**
+	 * This function accomplishes two functions:
+	 * 	1. Extract the relevant data we need from the Firestore document
+	 * 	2. Store the information locally as a true JSON (as compared with Firestore's
+	 * 		document that is technically only SIMILAR to a JSON)
+	 * NOTE: The field names of parameter "data" need to match documents of the FreeDraw subcollection
+	 * @param id			- Firestore document ID
+	 * @param data			- Data of a Firestore document
+	 * @returns {{TestName: *, ImageData: *, TimeStampMS: *, id: *}}
+	 */
 	extractor(id, data) {
 		return {
 			id: id,
@@ -55,7 +88,12 @@ class FreeDrawDAO {
 			ImageData: data.ImageData,
 		}
 	}
-	
+
+	/**
+	 * Iterates through the documents loaded from Firestore and translates them to
+	 * 	rows in the history table.
+	 * @param targetTableID		- ID of the history DOM table
+	 */
 	populateHistoryTable(targetTableID) {
 		if (!this.userID) {
 			console.log("User ID is null");
@@ -69,8 +107,14 @@ class FreeDrawDAO {
 		}
 	}
 	
-	// TODO: Refactor textID name
-	// TODO: Refactor variable names below to be more readable
+	/**
+	 * Attaches the constructed row to the target history table. The row is created by
+	 * 	generating HTML DOM elements that constitutes a row of the table and attaches
+	 * 	it to the existing history table seleton
+	 * @param docID				- Firestore document ID
+	 * @param timeStamp			- Timestamp of document (i.e. test result) in milliseconds
+	 * @param targetTableID		- ID of history DOM table
+	 */
 	addRowToTable(docID, timeStamp, targetTableID) {
 		let testName = "Free Draw";
 		let time = this.formatDate(timeStamp);
@@ -112,7 +156,13 @@ class FreeDrawDAO {
 		// Add the Row to the Table
 		tableBody.appendChild(row);
 	}
-	
+
+	/**
+	 * Renders the contents of the drawingData parameter to the canvas
+	 * 	via the ctx parameter context variable.
+	 * @param ctx					- 2D context of the canvas to draw to
+	 * @param drawingData			- Data to draw the line segments and their width
+	 */
 	drawToCanvas(ctx, drawingData) {
 		if (!ctx) {
 			console.log("Left Canvas DOM not found.");
@@ -139,7 +189,19 @@ class FreeDrawDAO {
 		
 		this.drawStaticAxes(ctx, ctx.canvas.width, ctx.canvas.width);
 	}
-	
+
+	/**
+	 * Draws a line segment with:
+	 * 	- Start point (x, y),
+	 * 	- End point (pX, pY)
+	 * 	- A width/thickness of w
+	 * @param ctx		- 2D context of the canvas to draw to
+	 * @param x			- Start point X coordinate
+	 * @param y			- Start point Y coordinate
+	 * @param pX		- End point X coordinate
+	 * @param pY		- End point Y coordinate
+	 * @param w			- Line segment width
+	 */
 	line(ctx, x, y, pX, pY, w) {
 		ctx.beginPath();
 		ctx.lineWidth = w;
@@ -148,7 +210,13 @@ class FreeDrawDAO {
 		ctx.lineTo(pX, pY);
 		ctx.stroke();
 	}
-	
+
+	/**
+	 * Draws the unchanging vertical and horizontal centers lines to the canvas.
+	 * @param ctx		- 2D context of the canvas to draw to
+	 * @param w			- Width of canvas
+	 * @param h			- Height of canvas
+	 */
 	drawStaticAxes(ctx, w, h) {
 		ctx.lineWidth = 2;
 		
@@ -162,14 +230,18 @@ class FreeDrawDAO {
 		ctx.lineTo(w, h / 2);
 		ctx.stroke();
 	}
-	
-	// !! NOTE: The TEST_NAME value has to match Firestore's collection name exactly
-	// !! NOTE: URI's are relative to dashboard.html OR physiciansDash.html. NOT this DAO file.
-	//	From physiciansDash.html
-	//		./physiciansDetailedDash.html
-	//
-	//	From dashboard.html
-	// 		./detailed_view.html
+
+	/**
+	 * Builds a URI that contains key value pairs for the test's name and document ID
+	 * NOTE: The TEST_NAME value has to match Firestore's collection name exactly
+	 * NOTE: URI's are relative to dashboard.html OR physiciansDash.html. NOT this DAO file.
+	 * 	From physiciansDash.html
+	 * 		./physiciansDetailedDash.html
+	 * 	From dashboard.html
+	 * 		./detailed_view.html
+	 * @param docID				- ID of Firestore document
+	 * @returns {string}
+	 */
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
 		uri.append("TEST_NAME", "FreeDraw");
@@ -185,7 +257,11 @@ class FreeDrawDAO {
 		}
 	}
 	
-	// !! TODO: Bug when hoursString < timezoneOffset
+	/**
+	 * Formats the milliseconds parameter into a human readable date string.
+	 * @param milliseconds			- Milliseconds of the date to convert
+	 * @returns {string}
+	 */
 	formatDate(milliseconds) {
 		return (new Date(milliseconds)).toDateString();
 	}

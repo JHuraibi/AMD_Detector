@@ -1,4 +1,10 @@
 class SymbolsDAO {
+	
+	/**
+	 * Constructor for the SymbolsDAO
+	 * @param db			- Reference to Firestore
+	 * @param userID		- User's Firebase Auth UID
+	 */
 	constructor(db, userID) {
 		this.db = db;
 		this.userID = userID;
@@ -17,9 +23,11 @@ class SymbolsDAO {
 
 	// TODO: Determine how to handle a test that was taken but had empty fields
 	/**
-	 * !! Only updates for true values. Leaves the false values as-in.
-	 * @param whichEyesRecord
-	 * @param dataJSON
+	 * Updates the referenced whichEyesRecord JSON parameter according to whether
+	 * 	the dataJSON parameter's data indicates the left or right eye has test results saved.
+	 * Only updates for true values. Leaves the false values as-in.
+	 * @param whichEyesRecord 	- JSON indicating which eyes were tested
+	 * @param dataJSON			- Firestore document data
 	 * @returns {*}
 	 */
 	static checkWhichEyes(whichEyesRecord, dataJSON) {
@@ -31,7 +39,13 @@ class SymbolsDAO {
 			whichEyesRecord.right = true;
 		}
 	}
-	
+
+	/**
+	 * Loads all documents within the Symbols Firestore subcollection of TestResults
+	 * 	for the currently logged-in user. Saves the ID and data of the documents
+	 * 	to the object instance.
+	 * @returns {Promise<void>}
+	 */
 	async loadForDashboard() {
 		await this.db
 			.collection("TestResults")
@@ -48,7 +62,17 @@ class SymbolsDAO {
 		
 		// this.manualAdd();
 	}
-	
+
+	/**
+	 * Loads the single document whose ID is specified by the testID parameter.
+	 * Uses the canvas reference parameters to render the single document's results.
+	 * NOTE: The "_this" variable maintains a reference to the calling object from
+	 * 	within the anonymous function in the then() block.
+	 * @param testID				- ID of Firestore document
+	 * @param canvasLeft			- Reference to DOM of left canvas
+	 * @param canvasRight			- Reference to DOM of right canvas
+	 * @returns {Promise<void>}
+	 */
 	async loadForDetailedView(testID, canvasLeft, canvasRight) {
 		let _this = this;
 		
@@ -73,8 +97,10 @@ class SymbolsDAO {
 			});
 		
 	}
-	
-	// !! TESTING ONLY - Clones FireStore doc from existing
+
+	/**
+	 * 	!! TESTING ONLY - Clones the first Firestore doc retrieved and uploads it back to Firestore
+	 */
 	manualAdd() {
 		this.db.collection("TestResults")
 			.doc(this.userID)
@@ -84,8 +110,18 @@ class SymbolsDAO {
 				console.log("Manual document added.");
 			});
 	}
-	
-	// NOTE: The JSON returned needs to match the FireStore document structure for Symbols
+
+	/**
+	 * This function accomplishes two functions:
+	 * 		1. Extract the relevant data we need from the Firestore document
+	 * 		2. Store the information locally as a true JSON (as compared with Firestore's
+	 * 			document that is technically only SIMILAR to a JSON)
+	 * 	NOTE: The field names of parameter "data" need to match documents of the FreeDraw subcollection
+	 * @param id			- Firestore document ID
+	 * @param data			- Data of a Firestore document
+	 * @returns {{RightResultsSymbols: *, TestName: *, RightYLocations: *, TimeStampMS: *,
+	 * 				LeftXLocations: *, RightXLocations: *, id: *, LeftResultsSymbols: *, LeftYLocations: *}}
+	 */
 	extractor(id, data) {
 		return {
 			id: id,
@@ -99,7 +135,12 @@ class SymbolsDAO {
 			RightYLocations: data.RightYLocations,
 		}
 	}
-	
+
+	/**
+	 * Iterates through the documents loaded from Firestore and translates them to
+	 * 	rows in the history table.
+	 * @param targetTableID		- ID of the history DOM table
+	 */
 	populateHistoryTable(targetTableID) {
 		if (!this.userID) {
 			console.log("User ID is null");
@@ -112,9 +153,14 @@ class SymbolsDAO {
 			this.addRowToTable(doc.id, timeStamp, targetTableID);
 		}
 	}
-	
-	// TODO: Update with actual method for detailed view
-	// TODO: Refactor variable names below to be more readable
+
+	/**
+	 * Attaches the constructed row to the target history table. The row is created by
+	 * 	generating HTML DOM elements that constitutes a row of the table and attaches
+	 * @param docID				- Firestore document ID
+	 * @param timeStamp			- Timestamp of document (i.e. test result) in milliseconds
+	 * @param targetTableID		- ID of history DOM table
+	 */
 	addRowToTable(docID, timeStamp, targetTableID) {
 		let testName = "Symbols";
 		let time = this.formatDate(timeStamp);
@@ -156,12 +202,25 @@ class SymbolsDAO {
 		// Add the Row to the Table
 		tableBody.appendChild(row);
 	}
+
+	/**
+	 * Render default view to the canvas(es).
+	 * Uses the 3 most-recent documents to render test results where the newer the document
+	 * 	(i.e. test results), the dark the color is ("darker" refers to a higher opacity/alpha).
+	 * @param leftCanvasID		- ID of the left canvas
+	 * @param rightCanvasID		- ID of the right canvas
+	 */
 	renderAggregate(leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
 		
 		let max = this.docList.length;
+
+		if (max < 3) {
+			alphaIndex = (3 - (max + 1)); // (max + 1) to compensate for index vs length
+		}
+
 		for (let i = 0; i < 3 && i < max; i++) {
 			let doc = this.docList[i];
 			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
@@ -177,7 +236,12 @@ class SymbolsDAO {
 			}
 		}
 	}
-	
+
+	/**
+	 * Renders the single most recent document to the canvas(es).
+	 * @param leftCanvasID		- ID of the left canvas
+	 * @param rightCanvasID		- ID of the right canvas
+	 */
 	renderMostRecent(leftCanvasID, rightCanvasID) {
 		if (!this.docList[0]) {
 			console.log("First document (most recent) empty.")
@@ -194,7 +258,13 @@ class SymbolsDAO {
 		this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
 		this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
 	}
-	
+
+	/**
+	 * Renders to the canvas(es) any documents that are dated within the selected month.
+	 * @param month				- The selected month (integer, where 1 == January)
+	 * @param leftCanvasID		- Left canvas ID
+	 * @param rightCanvasID		- Right canvas ID
+	 */
 	renderSelectedMonth(month, leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
@@ -229,7 +299,14 @@ class SymbolsDAO {
 			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
 		}
 	}
-	
+
+	/**
+	 * Renders to the canvas(es) any documents that are dated within the month
+	 * 	range provided.
+	 * @param monthsBack		- How many months back from the current month to use
+	 * @param leftCanvasID		- Left canvas ID
+	 * @param rightCanvasID		- Right canvas ID
+	 */
 	renderMonthRange(monthsBack, leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
@@ -248,7 +325,16 @@ class SymbolsDAO {
 			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
 		}
 	}
-	
+
+	/**
+	 * Draws squares to the canvas at the coordinates specified by xPositions and yPositions
+	 * 	parameters, via the canvas context ctx parameter. Instead of redrawing the symbol, a
+	 * 	boundary box is drawn to indicate the overall area that would be occupied
+	 * 	by the symbol on the testing canvas.
+	 * @param ctx				- 2D context of the canvas to draw to (either left or right)
+	 * @param xPositions		- X coordinates of the items to draw
+	 * @param yPositions		- Y coordinates of the items to draw
+	 */
 	drawToCanvas(ctx, xPositions, yPositions) {
 		if (!ctx) {
 			console.log("Invalid Canvas Context.");
@@ -273,7 +359,17 @@ class SymbolsDAO {
 			}
 		}
 	}
-	
+
+	/**
+	 * Helper function to draw the symbol locations as a square with rounded corners.
+	 * rounded corners.
+	 * @param ctx		- 2D context of the canvas to draw to (either left or right)
+	 * @param x			- X coordinate
+	 * @param y			- Y coordinate
+	 * @param w			- How wide to draw the square
+	 * @param h			- How high to draw the square
+	 * @param r			- Corner radius
+	 */
 	roundedRectangle(ctx, x, y, w, h, r) {
 		ctx.beginPath();
 		ctx.moveTo(x + r, y);
@@ -285,14 +381,18 @@ class SymbolsDAO {
 		
 		ctx.fill();
 	}
-	
-	// !! NOTE: The TEST_NAME value has to match Firestore's collection name exactly
-	// !! NOTE: URI's are relative to dashboard.html OR physiciansDash.html. NOT this DAO file.
-	//	From physiciansDash.html
-	//		./physiciansDetailedDash.html
-	//
-	//	From dashboard.html
-	// 		./detailed_view.html
+
+	/**
+	 * Builds a URI that contains key value pairs for the test's name and document ID
+	 * NOTE: The TEST_NAME value has to match Firestore's collection name exactly
+	 * NOTE: URI's are relative to dashboard.html OR physiciansDash.html. NOT this DAO file.
+	 * 	From physiciansDash.html
+	 * 		./physiciansDetailedDash.html
+	 * 	From dashboard.html
+	 * 		./detailed_view.html
+	 * @param docID
+	 * @returns {string}
+	 */
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
 		uri.append("TEST_NAME", "Symbols");
@@ -307,7 +407,15 @@ class SymbolsDAO {
 			return "./detailed_view.html?" + uri.toString();
 		}
 	}
-	
+
+	/**
+	 * Helper function to position the iterator at the index  in the doclist
+	 * 	array in which the milliseconds is equal to or greater than the
+	 * 	ms parameter. This is useful for retrieving only the documents that
+	 * 	fall within a date range.
+	 * @param ms			- Milliseconds of the date to move the iterator to
+	 * @returns {number}
+	 */
 	setIndex(ms) {
 		let length = this.docList.length;
 		let i = 0;
@@ -319,13 +427,22 @@ class SymbolsDAO {
 		
 		return i;
 	}
-	
+
+	/**
+	 * Formats the milliseconds parameter into a human readable date string.
+	 * @param milliseconds			- Milliseconds of the date to convert
+	 * @returns {string}
+	 */
 	formatDate(milliseconds) {
 		return (new Date(milliseconds)).toDateString();
 	}
-	
-	// TODO: docstring
-	// TODO: Better year handling (abs, then mod 12 for number of years)
+
+	/**
+	 * Returns the milliseconds of the specified date.
+	 * @param current			- Current month (integer)
+	 * @param number			- How many months to go back
+	 * @returns {number}
+	 */
 	monthMSHelper(current, number) {
 		// !! TODO: ERROR HANDLING
 		let year = 2020;

@@ -1,4 +1,10 @@
 class FacesDAO {
+	
+	/**
+	 * Constructor for the FacesDAO
+	 * @param db			- Reference to Firestore
+	 * @param userID		- User's Firebase Auth UID
+	 */
 	constructor(db, userID) {
 		this.db = db;
 		this.userID = userID;
@@ -15,14 +21,16 @@ class FacesDAO {
 		this.alphaLevels = ["33", "73", "F3"];
 	}
 	
-	// TODO: Determine how to handle a test that was taken but had empty fields
 	/**
-	 * !! Only updates true values. Leaves the false value as-in.
-	 * @param whichEyesRecord
-	 * @param dataJSON
+	 * Updates the referenced whichEyesRecord JSON parameter according to whether
+	 * 	the dataJSON parameter's data indicates the left or right eye has test results saved.
+	 * Only updates for true values. Leaves the false values as-in.
+	 * @param whichEyesRecord 	- JSON indicating which eyes were tested
+	 * @param dataJSON			- Firestore document data
 	 * @returns {*}
 	 */
 	static checkWhichEyes(whichEyesRecord, dataJSON) {
+		// TODO: Determine how to handle a test that was taken but had empty fields
 		if (dataJSON.LeftResultsSymbols.length) {
 			whichEyesRecord.left = true;
 		}
@@ -32,6 +40,12 @@ class FacesDAO {
 		}
 	}
 	
+	/**
+	 * Loads all documents within the Smiley Firestore subcollection of TestResults
+	 * 	for the currently logged-in user. Saves the ID and data of the documents
+	 * 	to the object instance.
+	 * @returns {Promise<void>}
+	 */
 	async loadForDashboard() {
 		await this.db
 			.collection("TestResults")
@@ -49,6 +63,16 @@ class FacesDAO {
 		// this.manualAdd();
 	}
 	
+	/**
+	 * Loads the single document whose ID is specified by the testID parameter.
+	 * Uses the canvas reference parameters to render the single document's results.
+	 * NOTE: The "_this" variable maintains a reference to the calling object from
+	 * 	within the anonymous function in the then() block.
+	 * @param testID				- ID of Firestore document
+	 * @param canvasLeft			- Reference to DOM of left canvas
+	 * @param canvasRight			- Reference to DOM of right canvas
+	 * @returns {Promise<void>}
+	 */
 	async loadForDetailedView(testID, canvasLeft, canvasRight) {
 		let _this = this;
 		
@@ -85,7 +109,17 @@ class FacesDAO {
 			});
 	}
 	
-	// NOTE: The JSON returned needs to match the FireStore document structure for Smiley
+	/**
+	 * This function accomplishes two functions:
+	 * 	1. Extract the relevant data we need from the Firestore document
+	 * 	2. Store the information locally as a true JSON (as compared with Firestore's
+	 * 		document that is technically only SIMILAR to a JSON)
+	 * NOTE: The field names of parameter "data" need to match documents of the Smiley subcollection
+	 * @param id			- Firestore document ID
+	 * @param data			- Data of a Firestore document
+	 * @returns {{RightResultsSymbols: [], TestName: *, RightYLocations: [], TimeStampMS: *, LeftXLocations: [],
+	 * 				RightXLocations: [], id: *, LeftResultsSymbols: [], LeftYLocations: []}}
+	 */
 	extractor(id, data) {
 		return {
 			id: id,
@@ -100,6 +134,11 @@ class FacesDAO {
 		}
 	}
 	
+	/**
+	 * Iterates through the documents loaded from Firestore and translates them to
+	 * 	rows in the history table.
+	 * @param targetTableID		- ID of the history DOM table
+	 */
 	populateHistoryTable(targetTableID) {
 		if (!this.userID) {
 			console.log("User ID is null");
@@ -113,8 +152,14 @@ class FacesDAO {
 		}
 	}
 	
-	// TODO: Update with actual method for detailed view
-	// TODO: Refactor variable names below to be more readable
+	/**
+	 * Attaches the constructed row to the target history table. The row is created by
+	 * 	generating HTML DOM elements that constitutes a row of the table and attaches
+	 * 	it to the existing history table seleton
+	 * @param docID				- Firestore document ID
+	 * @param timeStamp			- Timestamp of document (i.e. test result) in milliseconds
+	 * @param targetTableID		- ID of history DOM table
+	 */
 	addRowToTable(docID, timeStamp, targetTableID) {
 		let testName = "Smiley";
 		let time = this.formatDate(timeStamp);
@@ -157,6 +202,13 @@ class FacesDAO {
 		tableBody.appendChild(row);
 	}
 	
+	/**
+	 * Render default view to the canvas(es).
+	 * Uses the 3 most-recent documents to render test results where the newer the document
+	 * 	(i.e. test results), the dark the color is ("darker" refers to a higher opacity/alpha).
+	 * @param leftCanvasID		- ID of the left canvas
+	 * @param rightCanvasID		- ID of the right canvas
+	 */
 	renderAggregate(leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
@@ -179,6 +231,11 @@ class FacesDAO {
 		}
 	}
 	
+	/**
+	 * Renders the single most recent document to the canvas(es).
+	 * @param leftCanvasID		- ID of the left canvas
+	 * @param rightCanvasID		- ID of the right canvas
+	 */
 	renderMostRecent(leftCanvasID, rightCanvasID) {
 		if (!this.docList[0]) {
 			console.log("First document (most recent) empty.")
@@ -196,6 +253,12 @@ class FacesDAO {
 		this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
 	}
 	
+	/**
+	 * Renders to the canvas(es) any documents that are dated within the selected month.
+	 * @param month				- The selected month (integer, where 1 == January)
+	 * @param leftCanvasID		- Left canvas ID
+	 * @param rightCanvasID		- Right canvas ID
+	 */
 	renderSelectedMonth(month, leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
@@ -231,6 +294,13 @@ class FacesDAO {
 		}
 	}
 	
+	/**
+	 * Renders to the canvas(es) any documents that are dated within the month
+	 * 	range provided.
+	 * @param monthsBack		- How many months back from the current month to use
+	 * @param leftCanvasID		- Left canvas ID
+	 * @param rightCanvasID		- Right canvas ID
+	 */
 	renderMonthRange(monthsBack, leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
@@ -250,6 +320,13 @@ class FacesDAO {
 		}
 	}
 	
+	/**
+	 * Draws squares to the canvas at the coordinates specified by xPositions and yPositions
+	 * 	parameters, via the canvas context ctx parameter.
+	 * @param ctx				- 2D context of the canvas to draw to (either left or right)
+	 * @param xPositions		- X coordinates of the items to draw
+	 * @param yPositions		- Y coordinates of the items to draw
+	 */
 	drawToCanvas(ctx, xPositions, yPositions) {
 		if (!ctx) {
 			console.log("Invalid Canvas Context.");
@@ -275,6 +352,15 @@ class FacesDAO {
 		}
 	}
 	
+	/**
+	 * Helper function to draw the bar as a rectangle with rounded corners.
+	 * @param ctx		- 2D context of the canvas to draw to (either left or right)
+	 * @param x			- X coordinate
+	 * @param y			- Y coordinate
+	 * @param w			- How wide to draw the square
+	 * @param h			- How high to draw the square
+	 * @param r			- Corner radius
+	 */
 	roundedRectangle(ctx, x, y, w, h, r) {
 		ctx.beginPath();
 		ctx.moveTo(x + r, y);
@@ -287,13 +373,17 @@ class FacesDAO {
 		ctx.fill();
 	}
 	
-	// !! NOTE: The TEST_NAME value has to match Firestore's collection name exactly
-	// !! NOTE: URI's are relative to dashboard.html OR physiciansDash.html. NOT this DAO file.
-	//	From physiciansDash.html
-	//		./physiciansDetailedDash.html
-	//
-	//	From dashboard.html
-	// 		./detailed_view.html
+	/**
+	 * Builds a URI that contains key value pairs for the test's name and document ID
+	 * NOTE: The TEST_NAME value has to match Firestore's collection name exactly
+	 * NOTE: URI's are relative to dashboard.html OR physiciansDash.html. NOT this DAO file.
+	 * 	From physiciansDash.html
+	 * 		./physiciansDetailedDash.html
+	 * 	From dashboard.html
+	 * 		./detailed_view.html
+	 * @param docID				- ID of Firestore document
+	 * @returns {string}
+	 */
 	URIBuilder(docID) {
 		let uri = new URLSearchParams();
 		uri.append("TEST_NAME", "Smiley");
@@ -309,6 +399,14 @@ class FacesDAO {
 		}
 	}
 	
+	/**
+	 * Helper function to position the iterator at the index  in the doclist
+	 * 	array in which the milliseconds is equal to or greater than the
+	 * 	ms parameter. This is useful for retrieving only the documents that
+	 * 	fall within a date range.
+	 * @param ms			- Milliseconds of the date to move the iterator to
+	 * @returns {number}
+	 */
 	setIndex(ms) {
 		let length = this.docList.length;
 		let i = 0;
@@ -321,12 +419,21 @@ class FacesDAO {
 		return i;
 	}
 	
+	/**
+	 * Formats the milliseconds parameter into a human readable date string.
+	 * @param milliseconds			- Milliseconds of the date to convert
+	 * @returns {string}
+	 */
 	formatDate(milliseconds) {
 		return (new Date(milliseconds)).toDateString();
 	}
 	
-	// TODO: docstring
-	// TODO: Better year handling (abs, then mod 12 for number of years)
+	/**
+	 * Returns the milliseconds of the specified date.
+	 * @param current			- Current month (integer)
+	 * @param number			- How many months to go back
+	 * @returns {number}
+	 */
 	monthMSHelper(current, number) {
 		// !! TODO: ERROR HANDLING
 		let year = 2020;
