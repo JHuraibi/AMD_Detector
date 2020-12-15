@@ -3,22 +3,16 @@ class SymbolsDAO {
 		this.db = db;
 		this.userID = userID;
 		this.docList = [];
+		this.canvasSize = 800;								// TODO: Set this dynamically
+		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
+		this.isPhysician = false;
 		
-		// !! TODO: This value to be dynamically set
-		this.canvasSize = 800;
-		
-		// These values are equal to 20, 45, and 95% opacity levels respectively
-		// Max alpha in hex is FF or 255 in decimal
+		// The decimal array values below are equal to 20, 45, and 95% opacity levels respectively
+		// The maximum value for the alpha component of an RGBA color in hex is FF, which is 255 in decimal
 		// e.g. [Hex F3 == Dec 243]
 		// 			(243 / 255) -> 95%
 		//			(F3 / FF)   -> 95%
 		this.alphaLevels = ["33", "73", "F3"];
-		this.leftAlphaIndex = 0;
-		this.rightAlphaIndex = 0;
-		this.useAlpha = false;
-		
-		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
-		this.isPhysician = false;
 	}
 
 	// TODO: Determine how to handle a test that was taken but had empty fields
@@ -36,8 +30,6 @@ class SymbolsDAO {
 		if (dataJSON.RightResultsSymbols.length) {
 			whichEyesRecord.right = true;
 		}
-		
-		return whichEyesRecord;
 	}
 	
 	async loadForDashboard() {
@@ -164,27 +156,6 @@ class SymbolsDAO {
 		// Add the Row to the Table
 		tableBody.appendChild(row);
 	}
-	
-	renderAll(leftCanvasID, rightCanvasID) {
-		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
-		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
-		let alphaIndex = 0;
-		
-		this.docList.forEach((doc) => {
-			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
-			ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
-			this.drawToCanvas(ctxLeft, doc.LeftXLocations, doc.LeftYLocations);
-			this.drawToCanvas(ctxRight, doc.RightXLocations, doc.RightYLocations);
-			
-			alphaIndex++;
-			if (alphaIndex > 3) {
-				alphaIndex = 3;
-				console.log("Warning: Alpha Index Exceeded 3 Iterations.");
-			}
-		})
-	}
-	
-	// TODO: RENAME
 	renderAggregate(leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
@@ -289,24 +260,17 @@ class SymbolsDAO {
 		let h = 35;
 		let r = w / 6;
 		
-		if (xPositions) {
-			xPositions.forEach((xPos) => {
-				let x = xPos * ratio;
-				let y = 0;
-				
-				// Draw shape as rectangle with rounded corners
-				this.roundedRectangle(ctx, x, y, w, h, r);
-			});
-		}
+		let xLength = xPositions.length;
+		let yLength = yPositions.length;
 		
-		if (yPositions) {
-			yPositions.forEach((yPos) => {
-				let x = 0;
-				let y = yPos * ratio;
+		if (xPositions && yPositions && (xLength === yLength)) {
+			for (let i = 0; i < xPositions.length; i++){
+				let x = xPositions[i] * ratio;
+				let y = yPositions[i] * ratio;
 				
 				// Draw shape as rectangle with rounded corners
 				this.roundedRectangle(ctx, x, y, w, h, r);
-			});
+			}
 		}
 	}
 	
@@ -357,24 +321,7 @@ class SymbolsDAO {
 	}
 	
 	formatDate(milliseconds) {
-		let date = new Date(milliseconds);
-		let timezoneOffset = -5;	// UTC -5:00
-		
-		let dateString = date.toDateString();
-		let hoursString = +date.getUTCHours() + timezoneOffset;
-		let minutesString = date.getUTCMinutes();
-		let postfix = hoursString > 11 ? "PM" : "AM";
-		
-		if (hoursString === 0) {
-			hoursString = 12;
-		}
-		
-		minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
-		hoursString = hoursString % 12;
-		
-		// Uncomment below line to add time of day
-		// return dateString + " at " + hoursString + ":" + minutesString + postfix;
-		return dateString;
+		return (new Date(milliseconds)).toDateString();
 	}
 	
 	// TODO: docstring
@@ -390,21 +337,5 @@ class SymbolsDAO {
 		
 		return Date.UTC(year, month, 1);
 	}
-	
-	monthName(number) {
-		if (number < 0 || number > 12) {
-			console.log("Month number invalid. Number: " + number);
-			return "January";
-		}
-		
-		let months = [
-			"January", "February", "March",
-			"April", "May", "June",
-			"July", "August", "September",
-			"October", "November", "December"
-		];
-		
-		return months[number];
-	}
-	
+
 }// class [ SymbolsDAO ]

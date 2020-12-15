@@ -3,20 +3,7 @@ class FreeDrawDAO {
 		this.db = db;
 		this.userID = userID;
 		this.docList = [];
-		
-		// !! TODO: This value to be dynamically set
-		this.canvasSize = 800;
-		
-		// These values are equal to 20, 45, and 95% opacity levels respectively
-		// Max alpha in hex is FF or 255 in decimal
-		// e.g. [Hex F3 == Dec 243]
-		// 			(243 / 255) -> 95%
-		//			(F3 / FF)   -> 95%
-		this.alphaLevels = ["33", "73", "F3"];
-		this.leftAlphaIndex = 0;
-		this.rightAlphaIndex = 0;
-		this.useAlpha = false;
-		
+		this.canvasSize = 800;								// TODO: Set this dynamically
 		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
 		this.isPhysician = false;
 	}
@@ -200,24 +187,7 @@ class FreeDrawDAO {
 	
 	// !! TODO: Bug when hoursString < timezoneOffset
 	formatDate(milliseconds) {
-		let date = new Date(milliseconds);
-		let timezoneOffset = 5;	// UTC -5:00
-		
-		let dateString = date.toDateString();
-		let hoursString = +date.getUTCHours() - timezoneOffset;
-		let minutesString = date.getUTCMinutes();
-		let postfix = hoursString > 11 ? "PM" : "AM";
-		
-		if (hoursString === 0) {
-			hoursString = 12;
-		}
-		
-		minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
-		hoursString = hoursString % 12;
-		
-		// Uncomment below line to add time of day
-		// return dateString + " at " + hoursString + ":" + minutesString + postfix;
-		return dateString;
+		return (new Date(milliseconds)).toDateString();
 	}
 	
 }// class [ FreeDrawDAO ]

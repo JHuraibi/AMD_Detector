@@ -3,22 +3,16 @@ class GrowingCirclesDAO {
 		this.db = db;
 		this.userID = userID;
 		this.docList = [];
+		this.canvasSize = 700;								// TODO: Set this dynamically
+		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
+		this.isPhysician = false;
 		
-		// !! TODO: This value to be dynamically set
-		this.canvasSize = 700;
-		
-		// These values are equal to 20, 45, and 95% opacity levels respectively
-		// Max alpha in hex is FF or 255 in decimal
+		// The decimal array values below are equal to 20, 45, and 95% opacity levels respectively
+		// The maximum value for the alpha component of an RGBA color in hex is FF, which is 255 in decimal.
 		// e.g. [Hex F3 == Dec 243]
 		// 			(243 / 255) -> 95%
 		//			(F3 / FF)   -> 95%
 		this.alphaLevels = ["33", "73", "F3"];
-		this.leftAlphaIndex = 0;
-		this.rightAlphaIndex = 0;
-		this.useAlpha = false;
-		
-		this.detailedViewTimeStamp = 0;						// Milliseconds. 0 == (1, 1, 1970)
-		this.isPhysician = false;
 	}
 	
 	// TODO: Determine how to handle a test that was taken but had empty fields
@@ -38,8 +32,6 @@ class GrowingCirclesDAO {
 		if (dataJSON.XLocationsRight.length) {
 			whichEyesRecord.right = true;
 		}
-		
-		return whichEyesRecord;
 	}
 	
 	async loadForDashboard() {
@@ -215,41 +207,17 @@ class GrowingCirclesDAO {
 		tableBody.appendChild(row);
 	}
 
-	renderAll(leftCanvasID, rightCanvasID) {
-		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
-		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
-		let alphaIndex = 0;
-		
-		this.docList.forEach((doc) => {
-			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
-			ctxRight.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
-			
-			if (doc.Tested == "left") {
-				this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
-			}
-			else if (doc.Tested == "right") {
-				this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
-			}
-			else {
-				this.drawToCanvas(ctxLeft, doc.XLocationsLeft, doc.YLocationsLeft, doc.ZLocationsLeft);
-				this.drawToCanvas(ctxRight, doc.XLocationsRight, doc.YLocationsRight, doc.ZLocationsRight);
-			}
-			
-			alphaIndex++;
-			if (alphaIndex > 3) {
-				alphaIndex = 3;
-				console.log("Warning: Alpha Index Exceeded 3 Iterations.");
-			}
-		})
-	}
-	
-	// TODO: RENAME
 	renderAggregate(leftCanvasID, rightCanvasID) {
 		let ctxLeft = document.getElementById(leftCanvasID).getContext('2d');
 		let ctxRight = document.getElementById(rightCanvasID).getContext('2d');
 		let alphaIndex = 0;
 		
 		let max = this.docList.length;
+
+        if (max < 3) {
+            alphaIndex = (3 - (max + 1)); // (max + 1) to compensate for index vs length
+        }
+
 		for (let i = 0; i < 3 && i < max; i++) {
 			let doc = this.docList[i];
 			ctxLeft.fillStyle = "#f47171" + this.alphaLevels[alphaIndex];
@@ -272,7 +240,6 @@ class GrowingCirclesDAO {
 				console.log("Warning: Alpha Index Exceeded 3 Iterations.");
 			}
 		}
-		
 	}
 
 	renderMostRecent(leftCanvasID, rightCanvasID) {
@@ -435,24 +402,7 @@ class GrowingCirclesDAO {
 	}
 	
 	formatDate(milliseconds) {
-		let date = new Date(milliseconds);
-		let timezoneOffset = -5;	// UTC -5:00
-		
-		let dateString = date.toDateString();
-		let hoursString = +date.getUTCHours() + timezoneOffset;
-		let minutesString = date.getUTCMinutes();
-		let postfix = hoursString > 11 ? "PM" : "AM";
-		
-		if (hoursString === 0) {
-			hoursString = 12;
-		}
-		
-		minutesString = minutesString < 10 ? "0" + minutesString : minutesString;
-		hoursString = hoursString % 12;
-		
-		// Uncomment below line to add time of day
-		// return dateString + " at " + hoursString + ":" + minutesString + postfix;
-		return dateString;
+		return (new Date(milliseconds)).toDateString();
 	}
 	
 	// TODO: docstring
@@ -467,22 +417,6 @@ class GrowingCirclesDAO {
 		let month = (current + (11 - number)) % 12;
 		
 		return Date.UTC(year, month, 1);
-	}
-	
-	monthName(number) {
-		if (number < 0 || number > 12) {
-			console.log("Month number invalid. Number: " + number);
-			return "January";
-		}
-		
-		let months = [
-			"January", "February", "March",
-			"April", "May", "June",
-			"July", "August", "September",
-			"October", "November", "December"
-		];
-		
-		return months[number];
 	}
 	
 }// class [ GrowingCirclesDAO ]
