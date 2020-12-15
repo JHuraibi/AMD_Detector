@@ -14,15 +14,20 @@
  *  [2] Check whether the two documents are before or after midnight of the current day
  *  [3] Utilize a static method to the appropriate DAO to check the test results
  *  	and whether they include left, right, or both eye data points
- *  [4] Update buttons accordingly which eyes have been completed across
+ *  [4] Update buttons according to which eyes have been completed across
  *  	either a single, or both test results loaded from Step 1:
  * 		[Left Eye only completed]
  * 			- Disable button for left eye, show a checkmark
+ * 			- Disable button for both eyes
+ * 			- Message explaining that the user has already completed the test left eye portion for the current day
  * 		[Right Eye only completed]
  * 			- Disable button for right eye, show a checkmark
+ * 			- Disable button for both eyes
+ * 			- Message explaining that the user has already completed the test right eye portion for the current day
  * 		[Both Eyes completed]
- * 			- Disable both buttons, show two checkmarks and also a message explaining
- * 			 that the user has already fully completed the test for the current day
+ * 			- Disable both buttons, show two checkmarks
+ * 			- Disable button for both eyes, show checkmark
+ * 			- Message explaining that the user has already fully completed the test for the current day
  */
 
 let testResults = [];
@@ -31,8 +36,9 @@ let secondMostRecentResult;
 let whichEyesTested;
 
 /**
- * @param userID
- * @param testName
+ * Main function controller
+ * @param userID				- User's Firebase Auth UID
+ * @param testName				- Name of the test
  * @returns {Promise<void>}
  */
 async function updateEyeSelection(userID, testName) {
@@ -59,8 +65,8 @@ async function updateEyeSelection(userID, testName) {
 /**
  * Loads the two most-recent documents from the FireStore collection that
  * 	corresponds to the testName parameter.
- * @param userID
- * @param testName
+ * @param userID				- User's Firebase Auth UID
+ * @param testName				- Name of the test, must match the Firestore collection for the releveant test
  * @returns {Promise<void>}
  */
 async function loadDocuments(userID, testName) {
@@ -96,7 +102,7 @@ async function loadDocuments(userID, testName) {
  *   or the variables are not null beforehand.
  * NOTE: parameter "data" is the .data() component of a Firestore
  * 	document.
- * @param data
+ * @param data			- Data of Firestore document
  */
 function saveResult(data) {
 	if (!mostRecentResult) {
@@ -134,6 +140,7 @@ function checkIfResultsFromToday() {
  * 		Returns false if:
  * 			- Invalid timestamp or no timestamp provided.
  * 			- Timestamp was less than midnight of the current day
+ * @param timestamp				- Milliseconds of the time
  * @returns {boolean}
  */
 function afterMidnight(timestamp) {
@@ -156,9 +163,9 @@ function afterMidnight(timestamp) {
 
 /**
  * Uses a static method in the corresponding DAO to check which eye has testing result data.
- * The DAO returns the result of its by updating the values of the whichEyesTested JSON
- * 	that was initialized to false beforehand.
- * @param testName
+ * The DAO returns the result of its search by updating the values of the whichEyesTested JSON
+ * 	that is passed as reference and was initialized to false beforehand.
+ * @param testName			- Name of the test
  */
 function checkWhichEyesTested(testName) {
 	whichEyesTested = {

@@ -80,7 +80,6 @@ function defineDAO() {
 			genericDAO = new FacesDAO(db, patientUID);
 			break;
 
-
 		// case "Fractal":
 		// 	setTestNameTitle("Fractal");
 		// 	break;
@@ -113,10 +112,10 @@ async function drawResults() {
 /**
  * Sets the title for the page (i.e. the test's name) using the extracted
  *  name from the URI.
+ *  NOTE: The single dash and space characters are here so that
+ *  		if this function fails to return a test name to
+ *  		the header, the header then won't look incomplete.
  */
-// NOTE: The single dash and space characters are here so that
-//			if this function fails to return a test name to
-//			the header, the header then won't look incomplete.
 function setTestNameTitle() {
 	let title = document.getElementById('testTitle');
 	let postfix = "";
